@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Nunito', sans-serif;
+    color: #4b4b4b;
+    background-color: #f7f7f7;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Fredoka', sans-serif;
+  }
+}
+
+/* Duolingo Bouncy 3D Button Utility */
+.duo-btn {
+  @apply font-heading uppercase tracking-wider font-bold transition-all duration-100 flex items-center justify-center cursor-pointer select-none rounded-2xl active:translate-y-1 active:shadow-none;
+}
+
+.duo-btn-green {
+  @apply duo-btn bg-duo-green text-white shadow-duo-green hover:bg-duo-green-light;
+}
+
+.duo-btn-blue {
+  @apply duo-btn bg-duo-blue text-white shadow-duo-blue hover:bg-duo-blue-light;
+}
+
+.duo-btn-yellow {
+  @apply duo-btn bg-duo-yellow text-slate-900 shadow-duo-yellow hover:bg-duo-yellow-light;
+}
+
+.duo-btn-red {
+  @apply duo-btn bg-duo-red text-white shadow-duo-red hover:bg-duo-red-light;
+}
+
+.duo-btn-gray {
+  @apply duo-btn bg-white text-duo-gray-400 border-2 border-duo-gray-100 shadow-duo-gray hover:bg-duo-gray-50;
+}
+
+.duo-card {
+  @apply bg-white rounded-2xl border-2 border-duo-gray-100 p-4 shadow-sm transition-all;
+}
+
+/* Animations */
+@keyframes duo-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+.animate-shake {
+  animation: duo-shake 0.4s ease-in-out;
+}
+
+@keyframes duo-pop {
+  0% { transform: scale(0.9); opacity: 0; }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-pop {
+  animation: duo-pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes duo-pulse-glow {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(88, 204, 2, 0.4); }
+  50% { transform: scale(1.05); box-shadow: 0 0 0 14px rgba(88, 204, 2, 0); }
+}
+
+.animate-pulse-glow {
+  animation: duo-pulse-glow 2s infinite;
+}
+
+@layer utilities {
+  .shadow-xs {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+  .shadow-2xs {
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.03);
+  }
+  .drop-shadow-xs {
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.05));
+  }
+  .text-shadow-xs {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Material Design 3 (M3) Utility Classes & Ergonomics */
+.m3-touch-target {
+  @apply min-h-[48px] min-w-[48px] flex items-center justify-center;
+}
+
+.m3-card {
+  @apply bg-white rounded-[24px] border border-slate-200/80 p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:border-slate-300;
+}
+
+.m3-card-tonal {
+  @apply bg-slate-100/80 rounded-[24px] border border-slate-200 p-5 shadow-sm transition-all duration-200 hover:bg-slate-100;
+}
+
+.m3-btn {
+  @apply font-heading font-extrabold text-sm min-h-[48px] px-6 rounded-full transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer select-none active:scale-95 shadow-sm;
+}
+
+.m3-btn-primary {
+  @apply m3-btn bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-600/30 shadow-md;
+}
+
+.m3-btn-tonal {
+  @apply m3-btn bg-emerald-100 text-emerald-900 hover:bg-emerald-200;
+}
+
+/* Mobile-First Bottom Nav Compensation Padding */
+.safe-mobile-padding {
+  @apply pb-24 md:pb-8;
+}

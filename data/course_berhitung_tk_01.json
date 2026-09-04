@@ -1,0 +1,378 @@
+{
+  "course": {
+    "id": "course_berhitung_tk_01",
+    "title": "Mengenal Angka 1-5 & Berhitung Ceria",
+    "description": "Petualangan seru belajar angka 1 sampai 5 untuk anak usia taman kanak-kanak dengan berbagai permainan interaktif!",
+    "target_audience": "Anak TK (4-6 tahun)",
+    "units": [
+      {
+        "id": "unit_1",
+        "title": "Unit 1: Berkenalan dengan Angka 1, 2, dan 3",
+        "order": 1,
+        "icon": "star",
+        "color": "blue",
+        "lessons": [
+          {
+            "id": "u1_lesson1",
+            "title": "Satu dan Dua yang Lucu",
+            "order": 1,
+            "summary": "Belajar mengenali bentuk dan jumlah angka 1 dan 2.",
+            "exercises": [
+              {
+                "id": "u1l1_ex1",
+                "type": "multiple_choice",
+                "difficulty": "easy",
+                "question": "Ada berapa buah apel di gambar?",
+                "options": ["1", "2", "3", "4"],
+                "correct_answer": "1",
+                "explanation": "Betul! Hanya ada 1 apel berwarna merah.",
+                "spaced_repetition": true,
+                "visual": { "type": "objects", "label": "🍎", "count": 1 }
+              },
+              {
+                "id": "u1l1_ex2",
+                "type": "drag_and_drop",
+                "difficulty": "easy",
+                "question": "Masukkan 2 buah pisang 🍌 ke dalam keranjang monyet!",
+                "options": [],
+                "correct_answer": "2",
+                "explanation": "Pintar! Monyet sangat senang dengan 2 pisang itu.",
+                "spaced_repetition": false,
+                "visual": { "type": "objects", "label": "🍌", "count": 4 }
+              },
+              {
+                "id": "u1l1_ex3",
+                "type": "true_false",
+                "difficulty": "easy",
+                "question": "Apakah ini menunjukkan 2 jari?",
+                "options": ["Benar", "Salah"],
+                "correct_answer": "Benar",
+                "explanation": "Tepat sekali! Itu adalah telunjuk dan jari tengah, jumlahnya 2.",
+                "spaced_repetition": true,
+                "visual": { "type": "hand", "value": 2 }
+              },
+              {
+                "id": "u1l1_ex4",
+                "type": "seek_find",
+                "difficulty": "medium",
+                "question": "Cari & temukan 2 ekor Kucing 🐱 yang bersembunyi!",
+                "options": [],
+                "correct_answer": "2",
+                "explanation": "Hebat! Kamu menemukan kedua kucing tersebut.",
+                "spaced_repetition": false,
+                "visual": { 
+                  "label": "🐱", 
+                  "items": [
+                    { "x": 20, "y": 30, "icon": "🐱" }, 
+                    { "x": 80, "y": 60, "icon": "🐱" }
+                  ] 
+                }
+              }
+            ]
+          },
+          {
+            "id": "u1_lesson2",
+            "title": "Tiga yang Menggemaskan",
+            "order": 2,
+            "summary": "Mengenal angka 3 dan berlatih membandingkan.",
+            "exercises": [
+              {
+                "id": "u1l2_ex1",
+                "type": "multiple_choice",
+                "difficulty": "easy",
+                "question": "Berapa banyak jeruk yang kamu lihat?",
+                "options": ["1", "2", "3", "4"],
+                "correct_answer": "3",
+                "explanation": "Benar! Ada tiga jeruk segar.",
+                "spaced_repetition": true,
+                "visual": { "type": "objects", "label": "🍊", "count": 3 }
+              },
+              {
+                "id": "u1l2_ex2",
+                "type": "sequence_ordering",
+                "difficulty": "medium",
+                "question": "Angka berapa yang hilang setelah 1?",
+                "options": ["1", "2", "3", "4"],
+                "correct_answer": "2",
+                "explanation": "Yey! Setelah 1 adalah 2, lalu 3.",
+                "spaced_repetition": true,
+                "visual": { "sequence": ["1", "?", "3"] }
+              },
+              {
+                "id": "u1l2_ex3",
+                "type": "comparison",
+                "difficulty": "medium",
+                "question": "Mana kelompok buah yang jumlahnya LEBIH BANYAK?",
+                "options": ["A", "B", "Sama"],
+                "correct_answer": "B",
+                "explanation": "Betul! Kelompok B punya 3 pisang, sedangkan A hanya 1 apel.",
+                "spaced_repetition": false,
+                "visual": {
+                  "groupA": { "count": 1, "icon": "🍎", "label": "Kelompok A" },
+                  "groupB": { "count": 3, "icon": "🍌", "label": "Kelompok B" }
+                }
+              },
+              {
+                "id": "u1l2_ex4",
+                "type": "pattern_matching",
+                "difficulty": "hard",
+                "question": "Gambar apa yang selanjutnya?",
+                "options": ["🍎", "🍌", "🍇", "🍊"],
+                "correct_answer": "🍎",
+                "explanation": "Pintar! Polanya adalah Apel, Pisang, lalu Apel lagi.",
+                "spaced_repetition": false,
+                "visual": { "pattern": ["🍎", "🍌", "🍎", "🍌", "?"] }
+              }
+            ]
+          }
+        ],
+        "checkpoint": {
+          "id": "u1_checkpoint",
+          "title": "Checkpoint Unit 1: Pesta Angka 1-3",
+          "exercises": [
+            {
+              "id": "u1cp_ex1",
+              "type": "multiple_choice",
+              "difficulty": "easy",
+              "question": "Pilih angka yang mewakili 3 buah stroberi 🍓!",
+              "options": ["1", "2", "3", "4"],
+              "correct_answer": "3",
+              "explanation": "Benar! 3 stroberi sama dengan angka 3.",
+              "spaced_repetition": true,
+              "visual": { "type": "objects", "label": "🍓", "count": 3 }
+            },
+            {
+              "id": "u1cp_ex2",
+              "type": "matching",
+              "difficulty": "medium",
+              "question": "Cocokkan angka dengan jumlah buahnya!",
+              "options": ["1::🍎", "2::🍌🍌", "3::🍊🍊🍊"],
+              "correct_answer": "1::🍎|2::🍌🍌|3::🍊🍊🍊",
+              "explanation": "Wah, kamu berhasil memasangkan semuanya dengan tepat!",
+              "spaced_repetition": false
+            },
+            {
+              "id": "u1cp_ex3",
+              "type": "drag_and_drop",
+              "difficulty": "easy",
+              "question": "Seret 1 buah jeruk 🍊 ke piring!",
+              "options": [],
+              "correct_answer": "1",
+              "explanation": "Bagus sekali!",
+              "spaced_repetition": false,
+              "visual": { "type": "objects", "label": "🍊", "count": 3 }
+            },
+            {
+              "id": "u1cp_ex4",
+              "type": "true_false",
+              "difficulty": "easy",
+              "question": "Ada 3 kucing 🐱 di taman ini, benar atau salah?",
+              "options": ["Benar", "Salah"],
+              "correct_answer": "Salah",
+              "explanation": "Itu salah, karena hanya ada 2 kucing.",
+              "spaced_repetition": false,
+              "visual": { "type": "objects", "label": "🐱", "count": 2 }
+            },
+            {
+              "id": "u1cp_ex5",
+              "type": "fill_in_blank",
+              "difficulty": "medium",
+              "question": "Hitung jumlah mobilnya dan ketik angkanya: 🚗 🚗 🚗",
+              "options": [],
+              "correct_answer": "3",
+              "explanation": "Sempurna! Jumlahnya 3.",
+              "spaced_repetition": true
+            }
+          ]
+        }
+      },
+      {
+        "id": "unit_2",
+        "title": "Unit 2: Empat dan Lima yang Hebat",
+        "order": 2,
+        "icon": "moon",
+        "color": "purple",
+        "lessons": [
+          {
+            "id": "u2_lesson1",
+            "title": "Angka 4 yang Kuat",
+            "order": 1,
+            "summary": "Mengenal angka 4 melalui bentuk dan jumlah.",
+            "exercises": [
+              {
+                "id": "u2l1_ex1",
+                "type": "multiple_choice",
+                "difficulty": "easy",
+                "question": "Ada berapa semangka di gambar?",
+                "options": ["2", "3", "4", "5"],
+                "correct_answer": "4",
+                "explanation": "Betul sekali, ada 4 semangka yang lezat!",
+                "spaced_repetition": true,
+                "visual": { "type": "objects", "label": "🍉", "count": 4 }
+              },
+              {
+                "id": "u2l1_ex2",
+                "type": "true_false",
+                "difficulty": "easy",
+                "question": "Gambar di bawah ini menunjukkan 4 benda?",
+                "options": ["Benar", "Salah"],
+                "correct_answer": "Benar",
+                "explanation": "Tepat! Terdapat 4 benda.",
+                "spaced_repetition": false,
+                "visual": { "type": "ten_frame", "value": 4 }
+              },
+              {
+                "id": "u2l1_ex3",
+                "type": "drag_and_drop",
+                "difficulty": "medium",
+                "question": "Masukkan 4 buah anggur 🍇 ke mangkuk!",
+                "options": [],
+                "correct_answer": "4",
+                "explanation": "Super! Kamu sudah bisa menghitung sampai 4.",
+                "spaced_repetition": true,
+                "visual": { "type": "objects", "label": "🍇", "count": 6 }
+              },
+              {
+                "id": "u2l1_ex4",
+                "type": "comparison",
+                "difficulty": "medium",
+                "question": "Mana yang jumlahnya LEBIH SEDIKIT?",
+                "options": ["A", "B", "Sama"],
+                "correct_answer": "A",
+                "explanation": "Benar! Kelompok A (2) lebih sedikit dari B (4).",
+                "spaced_repetition": false,
+                "visual": {
+                  "groupA": { "count": 2, "icon": "🍎", "label": "Kelompok A" },
+                  "groupB": { "count": 4, "icon": "🍉", "label": "Kelompok B" }
+                }
+              }
+            ]
+          },
+          {
+            "id": "u2_lesson2",
+            "title": "Angka 5 yang Ceria",
+            "order": 2,
+            "summary": "Belajar angka 5 dan melengkapi urutan.",
+            "exercises": [
+              {
+                "id": "u2l2_ex1",
+                "type": "multiple_choice",
+                "difficulty": "easy",
+                "question": "Berapa banyak bintang yang bersinar?",
+                "options": ["2", "3", "4", "5"],
+                "correct_answer": "5",
+                "explanation": "Hebat! Ada 5 bintang cemerlang.",
+                "spaced_repetition": true,
+                "visual": { "type": "objects", "label": "⭐", "count": 5 }
+              },
+              {
+                "id": "u2l2_ex2",
+                "type": "sequence_ordering",
+                "difficulty": "hard",
+                "question": "Bantu melengkapi angka yang hilang!",
+                "options": ["3", "4", "5", "6"],
+                "correct_answer": "5",
+                "explanation": "Tepat sekali, 5 melengkapi urutan 3, 4, 5.",
+                "spaced_repetition": true,
+                "visual": { "sequence": ["3", "4", "?", "6"] }
+              },
+              {
+                "id": "u2l2_ex3",
+                "type": "seek_find",
+                "difficulty": "medium",
+                "question": "Temukan 5 kupu-kupu 🦋 di taman bunga!",
+                "options": [],
+                "correct_answer": "5",
+                "explanation": "Wah, matamu sangat jeli!",
+                "spaced_repetition": false,
+                "visual": { 
+                  "label": "🦋", 
+                  "items": [
+                    { "x": 10, "y": 20, "icon": "🦋" },
+                    { "x": 40, "y": 50, "icon": "🦋" },
+                    { "x": 70, "y": 10, "icon": "🦋" },
+                    { "x": 80, "y": 80, "icon": "🦋" },
+                    { "x": 30, "y": 90, "icon": "🦋" }
+                  ] 
+                }
+              },
+              {
+                "id": "u2l2_ex4",
+                "type": "matching",
+                "difficulty": "medium",
+                "question": "Hubungkan angka dengan jumlah yang benar!",
+                "options": ["4::🍉🍉🍉🍉", "5::⭐⭐⭐⭐⭐", "2::🍎🍎"],
+                "correct_answer": "4::🍉🍉🍉🍉|5::⭐⭐⭐⭐⭐|2::🍎🍎",
+                "explanation": "Luar biasa! Semuanya berpasangan dengan sempurna.",
+                "spaced_repetition": true
+              }
+            ]
+          }
+        ],
+        "checkpoint": {
+          "id": "u2_checkpoint",
+          "title": "Checkpoint Unit 2: Tantangan 1 sampai 5",
+          "exercises": [
+            {
+              "id": "u2cp_ex1",
+              "type": "multiple_choice",
+              "difficulty": "easy",
+              "question": "Ada berapa jumlah kelinci ini: 🐇 🐇 🐇 🐇 🐇?",
+              "options": ["3", "4", "5", "6"],
+              "correct_answer": "5",
+              "explanation": "Benar! Totalnya ada 5 kelinci.",
+              "spaced_repetition": true
+            },
+            {
+              "id": "u2cp_ex2",
+              "type": "sequence_ordering",
+              "difficulty": "medium",
+              "question": "Isi angka yang kosong untuk melengkapi urutan!",
+              "options": ["2", "3", "4", "5"],
+              "correct_answer": "4",
+              "explanation": "Pintar! Setelah 3 adalah 4.",
+              "spaced_repetition": true,
+              "visual": { "sequence": ["2", "3", "?", "5"] }
+            },
+            {
+              "id": "u2cp_ex3",
+              "type": "drag_and_drop",
+              "difficulty": "medium",
+              "question": "Ambil 4 bunga 🌻 dan taruh di vas!",
+              "options": [],
+              "correct_answer": "4",
+              "explanation": "Vas bunganya terlihat sangat cantik dengan 4 bunga.",
+              "spaced_repetition": false,
+              "visual": { "type": "objects", "label": "🌻", "count": 6 }
+            },
+            {
+              "id": "u2cp_ex4",
+              "type": "pattern_matching",
+              "difficulty": "hard",
+              "question": "Gambar apa yang harusnya muncul di akhir?",
+              "options": ["⭐", "🌙", "☀️", "☁️"],
+              "correct_answer": "⭐",
+              "explanation": "Tepat! Polanya adalah Bintang, Bulan, Bintang.",
+              "spaced_repetition": false,
+              "visual": { "pattern": ["⭐", "🌙", "⭐", "🌙", "?"] }
+            },
+            {
+              "id": "u2cp_ex5",
+              "type": "comparison",
+              "difficulty": "medium",
+              "question": "Mana yang jumlahnya SAMA DENGAN 4?",
+              "options": ["A", "B", "Sama"],
+              "correct_answer": "B",
+              "explanation": "Betul, Kelompok B berjumlah 4.",
+              "spaced_repetition": true,
+              "visual": {
+                "groupA": { "count": 5, "icon": "🍎", "label": "Kelompok A" },
+                "groupB": { "count": 4, "icon": "🍉", "label": "Kelompok B" }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
