@@ -1,31 +1,33 @@
 <template>
   <div class="space-y-8 py-4">
-    <!-- View Switcher Toolbar -->
-    <div class="bg-white p-4 rounded-3xl border-2 border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-duo-green text-white flex items-center justify-center font-heading text-xl font-bold shadow-duo-green">
+    <!-- Compact 1-Line View Switcher Toolbar -->
+    <div class="bg-white px-4 py-2.5 rounded-2xl border-2 border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl bg-duo-blue text-white flex items-center justify-center font-heading text-base font-bold shadow-2xs">
           🗺️
         </div>
-        <div>
-          <h3 class="font-heading text-lg font-black text-slate-800">Mode Tampilan Peta Belajar</h3>
-          <p class="text-xs text-slate-500 font-heading font-semibold">Pilih antara petualangan 3D WebGL atau jalur 2D klasik</p>
+        <div class="flex items-center gap-2 flex-wrap">
+          <h3 class="font-heading text-base font-black text-slate-800">Skill Path</h3>
+          <span class="px-2.5 py-0.5 bg-slate-100 border border-slate-200 rounded-full font-heading font-bold text-[11px] text-slate-500">
+            {{ courseStore.units.length }} Unit
+          </span>
         </div>
       </div>
 
-      <div class="p-1.5 bg-slate-100 rounded-2xl flex items-center gap-1.5 border border-slate-200">
+      <div class="p-1 bg-slate-100 rounded-xl flex items-center gap-1 border border-slate-200">
         <button 
           @click="pathViewMode = '3d'"
-          class="px-4 py-2 rounded-xl font-heading font-extrabold text-xs transition-all cursor-pointer flex items-center gap-1.5"
-          :class="pathViewMode === '3d' ? 'bg-duo-green text-white shadow-duo-green scale-105' : 'text-slate-600 hover:text-slate-900'"
+          class="px-3 py-1 rounded-lg font-heading font-black text-xs transition-all cursor-pointer flex items-center gap-1"
+          :class="pathViewMode === '3d' ? 'bg-duo-green text-white shadow-2xs scale-105' : 'text-slate-600 hover:text-slate-900'"
         >
-          <span>🌴 Jalur Petualangan 3D</span>
+          <span>🌴 Jalur 3D</span>
         </button>
         <button 
           @click="pathViewMode = '2d'"
-          class="px-4 py-2 rounded-xl font-heading font-extrabold text-xs transition-all cursor-pointer flex items-center gap-1.5"
-          :class="pathViewMode === '2d' ? 'bg-duo-blue text-white shadow-duo-blue scale-105' : 'text-slate-600 hover:text-slate-900'"
+          class="px-3 py-1 rounded-lg font-heading font-black text-xs transition-all cursor-pointer flex items-center gap-1"
+          :class="pathViewMode === '2d' ? 'bg-duo-blue text-white shadow-2xs scale-105' : 'text-slate-600 hover:text-slate-900'"
         >
-          <span>🗺️ Jalur 2D Klasik</span>
+          <span>🗺️ Jalur 2D</span>
         </button>
       </div>
     </div>

@@ -202,28 +202,8 @@
         </NuxtLink>
       </div>
 
-      <!-- Skill Tree Section Header -->
-      <section class="pt-4 space-y-4">
-        <div class="bg-white rounded-2xl p-4 border-2 border-slate-200 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-duo-blue text-white flex items-center justify-center font-heading text-xl font-bold shadow-duo-blue">
-              🗺️
-            </div>
-            <div>
-              <h2 class="font-heading text-xl font-black text-slate-800">
-                Peta Alur Pembelajaran (Skill Path)
-              </h2>
-              <p class="text-xs text-slate-500 font-heading font-semibold">
-                Klik node berwarna untuk memilih materi dan mulai kuis interaktif
-              </p>
-            </div>
-          </div>
-          
-          <span class="px-3.5 py-1.5 bg-slate-100 border border-slate-200 rounded-full font-heading font-bold text-xs text-slate-600">
-            📊 {{ courseStore.units.length }} Unit • {{ totalLessonsCount }} Pelajaran Total
-          </span>
-        </div>
-
+      <!-- Skill Tree Section -->
+      <section class="pt-2">
         <!-- Interactive Skill Tree Node Graph -->
         <SkillTree />
       </section>
