@@ -51,9 +51,10 @@
       class="rounded-[32px] border-4 p-5 sm:p-7 shadow-2xl relative space-y-8 transition-all duration-300 overflow-visible"
       :class="getUnitContainerTheme(unit.color)"
     >
-      <!-- Vibrant Biome Header Banner -->
+      <!-- Vibrant Biome Header Banner (Clickable Collapse Header) -->
       <div 
-        class="rounded-2xl p-5 sm:p-6 text-white relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg border-b-4 border-black/15 z-10 overflow-hidden"
+        @click="toggleUnitCollapse(unit.id)"
+        class="rounded-2xl p-5 sm:p-6 text-white relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg border-b-4 border-black/15 z-10 overflow-hidden cursor-pointer group/header hover:brightness-105 transition-all select-none"
         :class="getUnitHeaderTheme(unit.color)"
       >
         <!-- Decorative Ambient Light Blobs -->
@@ -73,8 +74,8 @@
           </p>
         </div>
 
-        <!-- Unit Completion Progress Badge & Collapse Toggle -->
-        <div class="flex items-center gap-2.5 w-full sm:w-auto z-10">
+        <!-- Unit Completion Progress Badge & Sleek Rotating Chevron Toggle -->
+        <div class="flex items-center gap-3 w-full sm:w-auto z-10 justify-between sm:justify-end">
           <div class="bg-black/20 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/30 font-heading text-xs font-bold text-center shrink-0 space-y-1 flex-1 sm:flex-none shadow-md">
             <div class="flex items-center justify-center gap-1.5 text-amber-300 font-extrabold text-sm drop-shadow-xs">
               <Trophy class="w-4 h-4 text-amber-300 fill-amber-300 animate-bounce" />
@@ -88,16 +89,14 @@
             </div>
           </div>
 
-          <!-- Collapse / Expand Toggle Button -->
-          <button 
-            @click="toggleUnitCollapse(unit.id)"
-            class="px-4 py-3 bg-white/20 hover:bg-white/35 active:scale-95 backdrop-blur-md rounded-2xl border border-white/30 text-white font-heading font-black text-xs flex items-center justify-center gap-1.5 cursor-pointer transition-all shadow-md shrink-0"
-            :title="isUnitCollapsed(unit.id) ? 'Tampilkan Jalur Belajar' : 'Sembunyikan Jalur Belajar'"
+          <!-- Sleek Rotating Glass Chevron Icon -->
+          <div 
+            class="w-11 h-11 rounded-2xl bg-white/20 group-hover/header:bg-white/35 backdrop-blur-md border border-white/35 flex items-center justify-center text-white shadow-md shrink-0 transition-transform duration-300"
+            :class="isUnitCollapsed(unit.id) ? 'rotate-180' : 'rotate-0'"
+            :title="isUnitCollapsed(unit.id) ? 'Buka Jalur Belajar' : 'Tutup Jalur Belajar'"
           >
-            <span>{{ isUnitCollapsed(unit.id) ? '📖 Buka' : '🙈 Sembunyikan' }}</span>
-            <ChevronDown v-if="isUnitCollapsed(unit.id)" class="w-4 h-4 stroke-[3]" />
-            <ChevronUp v-else class="w-4 h-4 stroke-[3]" />
-          </button>
+            <ChevronUp class="w-6 h-6 stroke-[3]" />
+          </div>
         </div>
       </div>
 
