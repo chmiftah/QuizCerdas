@@ -42,7 +42,7 @@
     <!-- Duolingo-Style Sticky Top Active Unit Header Bar (Pins active unit on scroll without overlapping navbar) -->
     <Transition name="slide-down">
       <div 
-        v-if="courseStore.units.length > 0"
+        v-if="showStickyHeader && courseStore.units.length > 0"
         class="sticky top-16 sm:top-20 z-30 w-full rounded-2xl p-3 sm:p-4 text-white shadow-2xl border-4 border-black/15 backdrop-blur-md flex items-center justify-between gap-3 transition-all duration-300 select-none mb-4"
         :class="getUnitHeaderTheme(currentVisibleUnit?.color || 'emerald')"
       >
@@ -729,18 +729,28 @@ const isUnitCollapsed = (unitId) => {
 }
 
 const updateActiveUnitOnScroll = () => {
+  if (typeof window !== 'undefined') {
+    showStickyHeader.value = window.scrollY > 140
+  }
+
   if (!courseStore.units || courseStore.units.length === 0) return
-  let current = courseStore.units[0]
+
+  const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 800
+  const viewportCenter = viewportHeight * 0.45
+
+  let activeUnit = courseStore.units[0]
+
   for (const unit of courseStore.units) {
     const el = document.getElementById(`unit-container-${unit.id}`)
     if (el) {
       const rect = el.getBoundingClientRect()
-      if (rect.top <= 350) {
-        current = unit
+      if (rect.top <= viewportCenter && rect.bottom >= 100) {
+        activeUnit = unit
       }
     }
   }
-  currentVisibleUnit.value = current
+
+  currentVisibleUnit.value = activeUnit
 }
 
 const scrollToActiveNode = () => {
