@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-body antialiased">
+  <div class="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-body antialiased overflow-x-hidden w-full">
     <NuxtPage />
   </div>
 </template>

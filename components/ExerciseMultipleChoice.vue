@@ -1,24 +1,24 @@
 <template>
-  <div class="space-y-4 sm:space-y-6">
+  <div class="space-y-4 sm:space-y-6 w-full min-w-0">
     <!-- Question Text with Audio Player Button -->
-    <div class="flex items-center gap-2 sm:gap-3">
-      <h2 class="font-heading text-lg sm:text-2xl md:text-3xl text-slate-800 font-bold leading-snug flex-1">
+    <div class="flex items-center gap-2 sm:gap-3 w-full min-w-0">
+      <h2 class="font-heading text-lg sm:text-2xl md:text-3xl text-slate-800 font-bold leading-snug flex-1 min-w-0 break-words">
         {{ exercise.question }}
       </h2>
-      <AudioPlayerButton :text="exercise.question" />
+      <AudioPlayerButton :text="exercise.question" class="shrink-0" />
     </div>
 
     <!-- Option Cards Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4 pt-1 sm:pt-2">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4 pt-1 sm:pt-2 w-full">
       <button 
         v-for="(option, idx) in exercise.options" 
         :key="idx"
         @click="$emit('select', option)"
         :disabled="isChecked"
-        class="relative p-3 sm:p-5 rounded-xl sm:rounded-2xl border-2 transition-all duration-150 text-left flex items-center justify-between gap-2.5 sm:gap-3 group cursor-pointer select-none min-h-[52px] sm:min-h-[64px]"
+        class="relative p-3 sm:p-5 rounded-xl sm:rounded-2xl border-2 transition-all duration-150 text-left flex items-center justify-between gap-2.5 sm:gap-3 group cursor-pointer select-none min-h-[52px] sm:min-h-[64px] w-full min-w-0 overflow-hidden"
         :class="getOptionClass(option)"
       >
-        <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+        <div class="flex items-center gap-2.5 sm:gap-3 min-w-0 w-full overflow-hidden">
           <!-- Keyboard / Number Badge -->
           <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl flex items-center justify-center font-heading font-bold text-xs sm:text-sm border-2 transition-colors shrink-0"
                 :class="getBadgeClass(option)">
@@ -35,7 +35,7 @@
             />
           </div>
 
-          <span class="font-heading font-bold text-sm sm:text-lg text-slate-800 truncate">
+          <span class="font-heading font-bold text-sm sm:text-lg text-slate-800 truncate min-w-0 flex-1">
             {{ option }}
           </span>
         </div>

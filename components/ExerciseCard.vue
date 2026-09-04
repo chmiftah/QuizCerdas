@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen bg-slate-50 flex flex-col justify-between pb-32">
+  <div class="min-h-screen bg-slate-50 flex flex-col justify-between pb-32 overflow-x-hidden w-full max-w-full">
     <!-- Lesson Runner Top Header Bar -->
-    <header class="p-2.5 sm:p-4 bg-white border-b-2 border-duo-gray-100 sticky top-0 z-30 shadow-2xs">
-      <div class="max-w-3xl mx-auto flex items-center justify-between gap-1.5 sm:gap-4">
+    <header class="p-2.5 sm:p-4 bg-white border-b-2 border-duo-gray-100 sticky top-0 z-30 shadow-2xs overflow-hidden">
+      <div class="max-w-3xl mx-auto flex items-center justify-between gap-1.5 sm:gap-4 w-full min-w-0">
         <!-- Close / Quit Button -->
         <NuxtLink to="/" class="p-1 text-duo-gray-400 hover:text-slate-800 transition-colors rounded-xl hover:bg-duo-gray-50 shrink-0">
           <X class="w-6 h-6 sm:w-7 sm:h-7 stroke-[3]" />
@@ -42,13 +42,13 @@
     </header>
 
     <!-- Main Question Container -->
-    <main class="max-w-2xl mx-auto w-full px-3 sm:px-4 py-4 sm:py-8 flex-1">
-      <div v-if="engine.currentExercise" class="space-y-4 sm:space-y-8 animate-pop">
+    <main class="max-w-2xl mx-auto w-full px-3 sm:px-4 py-4 sm:py-8 flex-1 overflow-x-hidden">
+      <div v-if="engine.currentExercise" class="space-y-4 sm:space-y-8 animate-pop w-full min-w-0">
         <!-- Lesson Summary Header & Hint Button -->
-        <div class="flex items-center justify-between gap-3">
-          <div v-if="lessonSummary" class="bg-blue-50 border-2 border-duo-blue/30 rounded-2xl p-3 flex items-center gap-2 flex-1">
-            <span class="text-base">💡</span>
-            <p class="text-xs font-heading font-semibold text-slate-700 truncate">
+        <div class="flex items-center justify-between gap-2 sm:gap-3 w-full min-w-0">
+          <div v-if="lessonSummary" class="bg-blue-50 border-2 border-duo-blue/30 rounded-2xl p-2.5 sm:p-3 flex items-center gap-2 flex-1 min-w-0 overflow-hidden">
+            <span class="text-base shrink-0">💡</span>
+            <p class="text-xs font-heading font-semibold text-slate-700 truncate min-w-0">
               {{ lessonSummary }}
             </p>
           </div>
