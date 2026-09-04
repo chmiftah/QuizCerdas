@@ -30,12 +30,12 @@
         <div 
           class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shrink-0 shadow-lg cursor-pointer"
           :class="activeCardNode.type === 'checkpoint' ? 'bg-gradient-to-br from-amber-400 to-yellow-500 text-amber-950' : 'bg-gradient-to-br from-emerald-400 to-teal-600 text-white'"
-          @click="onStartNode(activeCardNode)"
+          @click="launchQuiz(activeCardNode)"
         >
           {{ activeCardNode.type === 'checkpoint' ? '👑' : (activeCardNode.isCompleted ? '✓' : '⭐') }}
         </div>
 
-        <div class="text-left space-y-1 flex-1 min-w-0 cursor-pointer" @click="onStartNode(activeCardNode)">
+        <div class="text-left space-y-1 flex-1 min-w-0 cursor-pointer" @click="launchQuiz(activeCardNode)">
           <div class="flex items-center gap-2">
             <span 
               class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-2xs"
@@ -54,7 +54,7 @@
 
         <div class="flex items-center gap-1.5 shrink-0">
           <button 
-            @click="onStartNode(activeCardNode)"
+            @click="launchQuiz(activeCardNode)"
             class="px-4 py-2.5 rounded-xl font-heading font-black text-xs shadow-lg cursor-pointer transition-transform hover:scale-105 active:scale-95"
             :class="activeCardNode.type === 'checkpoint' ? 'duo-btn-yellow' : 'duo-btn-green'"
           >
@@ -441,7 +441,7 @@ const onMouseUp = () => {
   mouse.isDragging = false
 }
 
-// Click Canvas Direct Trigger Handler
+// Click Canvas Raycast Handler: Opens Popup Card FIRST
 const onClickCanvas = () => {
   if (camera && scene) {
     raycaster.setFromCamera(mouseVector, camera)
@@ -451,19 +451,16 @@ const onClickCanvas = () => {
       const hitObj = intersects[0].object
       const data = hitObj.userData.nodeData
       if (data) {
+        // Show persistent Popup Card first!
         selectedNode.value = data
-        // If node is unlocked, immediately launch quiz or keep card persistent
-        if (data.isUnlocked) {
-          onStartNode(data)
-        }
       }
     }
   }
 }
 
-const onStartNode = (node: any) => {
-  if (node) {
-    selectedNode.value = node
+// Launched only when user clicks the Popup Card / MULAI button!
+const launchQuiz = (node: any) => {
+  if (node && node.isUnlocked) {
     emit('node-click', { unitId: props.unit.id, itemId: node.id, type: node.type })
   }
 }
