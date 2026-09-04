@@ -1,9 +1,40 @@
 <template>
   <div class="relative w-full max-w-xl mx-auto h-[580px] sm:h-[660px] select-none">
-    <!-- WebGL Canvas Container (Transparent background, no outer card frame) -->
+    <!-- WebGL Canvas Container -->
     <div ref="canvasContainer" class="w-full h-full cursor-pointer"></div>
 
-    <!-- Active Node Popover HUD Card (Only shows when a node is hovered or clicked) -->
+    <!-- Floating Title Pill Badges Overlay Projected Over 3D Nodes -->
+    <div class="absolute inset-0 pointer-events-none z-10 overflow-hidden">
+      <div 
+        v-for="node in projectedNodes" 
+        :key="node.id"
+        class="absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-75 pointer-events-auto cursor-pointer flex flex-col items-center"
+        :style="{ left: `${node.screenX}px`, top: `${node.screenY}px` }"
+        @click="onBadgeClick(node)"
+      >
+        <!-- Blinking "Lanjut di Sini!" Mascot Callout for Current Active Node -->
+        <div 
+          v-if="node.isUnlocked && !node.isCompleted && node.type === 'lesson'"
+          class="mb-2 px-3 py-1 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-full text-[10px] font-heading font-black shadow-lg border-2 border-white flex items-center gap-1.5 animate-bounce animate-pulse"
+        >
+          <span class="w-2 h-2 rounded-full bg-amber-300 animate-ping"></span>
+          <span>🦉 Lanjut di sini!</span>
+        </div>
+
+        <!-- Node Title Badge (Matching 2D Skill Tree Style) -->
+        <div 
+          class="px-3 py-1.5 rounded-2xl border-2 shadow-lg text-center max-w-[140px] font-heading font-black text-[11px] truncate backdrop-blur-md transition-transform hover:scale-105 active:scale-95"
+          :class="getNodeBadgeClass(node)"
+        >
+          <span v-if="!node.isUnlocked" class="mr-1">🔒</span>
+          <span v-else-if="node.isCompleted" class="mr-1 text-emerald-600">✓</span>
+          <span v-else class="mr-1 text-amber-500">⭐</span>
+          <span>{{ node.title }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Node Popover HUD Card -->
     <Transition name="bounce-popover">
       <div 
         v-if="activeCardNode"
@@ -81,6 +112,7 @@ const emit = defineEmits(['node-click'])
 const canvasContainer = ref<HTMLDivElement | null>(null)
 const hoveredNode = ref<any | null>(null)
 const selectedNode = ref<any | null>(null)
+const projectedNodes = ref<any[]>([])
 
 const activeCardNode = computed(() => selectedNode.value || hoveredNode.value)
 
@@ -91,7 +123,9 @@ let animationFrameId: number
 
 let terrainGroup: THREE.Group
 let mascotGroup: THREE.Group
+let pulseRingMesh: THREE.Mesh | null = null
 const nodeMeshes: THREE.Mesh[] = []
+const rawNodesList: any[] = []
 
 const mouse = { x: 0, y: 0, isDragging: false, previousMouseX: 0, previousMouseY: 0 }
 const raycaster = new THREE.Raycaster()
@@ -99,7 +133,7 @@ const mouseVector = new THREE.Vector2()
 
 const unitTitle = ref(props.unit.title || 'Terrain 3D Petualangan')
 
-// Calculate Vertical S-Curve Nodes with refined proportional scaling
+// Calculate Vertical S-Curve Nodes
 const getVerticalTrackNodes = () => {
   const nodes: any[] = []
   const lessons = props.unit.lessons || []
@@ -146,6 +180,23 @@ const getVerticalTrackNodes = () => {
   return nodes
 }
 
+const getNodeBadgeClass = (node: any) => {
+  if (!node.isUnlocked) {
+    return 'bg-slate-100/90 text-slate-400 border-slate-300'
+  }
+  if (node.isCompleted) {
+    return 'bg-white/95 text-slate-800 border-emerald-400 shadow-emerald-200'
+  }
+  // Current active unlocked position: Blinking glowing green border!
+  return 'bg-emerald-500 text-white border-white shadow-emerald-400 animate-pulse scale-105'
+}
+
+const onBadgeClick = (node: any) => {
+  if (node.isUnlocked) {
+    selectedNode.value = node
+  }
+}
+
 const init3D = () => {
   if (!canvasContainer.value) return
 
@@ -153,7 +204,6 @@ const init3D = () => {
   const height = canvasContainer.value.clientHeight
 
   scene = new THREE.Scene()
-  // Set transparent background so 3D terrain sits directly on the page!
   scene.background = null
 
   camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100)
@@ -161,7 +211,7 @@ const init3D = () => {
   camera.lookAt(0, 0, 0)
 
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
-  renderer.setClearColor(0x000000, 0) // Fully transparent canvas!
+  renderer.setClearColor(0x000000, 0)
   renderer.setSize(width, height)
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.toneMapping = THREE.ACESFilmicToneMapping
@@ -200,6 +250,8 @@ const init3D = () => {
 
   // --- 2. WINDING ROAD PATHWAY ---
   const nodes = getVerticalTrackNodes()
+  rawNodesList.push(...nodes)
+
   const pathPoints = nodes.map(n => new THREE.Vector3(n.position.x, 0.58, n.position.z))
   const curve = new THREE.CatmullRomCurve3(pathPoints)
 
@@ -268,17 +320,17 @@ const init3D = () => {
     terrainGroup.add(cGroup)
   })
 
-  // --- 4. ELEGANTLY SCALED STEPPING NODES ---
+  // --- 4. STEPPING NODES & PULSING GLOW RING ---
   let activeNodePos: THREE.Vector3 | null = null
 
   nodes.forEach((node) => {
     const nodeGroup = new THREE.Group()
     nodeGroup.position.set(node.position.x, node.position.y, node.position.z)
 
-    // Base Cobblestone 3D Disc Ring
+    // Base Cobblestone Disc Ring
     const ringGeo = new THREE.CylinderGeometry(0.68, 0.72, 0.22, 24)
     const ringMat = new THREE.MeshStandardMaterial({ 
-      color: node.isCompleted ? 0xffb700 : (node.isUnlocked ? 0x43a047 : 0x94a3b8),
+      color: node.isCompleted ? 0xffb700 : (node.isUnlocked ? 0x43a047 : 0x64748b),
       roughness: 0.3 
     })
     const ring = new THREE.Mesh(ringGeo, ringMat)
@@ -326,18 +378,16 @@ const init3D = () => {
       nodeMeshes.push(gem)
     }
 
-    // Add 3D Lock Padlock for locked nodes 🔒
+    // Add 3D Metallic Lock Padlock for locked nodes 🔒
     if (!node.isUnlocked) {
       const lockGroup = new THREE.Group()
       lockGroup.position.set(0, 0.85, 0)
 
-      // Lock Body
       const lockBodyGeo = new THREE.BoxGeometry(0.28, 0.26, 0.12)
       const lockBodyMat = new THREE.MeshStandardMaterial({ color: 0x475569, metalness: 0.7, roughness: 0.3 })
       const lockBody = new THREE.Mesh(lockBodyGeo, lockBodyMat)
       lockGroup.add(lockBody)
 
-      // Lock Ring Shackle
       const shackleGeo = new THREE.TorusGeometry(0.09, 0.03, 12, 16, Math.PI)
       const shackleMat = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, metalness: 0.8, roughness: 0.2 })
       const shackle = new THREE.Mesh(shackleGeo, shackleMat)
@@ -355,6 +405,21 @@ const init3D = () => {
     nodeGroup.userData = { id: node.id, targetY: 0, data: node }
     terrainGroup.add(nodeGroup)
   })
+
+  // Pulsing 3D Glowing Aura Ring for Active Position
+  if (activeNodePos) {
+    const pulseRingGeo = new THREE.RingGeometry(0.7, 1.0, 32)
+    const pulseRingMat = new THREE.MeshBasicMaterial({ 
+      color: 0x58cc02, 
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.8 
+    })
+    pulseRingMesh = new THREE.Mesh(pulseRingGeo, pulseRingMat)
+    pulseRingMesh.rotation.x = Math.PI * 0.5
+    pulseRingMesh.position.set(activeNodePos.x, 0.59, activeNodePos.z)
+    terrainGroup.add(pulseRingMesh)
+  }
 
   // --- 5. 3D ANIMATED MASCOT KIKO ---
   mascotGroup = new THREE.Group()
@@ -405,6 +470,31 @@ const init3D = () => {
   animate()
 }
 
+const updateProjectedNodeBadges = () => {
+  if (!camera || !canvasContainer.value) return
+
+  const width = canvasContainer.value.clientWidth
+  const height = canvasContainer.value.clientHeight
+  const projected: any[] = []
+
+  rawNodesList.forEach(node => {
+    // Project 3D vector to 2D screen coordinate
+    const vec = new THREE.Vector3(node.position.x, node.position.y + 0.95, node.position.z)
+    vec.project(camera)
+
+    const screenX = (vec.x * 0.5 + 0.5) * width
+    const screenY = (-vec.y * 0.5 + 0.5) * height
+
+    projected.push({
+      ...node,
+      screenX,
+      screenY
+    })
+  })
+
+  projectedNodes.value = projected
+}
+
 const onMouseDown = (e: MouseEvent) => {
   mouse.isDragging = false
   mouse.previousMouseX = e.clientX
@@ -424,7 +514,6 @@ const onMouseMove = (e: MouseEvent) => {
     if (intersects.length > 0) {
       const hitObj = intersects[0].object
       const data = hitObj.userData.nodeData
-      // Only highlight unlocked nodes!
       if (data && data.isUnlocked) {
         hoveredNode.value = data
         terrainGroup.children.forEach((child) => {
@@ -458,7 +547,6 @@ const onClickCanvas = () => {
     if (intersects.length > 0) {
       const hitObj = intersects[0].object
       const data = hitObj.userData.nodeData
-      // Only allow selection & popup for unlocked nodes! 🔒
       if (data && data.isUnlocked) {
         selectedNode.value = data
       }
@@ -479,9 +567,21 @@ const animate = () => {
 
   const time = clock.getElapsedTime()
 
+  // Mascot Happy Hopping
   if (mascotGroup) {
-    mascotGroup.position.y = 0.85 + Math.abs(Math.sin(time * 4)) * 0.15
+    mascotGroup.position.y = 0.85 + Math.abs(Math.sin(time * 4)) * 0.18
   }
+
+  // Active Position Pulsing Ring Animation
+  if (pulseRingMesh) {
+    const scale = 1.0 + Math.sin(time * 5) * 0.25
+    pulseRingMesh.scale.set(scale, scale, 1)
+    const mat = pulseRingMesh.material as THREE.MeshBasicMaterial
+    mat.opacity = 0.4 + Math.sin(time * 5) * 0.4
+  }
+
+  // Project 3D node points to 2D HTML badges in real time
+  updateProjectedNodeBadges()
 
   renderer.render(scene, camera)
 }
