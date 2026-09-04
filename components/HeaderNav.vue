@@ -300,11 +300,17 @@
 
           <div class="pt-2 space-y-2">
             <button 
-              @click="refill" 
-              class="w-full duo-btn-red py-3 text-base"
+              v-if="userStore.hearts < userStore.maxHearts"
+              @click="buyHeartRefill" 
+              class="w-full duo-btn-red py-3 text-sm flex items-center justify-center gap-2 cursor-pointer"
             >
-              ❤️ Isi Penuh Nyawa (Gratis)
+              <span>❤️ Beli Isi Penuh Nyawa</span>
+              <span class="bg-black/20 px-2 py-0.5 rounded-full text-xs font-black">20 XP</span>
             </button>
+            <div v-else class="bg-emerald-50 text-emerald-800 text-xs p-2.5 rounded-xl border border-emerald-200 font-extrabold">
+              ✨ Nyawa kamu sudah penuh (5/5)!
+            </div>
+
             <button 
               @click="confirmReset" 
               class="w-full py-2 text-xs font-heading font-bold text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
@@ -313,7 +319,7 @@
             </button>
             <button 
               @click="showHeartModal = false" 
-              class="w-full duo-btn-gray py-2 text-sm"
+              class="w-full duo-btn-gray py-2 text-sm cursor-pointer"
             >
               Tutup
             </button>
@@ -345,9 +351,13 @@ const isActivityActive = computed(() => {
   return ['/tracing', '/games/bubble-pop', '/coloring', '/nursery-rhymes', '/shop', '/stickers', '/parent-dashboard'].some(p => path.startsWith(p))
 })
 
-const refill = () => {
-  userStore.refillHearts()
-  showHeartModal.value = false
+const buyHeartRefill = () => {
+  try {
+    userStore.buyHeartRefill(20)
+    showHeartModal.value = false
+  } catch (err) {
+    alert(err.message)
+  }
 }
 
 const handleLogout = () => {

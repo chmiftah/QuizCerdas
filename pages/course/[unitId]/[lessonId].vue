@@ -16,11 +16,24 @@
           </div>
           <h3 class="font-heading text-2xl text-slate-800 font-bold">Nyawa Habis!</h3>
           <p class="text-slate-600 text-sm">
-            Kamu kehabisan nyawa untuk melanjutkan pelajaran ini. Isi nyawa kembali untuk terus belajar!
+            Kamu kehabisan nyawa untuk melanjutkan pelajaran ini. Tukar <strong>20 XP</strong> untuk isi nyawa penuh!
           </p>
-          <button @click="refillAndContinue" class="w-full duo-btn-red py-3 text-base">
-            ❤️ Isi Nyawa Gratis
-          </button>
+
+          <div v-if="userStore.xp >= 20" class="space-y-2 pt-1">
+            <button @click="buyAndContinue" class="w-full duo-btn-red py-3 text-sm sm:text-base flex items-center justify-center gap-2 cursor-pointer">
+              <span>❤️ Isi Penuh Nyawa</span>
+              <span class="bg-black/20 px-2 py-0.5 rounded-full text-xs font-black">20 XP</span>
+            </button>
+          </div>
+          <div v-else class="space-y-2 pt-1">
+            <div class="bg-amber-50 text-amber-800 text-xs p-3 rounded-2xl border border-amber-200 font-bold">
+              XP kamu belum cukup (butuh 20 XP, saat ini: {{ userStore.xp }} XP).
+            </div>
+            <NuxtLink to="/catalog" class="w-full duo-btn-blue block py-2.5 text-xs font-extrabold text-center">
+              📚 Cari XP di Modul Lain
+            </NuxtLink>
+          </div>
+
           <NuxtLink to="/" class="block text-xs font-heading font-bold text-slate-400 hover:underline pt-2">
             Kembali ke Dashboard
           </NuxtLink>
@@ -100,8 +113,12 @@ onMounted(() => {
   })
 })
 
-const refillAndContinue = () => {
-  userStore.refillHearts()
+const buyAndContinue = () => {
+  try {
+    userStore.buyHeartRefill(20)
+  } catch (err) {
+    alert(err.message)
+  }
 }
 
 const finishLesson = () => {

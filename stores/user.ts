@@ -332,6 +332,14 @@ export const useUserStore = defineStore('user', {
       this.saveToStorage()
     },
 
+    buyHeartRefill(cost: number = 20) {
+      if (this.xp < cost) {
+        throw new Error(`XP kamu belum cukup! Kamu butuh ${cost} XP untuk isi nyawa.`)
+      }
+      this.xp -= cost
+      this.refillHearts()
+    },
+
     completeLesson(lessonId: string, xpEarned: number = 20, courseId?: string) {
       const activeCourse = courseId || 'counting_101'
       if (!this.completedLessonsByCourse[activeCourse]) {
