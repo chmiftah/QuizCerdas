@@ -14,7 +14,7 @@
     <!-- Loading Fallback Spinner -->
     <div v-if="loading" class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-transparent gap-3">
       <div class="w-12 h-12 border-4 border-duo-green border-t-transparent rounded-full animate-spin"></div>
-      <span class="text-xs font-heading font-bold text-slate-700">Memuat Teks 3D & Mascot Kiko...</span>
+      <span class="text-xs font-heading font-bold text-slate-700">Memuat Teks, Roket & Mascot 3D...</span>
     </div>
   </div>
 </template>
@@ -47,6 +47,10 @@ let textLine1Mesh: THREE.Mesh
 let textLine2Mesh: THREE.Mesh
 let textLine3Mesh: THREE.Mesh
 
+// 3D Space Rocket Model
+let spaceRocketGroup: THREE.Group
+let rocketFlameMesh: THREE.Mesh
+
 // Specific Shrunk 3D Educational Models
 let globeGroup: THREE.Group
 let physicsAtomGroup: THREE.Group
@@ -70,9 +74,9 @@ const init3D = () => {
   // 1. Scene
   scene = new THREE.Scene()
 
-  // 2. Camera (Positioned for balanced FOV)
+  // 2. Camera
   camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000)
-  camera.position.set(0, 0, 9.2)
+  camera.position.set(0, 0.2, 9.5)
 
   // 3. Renderer (Alpha enabled for transparent background)
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
@@ -86,7 +90,7 @@ const init3D = () => {
   canvasContainer.value.appendChild(renderer.domElement)
 
   // 4. Lights
-  const ambientLight = new THREE.AmbientLight(0xffffff, 1.6)
+  const ambientLight = new THREE.AmbientLight(0xffffff, 1.7)
   scene.add(ambientLight)
 
   const mainLight = new THREE.DirectionalLight(0xffffff, 2.5)
@@ -108,19 +112,22 @@ const init3D = () => {
   yellowRimLight.position.set(0, -5, 3)
   scene.add(yellowRimLight)
 
-  // 5. Create Enlarged 3D Mascot "Kiko" (PERBESAR BURUNG)
+  // 5. Create 3D Mascot "Kiko" (Balanced size & lower position)
   createMascot()
 
-  // 6. Create Shrunk 3D Subject Objects (PERKECIL ELEMEN 3D LAIN)
+  // 6. Create 3D Space Rocket (ROKET 3D)
+  createSpaceRocket()
+
+  // 7. Create Shrunk 3D Subject Objects
   createGlobe()
   createPhysicsAtom()
   createMathSymbol()
   createScienceFlask()
 
-  // 7. Create Dynamic 3D Text using Three.js (TEXT 3D)
+  // 8. Create Dynamic 3D Text using Three.js FontLoader & TextGeometry
   create3DText()
 
-  // 8. Create Star Dust Particles
+  // 9. Create Star Dust Particles
   createSparkles()
 
   // Listeners
@@ -132,7 +139,7 @@ const init3D = () => {
   animate()
 }
 
-// Build Scaled-up 3D Owl Mascot "Kiko" (ENLARGED ~45%)
+// Build 3D Owl Mascot "Kiko"
 const createMascot = () => {
   mascotGroup = new THREE.Group()
 
@@ -162,8 +169,8 @@ const createMascot = () => {
     roughness: 0.2,
   })
 
-  // Body/Head (Scaled up: radius 1.85)
-  const bodyGeo = new THREE.SphereGeometry(1.85, 36, 36)
+  // Body/Head (Proportional scale radius 1.45)
+  const bodyGeo = new THREE.SphereGeometry(1.45, 36, 36)
   bodyGeo.scale(1, 1.15, 0.95)
   headMesh = new THREE.Mesh(bodyGeo, bodyMat)
   headMesh.castShadow = true
@@ -171,64 +178,64 @@ const createMascot = () => {
   mascotGroup.add(headMesh)
 
   // Cream Belly Oval
-  const bellyGeo = new THREE.SphereGeometry(1.25, 32, 32)
+  const bellyGeo = new THREE.SphereGeometry(0.98, 32, 32)
   bellyGeo.scale(0.85, 0.9, 0.35)
   const bellyMesh = new THREE.Mesh(bellyGeo, bellyMat)
-  bellyMesh.position.set(0, -0.4, 1.25)
+  bellyMesh.position.set(0, -0.3, 0.98)
   mascotGroup.add(bellyMesh)
 
-  // Eyes (Scaled up)
-  const eyeGeo = new THREE.SphereGeometry(0.58, 32, 32)
+  // Eyes
+  const eyeGeo = new THREE.SphereGeometry(0.46, 32, 32)
   
   const leftEyeWhite = new THREE.Mesh(eyeGeo, eyeWhiteMat)
-  leftEyeWhite.position.set(-0.68, 0.52, 1.45)
+  leftEyeWhite.position.set(-0.54, 0.42, 1.15)
   mascotGroup.add(leftEyeWhite)
 
   const rightEyeWhite = new THREE.Mesh(eyeGeo, eyeWhiteMat)
-  rightEyeWhite.position.set(0.68, 0.52, 1.45)
+  rightEyeWhite.position.set(0.54, 0.42, 1.15)
   mascotGroup.add(rightEyeWhite)
 
   // Pupils
-  const pupilGeo = new THREE.SphereGeometry(0.28, 24, 24)
+  const pupilGeo = new THREE.SphereGeometry(0.22, 24, 24)
   leftEyePupil = new THREE.Mesh(pupilGeo, pupilMat)
-  leftEyePupil.position.set(-0.68, 0.52, 1.9)
+  leftEyePupil.position.set(-0.54, 0.42, 1.5)
   mascotGroup.add(leftEyePupil)
 
   rightEyePupil = new THREE.Mesh(pupilGeo, pupilMat)
-  rightEyePupil.position.set(0.68, 0.52, 1.9)
+  rightEyePupil.position.set(0.54, 0.42, 1.5)
   mascotGroup.add(rightEyePupil)
 
   // Eye Catchlights
   const glintMat = new THREE.MeshBasicMaterial({ color: 0xffffff })
-  const glintGeo = new THREE.SphereGeometry(0.09, 16, 16)
+  const glintGeo = new THREE.SphereGeometry(0.07, 16, 16)
   
   const leftGlint = new THREE.Mesh(glintGeo, glintMat)
-  leftGlint.position.set(-0.58, 0.62, 2.1)
+  leftGlint.position.set(-0.46, 0.5, 1.66)
   mascotGroup.add(leftGlint)
 
   const rightGlint = new THREE.Mesh(glintGeo, glintMat)
-  rightGlint.position.set(0.78, 0.62, 2.1)
+  rightGlint.position.set(0.62, 0.5, 1.66)
   mascotGroup.add(rightGlint)
 
   // Beak
-  const beakGeo = new THREE.ConeGeometry(0.32, 0.52, 4)
+  const beakGeo = new THREE.ConeGeometry(0.26, 0.42, 4)
   const beakMesh = new THREE.Mesh(beakGeo, beakMat)
   beakMesh.rotation.x = Math.PI * 0.5
   beakMesh.rotation.z = Math.PI
-  beakMesh.position.set(0, 0.16, 1.78)
+  beakMesh.position.set(0, 0.13, 1.4)
   mascotGroup.add(beakMesh)
 
   // Wings
-  const wingGeo = new THREE.SphereGeometry(0.8, 24, 24)
+  const wingGeo = new THREE.SphereGeometry(0.65, 24, 24)
   wingGeo.scale(0.3, 0.9, 0.6)
 
   leftWing = new THREE.Mesh(wingGeo, bodyMat)
-  leftWing.position.set(-1.9, -0.15, 0.15)
+  leftWing.position.set(-1.5, -0.1, 0.12)
   leftWing.rotation.z = 0.35
   mascotGroup.add(leftWing)
 
   rightWing = new THREE.Mesh(wingGeo, bodyMat)
-  rightWing.position.set(1.9, -0.15, 0.15)
+  rightWing.position.set(1.5, -0.1, 0.12)
   rightWing.rotation.z = -0.35
   mascotGroup.add(rightWing)
 
@@ -237,70 +244,147 @@ const createMascot = () => {
   const hatBaseMat = new THREE.MeshStandardMaterial({ color: 0xce82ff, roughness: 0.2 })
   const hatGoldMat = new THREE.MeshStandardMaterial({ color: 0xffc800, roughness: 0.2, metalness: 0.6 })
 
-  const hatTopGeo = new THREE.BoxGeometry(1.1, 0.12, 1.1)
+  const hatTopGeo = new THREE.BoxGeometry(0.9, 0.1, 0.9)
   const hatTop = new THREE.Mesh(hatTopGeo, hatBaseMat)
-  hatTop.position.y = 0.38
+  hatTop.position.y = 0.3
   hatGroup.add(hatTop)
 
-  const hatConeGeo = new THREE.CylinderGeometry(0.4, 0.48, 0.38, 16)
+  const hatConeGeo = new THREE.CylinderGeometry(0.32, 0.38, 0.3, 16)
   const hatCone = new THREE.Mesh(hatConeGeo, hatBaseMat)
   hatGroup.add(hatCone)
 
-  const hatButtonGeo = new THREE.SphereGeometry(0.09, 16, 16)
+  const hatButtonGeo = new THREE.SphereGeometry(0.07, 16, 16)
   const hatButton = new THREE.Mesh(hatButtonGeo, hatGoldMat)
-  hatButton.position.y = 0.48
+  hatButton.position.y = 0.38
   hatGroup.add(hatButton)
 
-  hatGroup.position.set(0, 2.25, 0)
+  hatGroup.position.set(0, 1.8, 0)
   hatGroup.rotation.z = -0.12
   mascotGroup.add(hatGroup)
 
-  mascotGroup.position.set(0, -0.6, 0)
+  mascotGroup.position.set(0, -1.15, 0)
   scene.add(mascotGroup)
 }
 
-// 1. Shrunk 3D Globe (Sains & Geografi)
+// Build 3D Space Rocket (ROKET 3D)
+const createSpaceRocket = () => {
+  spaceRocketGroup = new THREE.Group()
+
+  // Materials
+  const bodyMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.15, metalness: 0.2 })
+  const noseMat = new THREE.MeshStandardMaterial({ color: 0xff4b4b, roughness: 0.2, metalness: 0.1 })
+  const stripeMat = new THREE.MeshStandardMaterial({ color: 0x1cb0f6, roughness: 0.2 })
+  const windowRingMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.8, roughness: 0.2 })
+  const glassMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, roughness: 0.1, metalness: 0.5 })
+  const thrusterMat = new THREE.MeshStandardMaterial({ color: 0x475569, metalness: 0.8, roughness: 0.3 })
+  const flameMat = new THREE.MeshBasicMaterial({ color: 0xff9600, transparent: true, opacity: 0.9 })
+  const flameInnerMat = new THREE.MeshBasicMaterial({ color: 0xffc800 })
+
+  // Rocket Fuselage Body
+  const bodyGeo = new THREE.CylinderGeometry(0.28, 0.32, 1.0, 24)
+  const bodyMesh = new THREE.Mesh(bodyGeo, bodyMat)
+  bodyMesh.castShadow = true
+  spaceRocketGroup.add(bodyMesh)
+
+  // Red Nose Cone Top
+  const noseGeo = new THREE.ConeGeometry(0.28, 0.5, 24)
+  const noseMesh = new THREE.Mesh(noseGeo, noseMat)
+  noseMesh.position.y = 0.75
+  spaceRocketGroup.add(noseMesh)
+
+  // Cyan Stripe Ring
+  const stripeGeo = new THREE.CylinderGeometry(0.285, 0.29, 0.18, 24)
+  const stripeMesh = new THREE.Mesh(stripeGeo, stripeMat)
+  stripeMesh.position.y = 0.2
+  spaceRocketGroup.add(stripeMesh)
+
+  // Porthole Window
+  const windowRingGeo = new THREE.TorusGeometry(0.12, 0.03, 16, 24)
+  const windowRing = new THREE.Mesh(windowRingGeo, windowRingMat)
+  windowRing.position.set(0, 0.15, 0.27)
+  spaceRocketGroup.add(windowRing)
+
+  const glassGeo = new THREE.CircleGeometry(0.11, 24)
+  const glassMesh = new THREE.Mesh(glassGeo, glassMat)
+  glassMesh.position.set(0, 0.15, 0.28)
+  spaceRocketGroup.add(glassMesh)
+
+  // 3 Fins (Wings around bottom base)
+  const finGeo = new THREE.BoxGeometry(0.06, 0.4, 0.3)
+  for (let i = 0; i < 3; i++) {
+    const fin = new THREE.Mesh(finGeo, noseMat)
+    const angle = (i * Math.PI * 2) / 3
+    fin.position.x = Math.cos(angle) * 0.32
+    fin.position.z = Math.sin(angle) * 0.32
+    fin.position.y = -0.4
+    fin.rotation.y = -angle
+    spaceRocketGroup.add(fin)
+  }
+
+  // Thruster Exhaust Nozzle
+  const thrusterGeo = new THREE.CylinderGeometry(0.18, 0.24, 0.2, 20)
+  const thrusterMesh = new THREE.Mesh(thrusterGeo, thrusterMat)
+  thrusterMesh.position.y = -0.6
+  spaceRocketGroup.add(thrusterMesh)
+
+  // Fiery Jet Flame (Animated Cone)
+  const flameGeo = new THREE.ConeGeometry(0.2, 0.55, 16)
+  flameGeo.rotateX(Math.PI)
+  rocketFlameMesh = new THREE.Mesh(flameGeo, flameMat)
+  rocketFlameMesh.position.y = -0.95
+  spaceRocketGroup.add(rocketFlameMesh)
+
+  const flameInnerGeo = new THREE.ConeGeometry(0.1, 0.35, 16)
+  flameInnerGeo.rotateX(Math.PI)
+  const flameInner = new THREE.Mesh(flameInnerGeo, flameInnerMat)
+  flameInner.position.y = -0.85
+  spaceRocketGroup.add(flameInner)
+
+  // Tilt and place space rocket at top-right flying position
+  spaceRocketGroup.position.set(2.4, 0.7, 0.8)
+  spaceRocketGroup.rotation.z = -0.45
+  spaceRocketGroup.rotation.x = 0.2
+  scene.add(spaceRocketGroup)
+  floatingItems.push(spaceRocketGroup)
+}
+
+// 1. Shrunk 3D Globe
 const createGlobe = () => {
   globeGroup = new THREE.Group()
 
-  // Ocean Sphere (Shrunk radius: 0.45)
-  const oceanGeo = new THREE.SphereGeometry(0.45, 24, 24)
+  const oceanGeo = new THREE.SphereGeometry(0.4, 24, 24)
   const oceanMat = new THREE.MeshStandardMaterial({ color: 0x1cb0f6, roughness: 0.2, metalness: 0.1 })
   const oceanMesh = new THREE.Mesh(oceanGeo, oceanMat)
   oceanMesh.castShadow = true
   globeGroup.add(oceanMesh)
 
-  // Continents
   const landMat = new THREE.MeshStandardMaterial({ color: 0x58cc02, roughness: 0.3 })
-  const land1Geo = new THREE.SphereGeometry(0.46, 16, 16, 0, Math.PI * 0.7, 0.4, Math.PI * 0.5)
+  const land1Geo = new THREE.SphereGeometry(0.41, 16, 16, 0, Math.PI * 0.7, 0.4, Math.PI * 0.5)
   const land1 = new THREE.Mesh(land1Geo, landMat)
   globeGroup.add(land1)
 
-  // Saturn Ring
-  const ringGeo = new THREE.TorusGeometry(0.58, 0.04, 16, 32)
+  const ringGeo = new THREE.TorusGeometry(0.52, 0.035, 16, 32)
   const ringMat = new THREE.MeshStandardMaterial({ color: 0xffc800, roughness: 0.2, metalness: 0.4 })
   const ringMesh = new THREE.Mesh(ringGeo, ringMat)
   ringMesh.rotation.x = Math.PI * 0.4
   globeGroup.add(ringMesh)
 
-  globeGroup.position.set(-2.7, 2.2, 0.5)
+  globeGroup.position.set(-2.6, 2.0, 0.5)
   scene.add(globeGroup)
   floatingItems.push(globeGroup)
 }
 
-// 2. Shrunk 3D Physics Atom Model (Fisika)
+// 2. Shrunk 3D Physics Atom Model
 const createPhysicsAtom = () => {
   physicsAtomGroup = new THREE.Group()
 
-  // Central Nucleus (Shrunk radius: 0.18)
   const nucMat = new THREE.MeshStandardMaterial({ color: 0xff4b4b, roughness: 0.2, metalness: 0.3 })
-  const nucGeo = new THREE.SphereGeometry(0.18, 20, 20)
+  const nucGeo = new THREE.SphereGeometry(0.16, 20, 20)
   const nucleus = new THREE.Mesh(nucGeo, nucMat)
   nucleus.castShadow = true
   physicsAtomGroup.add(nucleus)
 
-  // Orbit Rings (Shrunk radius: 0.45)
-  const ring1Geo = new THREE.TorusGeometry(0.45, 0.025, 16, 32)
+  const ring1Geo = new THREE.TorusGeometry(0.4, 0.02, 16, 32)
   const ring1Mat = new THREE.MeshStandardMaterial({ color: 0x1cb0f6, roughness: 0.1 })
   const ring1 = new THREE.Mesh(ring1Geo, ring1Mat)
   ring1.rotation.x = Math.PI * 0.3
@@ -311,45 +395,42 @@ const createPhysicsAtom = () => {
   ring2.rotation.y = Math.PI * 0.45
   physicsAtomGroup.add(ring2)
 
-  // Orbiting Electrons
   const elecMat = new THREE.MeshStandardMaterial({ color: 0xffc800, roughness: 0.1 })
-  const elecGeo = new THREE.SphereGeometry(0.06, 12, 12)
+  const elecGeo = new THREE.SphereGeometry(0.05, 12, 12)
   
   const elec1 = new THREE.Mesh(elecGeo, elecMat)
-  elec1.position.set(0.45, 0, 0)
+  elec1.position.set(0.4, 0, 0)
   ring1.add(elec1)
 
-  physicsAtomGroup.position.set(2.7, 2.2, 0.5)
+  physicsAtomGroup.position.set(-2.5, -1.8, 0.8)
   scene.add(physicsAtomGroup)
   floatingItems.push(physicsAtomGroup)
 }
 
-// 3. Shrunk 3D Math Symbol Block (Matematika)
+// 3. Shrunk 3D Math Symbol Block
 const createMathSymbol = () => {
   mathSymbolGroup = new THREE.Group()
 
-  // Shrunk Block Geometry (0.45 x 0.45 x 0.45)
-  const blockGeo = new THREE.BoxGeometry(0.45, 0.45, 0.45)
+  const blockGeo = new THREE.BoxGeometry(0.4, 0.4, 0.4)
   const blockMat = new THREE.MeshStandardMaterial({ color: 0xffc800, roughness: 0.25, metalness: 0.2 })
   const blockMesh = new THREE.Mesh(blockGeo, blockMat)
   blockMesh.rotation.set(0.3, 0.6, 0.2)
   blockMesh.castShadow = true
   mathSymbolGroup.add(blockMesh)
 
-  // Plus Symbol
   const plusMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.2 })
-  const plusHGeo = new THREE.BoxGeometry(0.28, 0.08, 0.08)
-  const plusVGeo = new THREE.BoxGeometry(0.08, 0.28, 0.08)
+  const plusHGeo = new THREE.BoxGeometry(0.24, 0.07, 0.07)
+  const plusVGeo = new THREE.BoxGeometry(0.07, 0.24, 0.07)
   
   const plusH = new THREE.Mesh(plusHGeo, plusMat)
   const plusV = new THREE.Mesh(plusVGeo, plusMat)
-  plusH.position.z = 0.23
-  plusV.position.z = 0.23
+  plusH.position.z = 0.21
+  plusV.position.z = 0.21
 
   blockMesh.add(plusH)
   blockMesh.add(plusV)
 
-  mathSymbolGroup.position.set(-2.6, -2.2, 0.8)
+  mathSymbolGroup.position.set(2.5, -1.8, 0.8)
   scene.add(mathSymbolGroup)
   floatingItems.push(mathSymbolGroup)
 }
@@ -358,8 +439,7 @@ const createMathSymbol = () => {
 const createScienceFlask = () => {
   scienceFlaskGroup = new THREE.Group()
 
-  // Flask Neck & Base (Shrunk height: 0.45)
-  const bodyGeo = new THREE.CylinderGeometry(0.1, 0.3, 0.45, 20)
+  const bodyGeo = new THREE.CylinderGeometry(0.08, 0.26, 0.4, 20)
   const glassMat = new THREE.MeshStandardMaterial({
     color: 0xce82ff,
     roughness: 0.1,
@@ -371,33 +451,32 @@ const createScienceFlask = () => {
   flaskMesh.castShadow = true
   scienceFlaskGroup.add(flaskMesh)
 
-  // Green Liquid Inside
-  const liquidGeo = new THREE.CylinderGeometry(0.16, 0.26, 0.22, 20)
+  const liquidGeo = new THREE.CylinderGeometry(0.14, 0.22, 0.18, 20)
   const liquidMat = new THREE.MeshStandardMaterial({ color: 0x58cc02, roughness: 0.2 })
   const liquidMesh = new THREE.Mesh(liquidGeo, liquidMat)
-  liquidMesh.position.y = -0.1
+  liquidMesh.position.y = -0.09
   scienceFlaskGroup.add(liquidMesh)
 
-  scienceFlaskGroup.position.set(2.6, -2.2, 0.8)
+  scienceFlaskGroup.position.set(-0.1, 2.7, 0.3)
   scene.add(scienceFlaskGroup)
   floatingItems.push(scienceFlaskGroup)
 }
 
-// 5. Dynamic 3D Text using Three.js FontLoader & TextGeometry
+// 5. Dynamic 3D Text using Three.js FontLoader & TextGeometry (POSITIONED ABOVE KIKO)
 const create3DText = () => {
   textGroup = new THREE.Group()
 
   const loader = new FontLoader()
   loader.load('/fonts/helvetiker_bold.typeface.json', (font) => {
-    const createLine = (text: string, colorHex: number, yPos: number, size: number = 0.38) => {
+    const createLine = (text: string, colorHex: number, yPos: number, size: number = 0.34) => {
       const textGeo = new TextGeometry(text, {
         font: font,
         size: size,
-        depth: 0.08,
+        depth: 0.07,
         curveSegments: 12,
         bevelEnabled: true,
         bevelThickness: 0.02,
-        bevelSize: 0.015,
+        bevelSize: 0.012,
         bevelOffset: 0,
         bevelSegments: 5,
       })
@@ -417,25 +496,25 @@ const create3DText = () => {
     }
 
     // Line 1: "Belajar Matematika" (Duo Green)
-    textLine1Mesh = createLine('Belajar Matematika', 0x58cc02, 3.1, 0.42)
+    textLine1Mesh = createLine('Belajar Matematika', 0x58cc02, 0.6, 0.36)
     textGroup.add(textLine1Mesh)
 
     // Line 2: "Sains & Bahasa" (Duo Blue)
-    textLine2Mesh = createLine('Sains & Bahasa', 0x1cb0f6, 2.5, 0.38)
+    textLine2Mesh = createLine('Sains & Bahasa', 0x1cb0f6, 0.1, 0.33)
     textGroup.add(textLine2Mesh)
 
     // Line 3: "Paling Seru!" (Duo Gold/Yellow)
-    textLine3Mesh = createLine('Paling Seru!', 0xffc800, 1.95, 0.36)
+    textLine3Mesh = createLine('Paling Seru!', 0xffc800, -0.4, 0.31)
     textGroup.add(textLine3Mesh)
 
-    textGroup.position.set(0, 0, 0.2)
+    textGroup.position.set(0, 1.4, 0.5)
     scene.add(textGroup)
   })
 }
 
 // Background Floating Particles
 const createSparkles = () => {
-  const particleCount = 120
+  const particleCount = 130
   const geometry = new THREE.BufferGeometry()
   const positions = new Float32Array(particleCount * 3)
   const colors = new Float32Array(particleCount * 3)
@@ -462,7 +541,7 @@ const createSparkles = () => {
   geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
 
   const material = new THREE.PointsMaterial({
-    size: 0.16,
+    size: 0.15,
     vertexColors: true,
     transparent: true,
     opacity: 0.85,
@@ -506,30 +585,39 @@ const animate = () => {
 
   // Mascot rotation and float
   if (mascotGroup) {
-    let bounceOffsetY = Math.sin(time * 2.5) * 0.18
+    let bounceOffsetY = Math.sin(time * 2.5) * 0.16
 
     if (clickBounceTime > 0) {
-      bounceOffsetY += Math.sin(clickBounceTime * Math.PI) * 0.85
+      bounceOffsetY += Math.sin(clickBounceTime * Math.PI) * 0.75
       mascotGroup.rotation.y = time * 8.0
       clickBounceTime -= 0.04
     } else {
       mascotGroup.rotation.y = mouse.x * 0.45
     }
 
-    mascotGroup.position.y = -0.6 + bounceOffsetY
+    mascotGroup.position.y = -1.15 + bounceOffsetY
     mascotGroup.rotation.x = -mouse.y * 0.2
 
     if (leftEyePupil && rightEyePupil) {
-      leftEyePupil.position.x = -0.68 + mouse.x * 0.15
-      leftEyePupil.position.y = 0.52 + mouse.y * 0.15
-      rightEyePupil.position.x = 0.68 + mouse.x * 0.15
-      rightEyePupil.position.y = 0.52 + mouse.y * 0.15
+      leftEyePupil.position.x = -0.54 + mouse.x * 0.12
+      leftEyePupil.position.y = 0.42 + mouse.y * 0.12
+      rightEyePupil.position.x = 0.54 + mouse.x * 0.12
+      rightEyePupil.position.y = 0.42 + mouse.y * 0.12
     }
 
     if (leftWing && rightWing) {
-      const flap = Math.sin(time * 5.0) * 0.3
+      const flap = Math.sin(time * 5.0) * 0.25
       leftWing.rotation.z = 0.35 + flap
       rightWing.rotation.z = -0.35 - flap
+    }
+  }
+
+  // 3D Space Rocket Hover Flight & Flame Animation
+  if (spaceRocketGroup) {
+    spaceRocketGroup.position.y = 0.7 + Math.sin(time * 2.2) * 0.12
+    spaceRocketGroup.rotation.y = time * 0.4
+    if (rocketFlameMesh) {
+      rocketFlameMesh.scale.y = 1.0 + Math.sin(time * 18.0) * 0.25
     }
   }
 
@@ -537,33 +625,33 @@ const animate = () => {
   if (textGroup) {
     textGroup.rotation.y = mouse.x * 0.15
     textGroup.rotation.x = -mouse.y * 0.1
-    textGroup.position.y = Math.sin(time * 1.8) * 0.08
+    textGroup.position.y = 1.4 + Math.sin(time * 1.8) * 0.08
   }
 
-  // Shrunk Globe rotation
+  // Globe rotation
   if (globeGroup) {
     globeGroup.rotation.y = time * 0.6
-    globeGroup.position.y = 2.2 + Math.sin(time * 2.2) * 0.1
+    globeGroup.position.y = 2.0 + Math.sin(time * 2.2) * 0.1
   }
 
-  // Shrunk Physics Atom rotation
+  // Physics Atom rotation
   if (physicsAtomGroup) {
     physicsAtomGroup.rotation.x = time * 0.7
     physicsAtomGroup.rotation.y = time * 0.9
-    physicsAtomGroup.position.y = 2.2 + Math.cos(time * 2.5) * 0.1
+    physicsAtomGroup.position.y = -1.8 + Math.cos(time * 2.5) * 0.1
   }
 
-  // Shrunk Math Symbol rotation
+  // Math Symbol rotation
   if (mathSymbolGroup) {
     mathSymbolGroup.rotation.y = time * 0.8
     mathSymbolGroup.rotation.z = Math.sin(time * 1.6) * 0.2
-    mathSymbolGroup.position.y = -2.2 + Math.sin(time * 2.0) * 0.1
+    mathSymbolGroup.position.y = -1.8 + Math.sin(time * 2.0) * 0.1
   }
 
-  // Shrunk Science Flask float
+  // Science Flask float
   if (scienceFlaskGroup) {
     scienceFlaskGroup.rotation.y = time * 0.5
-    scienceFlaskGroup.position.y = -2.2 + Math.cos(time * 2.8) * 0.1
+    scienceFlaskGroup.position.y = 2.7 + Math.cos(time * 2.8) * 0.1
   }
 
   // Particles rotation
