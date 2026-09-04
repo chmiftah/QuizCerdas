@@ -3,8 +3,8 @@
     <!-- Compact 1-Line View Switcher Toolbar -->
     <div class="bg-white px-4 py-2.5 rounded-2xl border-2 border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-xl bg-duo-blue text-white flex items-center justify-center font-heading text-base font-bold shadow-2xs">
-          🗺️
+        <div class="w-8 h-8 rounded-xl bg-duo-green text-white flex items-center justify-center font-heading text-base font-bold shadow-2xs">
+          🎯
         </div>
         <div class="flex items-center gap-2 flex-wrap">
           <h3 class="font-heading text-base font-black text-slate-800">Skill Path</h3>
@@ -15,6 +15,13 @@
       </div>
 
       <div class="p-1 bg-slate-100 rounded-xl flex items-center gap-1 border border-slate-200">
+        <button 
+          @click="pathViewMode = 'classic'"
+          class="px-3 py-1 rounded-lg font-heading font-black text-xs transition-all cursor-pointer flex items-center gap-1"
+          :class="pathViewMode === 'classic' ? 'bg-[#58cc02] text-white shadow-2xs scale-105' : 'text-slate-600 hover:text-slate-900'"
+        >
+          <span>🎯 Jalur Klasik</span>
+        </button>
         <button 
           @click="pathViewMode = '3d'"
           class="px-3 py-1 rounded-lg font-heading font-black text-xs transition-all cursor-pointer flex items-center gap-1"
@@ -27,7 +34,7 @@
           class="px-3 py-1 rounded-lg font-heading font-black text-xs transition-all cursor-pointer flex items-center gap-1"
           :class="pathViewMode === '2d' ? 'bg-duo-blue text-white shadow-2xs scale-105' : 'text-slate-600 hover:text-slate-900'"
         >
-          <span>🗺️ Jalur 2D</span>
+          <span>🗺️ Peta 2D</span>
         </button>
       </div>
     </div>
@@ -83,7 +90,191 @@
       </div>
     </div>
 
-    <!-- Unit Chapters Loop -->
+    <!-- DUOLINGO CLASSIC DARK SNAKE PATH VIEW (Matches User Reference Image 100%) -->
+    <div 
+      v-else-if="pathViewMode === 'classic'"
+      class="bg-[#131f24] rounded-[36px] p-4 sm:p-8 text-white space-y-12 shadow-2xl border-4 border-slate-800 relative overflow-hidden min-h-[600px]"
+    >
+      <!-- Background Ambient Glow -->
+      <div class="absolute inset-0 pointer-events-none bg-radial from-emerald-950/20 via-transparent to-transparent"></div>
+
+      <!-- Unit Chapters Continuous Flow -->
+      <div 
+        v-for="(unit, unitIdx) in courseStore.units" 
+        :key="unit.id" 
+        :id="'unit-container-' + unit.id" 
+        class="relative space-y-8"
+      >
+        <!-- Unit Title Section Header Line (for units after unit 1) -->
+        <div v-if="unitIdx > 0" class="relative py-6 flex items-center justify-center my-6 select-none">
+          <div class="absolute inset-0 flex items-center" aria-hidden="true">
+            <div class="w-full border-t-2 border-slate-700/80"></div>
+          </div>
+          <div class="relative bg-[#18272f] px-6 py-2 rounded-2xl border-2 border-slate-700 text-xs sm:text-sm font-heading font-black text-slate-300 shadow-lg flex items-center gap-2">
+            <span>{{ getUnitBiomeIcon(unit.color) }}</span>
+            <span>BAGIAN 1, UNIT {{ unit.order }} • {{ unit.title }}</span>
+          </div>
+        </div>
+
+        <!-- Vertical Snake Path Items Loop for Unit -->
+        <div class="relative flex flex-col items-center gap-8 sm:gap-10 py-4 max-w-md mx-auto">
+          
+          <template v-for="(item, itemIdx) in getClassicUnitNodeItems(unit)" :key="item.id">
+            
+            <div 
+              :id="isNextActiveLesson(unit.id, item.id) ? 'active-lesson-node' : undefined"
+              class="relative flex flex-col items-center group transition-transform"
+              :class="item.classOffset"
+            >
+              <!-- 1. "MULAI" Callout Badge (Dark Box with Arrow Tail) -->
+              <div 
+                v-if="item.type === 'lesson' && isNextActiveLesson(unit.id, item.id)"
+                class="absolute -top-12 z-30 flex flex-col items-center pointer-events-none animate-bounce"
+              >
+                <div class="relative bg-[#18272f] border-2 border-[#58cc02] text-[#58cc02] px-4 py-1.5 rounded-2xl shadow-xl font-heading font-black text-xs uppercase tracking-wider flex items-center gap-1.5">
+                  <span>MULAI</span>
+                  <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-[#18272f] border-r-2 border-b-2 border-[#58cc02] rotate-45"></div>
+                </div>
+              </div>
+
+              <!-- 2. "LOMPAT KE SINI?" Callout Badge for Unit Jump / Checkpoint -->
+              <div 
+                v-else-if="item.type === 'checkpoint' && isCheckpointUnlocked(unit.id) && !isCheckpointCompleted(item.id)"
+                class="absolute -top-12 z-30 flex flex-col items-center pointer-events-none animate-bounce"
+              >
+                <div class="relative bg-[#18272f] border-2 border-purple-400 text-purple-300 px-3.5 py-1.5 rounded-2xl shadow-xl font-heading font-black text-xs uppercase tracking-wider flex items-center gap-1.5">
+                  <span>LOMPAT KE SINI?</span>
+                  <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-[#18272f] border-r-2 border-b-2 border-purple-400 rotate-45"></div>
+                </div>
+              </div>
+
+              <!-- Floating Interactive Popover Card -->
+              <Transition name="bounce-popover">
+                <div 
+                  v-if="selectedNodeId === item.id"
+                  @click.outside="selectedNodeId = null"
+                  class="absolute -top-40 left-1/2 -translate-x-1/2 z-40 bg-[#18272f] text-white rounded-3xl p-5 w-72 shadow-2xl border-4 space-y-3.5 text-center animate-pop"
+                  :class="item.type === 'checkpoint' ? 'border-purple-400' : 'border-[#58cc02]'"
+                >
+                  <div 
+                    class="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-[#18272f]"
+                  ></div>
+
+                  <div class="space-y-1.5">
+                    <span 
+                      class="px-3 py-0.5 rounded-full text-[10px] font-heading font-black uppercase tracking-wide inline-block shadow-2xs"
+                      :class="item.type === 'checkpoint' ? 'bg-purple-500 text-white' : 'bg-[#58cc02] text-white'"
+                    >
+                      {{ item.type === 'checkpoint' ? '👑 UJIAN CHECKPOINT' : `🎯 PELAJARAN ${itemIdx + 1}` }}
+                    </span>
+                    <h4 class="font-heading text-base font-black text-white leading-snug">
+                      {{ item.title }}
+                    </h4>
+                  </div>
+
+                  <button 
+                    @click="confirmStartNode(unit.id, item.id, item.type)"
+                    class="w-full duo-btn-green py-3 text-xs font-heading font-black shadow-lg cursor-pointer flex items-center justify-center gap-2 active:scale-95 transition-transform"
+                    :class="item.type === 'checkpoint' ? 'bg-purple-600 border-purple-800 hover:bg-purple-500' : ''"
+                  >
+                    <span>🚀 MULAI BELAJAR</span>
+                  </button>
+                </div>
+              </Transition>
+
+              <!-- Node Button Elements -->
+
+              <!-- A. TREASURE CHEST NODE & MASCOT -->
+              <template v-if="item.type === 'chest'">
+                <div class="relative flex items-center justify-center">
+                  <!-- Treasure Chest Button -->
+                  <div 
+                    @click="onNodeTap(unit.id, item.id, item.type)"
+                    class="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-[#203239] border-4 border-[#374e56] border-b-8 flex items-center justify-center text-4xl shadow-xl cursor-pointer hover:scale-105 transition-transform"
+                  >
+                    🎁
+                  </div>
+                  
+                  <!-- Mascot Companion Standing / Dancing Beside Chest -->
+                  <div class="absolute left-28 sm:left-32 z-20 flex flex-col items-center pointer-events-none animate-float">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 text-5xl sm:text-6xl flex items-center justify-center drop-shadow-2xl">
+                      🦉
+                    </div>
+                  </div>
+                </div>
+              </template>
+
+              <!-- B. CHECKPOINT / JUMP NODE (Purple ⏩) -->
+              <template v-else-if="item.type === 'checkpoint'">
+                <button 
+                  @click="onNodeTap(unit.id, item.id, item.type)"
+                  class="w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center font-heading transition-all duration-200 select-none shadow-2xl relative cursor-pointer hover:scale-105 active:scale-95 border-b-8"
+                  :class="isCheckpointCompleted(item.id)
+                    ? 'bg-gradient-to-b from-amber-400 to-yellow-500 border-amber-700 text-slate-900'
+                    : isCheckpointUnlocked(unit.id)
+                      ? 'bg-gradient-to-b from-purple-500 to-purple-700 border-purple-900 text-white animate-pulse-glow'
+                      : 'bg-[#203239] border-[#374e56] text-slate-500 opacity-60'"
+                >
+                  <Trophy v-if="isCheckpointCompleted(item.id)" class="w-10 h-10 text-white fill-white" />
+                  <FastForward v-else-if="isCheckpointUnlocked(unit.id)" class="w-10 h-10 text-white fill-white" />
+                  <Lock v-else class="w-8 h-8 text-slate-500" />
+                </button>
+              </template>
+
+              <!-- C. REGULAR LESSON NODE (Green Star ⭐ / Gold Star ⭐ / Gray Lock) -->
+              <template v-else>
+                <div class="relative flex items-center justify-center">
+                  <!-- 3 Gold Stars above node if completed -->
+                  <div 
+                    v-if="isNodeCompleted(unit.id, item.id, item.type)" 
+                    class="absolute -top-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-0.5 px-2 py-0.5 bg-amber-400/90 border border-amber-500 rounded-full shadow-md text-[10px]"
+                  >
+                    <span class="text-yellow-100">⭐</span>
+                    <span class="text-yellow-100">⭐</span>
+                    <span class="text-yellow-100">⭐</span>
+                  </div>
+
+                  <button 
+                    @click="onNodeTap(unit.id, item.id, item.type)"
+                    class="w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center font-heading transition-all duration-200 select-none shadow-2xl relative cursor-pointer hover:scale-105 active:scale-95 border-b-8"
+                    :class="isNodeCompleted(unit.id, item.id, item.type)
+                      ? 'bg-gradient-to-b from-amber-400 to-yellow-500 border-amber-700 text-slate-900'
+                      : isLessonUnlocked(unit.id, item.id)
+                        ? 'bg-gradient-to-b from-[#58cc02] to-[#46a302] border-[#3b8a02] text-white shadow-[#58cc02]/40'
+                        : 'bg-[#203239] border-[#374e56] text-slate-500 opacity-60'"
+                  >
+                    <Check v-if="isNodeCompleted(unit.id, item.id, item.type)" class="w-10 h-10 text-white stroke-[4]" />
+                    <Star v-else-if="isLessonUnlocked(unit.id, item.id)" class="w-10 h-10 text-white fill-white drop-shadow-md" />
+                    <Lock v-else class="w-8 h-8 text-slate-500" />
+
+                    <!-- Active Glowing Ring -->
+                    <div 
+                      v-if="isNextActiveLesson(unit.id, item.id)"
+                      class="absolute -inset-3 rounded-full border-4 border-[#58cc02] animate-ping pointer-events-none opacity-75"
+                    ></div>
+                  </button>
+                </div>
+              </template>
+
+              <!-- Node Title Badge Below -->
+              <div 
+                @click="onNodeTap(unit.id, item.id, item.type)"
+                class="mt-2 text-center bg-[#18272f] px-3.5 py-1 rounded-xl border border-slate-700 shadow-md max-w-[160px] cursor-pointer hover:border-[#58cc02] transition-colors"
+              >
+                <span class="font-heading font-extrabold text-xs text-slate-200 block truncate">
+                  {{ item.title }}
+                </span>
+              </div>
+
+            </div>
+
+          </template>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Unit Chapters Loop (For 3D and 2D Map modes) -->
     <div 
       v-else
       v-for="(unit, unitIdx) in courseStore.units" 
@@ -483,7 +674,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useCourseStore } from '~/stores/course'
 import { useUserStore } from '~/stores/user'
-import { Check, Star, Lock, Trophy, Crown, ChevronDown, ChevronUp } from 'lucide-vue-next'
+import { Check, Star, Lock, Trophy, Crown, ChevronDown, ChevronUp, FastForward } from 'lucide-vue-next'
 
 const courseStore = useCourseStore()
 const userStore = useUserStore()
@@ -491,10 +682,43 @@ const userStore = useUserStore()
 const showAuthModal = ref(false)
 const pendingTargetUrl = ref('')
 const selectedNodeId = ref(null)
-const pathViewMode = ref('3d')
+const pathViewMode = ref('classic')
 const collapsedUnits = ref({})
 const currentVisibleUnit = ref(null)
 const showStickyHeader = ref(false)
+
+const getClassicUnitNodeItems = (unit) => {
+  const items = []
+  const waveOffsets = ['translate-x-0', 'translate-x-6 sm:translate-x-12', '-translate-x-6 sm:-translate-x-12', 'translate-x-0']
+  
+  unit.lessons.forEach((lesson, index) => {
+    if (index === 1) {
+      items.push({
+        id: `chest_${unit.id}`,
+        title: 'Peti Hadiah XP Bonus 🎁',
+        type: 'chest',
+        classOffset: '-translate-x-8 sm:-translate-x-14'
+      })
+    }
+    
+    items.push({
+      id: lesson.id,
+      title: lesson.title,
+      type: 'lesson',
+      classOffset: waveOffsets[index % waveOffsets.length]
+    })
+  })
+
+  // Add Checkpoint / Unit Jump at the end of path
+  items.push({
+    id: unit.checkpoint?.id || `checkpoint_${unit.id}`,
+    title: unit.checkpoint?.title || `Checkpoint Unit ${unit.order}`,
+    type: 'checkpoint',
+    classOffset: 'translate-x-0'
+  })
+
+  return items
+}
 
 const toggleUnitCollapse = (unitId) => {
   collapsedUnits.value[unitId] = !collapsedUnits.value[unitId]
