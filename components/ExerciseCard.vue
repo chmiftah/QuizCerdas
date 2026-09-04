@@ -187,8 +187,8 @@
     </main>
 
     <!-- Bottom Check Answer Bar (Visible when not checked) -->
-    <footer v-if="!engine.isChecked" class="fixed bottom-0 left-0 right-0 z-20 bg-white border-t-2 border-duo-gray-100 p-3 sm:p-6 shadow-lg">
-      <div class="max-w-2xl mx-auto flex items-center justify-between gap-2.5 sm:gap-4">
+    <footer v-if="!engine.isChecked" class="fixed bottom-0 left-0 right-0 z-20 bg-white/95 backdrop-blur-md border-t-2 border-duo-gray-100 p-2.5 sm:p-4 shadow-lg">
+      <div class="max-w-2xl mx-auto flex items-center justify-between gap-2 sm:gap-4 w-full">
         <!-- Voice Answer Microphone Button -->
         <VoiceAnswerButton 
           :disabled="engine.isChecked"
@@ -199,9 +199,9 @@
         <button 
           @click="handleManualCheckAnswer"
           type="button"
-          class="flex-1 sm:flex-initial px-4 sm:px-10 py-3.5 sm:py-4 text-sm sm:text-lg font-heading font-black duo-btn-green rounded-xl sm:rounded-2xl shadow-md transition-transform active:scale-95 cursor-pointer text-center justify-center min-w-0 truncate"
+          class="flex-1 px-3 sm:px-8 py-3 sm:py-4 text-xs xs:text-sm sm:text-base font-heading font-black duo-btn-green rounded-xl sm:rounded-2xl shadow-md transition-transform active:scale-95 cursor-pointer text-center justify-center min-w-0"
         >
-          CEK JAWABAN 🚀
+          <span class="truncate">CEK JAWABAN 🚀</span>
         </button>
       </div>
     </footer>
