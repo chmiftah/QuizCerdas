@@ -275,14 +275,14 @@
     </div>
 
     <!-- Unit Chapters Loop (For 3D and 2D Map modes) -->
-    <div 
-      v-else
-      v-for="(unit, unitIdx) in courseStore.units" 
-      :key="unit.id"
-      :id="'unit-container-' + unit.id"
-      class="rounded-[32px] border-4 p-5 sm:p-7 shadow-2xl relative space-y-8 transition-all duration-300 overflow-visible"
-      :class="getUnitContainerTheme(unit.color)"
-    >
+    <template v-else>
+      <div 
+        v-for="(unit, unitIdx) in courseStore.units" 
+        :key="unit.id"
+        :id="'unit-container-' + unit.id"
+        class="rounded-[32px] border-4 p-5 sm:p-7 shadow-2xl relative space-y-8 transition-all duration-300 overflow-visible mb-8"
+        :class="getUnitContainerTheme(unit.color)"
+      >
       <!-- Vibrant Biome Header Banner (Clickable Collapse Header) -->
       <div 
         @click="toggleUnitCollapse(unit.id)"
@@ -608,7 +608,9 @@
             </span>
           </div>
 
-      </template>
+        </div>
+      </div>
+    </template>
 
       <!-- Duolingo-Style Unit Section Divider Line -->
       <div 
@@ -624,6 +626,7 @@
         </div>
       </div>
     </div>
+    </template>
 
     <!-- Auth Prompt Modal Popup -->
     <Teleport to="body">
