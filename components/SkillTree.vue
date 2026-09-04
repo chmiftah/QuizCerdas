@@ -73,40 +73,55 @@
           </p>
         </div>
 
-        <!-- Unit Completion Progress Badge -->
-        <div class="bg-black/20 backdrop-blur-md px-4 py-3 rounded-2xl border border-white/30 font-heading text-xs font-bold text-center shrink-0 space-y-1.5 w-full sm:w-auto z-10 shadow-md">
-          <div class="flex items-center justify-center gap-1.5 text-amber-300 font-extrabold text-sm drop-shadow-xs">
-            <Trophy class="w-4 h-4 text-amber-300 fill-amber-300 animate-bounce" />
-            <span>{{ getUnitProgressPercent(unit) }}% Selesai</span>
+        <!-- Unit Completion Progress Badge & Collapse Toggle -->
+        <div class="flex items-center gap-2.5 w-full sm:w-auto z-10">
+          <div class="bg-black/20 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/30 font-heading text-xs font-bold text-center shrink-0 space-y-1 flex-1 sm:flex-none shadow-md">
+            <div class="flex items-center justify-center gap-1.5 text-amber-300 font-extrabold text-sm drop-shadow-xs">
+              <Trophy class="w-4 h-4 text-amber-300 fill-amber-300 animate-bounce" />
+              <span>{{ getUnitProgressPercent(unit) }}% Selesai</span>
+            </div>
+            <div class="w-full bg-black/30 h-2.5 rounded-full overflow-hidden p-0.5 min-w-[120px] border border-white/20">
+              <div 
+                class="h-full bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 rounded-full transition-all duration-500 shadow-sm"
+                :style="{ width: `${getUnitProgressPercent(unit)}%` }"
+              ></div>
+            </div>
           </div>
-          <div class="w-full bg-black/30 h-3 rounded-full overflow-hidden p-0.5 min-w-[130px] border border-white/20">
-            <div 
-              class="h-full bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 rounded-full transition-all duration-500 shadow-sm"
-              :style="{ width: `${getUnitProgressPercent(unit)}%` }"
-            ></div>
-          </div>
+
+          <!-- Collapse / Expand Toggle Button -->
+          <button 
+            @click="toggleUnitCollapse(unit.id)"
+            class="px-4 py-3 bg-white/20 hover:bg-white/35 active:scale-95 backdrop-blur-md rounded-2xl border border-white/30 text-white font-heading font-black text-xs flex items-center justify-center gap-1.5 cursor-pointer transition-all shadow-md shrink-0"
+            :title="isUnitCollapsed(unit.id) ? 'Tampilkan Jalur Belajar' : 'Sembunyikan Jalur Belajar'"
+          >
+            <span>{{ isUnitCollapsed(unit.id) ? '📖 Buka' : '🙈 Sembunyikan' }}</span>
+            <ChevronDown v-if="isUnitCollapsed(unit.id)" class="w-4 h-4 stroke-[3]" />
+            <ChevronUp v-else class="w-4 h-4 stroke-[3]" />
+          </button>
         </div>
       </div>
 
-      <!-- 3D WEBGL ADVENTURE TRACK VIEW -->
-      <div v-if="pathViewMode === '3d'" class="relative w-full py-2 animate-pop">
-        <ClientOnly>
-          <SkillPath3DCanvas 
-            :unit="unit"
-            :completedLessons="currentCompletedLessons"
-            :completedCheckpoints="currentCompletedCheckpoints"
-            @node-click="handle3DNodeClick"
-          />
-        </ClientOnly>
-      </div>
+      <!-- Collapsible Learning Path Body (Supports Both 3D & 2D Views) -->
+      <template v-if="!isUnitCollapsed(unit.id)">
+        <!-- 3D WEBGL ADVENTURE TRACK VIEW -->
+        <div v-if="pathViewMode === '3d'" class="relative w-full py-2 animate-pop">
+          <ClientOnly>
+            <SkillPath3DCanvas 
+              :unit="unit"
+              :completedLessons="currentCompletedLessons"
+              :completedCheckpoints="currentCompletedCheckpoints"
+              @node-click="handle3DNodeClick"
+            />
+          </ClientOnly>
+        </div>
 
-      <!-- Winding 2D Map Path Container (100% Full Width Illustrated Game Map) -->
-      <div 
-        v-else
-        class="relative w-full rounded-[36px] overflow-hidden border-4 shadow-xl transition-all"
-        :class="getUnitMapBgClass(unit.color)"
-        :style="{ height: `${getUnitContainerHeight(unit)}px` }"
-      >
+        <!-- Winding 2D Map Path Container (100% Full Width Illustrated Game Map) -->
+        <div 
+          v-else
+          class="relative w-full rounded-[36px] overflow-hidden border-4 shadow-xl transition-all animate-pop"
+          :class="getUnitMapBgClass(unit.color)"
+          :style="{ height: `${getUnitContainerHeight(unit)}px` }"
+        >
         <!-- Illustrated Map Background Elements (River, Grass Textures, Hills) -->
         <div class="absolute inset-0 pointer-events-none z-0 overflow-hidden">
           <!-- Winding Blue River Stream -->
@@ -363,6 +378,7 @@
 
         </div>
       </div>
+      </template>
     </div>
 
     <!-- Auth Prompt Modal Popup -->
@@ -414,7 +430,7 @@
 import { ref, computed } from 'vue'
 import { useCourseStore } from '~/stores/course'
 import { useUserStore } from '~/stores/user'
-import { Check, Star, Lock, Trophy, Crown } from 'lucide-vue-next'
+import { Check, Star, Lock, Trophy, Crown, ChevronDown, ChevronUp } from 'lucide-vue-next'
 
 const courseStore = useCourseStore()
 const userStore = useUserStore()
@@ -423,6 +439,15 @@ const showAuthModal = ref(false)
 const pendingTargetUrl = ref('')
 const selectedNodeId = ref(null)
 const pathViewMode = ref('3d')
+const collapsedUnits = ref({})
+
+const toggleUnitCollapse = (unitId) => {
+  collapsedUnits.value[unitId] = !collapsedUnits.value[unitId]
+}
+
+const isUnitCollapsed = (unitId) => {
+  return !!collapsedUnits.value[unitId]
+}
 
 const handle3DNodeClick = ({ unitId, itemId, type }) => {
   confirmStartNode(unitId, itemId, type)
