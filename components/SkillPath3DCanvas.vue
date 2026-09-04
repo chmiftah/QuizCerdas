@@ -1,30 +1,13 @@
 <template>
-  <div class="relative w-full max-w-xl mx-auto h-[580px] sm:h-[660px] rounded-[44px] overflow-hidden bg-gradient-to-b from-sky-200 via-sky-100 to-emerald-50 border-4 border-sky-300/80 shadow-2xl select-none group">
-    <!-- WebGL Canvas Container -->
+  <div class="relative w-full max-w-xl mx-auto h-[580px] sm:h-[660px] select-none">
+    <!-- WebGL Canvas Container (Transparent background, no outer card frame) -->
     <div ref="canvasContainer" class="w-full h-full cursor-pointer"></div>
 
-    <!-- Floating Top Bar Badge & Controls -->
-    <div class="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none z-10">
-      <div class="px-3.5 py-1.5 bg-white/90 backdrop-blur-md rounded-2xl border border-emerald-400/80 text-slate-800 font-heading text-xs font-black flex items-center gap-2 shadow-md">
-        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
-        <span>🌴 Peta Terrain 3D • {{ unitTitle }}</span>
-      </div>
-
-      <div class="flex items-center gap-2 pointer-events-auto">
-        <button 
-          @click="resetCamera"
-          class="px-3 py-1.5 bg-white/90 hover:bg-white text-emerald-700 border border-emerald-300 rounded-xl font-heading font-extrabold text-xs shadow-sm transition-all cursor-pointer flex items-center gap-1"
-        >
-          <span>🔄 Reset</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Persistent & Hover Active Node Popover HUD Card -->
+    <!-- Active Node Popover HUD Card (Only shows when a node is hovered or clicked) -->
     <Transition name="bounce-popover">
       <div 
         v-if="activeCardNode"
-        class="absolute bottom-5 left-1/2 -translate-x-1/2 px-5 py-3.5 bg-white/95 backdrop-blur-xl border-4 rounded-3xl text-slate-800 font-heading shadow-2xl z-30 pointer-events-auto flex items-center gap-3.5 max-w-sm w-[90%] animate-pop"
+        class="absolute bottom-4 left-1/2 -translate-x-1/2 px-5 py-3.5 bg-white/95 backdrop-blur-xl border-4 rounded-3xl text-slate-800 font-heading shadow-2xl z-30 pointer-events-auto flex items-center gap-3.5 max-w-sm w-[90%] animate-pop"
         :class="activeCardNode.type === 'checkpoint' ? 'border-amber-400' : 'border-emerald-400'"
       >
         <div 
@@ -71,11 +54,6 @@
         </div>
       </div>
     </Transition>
-
-    <!-- Bottom Helper Overlay -->
-    <div class="absolute bottom-3 left-4 text-[11px] font-heading font-bold text-slate-600 bg-white/80 px-3 py-1 rounded-xl backdrop-blur-sm pointer-events-none shadow-2xs border border-white">
-      💡 Klik node 3D untuk memilih & mulai kuis!
-    </div>
   </div>
 </template>
 
@@ -175,15 +153,15 @@ const init3D = () => {
   const height = canvasContainer.value.clientHeight
 
   scene = new THREE.Scene()
-  scene.background = new THREE.Color(0xe0f2fe)
-  scene.fog = new THREE.FogExp2(0xe0f2fe, 0.02)
+  // Set transparent background so 3D terrain sits directly on the page!
+  scene.background = null
 
-  // Camera set at elegant top-down perspective to view full island
   camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100)
   camera.position.set(0, 15.0, 3.8)
   camera.lookAt(0, 0, 0)
 
-  renderer = new THREE.WebGLRenderer({ antialias: true })
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+  renderer.setClearColor(0x000000, 0) // Fully transparent canvas!
   renderer.setSize(width, height)
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.toneMapping = THREE.ACESFilmicToneMapping
@@ -192,10 +170,10 @@ const init3D = () => {
   canvasContainer.value.appendChild(renderer.domElement)
 
   // Lights
-  const ambientLight = new THREE.AmbientLight(0xffffff, 2.0)
+  const ambientLight = new THREE.AmbientLight(0xffffff, 2.2)
   scene.add(ambientLight)
 
-  const sunLight = new THREE.DirectionalLight(0xfffaed, 2.2)
+  const sunLight = new THREE.DirectionalLight(0xfffaed, 2.5)
   sunLight.position.set(8, 18, 8)
   sunLight.castShadow = true
   sunLight.shadow.mapSize.width = 1024
@@ -220,7 +198,7 @@ const init3D = () => {
   grassSurface.receiveShadow = true
   terrainGroup.add(grassSurface)
 
-  // --- 2. WINDING ROAD PATHWAY (SCALED DOWN) ---
+  // --- 2. WINDING ROAD PATHWAY ---
   const nodes = getVerticalTrackNodes()
   const pathPoints = nodes.map(n => new THREE.Vector3(n.position.x, 0.58, n.position.z))
   const curve = new THREE.CatmullRomCurve3(pathPoints)
@@ -458,14 +436,6 @@ const launchQuiz = (node: any) => {
   if (node && node.isUnlocked) {
     emit('node-click', { unitId: props.unit.id, itemId: node.id, type: node.type })
   }
-}
-
-const resetCamera = () => {
-  selectedNode.value = null
-  hoveredNode.value = null
-  if (terrainGroup) terrainGroup.rotation.y = 0
-  camera.position.set(0, 15.0, 3.8)
-  camera.lookAt(0, 0, 0)
 }
 
 const clock = new THREE.Clock()
