@@ -1,7 +1,21 @@
 <template>
-  <div class="relative w-full max-w-xl mx-auto h-[580px] sm:h-[660px] select-none">
+  <div class="relative w-full h-[540px] sm:h-[620px] rounded-[36px] overflow-hidden bg-gradient-to-b from-sky-300 via-sky-200 to-emerald-100 border-4 border-sky-400 shadow-xl select-none group">
     <!-- WebGL Canvas Container -->
-    <div ref="canvasContainer" class="w-full h-full cursor-pointer"></div>
+    <div ref="canvasContainer" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
+
+    <!-- Interactive Controls Helper Badge & Reset View Button -->
+    <div class="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none z-20">
+      <div class="px-3 py-1.5 bg-white/90 backdrop-blur-md rounded-2xl border border-emerald-400/80 text-slate-800 font-heading text-[11px] font-black flex items-center gap-1.5 shadow-md">
+        <span>🎮 Tahan & Geser untuk Putar 3D</span>
+      </div>
+
+      <button 
+        @click="resetCamera"
+        class="px-3 py-1.5 bg-white/90 hover:bg-white text-emerald-700 border border-emerald-300 rounded-xl font-heading font-extrabold text-[11px] shadow-md transition-all cursor-pointer flex items-center gap-1 pointer-events-auto"
+      >
+        <span>🔄 Reset Sudut</span>
+      </button>
+    </div>
 
     <!-- Floating Title Pill Badges Overlay Projected Over 3D Nodes -->
     <div class="absolute inset-0 pointer-events-none z-10 overflow-hidden">
@@ -15,7 +29,7 @@
         <!-- Blinking "Lanjut di Sini!" Mascot Callout for Current Active Node -->
         <div 
           v-if="node.isUnlocked && !node.isCompleted && node.type === 'lesson'"
-          class="mb-2 px-3 py-1 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-full text-[10px] font-heading font-black shadow-lg border-2 border-white flex items-center gap-1.5 animate-bounce animate-pulse"
+          class="mb-1.5 px-2.5 py-0.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-full text-[10px] font-heading font-black shadow-lg border-2 border-white flex items-center gap-1 animate-bounce animate-pulse"
         >
           <span class="w-2 h-2 rounded-full bg-amber-300 animate-ping"></span>
           <span>🦉 Lanjut di sini!</span>
@@ -23,7 +37,7 @@
 
         <!-- Node Title Badge (Matching 2D Skill Tree Style) -->
         <div 
-          class="px-3 py-1.5 rounded-2xl border-2 shadow-lg text-center max-w-[140px] font-heading font-black text-[11px] truncate backdrop-blur-md transition-transform hover:scale-105 active:scale-95"
+          class="px-3 py-1.5 rounded-2xl border-2 shadow-lg text-center max-w-[150px] font-heading font-black text-[11px] truncate backdrop-blur-md transition-transform hover:scale-105 active:scale-95"
           :class="getNodeBadgeClass(node)"
         >
           <span v-if="!node.isUnlocked" class="mr-1">🔒</span>
@@ -127,21 +141,22 @@ let pulseRingMesh: THREE.Mesh | null = null
 const nodeMeshes: THREE.Mesh[] = []
 const rawNodesList: any[] = []
 
-const mouse = { x: 0, y: 0, isDragging: false, previousMouseX: 0, previousMouseY: 0 }
+// Mouse & Drag State for Smooth 3D Orbiting Rotation
+const mouse = { isDragging: false, startX: 0, startY: 0, currentRotY: 0.15, targetRotY: 0.15, currentRotX: 0.1, targetRotX: 0.1 }
 const raycaster = new THREE.Raycaster()
 const mouseVector = new THREE.Vector2()
 
 const unitTitle = ref(props.unit.title || 'Terrain 3D Petualangan')
 
-// Calculate Vertical S-Curve Nodes
+// Calculate Vertical S-Curve Nodes spanning generously across terrain
 const getVerticalTrackNodes = () => {
   const nodes: any[] = []
   const lessons = props.unit.lessons || []
   const totalCount = lessons.length + 1
 
-  const startZ = -4.0
-  const zSpacing = 8.0 / Math.max(totalCount - 1, 1)
-  const xOffsets = [-1.2, 1.2, -1.2, 1.2, -1.2, 1.2]
+  const startZ = -4.5
+  const zSpacing = 9.0 / Math.max(totalCount - 1, 1)
+  const xOffsets = [-1.8, 1.8, -1.8, 1.8, -1.8, 1.8]
 
   lessons.forEach((l: any, idx: number) => {
     const x = xOffsets[idx % xOffsets.length]
@@ -154,7 +169,7 @@ const getVerticalTrackNodes = () => {
       title: l.title,
       type: 'lesson',
       order: idx + 1,
-      position: { x, y: 0.55, z },
+      position: { x, y: 0.65, z },
       isCompleted,
       isUnlocked
     })
@@ -172,7 +187,7 @@ const getVerticalTrackNodes = () => {
     title: cpTitle,
     type: 'checkpoint',
     order: lessons.length + 1,
-    position: { x: 0, y: 0.55, z: lastZ },
+    position: { x: 0, y: 0.65, z: lastZ },
     isCompleted: isCpCompleted,
     isUnlocked: isCpUnlocked
   })
@@ -204,14 +219,14 @@ const init3D = () => {
   const height = canvasContainer.value.clientHeight
 
   scene = new THREE.Scene()
-  scene.background = null
+  scene.background = new THREE.Color(0xbae6fd) // Rich sky blue background filling the frame
+  scene.fog = new THREE.FogExp2(0xbae6fd, 0.018)
 
-  camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100)
-  camera.position.set(0, 15.0, 3.8)
+  camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100)
+  camera.position.set(0, 14.0, 4.5)
   camera.lookAt(0, 0, 0)
 
-  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
-  renderer.setClearColor(0x000000, 0)
+  renderer = new THREE.WebGLRenderer({ antialias: true })
   renderer.setSize(width, height)
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.toneMapping = THREE.ACESFilmicToneMapping
@@ -233,18 +248,18 @@ const init3D = () => {
   terrainGroup = new THREE.Group()
   scene.add(terrainGroup)
 
-  // --- 1. PROPORTIONAL VERTICAL 3D TERRAIN ISLAND ---
-  const baseBoxGeo = new THREE.BoxGeometry(5.2, 0.8, 10.5)
-  const cliffMat = new THREE.MeshStandardMaterial({ color: 0x8d6e63, roughness: 0.8 })
+  // --- 1. FULL EXPANDED 3D TERRAIN ISLAND (NO EMPTY SPACE) ---
+  const baseBoxGeo = new THREE.BoxGeometry(8.5, 1.2, 12.5)
+  const cliffMat = new THREE.MeshStandardMaterial({ color: 0x7c2d12, roughness: 0.85 })
   const baseCliff = new THREE.Mesh(baseBoxGeo, cliffMat)
-  baseCliff.position.y = -0.1
+  baseCliff.position.y = -0.2
   baseCliff.receiveShadow = true
   terrainGroup.add(baseCliff)
 
-  const grassTopGeo = new THREE.BoxGeometry(5.1, 0.3, 10.4)
-  const grassMat = new THREE.MeshStandardMaterial({ color: 0x4caf50, roughness: 0.5 })
+  const grassTopGeo = new THREE.BoxGeometry(8.4, 0.4, 12.4)
+  const grassMat = new THREE.MeshStandardMaterial({ color: 0x38a169, roughness: 0.45 })
   const grassSurface = new THREE.Mesh(grassTopGeo, grassMat)
-  grassSurface.position.y = 0.45
+  grassSurface.position.y = 0.5
   grassSurface.receiveShadow = true
   terrainGroup.add(grassSurface)
 
@@ -252,69 +267,68 @@ const init3D = () => {
   const nodes = getVerticalTrackNodes()
   rawNodesList.push(...nodes)
 
-  const pathPoints = nodes.map(n => new THREE.Vector3(n.position.x, 0.58, n.position.z))
+  const pathPoints = nodes.map(n => new THREE.Vector3(n.position.x, 0.68, n.position.z))
   const curve = new THREE.CatmullRomCurve3(pathPoints)
 
-  const roadTubeGeo = new THREE.TubeGeometry(curve, 64, 0.35, 12, false)
+  const roadTubeGeo = new THREE.TubeGeometry(curve, 64, 0.45, 12, false)
   const roadMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, roughness: 0.3 })
   const road = new THREE.Mesh(roadTubeGeo, roadMat)
   road.receiveShadow = true
   terrainGroup.add(road)
 
-  const innerTubeGeo = new THREE.TubeGeometry(curve, 64, 0.1, 8, false)
+  const innerTubeGeo = new THREE.TubeGeometry(curve, 64, 0.14, 8, false)
   const innerMat = new THREE.MeshStandardMaterial({ color: 0xffd700, roughness: 0.2 })
   const innerRoad = new THREE.Mesh(innerTubeGeo, innerMat)
-  innerRoad.position.y = 0.61
+  innerRoad.position.y = 0.72
   terrainGroup.add(innerRoad)
 
-  // --- 3. SCALED 3D ENVIRONMENT DECORATIONS ---
+  // --- 3. DENSE 3D SCENERY DECORATIONS ---
   const treeSidePositions = [
-    { x: -2.1, z: -4.5 },
-    { x: 2.1, z: -2.8 },
-    { x: -2.2, z: -0.8 },
-    { x: 2.2, z: 1.0 },
-    { x: -2.1, z: 2.8 },
-    { x: 2.1, z: 4.5 }
+    { x: -3.5, z: -5.0 }, { x: 3.5, z: -5.2 },
+    { x: -3.6, z: -2.8 }, { x: 3.6, z: -2.5 },
+    { x: -3.5, z: -0.2 }, { x: 3.5, z: 0.2 },
+    { x: -3.6, z: 2.5 },  { x: 3.6, z: 2.8 },
+    { x: -3.5, z: 5.0 },  { x: 3.5, z: 5.2 }
   ]
 
-  const trunkGeo = new THREE.CylinderGeometry(0.09, 0.14, 0.6, 12)
+  const trunkGeo = new THREE.CylinderGeometry(0.12, 0.18, 0.8, 12)
   const trunkMat = new THREE.MeshStandardMaterial({ color: 0x5d4037 })
-  const leavesGeo = new THREE.SphereGeometry(0.42, 16, 16)
+  const leavesGeo = new THREE.SphereGeometry(0.55, 16, 16)
   const leavesMat = new THREE.MeshStandardMaterial({ color: 0x2e7d32, roughness: 0.4 })
 
   treeSidePositions.forEach(pos => {
     const tGroup = new THREE.Group()
-    tGroup.position.set(pos.x, 0.58, pos.z)
+    tGroup.position.set(pos.x, 0.68, pos.z)
 
     const trunk = new THREE.Mesh(trunkGeo, trunkMat)
-    trunk.position.y = 0.3
+    trunk.position.y = 0.4
     trunk.castShadow = true
     tGroup.add(trunk)
 
     const leaves = new THREE.Mesh(leavesGeo, leavesMat)
-    leaves.position.y = 0.75
+    leaves.position.y = 1.0
     leaves.castShadow = true
     tGroup.add(leaves)
 
     terrainGroup.add(tGroup)
   })
 
-  // 3D Fluffy Clouds
+  // 3D Fluffy Floating Clouds
   const cloudPositions = [
-    { x: 2.2, z: -3.5, y: 2.8 },
-    { x: -2.2, z: -0.2, y: 3.0 },
-    { x: 2.2, z: 2.8, y: 2.6 }
+    { x: 3.5, z: -4.0, y: 3.2 },
+    { x: -3.5, z: -0.8, y: 3.5 },
+    { x: 3.5, z: 3.5, y: 3.0 }
   ]
   const cloudMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.1 })
-  const cloudGeo = new THREE.SphereGeometry(0.35, 16, 16)
+  const cloudGeo = new THREE.SphereGeometry(0.48, 16, 16)
 
   cloudPositions.forEach(pos => {
     const cGroup = new THREE.Group()
     cGroup.position.set(pos.x, pos.y, pos.z)
 
     const c1 = new THREE.Mesh(cloudGeo, cloudMat)
-    const c2 = new THREE.Mesh(new THREE.SphereGeometry(0.28, 12, 12), cloudMat)
-    c2.position.set(0.25, 0.08, 0)
+    const c2 = new THREE.Mesh(new THREE.SphereGeometry(0.38, 12, 12), cloudMat)
+    c2.position.set(0.35, 0.1, 0)
     cGroup.add(c1)
     cGroup.add(c2)
     terrainGroup.add(cGroup)
@@ -328,50 +342,50 @@ const init3D = () => {
     nodeGroup.position.set(node.position.x, node.position.y, node.position.z)
 
     // Base Cobblestone Disc Ring
-    const ringGeo = new THREE.CylinderGeometry(0.68, 0.72, 0.22, 24)
+    const ringGeo = new THREE.CylinderGeometry(0.8, 0.85, 0.25, 24)
     const ringMat = new THREE.MeshStandardMaterial({ 
       color: node.isCompleted ? 0xffb700 : (node.isUnlocked ? 0x43a047 : 0x64748b),
       roughness: 0.3 
     })
     const ring = new THREE.Mesh(ringGeo, ringMat)
-    ring.position.y = 0.11
+    ring.position.y = 0.12
     ring.castShadow = true
     ring.userData = { nodeData: node }
     nodeGroup.add(ring)
     nodeMeshes.push(ring)
 
     if (node.type === 'checkpoint') {
-      const cpBoxGeo = new THREE.BoxGeometry(0.9, 0.52, 0.9)
+      const cpBoxGeo = new THREE.BoxGeometry(1.1, 0.6, 1.1)
       const cpBoxMat = new THREE.MeshStandardMaterial({ 
         color: node.isUnlocked ? 0xff9800 : 0x64748b, 
         roughness: 0.2, 
         metalness: 0.5 
       })
       const cpBox = new THREE.Mesh(cpBoxGeo, cpBoxMat)
-      cpBox.position.y = 0.48
+      cpBox.position.y = 0.55
       cpBox.castShadow = true
       cpBox.userData = { nodeData: node }
       nodeGroup.add(cpBox)
       nodeMeshes.push(cpBox)
 
-      const crownGeo = new THREE.OctahedronGeometry(0.34, 0)
+      const crownGeo = new THREE.OctahedronGeometry(0.4, 0)
       const crownMat = new THREE.MeshStandardMaterial({ 
         color: node.isUnlocked ? 0xffd700 : 0x94a3b8, 
         roughness: 0.1, 
         metalness: 0.8 
       })
       const crown = new THREE.Mesh(crownGeo, crownMat)
-      crown.position.y = 1.1
+      crown.position.y = 1.25
       nodeGroup.add(crown)
     } else {
-      const gemGeo = new THREE.SphereGeometry(0.42, 24, 24)
+      const gemGeo = new THREE.SphereGeometry(0.5, 24, 24)
       const gemMat = new THREE.MeshStandardMaterial({ 
         color: node.isCompleted ? 0xffd54f : (node.isUnlocked ? 0x66bb6a : 0x64748b),
         roughness: 0.2,
         metalness: 0.3 
       })
       const gem = new THREE.Mesh(gemGeo, gemMat)
-      gem.position.y = 0.44
+      gem.position.y = 0.5
       gem.castShadow = true
       gem.userData = { nodeData: node }
       nodeGroup.add(gem)
@@ -381,25 +395,25 @@ const init3D = () => {
     // Add 3D Metallic Lock Padlock for locked nodes 🔒
     if (!node.isUnlocked) {
       const lockGroup = new THREE.Group()
-      lockGroup.position.set(0, 0.85, 0)
+      lockGroup.position.set(0, 0.95, 0)
 
-      const lockBodyGeo = new THREE.BoxGeometry(0.28, 0.26, 0.12)
+      const lockBodyGeo = new THREE.BoxGeometry(0.32, 0.3, 0.14)
       const lockBodyMat = new THREE.MeshStandardMaterial({ color: 0x475569, metalness: 0.7, roughness: 0.3 })
       const lockBody = new THREE.Mesh(lockBodyGeo, lockBodyMat)
       lockGroup.add(lockBody)
 
-      const shackleGeo = new THREE.TorusGeometry(0.09, 0.03, 12, 16, Math.PI)
+      const shackleGeo = new THREE.TorusGeometry(0.1, 0.035, 12, 16, Math.PI)
       const shackleMat = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, metalness: 0.8, roughness: 0.2 })
       const shackle = new THREE.Mesh(shackleGeo, shackleMat)
       shackle.rotation.x = Math.PI
-      shackle.position.set(0, 0.18, 0)
+      shackle.position.set(0, 0.2, 0)
       lockGroup.add(shackle)
 
       nodeGroup.add(lockGroup)
     }
 
     if (node.isUnlocked && !node.isCompleted && !activeNodePos) {
-      activeNodePos = new THREE.Vector3(node.position.x, node.position.y + 0.85, node.position.z)
+      activeNodePos = new THREE.Vector3(node.position.x, node.position.y + 0.95, node.position.z)
     }
 
     nodeGroup.userData = { id: node.id, targetY: 0, data: node }
@@ -408,7 +422,7 @@ const init3D = () => {
 
   // Pulsing 3D Glowing Aura Ring for Active Position
   if (activeNodePos) {
-    const pulseRingGeo = new THREE.RingGeometry(0.7, 1.0, 32)
+    const pulseRingGeo = new THREE.RingGeometry(0.85, 1.2, 32)
     const pulseRingMat = new THREE.MeshBasicMaterial({ 
       color: 0x58cc02, 
       side: THREE.DoubleSide,
@@ -417,7 +431,7 @@ const init3D = () => {
     })
     pulseRingMesh = new THREE.Mesh(pulseRingGeo, pulseRingMat)
     pulseRingMesh.rotation.x = Math.PI * 0.5
-    pulseRingMesh.position.set(activeNodePos.x, 0.59, activeNodePos.z)
+    pulseRingMesh.position.set(activeNodePos.x, 0.69, activeNodePos.z)
     terrainGroup.add(pulseRingMesh)
   }
 
@@ -426,45 +440,46 @@ const init3D = () => {
   if (activeNodePos) {
     mascotGroup.position.copy(activeNodePos)
   } else if (nodes.length > 0) {
-    mascotGroup.position.set(nodes[0].position.x, nodes[0].position.y + 0.85, nodes[0].position.z)
+    mascotGroup.position.set(nodes[0].position.x, nodes[0].position.y + 0.95, nodes[0].position.z)
   }
 
-  const bodyGeo = new THREE.SphereGeometry(0.3, 20, 20)
+  const bodyGeo = new THREE.SphereGeometry(0.35, 20, 20)
   const bodyMat = new THREE.MeshStandardMaterial({ color: 0x58cc02, roughness: 0.3 })
   const body = new THREE.Mesh(bodyGeo, bodyMat)
   body.castShadow = true
   mascotGroup.add(body)
 
-  const beakGeo = new THREE.ConeGeometry(0.09, 0.2, 12)
+  const beakGeo = new THREE.ConeGeometry(0.1, 0.22, 12)
   const beakMat = new THREE.MeshStandardMaterial({ color: 0xffb700, roughness: 0.2 })
   const beak = new THREE.Mesh(beakGeo, beakMat)
   beak.rotation.x = Math.PI * 0.5
-  beak.position.set(0, 0, 0.3)
+  beak.position.set(0, 0, 0.35)
   mascotGroup.add(beak)
 
   const eyeMat = new THREE.MeshBasicMaterial({ color: 0xffffff })
   const pupilMat = new THREE.MeshBasicMaterial({ color: 0x000000 })
-  const lEye = new THREE.Mesh(new THREE.SphereGeometry(0.065, 12, 12), eyeMat)
-  lEye.position.set(-0.1, 0.08, 0.24)
-  const lPupil = new THREE.Mesh(new THREE.SphereGeometry(0.03, 8, 8), pupilMat)
-  lPupil.position.set(-0.1, 0.08, 0.29)
+  const lEye = new THREE.Mesh(new THREE.SphereGeometry(0.075, 12, 12), eyeMat)
+  lEye.position.set(-0.12, 0.09, 0.28)
+  const lPupil = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 8), pupilMat)
+  lPupil.position.set(-0.12, 0.09, 0.34)
   mascotGroup.add(lEye)
   mascotGroup.add(lPupil)
 
-  const rEye = new THREE.Mesh(new THREE.SphereGeometry(0.065, 12, 12), eyeMat)
-  rEye.position.set(0.1, 0.08, 0.24)
-  const rPupil = new THREE.Mesh(new THREE.SphereGeometry(0.03, 8, 8), pupilMat)
-  rPupil.position.set(0.1, 0.08, 0.29)
+  const rEye = new THREE.Mesh(new THREE.SphereGeometry(0.075, 12, 12), eyeMat)
+  rEye.position.set(0.12, 0.09, 0.28)
+  const rPupil = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 8), pupilMat)
+  rPupil.position.set(0.12, 0.09, 0.34)
   mascotGroup.add(rEye)
   mascotGroup.add(rPupil)
 
   terrainGroup.add(mascotGroup)
 
-  // Listeners
+  // Mouse & Touch Dragging Orbit Rotation Listeners
   const dom = renderer.domElement
   dom.addEventListener('mousedown', onMouseDown)
   dom.addEventListener('mousemove', onMouseMove)
   dom.addEventListener('mouseup', onMouseUp)
+  dom.addEventListener('mouseleave', onMouseUp)
   dom.addEventListener('click', onClickCanvas)
 
   animate()
@@ -478,12 +493,13 @@ const updateProjectedNodeBadges = () => {
   const projected: any[] = []
 
   rawNodesList.forEach(node => {
-    // Project 3D vector to 2D screen coordinate
-    const vec = new THREE.Vector3(node.position.x, node.position.y + 0.95, node.position.z)
-    vec.project(camera)
+    // Project 3D position vector after rotation to screen 2D coordinates
+    const worldPos = new THREE.Vector3(node.position.x, node.position.y + 1.1, node.position.z)
+    worldPos.applyMatrix4(terrainGroup.matrixWorld)
+    worldPos.project(camera)
 
-    const screenX = (vec.x * 0.5 + 0.5) * width
-    const screenY = (-vec.y * 0.5 + 0.5) * height
+    const screenX = (worldPos.x * 0.5 + 0.5) * width
+    const screenY = (-worldPos.y * 0.5 + 0.5) * height
 
     projected.push({
       ...node,
@@ -496,17 +512,34 @@ const updateProjectedNodeBadges = () => {
 }
 
 const onMouseDown = (e: MouseEvent) => {
-  mouse.isDragging = false
-  mouse.previousMouseX = e.clientX
-  mouse.previousMouseY = e.clientY
+  mouse.isDragging = true
+  mouse.startX = e.clientX
+  mouse.startY = e.clientY
 }
 
 const onMouseMove = (e: MouseEvent) => {
   if (!canvasContainer.value) return
+
   const rect = canvasContainer.value.getBoundingClientRect()
   mouseVector.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
   mouseVector.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
 
+  // Handle Dragging 3D World Orbit Rotation
+  if (mouse.isDragging) {
+    const deltaX = e.clientX - mouse.startX
+    const deltaY = e.clientY - mouse.startY
+
+    mouse.targetRotY += deltaX * 0.005
+    mouse.targetRotX += deltaY * 0.003
+
+    // Clamp vertical tilt to avoid flipping
+    mouse.targetRotX = Math.max(-0.2, Math.min(0.35, mouse.targetRotX))
+
+    mouse.startX = e.clientX
+    mouse.startY = e.clientY
+  }
+
+  // Raycasting hover check
   if (camera && scene) {
     raycaster.setFromCamera(mouseVector, camera)
     const intersects = raycaster.intersectObjects(nodeMeshes)
@@ -516,21 +549,11 @@ const onMouseMove = (e: MouseEvent) => {
       const data = hitObj.userData.nodeData
       if (data && data.isUnlocked) {
         hoveredNode.value = data
-        terrainGroup.children.forEach((child) => {
-          if (child.userData.id === data.id) {
-            child.userData.targetY = 0.25
-          } else {
-            child.userData.targetY = 0
-          }
-        })
       } else {
         hoveredNode.value = null
       }
     } else {
       hoveredNode.value = null
-      terrainGroup.children.forEach((child) => {
-        child.userData.targetY = 0
-      })
     }
   }
 }
@@ -560,6 +583,13 @@ const launchQuiz = (node: any) => {
   }
 }
 
+const resetCamera = () => {
+  mouse.targetRotY = 0
+  mouse.targetRotX = 0
+  selectedNode.value = null
+  hoveredNode.value = null
+}
+
 const clock = new THREE.Clock()
 
 const animate = () => {
@@ -567,9 +597,18 @@ const animate = () => {
 
   const time = clock.getElapsedTime()
 
+  // Smooth Inertial Orbit Rotation on Dragging
+  mouse.currentRotY += (mouse.targetRotY - mouse.currentRotY) * 0.1
+  mouse.currentRotX += (mouse.targetRotX - mouse.currentRotX) * 0.1
+
+  if (terrainGroup) {
+    terrainGroup.rotation.y = mouse.currentRotY
+    terrainGroup.rotation.x = mouse.currentRotX
+  }
+
   // Mascot Happy Hopping
   if (mascotGroup) {
-    mascotGroup.position.y = 0.85 + Math.abs(Math.sin(time * 4)) * 0.18
+    mascotGroup.position.y = 0.95 + Math.abs(Math.sin(time * 4)) * 0.18
   }
 
   // Active Position Pulsing Ring Animation
