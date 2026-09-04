@@ -290,7 +290,11 @@ const init3D = () => {
 
     if (node.type === 'checkpoint') {
       const cpBoxGeo = new THREE.BoxGeometry(0.9, 0.52, 0.9)
-      const cpBoxMat = new THREE.MeshStandardMaterial({ color: 0xff9800, roughness: 0.2, metalness: 0.5 })
+      const cpBoxMat = new THREE.MeshStandardMaterial({ 
+        color: node.isUnlocked ? 0xff9800 : 0x64748b, 
+        roughness: 0.2, 
+        metalness: 0.5 
+      })
       const cpBox = new THREE.Mesh(cpBoxGeo, cpBoxMat)
       cpBox.position.y = 0.48
       cpBox.castShadow = true
@@ -299,14 +303,18 @@ const init3D = () => {
       nodeMeshes.push(cpBox)
 
       const crownGeo = new THREE.OctahedronGeometry(0.34, 0)
-      const crownMat = new THREE.MeshStandardMaterial({ color: 0xffd700, roughness: 0.1, metalness: 0.8 })
+      const crownMat = new THREE.MeshStandardMaterial({ 
+        color: node.isUnlocked ? 0xffd700 : 0x94a3b8, 
+        roughness: 0.1, 
+        metalness: 0.8 
+      })
       const crown = new THREE.Mesh(crownGeo, crownMat)
       crown.position.y = 1.1
       nodeGroup.add(crown)
     } else {
       const gemGeo = new THREE.SphereGeometry(0.42, 24, 24)
       const gemMat = new THREE.MeshStandardMaterial({ 
-        color: node.isCompleted ? 0xffd54f : (node.isUnlocked ? 0x66bb6a : 0xcbd5e1),
+        color: node.isCompleted ? 0xffd54f : (node.isUnlocked ? 0x66bb6a : 0x64748b),
         roughness: 0.2,
         metalness: 0.3 
       })
@@ -316,6 +324,28 @@ const init3D = () => {
       gem.userData = { nodeData: node }
       nodeGroup.add(gem)
       nodeMeshes.push(gem)
+    }
+
+    // Add 3D Lock Padlock for locked nodes 🔒
+    if (!node.isUnlocked) {
+      const lockGroup = new THREE.Group()
+      lockGroup.position.set(0, 0.85, 0)
+
+      // Lock Body
+      const lockBodyGeo = new THREE.BoxGeometry(0.28, 0.26, 0.12)
+      const lockBodyMat = new THREE.MeshStandardMaterial({ color: 0x475569, metalness: 0.7, roughness: 0.3 })
+      const lockBody = new THREE.Mesh(lockBodyGeo, lockBodyMat)
+      lockGroup.add(lockBody)
+
+      // Lock Ring Shackle
+      const shackleGeo = new THREE.TorusGeometry(0.09, 0.03, 12, 16, Math.PI)
+      const shackleMat = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, metalness: 0.8, roughness: 0.2 })
+      const shackle = new THREE.Mesh(shackleGeo, shackleMat)
+      shackle.rotation.x = Math.PI
+      shackle.position.set(0, 0.18, 0)
+      lockGroup.add(shackle)
+
+      nodeGroup.add(lockGroup)
     }
 
     if (node.isUnlocked && !node.isCompleted && !activeNodePos) {
@@ -394,7 +424,8 @@ const onMouseMove = (e: MouseEvent) => {
     if (intersects.length > 0) {
       const hitObj = intersects[0].object
       const data = hitObj.userData.nodeData
-      if (data) {
+      // Only highlight unlocked nodes!
+      if (data && data.isUnlocked) {
         hoveredNode.value = data
         terrainGroup.children.forEach((child) => {
           if (child.userData.id === data.id) {
@@ -403,6 +434,8 @@ const onMouseMove = (e: MouseEvent) => {
             child.userData.targetY = 0
           }
         })
+      } else {
+        hoveredNode.value = null
       }
     } else {
       hoveredNode.value = null
@@ -425,7 +458,8 @@ const onClickCanvas = () => {
     if (intersects.length > 0) {
       const hitObj = intersects[0].object
       const data = hitObj.userData.nodeData
-      if (data) {
+      // Only allow selection & popup for unlocked nodes! 🔒
+      if (data && data.isUnlocked) {
         selectedNode.value = data
       }
     }
