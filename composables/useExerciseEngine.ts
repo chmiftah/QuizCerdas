@@ -24,12 +24,18 @@ export function useExerciseEngine(exercises: Exercise[], onLessonComplete?: (xp:
   const correctCount = ref(0)
   const comboCount = ref(0)
   const maxCombo = ref(0)
-  const totalExercises = computed(() => exercises?.length || 0)
-  const currentExercise = computed(() => exercises?.[currentIndex.value] || null)
+  
+  // Retry Logic State
+  const originalTotal = ref(exercises?.length || 0)
+  const activeQueue = ref<Exercise[]>([...(exercises || [])])
+  const retryQueue = ref<Exercise[]>([])
+
+  const totalExercises = computed(() => activeQueue.value.length)
+  const currentExercise = computed(() => activeQueue.value[currentIndex.value] || null)
 
   const earnedStars = computed(() => {
-    if (totalExercises.value === 0) return 0
-    const ratio = correctCount.value / totalExercises.value
+    if (originalTotal.value === 0) return 0
+    const ratio = correctCount.value / originalTotal.value
     if (ratio >= 0.9) return 3
     if (ratio >= 0.6) return 2
     return 1
@@ -171,6 +177,10 @@ export function useExerciseEngine(exercises: Exercise[], onLessonComplete?: (xp:
       comboCount.value = 0
       userStore.loseHeart()
       playSound('incorrect')
+      
+      // Add to retry queue to force user to answer it correctly later
+      retryQueue.value.push(ex)
+      
       if (ex.spaced_repetition) {
         userStore.addToSpacedRepetition(ex.id)
       }
@@ -199,13 +209,28 @@ export function useExerciseEngine(exercises: Exercise[], onLessonComplete?: (xp:
         isNavigatingNext.value = false
       }, 250)
     } else {
-      isLessonFinished.value = true
-      playSound('complete')
-      triggerConfetti()
-      const comboBonus = maxCombo.value * 5
-      const totalXP = correctCount.value * 10 + 10 + comboBonus
-      if (onLessonComplete) {
-        onLessonComplete(totalXP)
+      // Reached the end of the current active queue
+      const currentScore = originalTotal.value > 0 ? (correctCount.value / originalTotal.value) : 1
+      
+      if (currentScore >= 0.8 || retryQueue.value.length === 0) {
+        // Passed 80% threshold!
+        isLessonFinished.value = true
+        playSound('complete')
+        triggerConfetti()
+        const comboBonus = maxCombo.value * 5
+        const totalXP = correctCount.value * 10 + 10 + comboBonus
+        if (onLessonComplete) {
+          onLessonComplete(totalXP)
+        }
+      } else {
+        // Failed to reach 80% threshold. Append retry questions to the active queue.
+        activeQueue.value.push(...retryQueue.value)
+        retryQueue.value = [] // Clear the retry queue for the next cycle
+        
+        currentIndex.value++
+        setTimeout(() => {
+          isNavigatingNext.value = false
+        }, 250)
       }
     }
   }

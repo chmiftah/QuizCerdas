@@ -34,7 +34,7 @@ Setiap Pelajaran (Lesson) WAJIB berisi **7 Soal** yang disusun bertahap secara s
 ### ⚙️ ATURAN STRUKTUR JSON (HARUS SESUAI SKEMA):
 
 1. Format utama harus berupa JSON Object tunggal dengan kunci `"course"`.
-2. Tipe soal (`"type"`) HARUS salah satu dari 9 tipe interaktif berikut:
+2. Tipe soal (`"type"`) HARUS salah satu dari 13 tipe interaktif berikut:
 
    - **`"multiple_choice"`** : Pilihan ganda.
      * `"options"`: Array 4 teks/angka pilihan `["1", "2", "3", "4"]`.
@@ -77,6 +77,23 @@ Setiap Pelajaran (Lesson) WAJIB berisi **7 Soal** yang disusun bertahap secara s
      * `"options"`: `[]`.
      * `"correct_answer"`: `"4"` (jumlah objek tersembunyi yang wajib dicari).
      * `"visual"`: `{ "label": "🦋", "items": [{ "x": 15, "y": 20, "icon": "🦋" }, { "x": 75, "y": 15, "icon": "🦋" }] }`.
+
+   - **`"category_sorting"`** : Kelompokkan objek sesuai kategori.
+     * `"categories"`: `["Darat", "Laut"]`.
+     * `"items"`: `[{ "id": "1", "name": "Kucing 🐱", "category": "Darat" }, { "id": "2", "name": "Ikan 🐟", "category": "Laut" }]`.
+
+   - **`"odd_one_out"`** : Pilih satu objek yang berbeda dari yang lain.
+     * `"options"`: `["Kucing 🐱", "Anjing 🐶", "Mobil 🚗", "Kelinci 🐰"]`.
+     * `"correct_answer"`: `"Mobil 🚗"`.
+
+   - **`"memory_flip"`** : Permainan balik kartu memori.
+     * `"options"`: `["🍎::Apel", "🍌::Pisang", "🍇::Anggur"]`.
+     * `"correct_answer"`: `"3"` (total pasangan kartu yang cocok).
+
+   - **`"shadow_matching"`** : Mencocokkan objek dengan bayangannya.
+     * `"options"`: `["Kucing", "Gajah", "Burung"]`.
+     * `"correct_answer"`: `"Kucing"`.
+     * `"visual"`: `{ "target": "🐱" }`.
 
 3. Properti Visual Opsional (`"visual"`):
    - Visual Ten Frame: `{ "type": "ten_frame", "value": 6 }`

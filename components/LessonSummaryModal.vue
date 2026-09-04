@@ -8,7 +8,7 @@
 
         <!-- Trophy Header -->
         <div class="relative z-10 space-y-2">
-          <div class="w-20 h-20 rounded-3xl bg-gradient-to-tr from-amber-400 to-yellow-300 mx-auto flex items-center justify-center text-5xl shadow-xl animate-bounce">
+          <div class="w-20 h-20 rounded-3xl bg-amber-400 mx-auto flex items-center justify-center text-5xl shadow-xl animate-bounce">
             🏆
           </div>
           <h2 class="text-3xl font-heading font-black text-slate-800">
@@ -73,7 +73,7 @@
               v-if="isCourseCompleted"
               @click="showCert = true" 
               type="button"
-              class="w-full py-3 bg-gradient-to-r from-amber-400 to-yellow-400 hover:from-amber-500 hover:to-yellow-500 text-white font-heading font-black text-sm rounded-2xl shadow-lg transition-transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+              class="w-full py-3 bg-amber-400 hover:bg-amber-500 text-white font-heading font-black text-sm rounded-2xl shadow-lg transition-transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>🎓 Ambil Sertifikat Kelulusan 📜</span>
             </button>

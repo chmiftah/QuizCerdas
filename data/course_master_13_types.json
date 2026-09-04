@@ -1,0 +1,212 @@
+{
+  "course": {
+    "id": "course_master_types",
+    "title": "Master Showcase: 13 Tipe Interaktif",
+    "description": "Modul demonstrasi khusus yang merangkum keseluruhan 13 jenis variasi soal interaktif dalam satu tempat.",
+    "target_audience": "Semua Umur",
+    "category": "science",
+    "units": [
+      {
+        "id": "u1",
+        "title": "Eksplorasi Seluruh Interaksi",
+        "order": 1,
+        "icon": "🕹️",
+        "color": "amber",
+        "lessons": [
+          {
+            "id": "l1",
+            "title": "Demo Pilihan Ganda & Benar/Salah",
+            "order": 1,
+            "summary": "Kenali dasar interaksi pilihan ganda.",
+            "exercises": [
+              {
+                "id": "ex1",
+                "type": "multiple_choice",
+                "difficulty": "easy",
+                "question": "Berapakah hasil dari 5 + 3?",
+                "options": ["6", "7", "8", "9"],
+                "correct_answer": "8",
+                "explanation": "5 ditambah 3 sama dengan 8."
+              },
+              {
+                "id": "ex2",
+                "type": "true_false",
+                "difficulty": "easy",
+                "question": "Matahari terbit dari sebelah barat.",
+                "options": ["Benar", "Salah"],
+                "correct_answer": "Salah",
+                "explanation": "Matahari selalu terbit dari timur dan tenggelam di barat."
+              }
+            ]
+          },
+          {
+            "id": "l2",
+            "title": "Isian & Tarik Garis",
+            "order": 2,
+            "summary": "Demo tipe isian dan tarik garis berpasangan.",
+            "exercises": [
+              {
+                "id": "ex3",
+                "type": "fill_in_blank",
+                "difficulty": "medium",
+                "question": "Ibukota negara Indonesia adalah ___",
+                "options": [],
+                "correct_answer": "Jakarta",
+                "explanation": "Saat ini ibukota Indonesia adalah Jakarta."
+              },
+              {
+                "id": "ex4",
+                "type": "matching",
+                "difficulty": "medium",
+                "question": "Pasangkan hewan dengan jenis makanannya:",
+                "options": ["Sapi::Rumput", "Singa::Daging", "Ayam::Biji-bijian"],
+                "correct_answer": "Sapi::Rumput|Singa::Daging|Ayam::Biji-bijian",
+                "explanation": "Sapi herbivora, singa karnivora, ayam omnivora."
+              }
+            ]
+          },
+          {
+            "id": "l3",
+            "title": "Logika & Pola",
+            "order": 3,
+            "summary": "Melatih logika dengan mengurutkan dan pola.",
+            "exercises": [
+              {
+                "id": "ex5",
+                "type": "sequence_ordering",
+                "difficulty": "hard",
+                "question": "Lengkapi urutan planet terdekat ke matahari:",
+                "options": ["Bumi", "Jupiter", "Saturnus", "Pluto"],
+                "correct_answer": "Bumi",
+                "explanation": "Urutan yang benar adalah Merkurius, Venus, Bumi, Mars.",
+                "visual": {
+                  "sequence": ["Merkurius", "Venus", "?", "Mars"]
+                }
+              },
+              {
+                "id": "ex6",
+                "type": "pattern_matching",
+                "difficulty": "medium",
+                "question": "Lengkapi pola berikut: 2, 4, 6, 8, ...",
+                "options": ["9", "10", "11", "12"],
+                "correct_answer": "10",
+                "explanation": "Polanya adalah ditambah 2.",
+                "visual": {
+                  "pattern": ["2", "4", "6", "8", "?"]
+                }
+              }
+            ]
+          },
+          {
+            "id": "l4",
+            "title": "Perbandingan & Ganjil",
+            "order": 4,
+            "summary": "Demo soal perbandingan dan odd-one-out.",
+            "exercises": [
+              {
+                "id": "ex7",
+                "type": "comparison",
+                "difficulty": "easy",
+                "question": "Manakah yang ukurannya lebih besar?",
+                "options": ["Gajah", "Semut"],
+                "correct_answer": "Gajah",
+                "explanation": "Gajah mamalia besar, semut serangga kecil."
+              },
+              {
+                "id": "ex8",
+                "type": "odd_one_out",
+                "difficulty": "medium",
+                "question": "Pilih buah yang berbeda dari kelompok ini:",
+                "options": ["Apel", "Jeruk", "Batu", "Pisang"],
+                "correct_answer": "Batu",
+                "explanation": "Batu bukanlah buah-buahan."
+              }
+            ]
+          },
+          {
+            "id": "l5",
+            "title": "Seret Lepas & Cari",
+            "order": 5,
+            "summary": "Interaksi drag-and-drop dan cari tersembunyi.",
+            "exercises": [
+              {
+                "id": "ex9",
+                "type": "drag_and_drop",
+                "difficulty": "medium",
+                "question": "Pindahkan 3 buah apel ke keranjang.",
+                "options": [],
+                "correct_answer": "3",
+                "explanation": "Jumlah apel yang dipindahkan harus 3."
+              },
+              {
+                "id": "ex10",
+                "type": "seek_find",
+                "difficulty": "medium",
+                "question": "Berapa banyak bintang yang tersembunyi di gambar?",
+                "options": [],
+                "correct_answer": "5",
+                "explanation": "Ada total 5 bintang."
+              }
+            ]
+          },
+          {
+            "id": "l6",
+            "title": "Kartu Memori & Kategori",
+            "order": 6,
+            "summary": "Melatih daya ingat dan klasifikasi.",
+            "exercises": [
+              {
+                "id": "ex11",
+                "type": "memory_flip",
+                "difficulty": "medium",
+                "question": "Temukan semua pasangan gambar hewan yang sama!",
+                "options": [],
+                "correct_answer": "matched_all",
+                "explanation": "Kamu berhasil membalik dan mencocokkan semua kartu."
+              },
+              {
+                "id": "ex12",
+                "type": "category_sorting",
+                "difficulty": "hard",
+                "question": "Kelompokkan transportasi berikut:",
+                "categories": ["Darat", "Udara", "Air"],
+                "items": [
+                  { "id": "1", "name": "Mobil" },
+                  { "id": "2", "name": "Pesawat" },
+                  { "id": "3", "name": "Kapal" },
+                  { "id": "4", "name": "Motor" }
+                ],
+                "correct_answer": "Mobil::Darat|Pesawat::Udara|Kapal::Air|Motor::Darat",
+                "explanation": "Mobil dan motor ada di darat, kapal di air, pesawat di udara."
+              },
+              {
+                "id": "ex13",
+                "type": "shadow_matching",
+                "difficulty": "easy",
+                "question": "Cocokkan bayangan hitam ini dengan gambar aslinya:",
+                "options": ["Ayam", "Kelinci", "Kucing", "Anjing"],
+                "correct_answer": "Kelinci",
+                "explanation": "Bayangan dengan telinga panjang adalah kelinci."
+              }
+            ]
+          }
+        ],
+        "checkpoint": {
+          "id": "cp1",
+          "title": "Ujian Akhir Master Showcase",
+          "exercises": [
+             {
+                "id": "cp_ex1",
+                "type": "multiple_choice",
+                "difficulty": "hard",
+                "question": "Apakah kamu menikmati demonstrasi 13 tipe soal ini?",
+                "options": ["Ya, sangat interaktif!", "Biasa saja."],
+                "correct_answer": "Ya, sangat interaktif!",
+                "explanation": "Selamat, Anda telah menguasai platform!"
+             }
+          ]
+        }
+      }
+    ]
+  }
+}

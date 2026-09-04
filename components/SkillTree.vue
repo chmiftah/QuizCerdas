@@ -43,7 +43,7 @@
     <Transition name="slide-down">
       <div 
         v-if="showStickyHeader && courseStore.units.length > 0"
-        class="sticky top-16 sm:top-20 z-30 w-full rounded-2xl p-3 sm:p-4 text-white shadow-2xl border-4 border-black/15 backdrop-blur-md flex items-center justify-between gap-3 transition-all duration-300 select-none mb-4"
+        class="fixed top-16 sm:top-20 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-[calc(56rem-2rem)] rounded-2xl p-3 sm:p-4 text-white shadow-2xl border-4 border-black/15 backdrop-blur-md flex items-center justify-between gap-3 transition-all duration-300 select-none"
         :class="getUnitHeaderTheme(currentVisibleUnit?.color || 'emerald')"
       >
         <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
@@ -66,9 +66,22 @@
           </div>
         </div>
 
-        <div class="flex items-center gap-2 shrink-0">
+        <div class="flex items-center gap-3 sm:gap-4 shrink-0">
+          <!-- Mini Progress Bar -->
+          <div v-if="currentVisibleUnit" class="hidden sm:flex flex-col items-end gap-1">
+            <div class="text-[9px] font-heading font-black text-white uppercase tracking-widest drop-shadow-xs">
+              {{ getUnitProgressPercent(currentVisibleUnit) }}% Selesai
+            </div>
+            <div class="w-24 sm:w-32 h-2 bg-black/30 rounded-full overflow-hidden border border-white/20">
+              <div 
+                class="h-full bg-amber-400 rounded-full transition-all shadow-sm"
+                :style="{ width: `${getUnitProgressPercent(currentVisibleUnit)}%` }"
+              ></div>
+            </div>
+          </div>
+
           <button 
-            @click="scrollToActiveNode" 
+            @click="showGuidebook(currentVisibleUnit)" 
             class="px-3 sm:px-4 py-2 bg-white/25 hover:bg-white/40 active:scale-95 text-white rounded-xl font-heading font-black text-[11px] sm:text-xs flex items-center gap-1.5 border border-white/30 shadow-md cursor-pointer transition-all uppercase tracking-wider"
           >
             <span>📖 BUKU PANDUAN</span>
@@ -90,61 +103,80 @@
       </div>
     </div>
 
-    <!-- DUOLINGO CLASSIC DARK SNAKE PATH VIEW (Matches User Reference Image 100%) -->
+    <!-- DUOLINGO CLASSIC LIGHT SNAKE PATH VIEW (Tampilan Terang & Ada Jalur) -->
     <div 
       v-else-if="pathViewMode === 'classic'"
-      class="bg-[#131f24] rounded-[36px] p-4 sm:p-8 text-white space-y-12 shadow-2xl border-4 border-slate-800 relative overflow-hidden min-h-[600px]"
+      class="bg-slate-50 rounded-[36px] p-4 sm:p-8 text-slate-800 space-y-12 shadow-2xl border-4 border-slate-200 relative overflow-visible min-h-[600px]"
     >
       <!-- Background Ambient Glow -->
-      <div class="absolute inset-0 pointer-events-none bg-radial from-emerald-950/20 via-transparent to-transparent"></div>
+      <div class="absolute inset-0 pointer-events-none bg-radial from-slate-100 via-transparent to-transparent rounded-[32px]"></div>
 
       <!-- Unit Chapters Continuous Flow -->
       <div 
         v-for="(unit, unitIdx) in courseStore.units" 
         :key="unit.id" 
         :id="'unit-container-' + unit.id" 
-        class="relative space-y-8"
+        class="relative space-y-8 max-w-md mx-auto"
       >
         <!-- Unit Title Section Header Line (for units after unit 1) -->
-        <div v-if="unitIdx > 0" class="relative py-6 flex items-center justify-center my-6 select-none">
+        <div v-if="unitIdx > 0" class="relative py-6 flex items-center justify-center my-6 select-none z-10">
           <div class="absolute inset-0 flex items-center" aria-hidden="true">
-            <div class="w-full border-t-2 border-slate-700/80"></div>
+            <div class="w-full border-t-2 border-slate-300"></div>
           </div>
-          <div class="relative bg-[#18272f] px-6 py-2 rounded-2xl border-2 border-slate-700 text-xs sm:text-sm font-heading font-black text-slate-300 shadow-lg flex items-center gap-2">
+          <div class="relative bg-white px-6 py-2 rounded-2xl border-2 border-slate-200 text-xs sm:text-sm font-heading font-black text-slate-700 shadow-sm flex items-center gap-2">
             <span>{{ getUnitBiomeIcon(unit.color) }}</span>
             <span>BAGIAN 1, UNIT {{ unit.order }} • {{ unit.title }}</span>
           </div>
         </div>
 
-        <!-- Vertical Snake Path Items Loop for Unit -->
-        <div class="relative flex flex-col items-center gap-8 sm:gap-10 py-4 max-w-md mx-auto">
-          
+        <!-- Classic View Path Container with SVG Lines (Jalur) -->
+        <div 
+          class="relative w-full overflow-visible transition-all"
+          :style="{ height: `${getClassicUnitContainerHeight(unit)}px` }"
+        >
+          <!-- SVG Connecting Path (Jalur) -->
+          <svg 
+            class="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-visible"
+            :viewBox="`0 0 400 ${getClassicUnitContainerHeight(unit)}`"
+            preserveAspectRatio="none"
+          >
+            <path 
+              :d="getClassicUnitSvgPath(unit)" 
+              fill="none" 
+              stroke="#cbd5e1" 
+              stroke-width="16" 
+              stroke-linecap="round" 
+              stroke-linejoin="round" 
+            />
+          </svg>
+
+          <!-- Node Items -->
           <template v-for="(item, itemIdx) in getClassicUnitNodeItems(unit)" :key="item.id">
             
             <div 
               :id="isNextActiveLesson(unit.id, item.id) ? 'active-lesson-node' : undefined"
-              class="relative flex flex-col items-center group transition-transform"
-              :class="item.classOffset"
+              class="absolute z-10 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group"
+              :style="{ left: `${(item.x / 400) * 100}%`, top: `${item.y}px` }"
             >
-              <!-- 1. "MULAI" Callout Badge (Dark Box with Arrow Tail) -->
+              <!-- 1. "MULAI" Callout Badge -->
               <div 
                 v-if="item.type === 'lesson' && isNextActiveLesson(unit.id, item.id)"
                 class="absolute -top-12 z-30 flex flex-col items-center pointer-events-none animate-bounce"
               >
-                <div class="relative bg-[#18272f] border-2 border-[#58cc02] text-[#58cc02] px-4 py-1.5 rounded-2xl shadow-xl font-heading font-black text-xs uppercase tracking-wider flex items-center gap-1.5">
+                <div class="relative bg-white border-2 border-[#58cc02] text-[#58cc02] px-4 py-1.5 rounded-2xl shadow-xl font-heading font-black text-xs uppercase tracking-wider flex items-center gap-1.5">
                   <span>MULAI</span>
-                  <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-[#18272f] border-r-2 border-b-2 border-[#58cc02] rotate-45"></div>
+                  <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white border-r-2 border-b-2 border-[#58cc02] rotate-45"></div>
                 </div>
               </div>
 
-              <!-- 2. "LOMPAT KE SINI?" Callout Badge for Unit Jump / Checkpoint -->
+              <!-- 2. "LOMPAT KE SINI?" Callout Badge -->
               <div 
                 v-else-if="item.type === 'checkpoint' && isCheckpointUnlocked(unit.id) && !isCheckpointCompleted(item.id)"
                 class="absolute -top-12 z-30 flex flex-col items-center pointer-events-none animate-bounce"
               >
-                <div class="relative bg-[#18272f] border-2 border-purple-400 text-purple-300 px-3.5 py-1.5 rounded-2xl shadow-xl font-heading font-black text-xs uppercase tracking-wider flex items-center gap-1.5">
+                <div class="relative bg-white border-2 border-purple-400 text-purple-500 px-3.5 py-1.5 rounded-2xl shadow-xl font-heading font-black text-xs uppercase tracking-wider flex items-center gap-1.5">
                   <span>LOMPAT KE SINI?</span>
-                  <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-[#18272f] border-r-2 border-b-2 border-purple-400 rotate-45"></div>
+                  <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white border-r-2 border-b-2 border-purple-400 rotate-45"></div>
                 </div>
               </div>
 
@@ -153,11 +185,11 @@
                 <div 
                   v-if="selectedNodeId === item.id"
                   @click.outside="selectedNodeId = null"
-                  class="absolute -top-40 left-1/2 -translate-x-1/2 z-40 bg-[#18272f] text-white rounded-3xl p-5 w-72 shadow-2xl border-4 space-y-3.5 text-center animate-pop"
+                  class="absolute -top-40 left-1/2 -translate-x-1/2 z-40 bg-white text-slate-800 rounded-3xl p-5 w-72 shadow-2xl border-4 space-y-3.5 text-center animate-pop"
                   :class="item.type === 'checkpoint' ? 'border-purple-400' : 'border-[#58cc02]'"
                 >
                   <div 
-                    class="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-[#18272f]"
+                    class="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-white"
                   ></div>
 
                   <div class="space-y-1.5">
@@ -167,15 +199,15 @@
                     >
                       {{ item.type === 'checkpoint' ? '👑 UJIAN CHECKPOINT' : `🎯 PELAJARAN ${itemIdx + 1}` }}
                     </span>
-                    <h4 class="font-heading text-base font-black text-white leading-snug">
+                    <h4 class="font-heading text-base font-black text-slate-800 leading-snug">
                       {{ item.title }}
                     </h4>
                   </div>
 
                   <button 
                     @click="confirmStartNode(unit.id, item.id, item.type)"
-                    class="w-full duo-btn-green py-3 text-xs font-heading font-black shadow-lg cursor-pointer flex items-center justify-center gap-2 active:scale-95 transition-transform"
-                    :class="item.type === 'checkpoint' ? 'bg-purple-600 border-purple-800 hover:bg-purple-500' : ''"
+                    class="w-full duo-btn-green py-3 text-xs font-heading font-black shadow-sm cursor-pointer flex items-center justify-center gap-2 active:scale-95 transition-transform"
+                    :class="item.type === 'checkpoint' ? 'bg-purple-500 border-purple-600 hover:bg-purple-400' : ''"
                   >
                     <span>🚀 MULAI BELAJAR</span>
                   </button>
@@ -190,44 +222,44 @@
                   <!-- Treasure Chest Button -->
                   <div 
                     @click="onNodeTap(unit.id, item.id, item.type)"
-                    class="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-[#203239] border-4 border-[#374e56] border-b-8 flex items-center justify-center text-4xl shadow-xl cursor-pointer hover:scale-105 transition-transform"
+                    class="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-amber-100 border-4 border-amber-300 border-b-8 flex items-center justify-center text-4xl shadow-md cursor-pointer hover:scale-105 transition-transform relative z-10"
                   >
                     🎁
                   </div>
                   
-                  <!-- Mascot Companion Standing / Dancing Beside Chest -->
+                  <!-- Mascot Companion -->
                   <div class="absolute left-28 sm:left-32 z-20 flex flex-col items-center pointer-events-none animate-float">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 text-5xl sm:text-6xl flex items-center justify-center drop-shadow-2xl">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 text-5xl sm:text-6xl flex items-center justify-center drop-shadow-xl">
                       🦉
                     </div>
                   </div>
                 </div>
               </template>
 
-              <!-- B. CHECKPOINT / JUMP NODE (Purple ⏩) -->
+              <!-- B. CHECKPOINT / JUMP NODE -->
               <template v-else-if="item.type === 'checkpoint'">
                 <button 
                   @click="onNodeTap(unit.id, item.id, item.type)"
-                  class="w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center font-heading transition-all duration-200 select-none shadow-2xl relative cursor-pointer hover:scale-105 active:scale-95 border-b-8"
+                  class="w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center font-heading transition-all duration-200 select-none shadow-md relative cursor-pointer hover:scale-105 active:scale-95 border-b-8 z-10"
                   :class="isCheckpointCompleted(item.id)
-                    ? 'bg-gradient-to-b from-amber-400 to-yellow-500 border-amber-700 text-slate-900'
+                    ? 'bg-amber-400 border-amber-500 text-amber-900'
                     : isCheckpointUnlocked(unit.id)
-                      ? 'bg-gradient-to-b from-purple-500 to-purple-700 border-purple-900 text-white animate-pulse-glow'
-                      : 'bg-[#203239] border-[#374e56] text-slate-500 opacity-60'"
+                      ? 'bg-purple-500 border-purple-600 text-white animate-pulse-glow'
+                      : 'bg-slate-200 border-slate-300 text-slate-400 opacity-80'"
                 >
                   <Trophy v-if="isCheckpointCompleted(item.id)" class="w-10 h-10 text-white fill-white" />
                   <FastForward v-else-if="isCheckpointUnlocked(unit.id)" class="w-10 h-10 text-white fill-white" />
-                  <Lock v-else class="w-8 h-8 text-slate-500" />
+                  <Lock v-else class="w-8 h-8 text-slate-400" />
                 </button>
               </template>
 
-              <!-- C. REGULAR LESSON NODE (Green Star ⭐ / Gold Star ⭐ / Gray Lock) -->
+              <!-- C. REGULAR LESSON NODE -->
               <template v-else>
                 <div class="relative flex items-center justify-center">
-                  <!-- 3 Gold Stars above node if completed -->
+                  <!-- 3 Gold Stars -->
                   <div 
                     v-if="isNodeCompleted(unit.id, item.id, item.type)" 
-                    class="absolute -top-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-0.5 px-2 py-0.5 bg-amber-400/90 border border-amber-500 rounded-full shadow-md text-[10px]"
+                    class="absolute -top-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-0.5 px-2 py-0.5 bg-amber-400 border border-amber-500 rounded-full shadow-sm text-[10px]"
                   >
                     <span class="text-yellow-100">⭐</span>
                     <span class="text-yellow-100">⭐</span>
@@ -236,21 +268,21 @@
 
                   <button 
                     @click="onNodeTap(unit.id, item.id, item.type)"
-                    class="w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center font-heading transition-all duration-200 select-none shadow-2xl relative cursor-pointer hover:scale-105 active:scale-95 border-b-8"
+                    class="w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center font-heading transition-all duration-200 select-none shadow-md relative cursor-pointer hover:scale-105 active:scale-95 border-b-8 z-10"
                     :class="isNodeCompleted(unit.id, item.id, item.type)
-                      ? 'bg-gradient-to-b from-amber-400 to-yellow-500 border-amber-700 text-slate-900'
+                      ? 'bg-amber-400 border-amber-500 text-amber-900'
                       : isLessonUnlocked(unit.id, item.id)
-                        ? 'bg-gradient-to-b from-[#58cc02] to-[#46a302] border-[#3b8a02] text-white shadow-[#58cc02]/40'
-                        : 'bg-[#203239] border-[#374e56] text-slate-500 opacity-60'"
+                        ? 'bg-[#58cc02] border-[#3b8a02] text-white shadow-sm'
+                        : 'bg-slate-200 border-slate-300 text-slate-400 opacity-80'"
                   >
                     <Check v-if="isNodeCompleted(unit.id, item.id, item.type)" class="w-10 h-10 text-white stroke-[4]" />
-                    <Star v-else-if="isLessonUnlocked(unit.id, item.id)" class="w-10 h-10 text-white fill-white drop-shadow-md" />
-                    <Lock v-else class="w-8 h-8 text-slate-500" />
+                    <Star v-else-if="isLessonUnlocked(unit.id, item.id)" class="w-10 h-10 text-white fill-white drop-shadow-sm" />
+                    <Lock v-else class="w-8 h-8 text-slate-400" />
 
                     <!-- Active Glowing Ring -->
                     <div 
                       v-if="isNextActiveLesson(unit.id, item.id)"
-                      class="absolute -inset-3 rounded-full border-4 border-[#58cc02] animate-ping pointer-events-none opacity-75"
+                      class="absolute -inset-3 rounded-full border-4 border-[#58cc02] animate-ping pointer-events-none opacity-50"
                     ></div>
                   </button>
                 </div>
@@ -259,17 +291,15 @@
               <!-- Node Title Badge Below -->
               <div 
                 @click="onNodeTap(unit.id, item.id, item.type)"
-                class="mt-2 text-center bg-[#18272f] px-3.5 py-1 rounded-xl border border-slate-700 shadow-md max-w-[160px] cursor-pointer hover:border-[#58cc02] transition-colors"
+                class="mt-2 text-center bg-white px-3.5 py-1 rounded-xl border-2 border-slate-200 shadow-xs max-w-[160px] cursor-pointer hover:border-[#58cc02] transition-colors relative z-10"
               >
-                <span class="font-heading font-extrabold text-xs text-slate-200 block truncate">
+                <span class="font-heading font-extrabold text-xs text-slate-600 block truncate">
                   {{ item.title }}
                 </span>
               </div>
 
             </div>
-
           </template>
-
         </div>
       </div>
     </div>
@@ -280,8 +310,7 @@
         v-for="(unit, unitIdx) in courseStore.units" 
         :key="unit.id"
         :id="'unit-container-' + unit.id"
-        class="rounded-[32px] border-4 p-5 sm:p-7 shadow-2xl relative space-y-8 transition-all duration-300 overflow-visible mb-8"
-        :class="getUnitContainerTheme(unit.color)"
+        class="relative space-y-6 transition-all duration-300 overflow-visible mb-12"
       >
       <!-- Vibrant Biome Header Banner (Clickable Collapse Header) -->
       <div 
@@ -315,7 +344,7 @@
             </div>
             <div class="w-full bg-black/30 h-2.5 rounded-full overflow-hidden p-0.5 min-w-[120px] border border-white/20">
               <div 
-                class="h-full bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 rounded-full transition-all duration-500 shadow-sm"
+                class="h-full bg-amber-400 rounded-full transition-all duration-500 shadow-sm"
                 :style="{ width: `${getUnitProgressPercent(unit)}%` }"
               ></div>
             </div>
@@ -349,8 +378,7 @@
         <!-- Winding 2D Map Path Container (100% Full Width Illustrated Game Map) -->
         <div 
           v-else
-          class="relative w-full rounded-[36px] overflow-hidden border-4 shadow-xl transition-all animate-pop"
-          :class="getUnitMapBgClass(unit.color)"
+          class="relative w-full overflow-visible transition-all animate-pop"
           :style="{ height: `${getUnitContainerHeight(unit)}px` }"
         >
         <!-- Illustrated Map Background Elements (River, Grass Textures, Hills) -->
@@ -374,11 +402,6 @@
               stroke-linejoin="round"
             />
           </svg>
-
-          <!-- Rolling Hill Shadows & Grass Accents -->
-          <div class="absolute top-12 left-[-30px] w-64 h-40 bg-black/5 rounded-full blur-xl"></div>
-          <div class="absolute top-[40%] right-[-30px] w-72 h-48 bg-black/5 rounded-full blur-xl"></div>
-          <div class="absolute bottom-20 left-[10%] w-80 h-52 bg-black/5 rounded-full blur-xl"></div>
         </div>
 
         <!-- Dynamic SVG Winding Curved Trail (Thick Golden/Dirt Road) -->
@@ -692,35 +715,66 @@ const showStickyHeader = ref(false)
 
 const getClassicUnitNodeItems = (unit) => {
   const items = []
-  const waveOffsets = ['translate-x-0', 'translate-x-6 sm:translate-x-12', '-translate-x-6 sm:-translate-x-12', 'translate-x-0']
+  const baseWidth = 400
+  const startY = 85
+  const ySpacing = 190
+  const waveOffsets = [0, 48, -48, 0]
   
+  let currentY = startY
+
   unit.lessons.forEach((lesson, index) => {
     if (index === 1) {
       items.push({
         id: `chest_${unit.id}`,
         title: 'Peti Hadiah XP Bonus 🎁',
         type: 'chest',
-        classOffset: '-translate-x-8 sm:-translate-x-14'
+        x: (baseWidth / 2) - 56,
+        y: currentY
       })
+      currentY += ySpacing
     }
     
     items.push({
       id: lesson.id,
       title: lesson.title,
       type: 'lesson',
-      classOffset: waveOffsets[index % waveOffsets.length]
+      x: (baseWidth / 2) + waveOffsets[index % waveOffsets.length],
+      y: currentY
     })
+    currentY += ySpacing
   })
 
-  // Add Checkpoint / Unit Jump at the end of path
+  // Add Checkpoint at the end of path
   items.push({
     id: unit.checkpoint?.id || `checkpoint_${unit.id}`,
     title: unit.checkpoint?.title || `Checkpoint Unit ${unit.order}`,
     type: 'checkpoint',
-    classOffset: 'translate-x-0'
+    x: baseWidth / 2,
+    y: currentY
   })
 
   return items
+}
+
+const getClassicUnitContainerHeight = (unit) => {
+  const items = getClassicUnitNodeItems(unit)
+  if (items.length === 0) return 300
+  return items[items.length - 1].y + 150
+}
+
+const getClassicUnitSvgPath = (unit) => {
+  const items = getClassicUnitNodeItems(unit)
+  if (items.length === 0) return ''
+
+  let d = `M ${items[0].x} ${items[0].y}`
+  for (let i = 0; i < items.length - 1; i++) {
+    const current = items[i]
+    const next = items[i + 1]
+    const midY = (current.y + next.y) / 2
+    d += ` C ${current.x} ${midY}, ${next.x} ${midY}, ${next.x} ${next.y}`
+  }
+
+  return d
 }
 
 const toggleUnitCollapse = (unitId) => {
@@ -764,6 +818,13 @@ const scrollToActiveNode = () => {
   } else if (courseStore.units && courseStore.units.length > 0) {
     const firstUnitEl = document.getElementById(`unit-container-${courseStore.units[0].id}`)
     if (firstUnitEl) firstUnitEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }
+}
+
+const showGuidebook = (unit) => {
+  if (!unit) return
+  if (typeof window !== 'undefined') {
+    alert(`📖 BUKU PANDUAN UNIT ${unit.order}\n\n${unit.title}\n\nDeskripsi Materi:\n${getUnitSummary(unit)}`)
   }
 }
 
@@ -918,11 +979,11 @@ const isNextActiveLesson = (unitId, lessonId) => {
 
 const getUnitMapBgClass = (color) => {
   switch (color) {
-    case 'emerald': return 'bg-gradient-to-b from-emerald-200 via-green-300 to-emerald-400 border-emerald-500'
-    case 'sky': return 'bg-gradient-to-b from-sky-200 via-blue-200 to-indigo-300 border-sky-400'
-    case 'amber': return 'bg-gradient-to-b from-amber-100 via-orange-200 to-amber-300 border-amber-400'
-    case 'rose': return 'bg-gradient-to-b from-rose-200 via-pink-200 to-rose-300 border-rose-400'
-    default: return 'bg-gradient-to-b from-emerald-200 via-green-300 to-emerald-400 border-emerald-500'
+    case 'emerald': return 'bg-emerald-300 border-emerald-500'
+    case 'sky': return 'bg-sky-200 border-sky-400'
+    case 'amber': return 'bg-amber-200 border-amber-400'
+    case 'rose': return 'bg-rose-200 border-rose-400'
+    default: return 'bg-emerald-300 border-emerald-500'
   }
 }
 
@@ -933,21 +994,21 @@ const getUnitRiverPath = (unit) => {
 
 const getUnitContainerTheme = (color) => {
   switch (color) {
-    case 'emerald': return 'bg-gradient-to-b from-emerald-50/90 via-teal-50/60 to-emerald-100/40 border-emerald-300/80'
-    case 'sky': return 'bg-gradient-to-b from-sky-50/90 via-blue-50/60 to-indigo-100/40 border-sky-300/80'
-    case 'amber': return 'bg-gradient-to-b from-amber-50/90 via-orange-50/60 to-yellow-100/40 border-amber-300/80'
-    case 'rose': return 'bg-gradient-to-b from-rose-50/90 via-pink-50/60 to-purple-100/40 border-rose-300/80'
-    default: return 'bg-gradient-to-b from-emerald-50/90 via-teal-50/60 to-emerald-100/40 border-emerald-300/80'
+    case 'emerald': return 'bg-emerald-50 border-emerald-300/80'
+    case 'sky': return 'bg-sky-50 border-sky-300/80'
+    case 'amber': return 'bg-amber-50 border-amber-300/80'
+    case 'rose': return 'bg-rose-50 border-rose-300/80'
+    default: return 'bg-emerald-50 border-emerald-300/80'
   }
 }
 
 const getUnitHeaderTheme = (color) => {
   switch (color) {
-    case 'emerald': return 'bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 border-emerald-700'
-    case 'sky': return 'bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 border-sky-600'
-    case 'amber': return 'bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-600 border-amber-600'
-    case 'rose': return 'bg-gradient-to-r from-rose-500 via-pink-600 to-purple-600 border-rose-600'
-    default: return 'bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 border-emerald-700'
+    case 'emerald': return 'bg-emerald-600 border-emerald-700'
+    case 'sky': return 'bg-sky-600 border-sky-600'
+    case 'amber': return 'bg-amber-500 border-amber-600'
+    case 'rose': return 'bg-rose-600 border-rose-600'
+    default: return 'bg-emerald-600 border-emerald-700'
   }
 }
 
@@ -996,18 +1057,18 @@ const getNodeClass = (unitId, itemId, type, color) => {
   const completed = isNodeCompleted(unitId, itemId, type)
 
   if (completed) {
-    return 'bg-gradient-to-b from-amber-300 to-yellow-500 border-amber-600 text-slate-900 shadow-amber-400/40'
+    return 'bg-amber-400 border-amber-600 text-slate-900 shadow-amber-400/40'
   }
   if (unlocked) {
     if (type === 'checkpoint') {
-      return 'bg-gradient-to-b from-amber-400 via-orange-400 to-amber-500 border-amber-700 text-amber-950 shadow-amber-500/50 animate-pulse-glow'
+      return 'bg-amber-400 border-amber-700 text-amber-950 shadow-amber-500/50 animate-pulse-glow'
     }
     switch (color) {
-      case 'emerald': return 'bg-gradient-to-b from-emerald-400 to-emerald-600 border-emerald-700 text-white shadow-emerald-500/40'
-      case 'sky': return 'bg-gradient-to-b from-sky-400 to-blue-600 border-blue-700 text-white shadow-blue-500/40'
-      case 'amber': return 'bg-gradient-to-b from-amber-300 to-yellow-500 border-amber-600 text-slate-900 shadow-yellow-500/40'
-      case 'rose': return 'bg-gradient-to-b from-rose-400 to-red-600 border-red-700 text-white shadow-rose-500/40'
-      default: return 'bg-gradient-to-b from-emerald-400 to-emerald-600 border-emerald-700 text-white shadow-emerald-500/40'
+      case 'emerald': return 'bg-emerald-500 border-emerald-700 text-white shadow-emerald-500/40'
+      case 'sky': return 'bg-sky-500 border-blue-700 text-white shadow-blue-500/40'
+      case 'amber': return 'bg-amber-400 border-amber-600 text-slate-900 shadow-yellow-500/40'
+      case 'rose': return 'bg-rose-500 border-red-700 text-white shadow-rose-500/40'
+      default: return 'bg-emerald-500 border-emerald-700 text-white shadow-emerald-500/40'
     }
   }
   return 'bg-slate-200 border-slate-300 text-slate-400 cursor-not-allowed opacity-80 border-b-6 shadow-xs'

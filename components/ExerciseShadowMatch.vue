@@ -9,7 +9,7 @@
     </div>
 
     <!-- Main Target Object Card (Colored Photo) -->
-    <div class="max-w-xs mx-auto p-3 bg-gradient-to-b from-amber-50 to-orange-50 rounded-3xl border-4 border-amber-300 shadow-md text-center">
+    <div class="max-w-xs mx-auto p-3 bg-amber-50 rounded-3xl border-4 border-amber-300 shadow-md text-center">
       <span class="text-xs font-heading font-black text-amber-800 uppercase tracking-wider block mb-1">
         🔍 OBJEK TARGET
       </span>

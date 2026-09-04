@@ -32,7 +32,7 @@
     </div>
 
     <!-- Interactive Scene Box -->
-    <div class="relative bg-gradient-to-b from-sky-100 via-emerald-50 to-emerald-100 rounded-3xl border-4 border-emerald-300 shadow-xl min-h-[320px] sm:min-h-[360px] overflow-hidden max-w-lg mx-auto p-4">
+    <div class="relative bg-emerald-50 rounded-3xl border-4 border-emerald-300 shadow-xl min-h-[320px] sm:min-h-[360px] overflow-hidden max-w-lg mx-auto p-4">
       <!-- Background Scenery Details -->
       <span class="absolute bottom-2 left-3 text-4xl opacity-30 pointer-events-none">🌳</span>
       <span class="absolute top-3 right-5 text-4xl opacity-30 pointer-events-none">☀️</span>

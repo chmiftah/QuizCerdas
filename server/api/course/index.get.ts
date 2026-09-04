@@ -3,6 +3,8 @@ import mengenalAngkaTk from '~/data/course_mengenal_angka_tk.json'
 import courseCounting from '~/data/course_counting.json'
 import courseBerhitungTk01 from '~/data/course_berhitung_tk_01.json'
 import courseHewanTkSd from '~/data/course_hewan_tk_sd.json'
+import courseMasterTypes from '~/data/course_master_13_types.json'
+import coursePenjumlahanBuah from '~/data/course_penjumlahan_buah.json'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -12,7 +14,7 @@ export default defineEventHandler(async (event) => {
 
     if (dbCourses && dbCourses.length > 0) {
       console.log(`[POSTGRESQL] Served ${dbCourses.length} courses directly from database`)
-      return dbCourses.map(c => ({
+      const mappedDbCourses = dbCourses.map(c => ({
         id: c.id,
         title: c.title,
         description: c.description,
@@ -32,6 +34,25 @@ export default defineEventHandler(async (event) => {
           units: c.units
         }
       }))
+
+      // Inject the local Master Showcase to guarantee we use the fixed JSON
+      const masterCourse = {
+        id: 'course_master_types',
+        title: 'Master Showcase: 13 Tipe Interaktif',
+        description: 'Modul demonstrasi khusus yang merangkum keseluruhan 13 jenis variasi soal interaktif dalam satu tempat.',
+        target_audience: 'Semua Umur',
+        category: 'science',
+        icon: '🕹️',
+        themeColor: 'red',
+        features: ['Menampilkan 13 Tipe Soal', 'Seret & Lepas', 'Tarik Garis', 'Soal Bergambar'],
+        isReady: true,
+        courseData: courseMasterTypes.course
+      }
+      
+      // Remove any DB version of master course to prevent duplicates
+      const filteredDbCourses = mappedDbCourses.filter(c => c.id !== 'course_master_types')
+      
+      return [masterCourse, ...filteredDbCourses]
     }
   } catch (error: any) {
     console.warn('[POSTGRESQL] Database empty or offline, serving local fallback JSONs:', error.message)
@@ -39,6 +60,18 @@ export default defineEventHandler(async (event) => {
 
   // Fallback local courses
   return [
+    {
+      id: 'course_master_types',
+      title: 'Master Showcase: 13 Tipe Interaktif',
+      description: 'Modul demonstrasi khusus yang merangkum keseluruhan 13 jenis variasi soal interaktif dalam satu tempat.',
+      target_audience: 'Semua Umur',
+      category: 'science',
+      icon: '🕹️',
+      themeColor: 'red',
+      features: ['Menampilkan 13 Tipe Soal', 'Seret & Lepas', 'Tarik Garis', 'Soal Bergambar'],
+      isReady: true,
+      courseData: courseMasterTypes.course
+    },
     {
       id: 'course_hewan_tk_sd',
       title: 'Petualangan Dunia Hewan',
@@ -86,6 +119,18 @@ export default defineEventHandler(async (event) => {
       features: ['Penjumlahan dasar', 'Kurang tambah'],
       isReady: true,
       courseData: courseCounting.course
+    },
+    {
+      id: 'course_penjumlahan_buah',
+      title: 'Penjumlahan Seru dengan Buah-buahan',
+      description: 'Belajar penjumlahan 1-20 menggunakan gambar buah-buahan yang menyenangkan! Diadaptasi dari worksheet LembarKerja.com.',
+      target_audience: 'Anak TK B & SD Kelas 1 (5-7 tahun)',
+      category: 'math',
+      icon: '🍎',
+      themeColor: 'emerald',
+      features: ['10 Soal dari Worksheet Nyata', 'Penjumlahan Bergambar Buah', '3 Pelajaran Bertingkat', 'Ujian Akhir'],
+      isReady: true,
+      courseData: coursePenjumlahanBuah.course
     }
   ]
 })

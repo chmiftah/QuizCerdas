@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto space-y-6">
 
       <!-- Admin Top Header Banner -->
-      <div class="bg-gradient-to-r from-purple-700 via-indigo-700 to-blue-700 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div class="bg-purple-700 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div class="space-y-2 z-10">
           <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-heading font-extrabold text-purple-100">
             <span>🛡️ Panel Kontrol Administrator</span>
@@ -102,7 +102,7 @@
 
         <!-- Quick Action Cards -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-          <button @click="activeTab = 'courses'" class="p-6 bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-200 rounded-3xl text-left hover:shadow-md transition-all cursor-pointer group">
+          <button @click="activeTab = 'courses'" class="p-6 bg-emerald-50 border-2 border-emerald-200 rounded-3xl text-left hover:shadow-md transition-all cursor-pointer group">
             <div class="w-10 h-10 rounded-2xl bg-emerald-500 text-white flex items-center justify-center text-xl font-bold mb-3 group-hover:scale-110 transition-transform">
               ➕
             </div>
@@ -110,7 +110,7 @@
             <p class="text-xs text-emerald-800 font-heading mt-1">Buat kuis interaktif baru menggunakan Form GUI Visual atau JSON.</p>
           </button>
 
-          <button @click="activeTab = 'shop'" class="p-6 bg-gradient-to-br from-amber-50 to-yellow-50 border-2 border-amber-200 rounded-3xl text-left hover:shadow-md transition-all cursor-pointer group">
+          <button @click="activeTab = 'shop'" class="p-6 bg-amber-50 border-2 border-amber-200 rounded-3xl text-left hover:shadow-md transition-all cursor-pointer group">
             <div class="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center text-xl font-bold mb-3 group-hover:scale-110 transition-transform">
               🛍️
             </div>
@@ -118,7 +118,7 @@
             <p class="text-xs text-amber-800 font-heading mt-1">Tambah item topi, aksesori, atau skin avatar Kiko baru.</p>
           </button>
 
-          <button @click="activeTab = 'progress'" class="p-6 bg-gradient-to-br from-purple-50 to-indigo-50 border-2 border-purple-200 rounded-3xl text-left hover:shadow-md transition-all cursor-pointer group">
+          <button @click="activeTab = 'progress'" class="p-6 bg-purple-50 border-2 border-purple-200 rounded-3xl text-left hover:shadow-md transition-all cursor-pointer group">
             <div class="w-10 h-10 rounded-2xl bg-purple-500 text-white flex items-center justify-center text-xl font-bold mb-3 group-hover:scale-110 transition-transform">
               📈
             </div>
@@ -333,17 +333,21 @@
                         </div>
 
                         <div>
-                          <label class="font-bold text-slate-600">Tipe Soal (9 Tipe)</label>
+                          <label class="font-bold text-slate-600">Tipe Soal (13 Tipe Interaktif)</label>
                           <select v-model="ex.type" class="w-full p-2 rounded-lg border border-slate-300 bg-white font-bold">
-                            <option value="multiple_choice">Pilihan Ganda</option>
+                            <option value="multiple_choice">Pilihan Ganda (Multiple Choice)</option>
                             <option value="drag_and_drop">Seret Objek (Drag & Drop)</option>
                             <option value="seek_find">Cari & Temukan (Seek & Find)</option>
-                            <option value="matching">Pasangan (Matching)</option>
+                            <option value="matching">Pasangan / Tarik Garis (Matching)</option>
                             <option value="comparison">Bandingkan Jumlah (Comparison)</option>
-                            <option value="sequence_ordering">Urutan Angka (Sequence)</option>
+                            <option value="sequence_ordering">Urutan Angka / Objek (Sequence)</option>
                             <option value="pattern_matching">Pola Gambar (Pattern)</option>
                             <option value="fill_in_blank">Isian Singkat (Fill Blank)</option>
                             <option value="true_false">Benar / Salah (True/False)</option>
+                            <option value="category_sorting">Kelompokkan Kategori (Category Sort)</option>
+                            <option value="odd_one_out">Temukan yang Berbeda (Odd One Out)</option>
+                            <option value="memory_flip">Kartu Memori (Memory Flip)</option>
+                            <option value="shadow_matching">Pencocokan Bayangan (Shadow Match)</option>
                           </select>
                         </div>
 
@@ -474,6 +478,13 @@
                   class="px-3 py-1.5 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-xl text-xs font-heading font-extrabold flex items-center gap-1 cursor-pointer transition-colors"
                 >
                   <span>💻</span> Edit via JSON
+                </button>
+                <button 
+                  @click="confirmDeleteCourse(c)" 
+                  type="button" 
+                  class="ml-auto px-3 py-1.5 bg-rose-100 hover:bg-rose-200 text-rose-700 border border-rose-300 rounded-xl text-xs font-heading font-extrabold flex items-center gap-1 cursor-pointer transition-colors"
+                >
+                  <span>🗑️</span> Hapus
                 </button>
               </div>
             </div>
@@ -642,6 +653,62 @@
       </div>
     </Teleport>
 
+    <!-- Modal: Konfirmasi Hapus Kursus -->
+    <Teleport to="body">
+      <div v-if="showDeleteCourseModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-md w-full border-4 border-rose-200 shadow-2xl space-y-5 animate-pop">
+          <!-- Icon + Header -->
+          <div class="text-center space-y-2">
+            <div class="w-16 h-16 bg-rose-100 rounded-full flex items-center justify-center mx-auto text-4xl">🗑️</div>
+            <h3 class="font-heading text-xl font-black text-slate-800">Hapus Kursus Ini?</h3>
+            <p class="text-sm text-slate-500 font-body">
+              Tindakan ini akan <strong class="text-rose-600">menghapus permanen</strong> kursus dari database PostgreSQL dan tidak dapat dibatalkan.
+            </p>
+          </div>
+
+          <!-- Course Info Preview -->
+          <div v-if="courseToDelete" class="p-4 bg-rose-50 border-2 border-rose-200 rounded-2xl space-y-1">
+            <p class="font-heading font-black text-sm text-slate-800">
+              {{ courseToDelete.icon || '📚' }} {{ courseToDelete.title }}
+            </p>
+            <p class="text-xs text-slate-500 font-body">ID: <code class="bg-white px-1.5 py-0.5 rounded-md border border-slate-200">{{ courseToDelete.id }}</code></p>
+            <p class="text-xs text-slate-400 font-body line-clamp-2">{{ courseToDelete.description }}</p>
+          </div>
+
+          <!-- Warning for local-only courses -->
+          <div v-if="!courseToDelete?.isFromDatabase" class="p-3 bg-amber-50 border border-amber-300 rounded-xl">
+            <p class="text-xs text-amber-800 font-heading font-bold">
+              ⚠️ Kursus ini hanya ada di file JSON lokal, bukan di database. Hapus hanya akan menghilangkan dari tampilan sesi ini.
+            </p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex items-center gap-3">
+            <button 
+              @click="showDeleteCourseModal = false; courseToDelete = null" 
+              class="flex-1 px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-heading font-extrabold text-sm rounded-2xl cursor-pointer transition-colors"
+            >
+              Batal
+            </button>
+            <button 
+              @click="executeCourseDelete" 
+              :disabled="deleteStatus === 'loading'"
+              class="flex-1 px-4 py-3 bg-rose-600 hover:bg-rose-700 disabled:bg-rose-400 text-white font-heading font-black text-sm rounded-2xl cursor-pointer transition-colors flex items-center justify-center gap-2"
+            >
+              <span v-if="deleteStatus === 'loading'" class="animate-spin">⏳</span>
+              <span v-else>🗑️</span>
+              {{ deleteStatus === 'loading' ? 'Menghapus...' : 'Ya, Hapus Sekarang' }}
+            </button>
+          </div>
+
+          <!-- Status feedback -->
+          <p v-if="deleteStatus === 'error'" class="text-center text-xs text-rose-600 font-heading font-bold">
+            ❌ Gagal menghapus. Kursus mungkin tidak ada di database atau koneksi bermasalah.
+          </p>
+        </div>
+      </div>
+    </Teleport>
+
   </div>
 </template>
 
@@ -672,6 +739,10 @@ const courseEditorMode = ref('gui')
 const jsonInput = ref('')
 const jsonStatus = ref(null)
 const guiStatus = ref(null)
+
+const showDeleteCourseModal = ref(false)
+const courseToDelete = ref(null)
+const deleteStatus = ref(null) // null | 'loading' | 'error'
 
 const showAddShopModal = ref(false)
 const showAddUserModal = ref(false)
@@ -965,5 +1036,42 @@ const saveNewUser = () => {
   adminStore.addUser({ ...newUser.value })
   showAddUserModal.value = false
   newUser.value = { name: '', email: '', avatar: '🐱', role: 'student', xp: 100, hearts: 5, streak: 1, grade: 'TK B', completedLessonsCount: 0 }
+}
+
+// --- HAPUS KURSUS ---
+const confirmDeleteCourse = (c) => {
+  courseToDelete.value = c
+  deleteStatus.value = null
+  showDeleteCourseModal.value = true
+}
+
+const executeCourseDelete = async () => {
+  if (!courseToDelete.value) return
+  deleteStatus.value = 'loading'
+
+  try {
+    // Attempt to delete from PostgreSQL database
+    await $fetch('/api/admin/course-delete', {
+      method: 'DELETE',
+      body: { courseId: courseToDelete.value.id }
+    })
+
+    // Also remove from local store so UI updates immediately
+    courseStore.removeCourseFromRegistry(courseToDelete.value.id)
+
+    showDeleteCourseModal.value = false
+    courseToDelete.value = null
+    deleteStatus.value = null
+
+    // Reload courses to refresh the list
+    await courseStore.loadCourses()
+  } catch (err) {
+    console.error('[ADMIN] Delete course error:', err)
+    // If DB delete fails (e.g. local-only course), still remove from UI
+    courseStore.removeCourseFromRegistry(courseToDelete.value.id)
+    showDeleteCourseModal.value = false
+    courseToDelete.value = null
+    deleteStatus.value = null
+  }
 }
 </script>

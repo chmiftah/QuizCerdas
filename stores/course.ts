@@ -289,6 +289,15 @@ export const useCourseStore = defineStore('course', {
           this.catalogRegistry.push(catalogItem)
         }
       }
+    },
+
+    removeCourseFromRegistry(courseId: string) {
+      // Remove from catalogRegistry
+      this.catalogRegistry = this.catalogRegistry.filter(c => c.id !== courseId)
+      // Remove from courses object
+      if (this.courses[courseId]) {
+        delete this.courses[courseId]
+      }
     }
   }
 })

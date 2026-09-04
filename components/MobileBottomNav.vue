@@ -158,7 +158,7 @@
             <NuxtLink 
               to="/shop" 
               @click="showBottomSheet = false"
-              class="col-span-2 p-4 bg-gradient-to-r from-amber-100 to-yellow-100 border-2 border-amber-300 rounded-2xl flex items-center gap-4 hover:border-amber-400 active:scale-95 transition-all"
+              class="col-span-2 p-4 bg-amber-100 border-2 border-amber-300 rounded-2xl flex items-center gap-4 hover:border-amber-400 active:scale-95 transition-all"
             >
               <div class="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center text-2xl shadow-md">
                 🛍️

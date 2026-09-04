@@ -1,22 +1,10 @@
 <template>
-  <div class="relative w-full h-[540px] sm:h-[620px] rounded-[36px] overflow-hidden bg-gradient-to-b from-sky-300 via-sky-200 to-emerald-100 border-4 border-sky-400 shadow-xl select-none group">
+  <div class="relative w-full h-[540px] sm:h-[620px] rounded-2xl overflow-hidden select-none group">
     <!-- WebGL Canvas Container -->
     <div ref="canvasContainer" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
 
     <!-- Interactive Controls Helper Badge & Reset View Button -->
-    <!-- Interactive Controls Helper Badge & Reset View Button -->
-    <div class="absolute top-3 left-3 right-3 flex items-center justify-between gap-2 pointer-events-none z-20">
-      <div class="px-2.5 sm:px-3 py-1 sm:py-1.5 bg-white/90 backdrop-blur-md rounded-xl sm:rounded-2xl border border-emerald-400/80 text-slate-800 font-heading text-[10px] sm:text-[11px] font-black flex items-center gap-1 shadow-md truncate">
-        <span>🎮 <span class="hidden sm:inline">Tahan & Geser untuk </span>Putar 3D</span>
-      </div>
-
-      <button 
-        @click="resetCamera"
-        class="px-2.5 sm:px-3 py-1 sm:py-1.5 bg-white/90 hover:bg-white text-emerald-700 border border-emerald-300 rounded-xl font-heading font-extrabold text-[10px] sm:text-[11px] shadow-md transition-all cursor-pointer flex items-center gap-1 pointer-events-auto shrink-0"
-      >
-        <span>🔄 Reset<span class="hidden sm:inline"> Sudut</span></span>
-      </button>
-    </div>
+    <!-- Removed helper badge and reset button per user request -->
 
     <!-- Floating Title Pill Badges Overlay Projected Over 3D Nodes -->
     <div class="absolute inset-0 pointer-events-none z-10 overflow-hidden">
@@ -30,7 +18,7 @@
         <!-- Blinking "Lanjut di Sini!" Mascot Callout for Current Active Node -->
         <div 
           v-if="node.isUnlocked && !node.isCompleted && node.type === 'lesson'"
-          class="mb-1 px-2 py-0.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-full text-[9px] sm:text-[10px] font-heading font-black shadow-lg border border-white flex items-center gap-1 animate-bounce animate-pulse shrink-0"
+          class="mb-1 px-2 py-0.5 bg-emerald-500 text-white rounded-full text-[9px] sm:text-[10px] font-heading font-black shadow-lg border border-white flex items-center gap-1 animate-bounce animate-pulse shrink-0"
         >
           <span class="w-1.5 h-1.5 rounded-full bg-amber-300 animate-ping"></span>
           <span>🦉 Lanjut!</span>
@@ -58,7 +46,7 @@
       >
         <div 
           class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center text-xl sm:text-2xl shrink-0 shadow-md cursor-pointer"
-          :class="activeCardNode.type === 'checkpoint' ? 'bg-gradient-to-br from-amber-400 to-yellow-500 text-amber-950' : 'bg-gradient-to-br from-emerald-400 to-teal-600 text-white'"
+          :class="activeCardNode.type === 'checkpoint' ? 'bg-amber-400 text-amber-950' : 'bg-emerald-500 text-white'"
           @click="launchQuiz(activeCardNode)"
         >
           {{ activeCardNode.type === 'checkpoint' ? '👑' : (activeCardNode.isCompleted ? '✓' : '⭐') }}
@@ -140,7 +128,7 @@ const nodeMeshes: THREE.Mesh[] = []
 const rawNodesList: any[] = []
 
 // Mouse & Drag State for Smooth 3D Orbiting Rotation
-const mouse = { isDragging: false, startX: 0, startY: 0, currentRotY: 0.15, targetRotY: 0.15, currentRotX: 0.1, targetRotX: 0.1 }
+const mouse = { isDragging: false, startX: 0, startY: 0, currentRotY: 0, targetRotY: 0, currentRotX: 0, targetRotX: 0 }
 const raycaster = new THREE.Raycaster()
 const mouseVector = new THREE.Vector2()
 
@@ -217,8 +205,8 @@ const init3D = () => {
   const height = canvasContainer.value.clientHeight
 
   scene = new THREE.Scene()
-  scene.background = new THREE.Color(0xbae6fd) // Rich sky blue background filling the frame
-  scene.fog = new THREE.FogExp2(0xbae6fd, 0.018)
+  scene.background = new THREE.Color(0xf1f5f9) // Matches bg-slate-100
+  scene.fog = new THREE.FogExp2(0xf1f5f9, 0.018)
 
   camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100)
   camera.position.set(0, 14.0, 4.5)

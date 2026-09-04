@@ -6,7 +6,7 @@
     <!-- Main Room -->
     <main class="max-w-4xl mx-auto w-full px-4 py-8 flex-1 space-y-6 animate-pop">
       <!-- Title Header -->
-      <div class="bg-gradient-to-r from-pink-400 via-rose-400 to-amber-400 rounded-3xl p-6 sm:p-8 text-white shadow-lg flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="bg-rose-500 rounded-3xl p-6 sm:p-8 text-white shadow-lg flex flex-col sm:flex-row items-center justify-between gap-6">
         <div class="space-y-1 text-center sm:text-left">
           <div class="inline-flex items-center gap-1.5 px-3 py-0.5 bg-white/20 rounded-full text-xs font-heading font-extrabold">
             🎨 Mewarnai Sesuai Angka

@@ -1,8 +1,9 @@
 <template>
-  <div class="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-body antialiased overflow-x-hidden w-full">
+  <div class="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-body antialiased w-full">
     <NuxtPage />
   </div>
 </template>
+
 
 <script setup>
 import { onMounted } from 'vue'

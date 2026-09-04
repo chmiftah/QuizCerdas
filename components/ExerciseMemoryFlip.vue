@@ -28,7 +28,7 @@
         :class="[
           card.isFlipped || card.isMatched
             ? 'bg-white border-emerald-400 shadow-lg scale-102'
-            : 'bg-gradient-to-br from-emerald-400 to-teal-500 border-teal-600 hover:scale-105 active:scale-95'
+            : 'bg-emerald-500 border-teal-600 hover:scale-105 active:scale-95'
         ]"
       >
         <!-- Card Front (When Flipped / Matched) -->
@@ -75,7 +75,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['updateMatchCount'])
-const { playPop, playError } = useSoundEffects()
+const { playPop, playWrong } = useSoundEffects()
 
 const cards = ref([])
 const flippedIndices = ref([])
@@ -129,7 +129,7 @@ const flipCard = (idx) => {
     } else {
       // Not Matched -> Flip back after delay
       setTimeout(() => {
-        playError()
+        playWrong()
         firstCard.isFlipped = false
         secondCard.isFlipped = false
         flippedIndices.value = []

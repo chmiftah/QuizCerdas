@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-slate-50 pb-20 font-body select-none">
     <!-- Top Header Banner -->
-    <header class="bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-amber-950 pt-8 pb-16 px-4 shadow-md relative overflow-hidden">
+    <header class="bg-amber-400 text-amber-950 pt-8 pb-16 px-4 shadow-md relative overflow-hidden">
       <!-- Ambient Sparkle Shapes -->
       <div class="absolute -top-12 -left-12 w-36 h-36 bg-white/20 rounded-full blur-xl pointer-events-none"></div>
       <div class="absolute -bottom-12 -right-12 w-48 h-48 bg-yellow-200/30 rounded-full blur-2xl pointer-events-none"></div>

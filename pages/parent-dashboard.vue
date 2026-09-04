@@ -6,7 +6,7 @@
     <!-- Parent Dashboard Container -->
     <main class="max-w-5xl mx-auto w-full px-4 py-8 flex-1 space-y-8 animate-pop">
       <!-- Title Header -->
-      <div class="bg-gradient-to-r from-slate-800 via-indigo-900 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
+      <div class="bg-slate-800 rounded-3xl p-6 sm:p-8 text-white shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
         <div class="space-y-2 z-10">
           <div class="inline-flex items-center gap-2 px-3.5 py-1 bg-indigo-500/30 backdrop-blur-sm rounded-full text-xs font-heading font-extrabold tracking-wider uppercase text-indigo-200 border border-indigo-400/30">
             📊 Laporan Perkembangan Anak

@@ -6,7 +6,7 @@
     <!-- Main Game Area -->
     <main class="max-w-4xl mx-auto w-full px-4 py-8 flex-1 space-y-6 animate-pop">
       <!-- Game Top Status Bar -->
-      <div class="bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500 rounded-3xl p-6 text-white shadow-lg flex items-center justify-between gap-4">
+      <div class="bg-sky-500 rounded-3xl p-6 text-white shadow-lg flex items-center justify-between gap-4">
         <div class="space-y-1">
           <div class="inline-flex items-center gap-1.5 px-3 py-0.5 bg-white/20 rounded-full text-xs font-heading font-extrabold">
             🎈 Mini Game Berhitung
@@ -38,7 +38,7 @@
       </div>
 
       <!-- Game Canvas Box -->
-      <div class="relative bg-gradient-to-b from-sky-100 via-sky-50 to-emerald-50 rounded-3xl border-4 border-sky-300 shadow-xl min-h-[420px] overflow-hidden flex flex-col justify-between p-4">
+      <div class="relative bg-sky-100 rounded-3xl border-4 border-sky-300 shadow-xl min-h-[420px] overflow-hidden flex flex-col justify-between p-4">
         <!-- Start Screen Overlay -->
         <div v-if="!isPlaying && !isGameOver" class="absolute inset-0 bg-white/90 backdrop-blur-xs flex flex-col items-center justify-center text-center p-6 space-y-4 z-20">
           <div class="w-20 h-20 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center text-5xl shadow-lg animate-bounce">

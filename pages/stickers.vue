@@ -6,7 +6,7 @@
     <!-- Sticker Book Container -->
     <main class="max-w-4xl mx-auto w-full px-4 py-8 flex-1 space-y-8 animate-pop">
       <!-- Title & Banner -->
-      <div class="bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 rounded-3xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="bg-amber-400 rounded-3xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-6">
         <div class="space-y-2 text-center sm:text-left z-10">
           <div class="inline-flex items-center gap-2 px-3.5 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-heading font-extrabold tracking-wider uppercase">
             ⭐ Koleksi Hadiah Belajar

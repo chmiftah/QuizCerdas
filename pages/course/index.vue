@@ -27,7 +27,7 @@
       <!-- Guest Explorer Mode Dialogue Banner -->
       <div 
         v-if="!userStore.isAuthenticated" 
-        class="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 rounded-3xl p-5 sm:p-6 text-slate-900 shadow-lg border-4 border-amber-300 relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-5 animate-pop"
+        class="bg-amber-400 rounded-3xl p-5 sm:p-6 text-slate-900 shadow-lg border-4 border-amber-300 relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-5 animate-pop"
       >
         <div class="flex items-center gap-4 z-10">
           <div class="w-14 h-14 rounded-2xl bg-white text-3xl flex items-center justify-center shrink-0 shadow-md animate-bounce">
@@ -66,7 +66,7 @@
       </div>
 
       <!-- Main Course Hero Banner & Stat Summary Card -->
-      <div class="bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-700 rounded-3xl p-6 sm:p-8 text-white shadow-xl border-4 border-emerald-400/30 relative overflow-hidden space-y-6 animate-pop">
+      <div class="bg-emerald-500 rounded-3xl p-6 sm:p-8 text-white shadow-md relative overflow-hidden space-y-6 animate-pop">
         
         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 z-10 relative">
           <!-- Course Title & Description -->
@@ -86,7 +86,7 @@
           </div>
 
           <!-- Overall Course Progress Radial Card -->
-          <div class="bg-white/15 backdrop-blur-md rounded-2xl p-5 border border-white/30 text-center shrink-0 space-y-3 w-full md:w-56 shadow-inner">
+          <div class="bg-black/10 rounded-2xl p-5 text-center shrink-0 space-y-3 w-full md:w-56">
             <div class="text-xs font-heading font-extrabold text-amber-300 uppercase tracking-wide">
               Progres Total Modul
             </div>
@@ -99,7 +99,7 @@
               </div>
               <div class="w-full h-3.5 bg-black/20 rounded-full overflow-hidden p-0.5 border border-white/20">
                 <div 
-                  class="h-full bg-gradient-to-r from-amber-300 to-yellow-400 rounded-full transition-all duration-500 shadow-sm"
+                  class="h-full bg-amber-400 rounded-full transition-all duration-500 shadow-sm"
                   :style="{ width: `${overallProgressPercent}%` }"
                 ></div>
               </div>
@@ -113,7 +113,7 @@
               v-if="overallProgressPercent >= 100"
               @click="showCert = true"
               type="button"
-              class="w-full py-2.5 px-3 bg-gradient-to-r from-amber-400 to-yellow-400 hover:from-amber-500 hover:to-yellow-500 rounded-xl font-heading font-black text-xs text-amber-950 transition-transform hover:scale-105 cursor-pointer flex items-center justify-center gap-1.5 shadow-lg border border-amber-200"
+              class="w-full py-2.5 px-3 bg-amber-400 hover:bg-amber-500 rounded-xl font-heading font-black text-xs text-amber-950 transition-transform hover:scale-105 cursor-pointer flex items-center justify-center gap-1.5 shadow-lg border border-amber-200"
             >
               <span>🎓 Lihat & Cetak Sertifikat 📜</span>
             </button>
@@ -130,7 +130,7 @@
 
         <!-- Floating Quick Stats Toolbar -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-white/20 z-10 relative">
-          <div class="bg-black/15 rounded-2xl p-3 flex items-center gap-3 backdrop-blur-xs">
+          <div class="bg-black/10 rounded-2xl p-3 flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-amber-400 text-slate-900 flex items-center justify-center font-heading text-lg font-black shadow-xs">
               ⭐
             </div>
@@ -140,7 +140,7 @@
             </div>
           </div>
 
-          <div class="bg-black/15 rounded-2xl p-3 flex items-center gap-3 backdrop-blur-xs">
+          <div class="bg-black/10 rounded-2xl p-3 flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-rose-500 text-white flex items-center justify-center font-heading text-lg font-black shadow-xs">
               ❤️
             </div>
@@ -150,7 +150,7 @@
             </div>
           </div>
 
-          <div class="bg-black/15 rounded-2xl p-3 flex items-center gap-3 backdrop-blur-xs">
+          <div class="bg-black/10 rounded-2xl p-3 flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-orange-500 text-white flex items-center justify-center font-heading text-lg font-black shadow-xs">
               🔥
             </div>
@@ -160,7 +160,7 @@
             </div>
           </div>
 
-          <div class="bg-black/15 rounded-2xl p-3 flex items-center gap-3 backdrop-blur-xs">
+          <div class="bg-black/10 rounded-2xl p-3 flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-sky-400 text-slate-900 flex items-center justify-center font-heading text-lg font-black shadow-xs">
               👑
             </div>
@@ -171,15 +171,12 @@
           </div>
         </div>
 
-        <!-- Background Decorative Circles -->
-        <div class="absolute -right-12 -bottom-16 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -left-12 -top-16 w-48 h-48 bg-emerald-300/20 rounded-full blur-2xl pointer-events-none"></div>
       </div>
 
       <!-- Spaced Repetition Review Card Prompt -->
       <div 
         v-if="userStore.spacedRepetitionQueue.length > 0" 
-        class="bg-gradient-to-r from-amber-50 to-yellow-50 border-4 border-duo-yellow/60 rounded-3xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md animate-pop"
+        class="bg-amber-50 border-4 border-duo-yellow/60 rounded-3xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md animate-pop"
       >
         <div class="flex items-center gap-4">
           <div class="w-14 h-14 rounded-2xl bg-duo-yellow text-slate-900 flex items-center justify-center font-heading text-2xl font-black shrink-0 shadow-duo-yellow animate-bounce">

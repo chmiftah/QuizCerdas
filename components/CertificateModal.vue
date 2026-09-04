@@ -24,7 +24,7 @@
         </div>
 
         <!-- Certificate Body -->
-        <div class="p-6 bg-gradient-to-b from-amber-50/70 to-yellow-50/70 rounded-2xl border-2 border-dashed border-amber-300 text-center space-y-4">
+        <div class="p-6 bg-amber-50/70 rounded-2xl border-2 border-dashed border-amber-300 text-center space-y-4">
           <p class="text-sm font-heading font-semibold text-slate-600">
             Diberikan dengan bangga kepada Penjelajah Muda:
           </p>
@@ -49,7 +49,7 @@
             <span class="text-xs font-heading font-extrabold text-slate-700">{{ currentDate }}</span>
           </div>
 
-          <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-amber-400 to-yellow-300 border-4 border-white shadow-md flex items-center justify-center text-2xl font-black text-white shrink-0">
+          <div class="w-14 h-14 rounded-full bg-amber-400 border-4 border-white shadow-md flex items-center justify-center text-2xl font-black text-white shrink-0">
             ⭐
           </div>
 

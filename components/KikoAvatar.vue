@@ -6,7 +6,7 @@
   >
     <!-- Base Avatar Container -->
     <div 
-      class="w-full h-full rounded-3xl bg-gradient-to-tr from-amber-200 via-yellow-300 to-amber-400 border-4 border-white shadow-xl flex items-center justify-center relative overflow-hidden transition-transform group-hover:scale-105"
+      class="w-full h-full rounded-3xl bg-amber-300 border-4 border-white shadow-xl flex items-center justify-center relative overflow-hidden transition-transform group-hover:scale-105"
       :class="[isBouncing ? 'animate-bounce' : '', bgGradient]"
     >
       <!-- Base Character Icon -->

@@ -6,7 +6,7 @@
     <!-- Main Song Player Room -->
     <main class="max-w-4xl mx-auto w-full px-4 py-8 flex-1 space-y-8 animate-pop">
       <!-- Title & Banner -->
-      <div class="bg-gradient-to-r from-purple-500 via-indigo-500 to-sky-500 rounded-3xl p-6 sm:p-8 text-white shadow-lg flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="bg-purple-600 rounded-3xl p-6 sm:p-8 text-white shadow-lg flex flex-col sm:flex-row items-center justify-between gap-6">
         <div class="space-y-1 text-center sm:text-left">
           <div class="inline-flex items-center gap-1.5 px-3 py-0.5 bg-white/20 rounded-full text-xs font-heading font-extrabold">
             🎵 Lagu Hitungan Anak

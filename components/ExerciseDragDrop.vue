@@ -34,7 +34,7 @@
     </div>
 
     <!-- Target Basket Container -->
-    <div class="p-6 bg-gradient-to-b from-amber-100 to-amber-200 rounded-3xl border-4 border-amber-400 shadow-lg max-w-md mx-auto text-center space-y-3 relative overflow-hidden">
+    <div class="p-6 bg-amber-100 rounded-3xl border-4 border-amber-400 shadow-lg max-w-md mx-auto text-center space-y-3 relative overflow-hidden">
       <div class="flex items-center justify-between px-2">
         <span class="font-heading font-extrabold text-amber-900 text-sm sm:text-base">
           🧺 Keranjang

@@ -145,8 +145,8 @@ watch(() => props.exercise, (newEx) => {
   selectedLeft.value = null
   if (newEx && newEx.options) {
     const parsedPairs = newEx.options.map(opt => opt.split('::'))
-    const lefts = parsedPairs.map(p => p[0].trim())
-    const rights = parsedPairs.map(p => p[1].trim())
+    const lefts = parsedPairs.map(p => p[0] ? p[0].trim() : '')
+    const rights = parsedPairs.map(p => p[1] ? p[1].trim() : '').filter(r => r !== '')
 
     leftItems.value = lefts
     rightItems.value = [...rights].sort(() => Math.random() - 0.5)

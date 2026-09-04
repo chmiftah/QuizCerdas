@@ -120,7 +120,7 @@
                   </div>
 
                   <!-- Avatar Icon -->
-                  <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-slate-100 to-slate-200 border-2 border-slate-200 flex items-center justify-center text-2xl shadow-2xs">
+                  <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-slate-100 border-2 border-slate-200 flex items-center justify-center text-2xl shadow-2xs">
                     {{ student.avatar }}
                   </div>
 
@@ -169,7 +169,7 @@
             </div>
 
             <!-- Promotion Footer Info Banner -->
-            <div class="bg-gradient-to-r from-emerald-50 to-teal-50 px-6 py-4 border-t border-emerald-100 flex items-center justify-between text-xs font-heading font-bold text-emerald-800">
+            <div class="bg-emerald-50 px-6 py-4 border-t border-emerald-100 flex items-center justify-between text-xs font-heading font-bold text-emerald-800">
               <span class="flex items-center gap-1.5">
                 <span>🚀</span>
                 <span>Top 3 di akhir minggu otomatis naik divisi liga berikutnya!</span>
@@ -187,7 +187,7 @@
           <DailyQuestsCard />
 
           <!-- Kiko Evolution Progress Card -->
-          <div class="bg-gradient-to-b from-purple-500 to-indigo-600 rounded-3xl p-6 text-white shadow-lg space-y-4 relative overflow-hidden">
+          <div class="bg-purple-600 rounded-3xl p-6 text-white shadow-lg space-y-4 relative overflow-hidden">
             <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
 
             <div class="flex items-center gap-3 border-b border-white/20 pb-3">
@@ -209,7 +209,7 @@
               <!-- XP Progress Bar -->
               <div class="bg-black/20 h-4 rounded-full p-0.5 overflow-hidden border border-white/20">
                 <div 
-                  class="bg-gradient-to-r from-amber-300 to-yellow-400 h-full rounded-full transition-all duration-500 shadow-sm"
+                  class="bg-amber-400 h-full rounded-full transition-all duration-500 shadow-sm"
                   :style="{ width: `${Math.min(100, Math.round(((100 - userStore.xpToNextLevel) / 100) * 100))}%` }"
                 ></div>
               </div>
@@ -282,11 +282,11 @@ const currentUserRank = computed(() => {
 
 const leagueBgGradient = computed(() => {
   switch (userStore.leagueTier.name) {
-    case 'Diamond': return 'bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-700'
-    case 'Gold': return 'bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600'
-    case 'Silver': return 'bg-gradient-to-r from-slate-500 via-slate-600 to-slate-700'
+    case 'Diamond': return 'bg-cyan-600'
+    case 'Gold': return 'bg-amber-500'
+    case 'Silver': return 'bg-slate-600'
     case 'Bronze':
-    default: return 'bg-gradient-to-r from-amber-700 via-amber-800 to-amber-900'
+    default: return 'bg-amber-800'
   }
 })
 </script>

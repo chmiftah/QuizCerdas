@@ -3,7 +3,7 @@
     <!-- 1. Dynamic Book Illustration Card -->
     <div 
       v-if="visualData" 
-      class="max-w-md mx-auto rounded-2xl sm:rounded-3xl border-2 sm:border-4 border-duo-gray-100 bg-gradient-to-b from-slate-50 to-amber-50/50 p-2.5 sm:p-5 shadow-md relative overflow-hidden"
+      class="max-w-md mx-auto rounded-2xl sm:rounded-3xl border-2 sm:border-4 border-duo-gray-100 bg-slate-50 p-2.5 sm:p-5 shadow-md relative overflow-hidden"
     >
       <!-- Clean Top Header Bar (No overlapping) -->
       <div class="flex flex-wrap items-center justify-between gap-1.5 mb-2 sm:mb-3">

@@ -1,0 +1,271 @@
+{
+  "course": {
+    "id": "course_penjumlahan_buah",
+    "title": "Penjumlahan Seru dengan Buah-buahan",
+    "description": "Belajar penjumlahan angka 1 sampai 20 menggunakan gambar buah-buahan yang menyenangkan! Cocok untuk anak TK B dan SD Kelas 1.",
+    "target_audience": "Anak TK B & SD Kelas 1 (5-7 tahun)",
+    "category": "math",
+    "units": [
+      {
+        "id": "u_penj_1",
+        "title": "Unit 1: Penjumlahan Dasar (Hasil sampai 12)",
+        "order": 1,
+        "icon": "🍎",
+        "color": "green",
+        "lessons": [
+          {
+            "id": "l_penj_1",
+            "title": "Penjumlahan dengan Manggis & Apel",
+            "order": 1,
+            "summary": "Hitung buah manggis dan apel merah untuk belajar menjumlahkan!",
+            "exercises": [
+              {
+                "id": "penj_ex1",
+                "type": "fill_in_blank",
+                "difficulty": "easy",
+                "question": "Ada 9 buah manggis 🟣 di kotak kiri dan 1 buah manggis di kotak kanan. Berapa jumlah semuanya?",
+                "options": [],
+                "correct_answer": "10",
+                "explanation": "9 + 1 = 10. Sembilan ditambah satu sama dengan sepuluh!",
+                "visual": {
+                  "type": "objects",
+                  "label": "🟣",
+                  "count": 9
+                },
+                "spaced_repetition": true
+              },
+              {
+                "id": "penj_ex2",
+                "type": "multiple_choice",
+                "difficulty": "easy",
+                "question": "Ada 4 🍎 + 3 🍎. Berapakah hasilnya?",
+                "options": ["5", "6", "7", "8"],
+                "correct_answer": "7",
+                "explanation": "4 + 3 = 7. Empat apel ditambah tiga apel sama dengan tujuh apel!",
+                "visual": {
+                  "type": "objects",
+                  "label": "🍎",
+                  "count": 4
+                },
+                "spaced_repetition": true
+              },
+              {
+                "id": "penj_ex3",
+                "type": "true_false",
+                "difficulty": "easy",
+                "question": "1 + 8 = 9. Apakah pernyataan ini BENAR?",
+                "options": ["Benar", "Salah"],
+                "correct_answer": "Benar",
+                "explanation": "Benar! 1 + 8 = 9. Satu jeruk ditambah delapan jeruk sama dengan sembilan jeruk.",
+                "spaced_repetition": false
+              },
+              {
+                "id": "penj_ex4",
+                "type": "drag_and_drop",
+                "difficulty": "easy",
+                "question": "Masukkan 8 buah anggur hijau 🍇 ke dalam keranjang! (6 + 2 = ?)",
+                "options": [],
+                "correct_answer": "8",
+                "explanation": "6 + 2 = 8. Enam anggur ditambah dua anggur sama dengan delapan anggur!",
+                "visual": {
+                  "type": "objects",
+                  "label": "🍇",
+                  "count": 10
+                },
+                "spaced_repetition": true
+              },
+              {
+                "id": "penj_ex5",
+                "type": "fill_in_blank",
+                "difficulty": "medium",
+                "question": "Ada 2 tangkai anggur merah 🍇 dan 10 buah rasberi 🫐. Berapa jumlah buah semuanya?",
+                "options": [],
+                "correct_answer": "12",
+                "explanation": "2 + 10 = 12. Dua tambah sepuluh sama dengan dua belas!",
+                "spaced_repetition": true
+              }
+            ]
+          },
+          {
+            "id": "l_penj_2",
+            "title": "Penjumlahan dengan Jeruk & Nanas",
+            "order": 2,
+            "summary": "Latihan penjumlahan lebih lanjut dengan jeruk, nanas, dan stroberi!",
+            "exercises": [
+              {
+                "id": "penj_ex6",
+                "type": "multiple_choice",
+                "difficulty": "easy",
+                "question": "6 🍊 + 1 🍊 = ?",
+                "options": ["6", "7", "8", "9"],
+                "correct_answer": "7",
+                "explanation": "6 + 1 = 7. Enam jeruk ditambah satu jeruk sama dengan tujuh jeruk!",
+                "visual": {
+                  "type": "objects",
+                  "label": "🍊",
+                  "count": 6
+                },
+                "spaced_repetition": false
+              },
+              {
+                "id": "penj_ex7",
+                "type": "fill_in_blank",
+                "difficulty": "medium",
+                "question": "Di kotak kiri ada 8 🍎 dan di kotak kanan ada 6 🍎. Berapa jumlah semuanya?",
+                "options": [],
+                "correct_answer": "14",
+                "explanation": "8 + 6 = 14. Delapan tambah enam sama dengan empat belas!",
+                "spaced_repetition": true
+              },
+              {
+                "id": "penj_ex8",
+                "type": "multiple_choice",
+                "difficulty": "medium",
+                "question": "7 🍍 + 8 🍍 = ?",
+                "options": ["13", "14", "15", "16"],
+                "correct_answer": "15",
+                "explanation": "7 + 8 = 15. Tujuh nanas ditambah delapan nanas sama dengan lima belas nanas!",
+                "spaced_repetition": true
+              },
+              {
+                "id": "penj_ex9",
+                "type": "true_false",
+                "difficulty": "easy",
+                "question": "1 + 5 = 7. Apakah pernyataan ini BENAR?",
+                "options": ["Benar", "Salah"],
+                "correct_answer": "Salah",
+                "explanation": "Salah! 1 + 5 = 6, bukan 7. Satu ditambah lima sama dengan enam.",
+                "spaced_repetition": true
+              },
+              {
+                "id": "penj_ex10",
+                "type": "fill_in_blank",
+                "difficulty": "medium",
+                "question": "Ada 4 🍉 di kotak kiri dan 10 🍉 di kotak kanan. Berapa jumlah semua semangka?",
+                "options": [],
+                "correct_answer": "14",
+                "explanation": "4 + 10 = 14. Empat semangka ditambah sepuluh semangka sama dengan empat belas semangka!",
+                "spaced_repetition": true
+              }
+            ]
+          },
+          {
+            "id": "l_penj_3",
+            "title": "Latihan Campuran: Semua Penjumlahan",
+            "order": 3,
+            "summary": "Uji kemampuanmu! Selesaikan semua soal penjumlahan dari worksheet buah-buahan.",
+            "exercises": [
+              {
+                "id": "penj_mix1",
+                "type": "comparison",
+                "difficulty": "medium",
+                "question": "Mana hasil penjumlahan yang LEBIH BESAR?",
+                "options": ["9 + 1", "4 + 3"],
+                "correct_answer": "9 + 1",
+                "explanation": "9 + 1 = 10, sedangkan 4 + 3 = 7. Jadi 9 + 1 hasilnya lebih besar!",
+                "spaced_repetition": false
+              },
+              {
+                "id": "penj_mix2",
+                "type": "matching",
+                "difficulty": "medium",
+                "question": "Pasangkan soal penjumlahan dengan hasil yang benar!",
+                "options": ["9 + 1::10", "4 + 3::7", "1 + 5::6"],
+                "correct_answer": "9 + 1::10|4 + 3::7|1 + 5::6",
+                "explanation": "Bagus! 9+1=10, 4+3=7, dan 1+5=6. Kamu pintar sekali!",
+                "spaced_repetition": true
+              },
+              {
+                "id": "penj_mix3",
+                "type": "pattern_matching",
+                "difficulty": "hard",
+                "question": "Lengkapi pola penjumlahan berikut: 1+5=6, 2+5=7, 3+5=8, 4+5=?",
+                "options": ["8", "9", "10", "11"],
+                "correct_answer": "9",
+                "explanation": "Polanya adalah angka pertama ditambah 5. Jadi 4+5=9!",
+                "visual": {
+                  "pattern": ["1+5=6", "2+5=7", "3+5=8", "4+5=?"]
+                },
+                "spaced_repetition": true
+              },
+              {
+                "id": "penj_mix4",
+                "type": "sequence_ordering",
+                "difficulty": "medium",
+                "question": "Urutkan hasil penjumlahan dari yang terkecil: 8+6, 1+8, 6+1",
+                "options": ["6+1", "1+8", "8+6"],
+                "correct_answer": "6+1",
+                "explanation": "6+1=7 (terkecil), 1+8=9, 8+6=14 (terbesar). Urutannya dari kecil ke besar!",
+                "visual": {
+                  "sequence": ["6+1=7", "1+8=9", "?", "8+6=14"]
+                },
+                "spaced_repetition": false
+              },
+              {
+                "id": "penj_mix5",
+                "type": "odd_one_out",
+                "difficulty": "hard",
+                "question": "Pilih satu yang BUKAN termasuk soal penjumlahan dengan hasil 14!",
+                "options": ["8 + 6", "4 + 10", "7 + 8", "7 + 7"],
+                "correct_answer": "7 + 8",
+                "explanation": "7 + 8 = 15, bukan 14! Sedangkan 8+6=14, 4+10=14, dan 7+7=14.",
+                "spaced_repetition": true
+              }
+            ]
+          }
+        ],
+        "checkpoint": {
+          "id": "cp_penj_1",
+          "title": "Ujian Akhir: Penjumlahan Buah-buahan",
+          "exercises": [
+            {
+              "id": "cp_penj_ex1",
+              "type": "multiple_choice",
+              "difficulty": "medium",
+              "question": "9 + 1 = ?",
+              "options": ["8", "9", "10", "11"],
+              "correct_answer": "10",
+              "explanation": "9 + 1 = 10. Sembilan ditambah satu sama dengan sepuluh!"
+            },
+            {
+              "id": "cp_penj_ex2",
+              "type": "fill_in_blank",
+              "difficulty": "medium",
+              "question": "7 + 8 = ___",
+              "options": [],
+              "correct_answer": "15",
+              "explanation": "7 + 8 = 15. Tujuh ditambah delapan sama dengan lima belas!"
+            },
+            {
+              "id": "cp_penj_ex3",
+              "type": "true_false",
+              "difficulty": "easy",
+              "question": "6 + 2 = 8. Apakah pernyataan ini BENAR?",
+              "options": ["Benar", "Salah"],
+              "correct_answer": "Benar",
+              "explanation": "Benar! 6 + 2 = 8."
+            },
+            {
+              "id": "cp_penj_ex4",
+              "type": "multiple_choice",
+              "difficulty": "hard",
+              "question": "4 + 10 = ?",
+              "options": ["12", "13", "14", "15"],
+              "correct_answer": "14",
+              "explanation": "4 + 10 = 14. Empat ditambah sepuluh sama dengan empat belas!"
+            },
+            {
+              "id": "cp_penj_ex5",
+              "type": "matching",
+              "difficulty": "hard",
+              "question": "Pasangkan soal dan jawaban yang tepat!",
+              "options": ["6 + 1::7", "8 + 6::14", "1 + 5::6"],
+              "correct_answer": "6 + 1::7|8 + 6::14|1 + 5::6",
+              "explanation": "Hebat! Semua pasangan benar. Kamu sudah menguasai penjumlahan buah-buahan!"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

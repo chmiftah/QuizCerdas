@@ -59,7 +59,7 @@
           <div class="flex-1 bg-slate-200/70 h-3 rounded-full overflow-hidden p-0.5">
             <div 
               class="h-full rounded-full transition-all duration-500"
-              :class="quest.claimed ? 'bg-slate-400' : 'bg-gradient-to-r from-amber-400 to-emerald-500'"
+              :class="quest.claimed ? 'bg-slate-400' : 'bg-emerald-500'"
               :style="{ width: `${Math.min(100, Math.round((quest.current / quest.target) * 100))}%` }"
             ></div>
           </div>
@@ -84,7 +84,7 @@
     <Transition name="bounce">
       <div 
         v-if="toastMessage" 
-        class="absolute inset-x-4 bottom-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-2xl p-3 text-center shadow-xl border-2 border-white flex items-center justify-center gap-2 z-20"
+        class="absolute inset-x-4 bottom-4 bg-emerald-600 text-white rounded-2xl p-3 text-center shadow-xl border-2 border-white flex items-center justify-center gap-2 z-20"
       >
         <span class="text-xl">🎉</span>
         <span class="font-heading font-black text-xs sm:text-sm">{{ toastMessage }}</span>
