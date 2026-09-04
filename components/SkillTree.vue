@@ -32,6 +32,42 @@
       </div>
     </div>
 
+    <!-- Duolingo-Style Sticky Top Active Unit Header Bar (Pins active unit on scroll) -->
+    <div 
+      v-if="courseStore.units.length > 0"
+      class="sticky top-4 z-40 w-full rounded-2xl p-3 sm:p-4 text-white shadow-xl border-4 border-black/10 backdrop-blur-md flex items-center justify-between gap-3 transition-all duration-300 animate-pop select-none"
+      :class="getUnitHeaderTheme(currentVisibleUnit?.color || 'emerald')"
+    >
+      <div class="flex items-center gap-3 min-w-0">
+        <!-- Target Pin Button: Jump to active node -->
+        <button 
+          @click="scrollToActiveNode" 
+          class="w-10 h-10 rounded-xl bg-white/20 hover:bg-white/35 active:scale-95 text-white flex items-center justify-center font-heading font-black text-base shrink-0 border border-white/30 shadow-md cursor-pointer transition-all"
+          title="Lompat ke Posisi Aktif Belajar"
+        >
+          🎯
+        </button>
+        <div class="min-w-0 space-y-0.5">
+          <div class="text-[10px] font-heading font-black uppercase tracking-wider text-white/95 truncate flex items-center gap-1.5">
+            <span>{{ getUnitBiomeIcon(currentVisibleUnit?.color || 'emerald') }}</span>
+            <span>BAGIAN 1, UNIT {{ currentVisibleUnit?.order || 1 }}</span>
+          </div>
+          <h4 class="font-heading font-black text-sm sm:text-base text-white truncate drop-shadow-xs">
+            {{ currentVisibleUnit?.title || 'Petualangan Belajar' }}
+          </h4>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 shrink-0">
+        <button 
+          @click="scrollToActiveNode" 
+          class="px-3.5 py-2 bg-white/25 hover:bg-white/40 active:scale-95 text-white rounded-xl font-heading font-black text-xs flex items-center gap-1.5 border border-white/30 shadow-md cursor-pointer transition-all"
+        >
+          <span>📖 BUKU PANDUAN</span>
+        </button>
+      </div>
+    </div>
+
     <!-- Empty / Loading State -->
     <div v-if="courseStore.units.length === 0" class="bg-white rounded-3xl p-8 text-center border-4 border-dashed border-slate-300 space-y-4 shadow-sm animate-pop">
       <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center text-3xl mx-auto border-2 border-slate-200">
@@ -50,6 +86,7 @@
       v-else
       v-for="(unit, unitIdx) in courseStore.units" 
       :key="unit.id"
+      :id="'unit-container-' + unit.id"
       class="rounded-[32px] border-4 p-5 sm:p-7 shadow-2xl relative space-y-8 transition-all duration-300 overflow-visible"
       :class="getUnitContainerTheme(unit.color)"
     >
@@ -237,6 +274,7 @@
         <div 
           v-for="(item, itemIdx) in getUnitNodeItems(unit)" 
           :key="item.id"
+          :id="isNextActiveLesson(unit.id, item.id) ? 'active-lesson-node' : undefined"
           class="absolute z-10 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group"
           :style="{ left: `${(item.x / 600) * 100}%`, top: `${item.y}px` }"
         >
@@ -428,7 +466,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useCourseStore } from '~/stores/course'
 import { useUserStore } from '~/stores/user'
 import { Check, Star, Lock, Trophy, Crown, ChevronDown, ChevronUp } from 'lucide-vue-next'
@@ -441,6 +479,7 @@ const pendingTargetUrl = ref('')
 const selectedNodeId = ref(null)
 const pathViewMode = ref('3d')
 const collapsedUnits = ref({})
+const currentVisibleUnit = ref(null)
 
 const toggleUnitCollapse = (unitId) => {
   collapsedUnits.value[unitId] = !collapsedUnits.value[unitId]
@@ -449,6 +488,45 @@ const toggleUnitCollapse = (unitId) => {
 const isUnitCollapsed = (unitId) => {
   return !!collapsedUnits.value[unitId]
 }
+
+const updateActiveUnitOnScroll = () => {
+  if (!courseStore.units || courseStore.units.length === 0) return
+  let current = courseStore.units[0]
+  for (const unit of courseStore.units) {
+    const el = document.getElementById(`unit-container-${unit.id}`)
+    if (el) {
+      const rect = el.getBoundingClientRect()
+      if (rect.top <= 250) {
+        current = unit
+      }
+    }
+  }
+  currentVisibleUnit.value = current
+}
+
+const scrollToActiveNode = () => {
+  const el = document.getElementById('active-lesson-node')
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  } else if (courseStore.units && courseStore.units.length > 0) {
+    const firstUnitEl = document.getElementById(`unit-container-${courseStore.units[0].id}`)
+    if (firstUnitEl) firstUnitEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }
+}
+
+onMounted(() => {
+  updateActiveUnitOnScroll()
+  window.addEventListener('scroll', updateActiveUnitOnScroll, { passive: true })
+  
+  // Default scroll to user's current active node on load
+  setTimeout(() => {
+    scrollToActiveNode()
+  }, 400)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', updateActiveUnitOnScroll)
+})
 
 const handle3DNodeClick = ({ unitId, itemId, type }) => {
   confirmStartNode(unitId, itemId, type)
