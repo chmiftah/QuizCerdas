@@ -35,22 +35,22 @@
     <!-- Duolingo-Style Sticky Top Active Unit Header Bar (Pins active unit on scroll without overlapping navbar) -->
     <Transition name="slide-down">
       <div 
-        v-if="showStickyHeader && courseStore.units.length > 0"
-        class="sticky top-20 z-30 w-full rounded-2xl p-3 sm:p-4 text-white shadow-2xl border-4 border-black/15 backdrop-blur-md flex items-center justify-between gap-3 transition-all duration-300 select-none"
+        v-if="courseStore.units.length > 0"
+        class="sticky top-16 sm:top-20 z-30 w-full rounded-2xl p-3 sm:p-4 text-white shadow-2xl border-4 border-black/15 backdrop-blur-md flex items-center justify-between gap-3 transition-all duration-300 select-none mb-4"
         :class="getUnitHeaderTheme(currentVisibleUnit?.color || 'emerald')"
       >
-        <div class="flex items-center gap-3 min-w-0">
+        <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
           <!-- Target Pin Button: Jump to active node -->
           <button 
             @click="scrollToActiveNode" 
-            class="w-10 h-10 rounded-xl bg-white/20 hover:bg-white/35 active:scale-95 text-white flex items-center justify-center font-heading font-black text-base shrink-0 border border-white/30 shadow-md cursor-pointer transition-all"
+            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/20 hover:bg-white/35 active:scale-95 text-white flex items-center justify-center font-heading font-black text-sm sm:text-base shrink-0 border border-white/30 shadow-md cursor-pointer transition-all"
             title="Lompat ke Posisi Aktif Belajar"
           >
             🎯
           </button>
           <div class="min-w-0 space-y-0.5">
-            <div class="text-[10px] font-heading font-black uppercase tracking-wider text-white/95 truncate flex items-center gap-1.5">
-              <span>{{ getUnitBiomeIcon(currentVisibleUnit?.color || 'emerald') }}</span>
+            <div class="text-[10px] sm:text-xs font-heading font-black uppercase tracking-wider text-white/95 truncate flex items-center gap-1">
+              <span>←</span>
               <span>BAGIAN 1, UNIT {{ currentVisibleUnit?.order || 1 }}</span>
             </div>
             <h4 class="font-heading font-black text-sm sm:text-base text-white truncate drop-shadow-xs">
@@ -62,7 +62,7 @@
         <div class="flex items-center gap-2 shrink-0">
           <button 
             @click="scrollToActiveNode" 
-            class="px-3.5 py-2 bg-white/25 hover:bg-white/40 active:scale-95 text-white rounded-xl font-heading font-black text-xs flex items-center gap-1.5 border border-white/30 shadow-md cursor-pointer transition-all"
+            class="px-3 sm:px-4 py-2 bg-white/25 hover:bg-white/40 active:scale-95 text-white rounded-xl font-heading font-black text-[11px] sm:text-xs flex items-center gap-1.5 border border-white/30 shadow-md cursor-pointer transition-all uppercase tracking-wider"
           >
             <span>📖 BUKU PANDUAN</span>
           </button>
@@ -280,16 +280,16 @@
           class="absolute z-10 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group"
           :style="{ left: `${(item.x / 600) * 100}%`, top: `${item.y}px` }"
         >
-          <!-- Kiko Mascot Standing on Active Next Node -->
+          <!-- Duolingo-Style "MULAI" Callout Badge on Active Next Node -->
           <div 
             v-if="item.type === 'lesson' && isNextActiveLesson(unit.id, item.id)"
-            class="absolute -top-20 z-30 flex flex-col items-center pointer-events-none animate-bounce"
+            class="absolute -top-14 z-30 flex flex-col items-center pointer-events-none animate-bounce"
           >
-            <div class="bg-white/95 backdrop-blur-md border-2 border-duo-green px-3 py-1 rounded-2xl shadow-lg text-[10px] font-heading font-black text-slate-800 whitespace-nowrap mb-1 flex items-center gap-1">
-              <span>🦉</span>
-              <span>Lanjut di sini!</span>
+            <div class="relative bg-duo-green text-white px-3.5 py-1.5 rounded-xl shadow-xl font-heading font-black text-xs uppercase tracking-wider flex items-center gap-1.5 border border-emerald-400">
+              <span>MULAI</span>
+              <!-- Callout Triangle Arrow Tail -->
+              <div class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-duo-green border-r border-b border-emerald-400 rotate-45"></div>
             </div>
-            <KikoAvatar size="sm" />
           </div>
 
           <!-- Interactive Floating Popover Bubble Card -->
@@ -417,9 +417,21 @@
             </span>
           </div>
 
+      </template>
+
+      <!-- Duolingo-Style Unit Section Divider Line -->
+      <div 
+        v-if="unitIdx < courseStore.units.length - 1" 
+        class="relative py-6 flex items-center justify-center my-4 select-none"
+      >
+        <div class="absolute inset-0 flex items-center" aria-hidden="true">
+          <div class="w-full border-t-2 border-slate-300/80"></div>
+        </div>
+        <div class="relative bg-white px-5 py-1.5 rounded-full border border-slate-300 text-xs font-heading font-extrabold text-slate-600 shadow-2xs flex items-center gap-2">
+          <span>{{ getUnitBiomeIcon(courseStore.units[unitIdx + 1].color) }}</span>
+          <span>UNIT {{ courseStore.units[unitIdx + 1].order }} • {{ courseStore.units[unitIdx + 1].title }}</span>
         </div>
       </div>
-      </template>
     </div>
 
     <!-- Auth Prompt Modal Popup -->
@@ -493,18 +505,13 @@ const isUnitCollapsed = (unitId) => {
 }
 
 const updateActiveUnitOnScroll = () => {
-  if (typeof window !== 'undefined') {
-    // Only show sticky unit header when scrolled down past top hero/banner (> 250px)
-    showStickyHeader.value = window.scrollY > 250
-  }
-
   if (!courseStore.units || courseStore.units.length === 0) return
   let current = courseStore.units[0]
   for (const unit of courseStore.units) {
     const el = document.getElementById(`unit-container-${unit.id}`)
     if (el) {
       const rect = el.getBoundingClientRect()
-      if (rect.top <= 280) {
+      if (rect.top <= 350) {
         current = unit
       }
     }
@@ -513,6 +520,7 @@ const updateActiveUnitOnScroll = () => {
 }
 
 const scrollToActiveNode = () => {
+  if (typeof window === 'undefined') return
   const el = document.getElementById('active-lesson-node')
   if (el) {
     el.scrollIntoView({ behavior: 'smooth', block: 'center' })
@@ -527,13 +535,24 @@ onMounted(() => {
   window.addEventListener('scroll', updateActiveUnitOnScroll, { passive: true })
   
   // Default scroll to user's current active node on load
-  setTimeout(() => {
+  nextTick(() => {
     scrollToActiveNode()
-  }, 400)
+    setTimeout(scrollToActiveNode, 300)
+    setTimeout(scrollToActiveNode, 800)
+  })
 })
 
+watch(() => courseStore.units, () => {
+  nextTick(() => {
+    updateActiveUnitOnScroll()
+    setTimeout(scrollToActiveNode, 300)
+  })
+}, { immediate: true, deep: true })
+
 onUnmounted(() => {
-  window.removeEventListener('scroll', updateActiveUnitOnScroll)
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('scroll', updateActiveUnitOnScroll)
+  }
 })
 
 const handle3DNodeClick = ({ unitId, itemId, type }) => {
