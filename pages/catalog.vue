@@ -46,35 +46,63 @@
         <div class="absolute -right-12 -bottom-16 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
       </div>
 
-      <!-- Catalog Search & Category Filter Pills -->
-      <div class="space-y-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <!-- Catalog View Mode & Category Filter Pills -->
+      <div class="space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-4 rounded-3xl border-2 border-slate-200 shadow-sm">
           <div>
-            <h2 class="font-heading text-2xl font-extrabold text-slate-800 flex items-center gap-2">
+            <h2 class="font-heading text-xl sm:text-2xl font-black text-slate-800 flex items-center gap-2">
               <span>📚</span> Modul Pembelajaran Tersedia
             </h2>
             <p class="text-xs font-heading font-semibold text-slate-500 mt-0.5 flex items-center gap-1.5">
-              <span>Dimuat langsung dari Database PostgreSQL ({{ filteredCourses.length }} Modul)</span>
+              <span>Pilih pulau modul 3D atau daftar kartu ({{ filteredCourses.length }} Modul)</span>
               <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
             </p>
           </div>
 
-          <!-- Filter Category Tabs -->
-          <div class="flex items-center gap-2 overflow-x-auto pb-1">
-            <button 
-              v-for="cat in categories" 
-              :key="cat.id"
-              @click="activeCategory = cat.id"
-              class="px-4 py-2 rounded-2xl font-heading font-bold text-xs transition-all cursor-pointer whitespace-nowrap shadow-2xs"
-              :class="activeCategory === cat.id ? 'bg-duo-blue text-white shadow-duo-blue scale-105' : 'bg-white text-slate-600 hover:bg-slate-100 border border-duo-gray-200'"
-            >
-              {{ cat.label }}
-            </button>
+          <!-- View Mode Toggle & Category Filter Tabs -->
+          <div class="flex flex-wrap items-center gap-3">
+            <!-- View Mode Switcher -->
+            <div class="p-1 bg-slate-100 rounded-2xl flex items-center gap-1 border border-slate-200">
+              <button 
+                @click="viewMode = 'map3d'"
+                class="px-3.5 py-1.5 rounded-xl font-heading font-extrabold text-xs transition-all cursor-pointer flex items-center gap-1.5"
+                :class="viewMode === 'map3d' ? 'bg-duo-green text-white shadow-duo-green' : 'text-slate-600 hover:text-slate-900'"
+              >
+                <span>🌴 Peta 3D</span>
+              </button>
+              <button 
+                @click="viewMode = 'grid'"
+                class="px-3.5 py-1.5 rounded-xl font-heading font-extrabold text-xs transition-all cursor-pointer flex items-center gap-1.5"
+                :class="viewMode === 'grid' ? 'bg-duo-blue text-white shadow-duo-blue' : 'text-slate-600 hover:text-slate-900'"
+              >
+                <span>📄 Daftar Kartu</span>
+              </button>
+            </div>
+
+            <!-- Filter Category Tabs -->
+            <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
+              <button 
+                v-for="cat in categories" 
+                :key="cat.id"
+                @click="activeCategory = cat.id"
+                class="px-3 py-1.5 rounded-xl font-heading font-bold text-xs transition-all cursor-pointer whitespace-nowrap"
+                :class="activeCategory === cat.id ? 'bg-slate-800 text-white font-extrabold' : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'"
+              >
+                {{ cat.label }}
+              </button>
+            </div>
           </div>
         </div>
 
+        <!-- 3D WORLD MAP NAVIGATION VIEW -->
+        <div v-if="viewMode === 'map3d'" class="space-y-4 animate-pop">
+          <ClientOnly>
+            <WorldMap3DCanvas :courses="filteredCourses" @select-course="selectAndOpenCourse" />
+          </ClientOnly>
+        </div>
+
         <!-- Empty State Container when DB has 0 courses -->
-        <div v-if="filteredCourses.length === 0" class="text-center py-16 px-6 bg-white rounded-3xl border-4 border-dashed border-slate-300 space-y-4 shadow-sm animate-pop">
+        <div v-else-if="filteredCourses.length === 0" class="text-center py-16 px-6 bg-white rounded-3xl border-4 border-dashed border-slate-300 space-y-4 shadow-sm animate-pop">
           <div class="w-20 h-20 bg-slate-100 rounded-3xl flex items-center justify-center text-4xl mx-auto border-2 border-slate-200">
             📭
           </div>
@@ -204,6 +232,7 @@ const userStore = useUserStore()
 const courseStore = useCourseStore()
 
 const activeCategory = ref('all')
+const viewMode = ref('map3d')
 
 const categories = [
   { id: 'all', label: '⭐ Semua Modul' },
