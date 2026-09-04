@@ -524,33 +524,42 @@
         </div>
       </section>
 
-      <!-- FINAL CTA BANNER -->
-      <section class="py-16 px-4 bg-gradient-to-b from-sky-100 via-emerald-50 to-white text-center">
-        <div class="max-w-2xl mx-auto space-y-6">
-          <div class="w-20 h-20 bg-duo-green rounded-3xl mx-auto flex items-center justify-center text-4xl text-white shadow-duo-green animate-bounce">
-            🦉
+      <!-- FINAL CTA BANNER (REDESIGNED 3D SHOWCASE) -->
+      <section class="py-20 px-4 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-950 text-white text-center relative overflow-hidden border-t border-slate-700 shadow-2xl">
+        <!-- Background Ambient Glow Spheres -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-emerald-500/20 via-sky-500/20 to-purple-500/20 rounded-full blur-[140px] pointer-events-none"></div>
+
+        <div class="max-w-3xl mx-auto space-y-8 relative z-10">
+          <!-- Three.js 3D WebGL Mascot & Floating Reward Scene -->
+          <ClientOnly>
+            <Cta3DCanvas />
+          </ClientOnly>
+
+          <div class="space-y-4">
+            <h2 class="font-heading text-3xl sm:text-5xl font-black text-white tracking-tight">
+              Siap Memulai <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-sky-400 to-amber-300">Petualangan Belajarmu?</span> 🚀
+            </h2>
+            <p class="text-sm sm:text-lg text-slate-300 font-body max-w-xl mx-auto leading-relaxed">
+              Daftar gratis dalam 1 menit dan dapatkan bonus <span class="text-amber-300 font-bold">+50 XP</span> pertama untuk membuka Peta Jalur Belajar interaktif!
+            </p>
           </div>
-          <h2 class="font-heading text-3xl sm:text-4xl font-black text-slate-800">
-            Siap Memulai Petualangan Belajarmu?
-          </h2>
-          <p class="text-sm sm:text-base text-slate-600 font-body">
-            Daftar gratis dalam 1 menit dan dapatkan bonus 50 XP pertama untuk membuka Jalur Belajar!
-          </p>
 
           <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
             <NuxtLink 
               to="/register" 
-              class="w-full sm:w-auto px-10 py-4 duo-btn-green text-lg shadow-xl"
+              class="w-full sm:w-auto px-10 py-4.5 duo-btn-green text-lg shadow-2xl shadow-emerald-500/30 flex items-center justify-center gap-2 group"
               id="btn-footer-register"
             >
-              🌟 Buat Akun Gratis Sekarang
+              <span>🌟 Buat Akun Gratis Sekarang</span>
+              <span class="group-hover:translate-x-1 transition-transform">➔</span>
             </NuxtLink>
             <NuxtLink 
               to="/catalog" 
-              class="w-full sm:w-auto px-8 py-4 duo-btn-blue text-base"
+              class="w-full sm:w-auto px-8 py-4.5 duo-btn-blue text-base shadow-xl flex items-center justify-center gap-2 group"
               id="btn-footer-catalog"
             >
-              📚 Lihat Semua Katalog Modul
+              <span>📚 Lihat Semua Katalog Modul</span>
+              <span class="group-hover:translate-x-1 transition-transform">➔</span>
             </NuxtLink>
           </div>
         </div>
