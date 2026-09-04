@@ -177,64 +177,142 @@
         </div>
       </section>
 
-      <!-- FEATURES GRID SECTION -->
-      <section class="py-16 px-4 bg-white" aria-label="Keunggulan">
-        <div class="max-w-6xl mx-auto space-y-12">
-          <div class="text-center space-y-3 max-w-2xl mx-auto">
-            <span class="px-3 py-1 bg-emerald-100 text-duo-green-dark rounded-full font-heading font-extrabold text-xs">
-              ✨ Keunggulan Metode Belajar
+      <!-- FEATURES GRID SECTION (REDESIGNED STUDIO-GRADE) -->
+      <section class="py-20 px-4 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white relative overflow-hidden my-6 border-y border-slate-700 shadow-2xl" aria-label="Keunggulan">
+        <!-- Background Ambient Glow Orbs -->
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-duo-green/20 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-duo-blue/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-6xl mx-auto space-y-14 relative z-10">
+          <!-- Section Header -->
+          <div class="text-center space-y-4 max-w-3xl mx-auto">
+            <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-duo-green/20 border border-duo-green/50 text-emerald-300 rounded-full font-heading font-black text-xs uppercase tracking-wider shadow-lg backdrop-blur-md animate-pulse">
+              ✨ Keunggulan Metode Pembelajaran
             </span>
-            <h2 class="font-heading text-3xl sm:text-4xl font-black text-slate-800">
-              Mengapa Anak Menyukai Counting Duo?
+            <h2 class="font-heading text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+              Mengapa Anak Menyukai <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-sky-400 to-amber-300">Counting Duo?</span> 🦉
             </h2>
-            <p class="text-slate-600 text-sm sm:text-base font-body">
-              Dirancang khusus dengan prinsip mikro-pembelajaran dan gamifikasi untuk membangun kebiasaan belajar yang konsisten setiap hari.
+            <p class="text-slate-300 text-sm sm:text-base font-body leading-relaxed max-w-2xl mx-auto">
+              Dirancang khusus dengan prinsip mikro-pembelajaran interaktif dan gamifikasi psikologis untuk membangun kebiasaan belajar mandiri yang konsisten setiap hari.
             </p>
           </div>
 
+          <!-- 3D Tactile Features Grid -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Feature Card 1 -->
-            <div class="bg-slate-50 rounded-3xl border-2 border-slate-200 p-6 space-y-4 hover:border-duo-green transition-all hover:shadow-lg group">
-              <div class="w-14 h-14 rounded-2xl bg-duo-green text-white flex items-center justify-center font-heading text-2xl shadow-duo-green group-hover:scale-110 transition-transform">
-                🗺️
+            <!-- Feature Card 1: Peta Jalur -->
+            <div class="group relative bg-slate-800/80 hover:bg-slate-800 border-2 border-emerald-500/40 hover:border-emerald-400 rounded-3xl p-6 space-y-5 transition-all duration-300 hover:-translate-y-2 shadow-xl hover:shadow-2xl hover:shadow-emerald-500/20 flex flex-col justify-between overflow-hidden">
+              <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
+              
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-500 to-green-400 text-white flex items-center justify-center font-heading text-3xl shadow-lg shadow-emerald-500/30 border-b-4 border-emerald-700 group-hover:scale-110 group-hover:rotate-3 transition-transform">
+                    🗺️
+                  </div>
+                  <span class="px-2.5 py-1 bg-emerald-500/20 text-emerald-300 rounded-full font-heading font-extrabold text-[10px] tracking-wide border border-emerald-500/30">
+                    7 LEVEL JALUR
+                  </span>
+                </div>
+
+                <h3 class="font-heading text-xl font-black text-white group-hover:text-emerald-300 transition-colors">
+                  Peta Jalur Bertahap
+                </h3>
+                
+                <p class="text-xs sm:text-sm text-slate-300 font-body leading-relaxed">
+                  Materi disusun bertingkat mulai dari pengenalan visual sederhana hingga soal cerita kontekstual dengan *checkpoint* evaluasi.
+                </p>
               </div>
-              <h3 class="font-heading text-xl font-bold text-slate-800">Peta Jalur Bertahap</h3>
-              <p class="text-xs sm:text-sm text-slate-600 font-body leading-relaxed">
-                Materi disusun bertingkat 7 level (Level 1 Visual hingga Level 7 Soal Cerita) dengan checkpoint evaluasi.
-              </p>
+
+              <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between text-xs font-heading font-bold text-emerald-400">
+                <span>⚡ 98% Pemahaman Terukur</span>
+                <span class="group-hover:translate-x-1 transition-transform">➔</span>
+              </div>
             </div>
 
-            <!-- Feature Card 2 -->
-            <div class="bg-slate-50 rounded-3xl border-2 border-slate-200 p-6 space-y-4 hover:border-duo-blue transition-all hover:shadow-lg group">
-              <div class="w-14 h-14 rounded-2xl bg-duo-blue text-white flex items-center justify-center font-heading text-2xl shadow-duo-blue group-hover:scale-110 transition-transform">
-                🔥
+            <!-- Feature Card 2: Streak & XP -->
+            <div class="group relative bg-slate-800/80 hover:bg-slate-800 border-2 border-amber-500/40 hover:border-amber-400 rounded-3xl p-6 space-y-5 transition-all duration-300 hover:-translate-y-2 shadow-xl hover:shadow-2xl hover:shadow-amber-500/20 flex flex-col justify-between overflow-hidden">
+              <div class="absolute top-0 right-0 w-24 h-24 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition-all"></div>
+              
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-400 text-white flex items-center justify-center font-heading text-3xl shadow-lg shadow-amber-500/30 border-b-4 border-amber-700 group-hover:scale-110 group-hover:rotate-3 transition-transform">
+                    🔥
+                  </div>
+                  <span class="px-2.5 py-1 bg-amber-500/20 text-amber-300 rounded-full font-heading font-extrabold text-[10px] tracking-wide border border-amber-500/30">
+                    MOTIVASI HARIAN
+                  </span>
+                </div>
+
+                <h3 class="font-heading text-xl font-black text-white group-hover:text-amber-300 transition-colors">
+                  Streak & XP Harian
+                </h3>
+                
+                <p class="text-xs sm:text-sm text-slate-300 font-body leading-relaxed">
+                  Menjaga konsistensi belajar anak setiap hari lewat sistem nyawa, pembakar *Streak* harian, dan bonus *XP reward*.
+                </p>
               </div>
-              <h3 class="font-heading text-xl font-bold text-slate-800">Streak & XP Harian</h3>
-              <p class="text-xs sm:text-sm text-slate-600 font-body leading-relaxed">
-                Dapatkan motivasi belajar rutin dengan mempertahankan jumlah hari Streak dan mengumpulkan XP reward.
-              </p>
+
+              <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between text-xs font-heading font-bold text-amber-400">
+                <span>🔥 +50 XP Setiap Hari</span>
+                <span class="group-hover:translate-x-1 transition-transform">➔</span>
+              </div>
             </div>
 
-            <!-- Feature Card 3 -->
-            <div class="bg-slate-50 rounded-3xl border-2 border-slate-200 p-6 space-y-4 hover:border-duo-yellow transition-all hover:shadow-lg group">
-              <div class="w-14 h-14 rounded-2xl bg-duo-yellow text-slate-900 flex items-center justify-center font-heading text-2xl shadow-duo-yellow group-hover:scale-110 transition-transform">
-                🧠
+            <!-- Feature Card 3: Spaced Repetition -->
+            <div class="group relative bg-slate-800/80 hover:bg-slate-800 border-2 border-yellow-500/40 hover:border-yellow-400 rounded-3xl p-6 space-y-5 transition-all duration-300 hover:-translate-y-2 shadow-xl hover:shadow-2xl hover:shadow-yellow-500/20 flex flex-col justify-between overflow-hidden">
+              <div class="absolute top-0 right-0 w-24 h-24 bg-yellow-500/10 rounded-full blur-2xl group-hover:bg-yellow-500/20 transition-all"></div>
+              
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-yellow-400 to-amber-400 text-slate-900 flex items-center justify-center font-heading text-3xl shadow-lg shadow-yellow-500/30 border-b-4 border-yellow-600 group-hover:scale-110 group-hover:rotate-3 transition-transform">
+                    🧠
+                  </div>
+                  <span class="px-2.5 py-1 bg-yellow-500/20 text-yellow-300 rounded-full font-heading font-extrabold text-[10px] tracking-wide border border-yellow-500/30">
+                    ALGORITMA CERDAS
+                  </span>
+                </div>
+
+                <h3 class="font-heading text-xl font-black text-white group-hover:text-yellow-300 transition-colors">
+                  Pengulangan Cerdas
+                </h3>
+                
+                <p class="text-xs sm:text-sm text-slate-300 font-body leading-relaxed">
+                  Algoritma *Spaced Repetition* otomatis menyajikan ulang soal yang pernah keliru hingga ingatan konsep anak makin kuat.
+                </p>
               </div>
-              <h3 class="font-heading text-xl font-bold text-slate-800">Pengulangan Cerdas</h3>
-              <p class="text-xs sm:text-sm text-slate-600 font-body leading-relaxed">
-                Fitur Spaced Repetition otomatis mengulang soal yang pernah keliru agar ingatan anak makin kuat.
-              </p>
+
+              <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between text-xs font-heading font-bold text-yellow-400">
+                <span>🧠 Retensi Ingatan 3x Kuat</span>
+                <span class="group-hover:translate-x-1 transition-transform">➔</span>
+              </div>
             </div>
 
-            <!-- Feature Card 4 -->
-            <div class="bg-slate-50 rounded-3xl border-2 border-slate-200 p-6 space-y-4 hover:border-duo-purple transition-all hover:shadow-lg group">
-              <div class="w-14 h-14 rounded-2xl bg-duo-purple text-white flex items-center justify-center font-heading text-2xl shadow-md group-hover:scale-110 transition-transform">
-                🎨
+            <!-- Feature Card 4: Audio Visual -->
+            <div class="group relative bg-slate-800/80 hover:bg-slate-800 border-2 border-purple-500/40 hover:border-purple-400 rounded-3xl p-6 space-y-5 transition-all duration-300 hover:-translate-y-2 shadow-xl hover:shadow-2xl hover:shadow-purple-500/20 flex flex-col justify-between overflow-hidden">
+              <div class="absolute top-0 right-0 w-24 h-24 bg-purple-500/10 rounded-full blur-2xl group-hover:bg-purple-500/20 transition-all"></div>
+              
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-500 to-pink-500 text-white flex items-center justify-center font-heading text-3xl shadow-lg shadow-purple-500/30 border-b-4 border-purple-700 group-hover:scale-110 group-hover:rotate-3 transition-transform">
+                    🎨
+                  </div>
+                  <span class="px-2.5 py-1 bg-purple-500/20 text-purple-300 rounded-full font-heading font-extrabold text-[10px] tracking-wide border border-purple-500/30">
+                    MULTIMEDIA 4K
+                  </span>
+                </div>
+
+                <h3 class="font-heading text-xl font-black text-white group-hover:text-purple-300 transition-colors">
+                  Visual & Audio Jelas
+                </h3>
+                
+                <p class="text-xs sm:text-sm text-slate-300 font-body leading-relaxed">
+                  Soal dilengkapi ilustrasi objek nyata (hewan, buah, warna) dan pengucapan audio suara jernih ramah anak usia dini.
+                </p>
               </div>
-              <h3 class="font-heading text-xl font-bold text-slate-800">Visual & Audio Jelas</h3>
-              <p class="text-xs sm:text-sm text-slate-600 font-body leading-relaxed">
-                Soal dilengkapi gambar objek nyata (buah, binatang, benda) dan pengucapan suara teks yang jernih.
-              </p>
+
+              <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between text-xs font-heading font-bold text-purple-400">
+                <span>🎧 Pengucapan Audio Suara</span>
+                <span class="group-hover:translate-x-1 transition-transform">➔</span>
+              </div>
             </div>
           </div>
         </div>
