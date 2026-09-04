@@ -1,5 +1,35 @@
 <template>
-  <div class="space-y-12 py-4">
+  <div class="space-y-8 py-4">
+    <!-- View Switcher Toolbar -->
+    <div class="bg-white p-4 rounded-3xl border-2 border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-duo-green text-white flex items-center justify-center font-heading text-xl font-bold shadow-duo-green">
+          🗺️
+        </div>
+        <div>
+          <h3 class="font-heading text-lg font-black text-slate-800">Mode Tampilan Peta Belajar</h3>
+          <p class="text-xs text-slate-500 font-heading font-semibold">Pilih antara petualangan 3D WebGL atau jalur 2D klasik</p>
+        </div>
+      </div>
+
+      <div class="p-1.5 bg-slate-100 rounded-2xl flex items-center gap-1.5 border border-slate-200">
+        <button 
+          @click="pathViewMode = '3d'"
+          class="px-4 py-2 rounded-xl font-heading font-extrabold text-xs transition-all cursor-pointer flex items-center gap-1.5"
+          :class="pathViewMode === '3d' ? 'bg-duo-green text-white shadow-duo-green scale-105' : 'text-slate-600 hover:text-slate-900'"
+        >
+          <span>🌴 Jalur Petualangan 3D</span>
+        </button>
+        <button 
+          @click="pathViewMode = '2d'"
+          class="px-4 py-2 rounded-xl font-heading font-extrabold text-xs transition-all cursor-pointer flex items-center gap-1.5"
+          :class="pathViewMode === '2d' ? 'bg-duo-blue text-white shadow-duo-blue scale-105' : 'text-slate-600 hover:text-slate-900'"
+        >
+          <span>🗺️ Jalur 2D Klasik</span>
+        </button>
+      </div>
+    </div>
+
     <!-- Empty / Loading State -->
     <div v-if="courseStore.units.length === 0" class="bg-white rounded-3xl p-8 text-center border-4 border-dashed border-slate-300 space-y-4 shadow-sm animate-pop">
       <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center text-3xl mx-auto border-2 border-slate-200">
@@ -58,8 +88,21 @@
         </div>
       </div>
 
-      <!-- Winding 3D Map Path Container -->
+      <!-- 3D WEBGL ADVENTURE TRACK VIEW -->
+      <div v-if="pathViewMode === '3d'" class="relative w-full py-2 animate-pop">
+        <ClientOnly>
+          <SkillPath3DCanvas 
+            :unit="unit"
+            :completedLessons="currentCompletedLessons"
+            :completedCheckpoints="currentCompletedCheckpoints"
+            @node-click="handle3DNodeClick"
+          />
+        </ClientOnly>
+      </div>
+
+      <!-- Winding 2D Map Path Container -->
       <div 
+        v-else
         class="relative w-full max-w-md mx-auto py-6"
         :style="{ height: `${getUnitContainerHeight(unit)}px` }"
       >
@@ -333,6 +376,11 @@ const userStore = useUserStore()
 const showAuthModal = ref(false)
 const pendingTargetUrl = ref('')
 const selectedNodeId = ref(null)
+const pathViewMode = ref('3d')
+
+const handle3DNodeClick = ({ unitId, itemId, type }) => {
+  confirmStartNode(unitId, itemId, type)
+}
 
 const activeCourseId = computed(() => courseStore.activeCourseId)
 
