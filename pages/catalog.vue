@@ -232,7 +232,7 @@ const userStore = useUserStore()
 const courseStore = useCourseStore()
 
 const activeCategory = ref('all')
-const viewMode = ref('map3d')
+const viewMode = ref('grid')
 
 const categories = [
   { id: 'all', label: '⭐ Semua Modul' },
