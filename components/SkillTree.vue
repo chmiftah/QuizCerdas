@@ -100,22 +100,22 @@
         </ClientOnly>
       </div>
 
-      <!-- Winding 2D Map Path Container (Rich Illustrated Game Map Style) -->
+      <!-- Winding 2D Map Path Container (100% Full Width Illustrated Game Map) -->
       <div 
         v-else
-        class="relative w-full max-w-md mx-auto py-6 rounded-[36px] overflow-hidden border-4 shadow-xl transition-all"
+        class="relative w-full rounded-[36px] overflow-hidden border-4 shadow-xl transition-all"
         :class="getUnitMapBgClass(unit.color)"
         :style="{ height: `${getUnitContainerHeight(unit)}px` }"
       >
         <!-- Illustrated Map Background Elements (River, Grass Textures, Hills) -->
         <div class="absolute inset-0 pointer-events-none z-0 overflow-hidden">
           <!-- Winding Blue River Stream -->
-          <svg class="absolute inset-0 w-full h-full opacity-70" :viewBox="`0 0 400 ${getUnitContainerHeight(unit)}`">
+          <svg class="absolute inset-0 w-full h-full opacity-75" :viewBox="`0 0 600 ${getUnitContainerHeight(unit)}`" preserveAspectRatio="none">
             <path 
               :d="getUnitRiverPath(unit)" 
               fill="none" 
               stroke="#38bdf8" 
-              stroke-width="50" 
+              stroke-width="70" 
               stroke-linecap="round" 
               stroke-linejoin="round"
             />
@@ -123,29 +123,30 @@
               :d="getUnitRiverPath(unit)" 
               fill="none" 
               stroke="#7dd3fc" 
-              stroke-width="28" 
+              stroke-width="38" 
               stroke-linecap="round" 
               stroke-linejoin="round"
             />
           </svg>
 
           <!-- Rolling Hill Shadows & Grass Accents -->
-          <div class="absolute top-12 left-[-20px] w-48 h-32 bg-black/5 rounded-full blur-xl"></div>
-          <div class="absolute top-[40%] right-[-20px] w-56 h-36 bg-black/5 rounded-full blur-xl"></div>
-          <div class="absolute bottom-20 left-[10%] w-60 h-40 bg-black/5 rounded-full blur-xl"></div>
+          <div class="absolute top-12 left-[-30px] w-64 h-40 bg-black/5 rounded-full blur-xl"></div>
+          <div class="absolute top-[40%] right-[-30px] w-72 h-48 bg-black/5 rounded-full blur-xl"></div>
+          <div class="absolute bottom-20 left-[10%] w-80 h-52 bg-black/5 rounded-full blur-xl"></div>
         </div>
 
         <!-- Dynamic SVG Winding Curved Trail (Thick Golden/Dirt Road) -->
         <svg 
           class="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-visible"
-          :viewBox="`0 0 400 ${getUnitContainerHeight(unit)}`"
+          :viewBox="`0 0 600 ${getUnitContainerHeight(unit)}`"
+          preserveAspectRatio="none"
         >
           <!-- Outer Dark Border Track -->
           <path 
             :d="getUnitSvgPath(unit)" 
             fill="none" 
             stroke="#15803d" 
-            stroke-width="36" 
+            stroke-width="48" 
             stroke-linecap="round" 
             stroke-linejoin="round" 
             opacity="0.3"
@@ -155,7 +156,7 @@
             :d="getUnitSvgPath(unit)" 
             fill="none" 
             stroke="#b45309" 
-            stroke-width="30" 
+            stroke-width="38" 
             stroke-linecap="round" 
             stroke-linejoin="round" 
           />
@@ -164,7 +165,7 @@
             :d="getUnitSvgPath(unit)" 
             fill="none" 
             stroke="#f59e0b" 
-            stroke-width="20" 
+            stroke-width="26" 
             stroke-linecap="round" 
             stroke-linejoin="round" 
           />
@@ -173,8 +174,8 @@
             :d="getUnitSvgPath(unit)" 
             fill="none" 
             stroke="#fef3c7" 
-            stroke-width="5" 
-            stroke-dasharray="10 10"
+            stroke-width="6" 
+            stroke-dasharray="12 12"
             stroke-linecap="round" 
             stroke-linejoin="round" 
             opacity="0.95"
@@ -183,37 +184,37 @@
 
         <!-- Rich Game Scenery Decorative Elements (Trees, Signposts, Bushes, Rocks) -->
         <template v-if="unit.color === 'emerald'">
-          <div class="absolute top-4 left-4 text-4xl animate-float pointer-events-none z-0">🌲</div>
-          <div class="absolute top-10 right-5 text-3xl pointer-events-none z-0">🪵</div>
-          <div class="absolute top-[28%] left-3 text-3xl animate-bounce pointer-events-none z-0">🦊</div>
-          <div class="absolute top-[45%] right-4 text-3xl pointer-events-none z-0">🌳</div>
-          <div class="absolute top-[62%] left-5 text-3xl pointer-events-none z-0">🍄</div>
-          <div class="absolute bottom-16 right-4 text-4xl animate-float pointer-events-none z-0">🌳</div>
-          <div class="absolute bottom-6 left-6 text-2xl pointer-events-none z-0">🪨</div>
+          <div class="absolute top-6 left-6 text-4xl animate-float pointer-events-none z-0">🌲</div>
+          <div class="absolute top-12 right-8 text-3xl pointer-events-none z-0">🪵</div>
+          <div class="absolute top-[28%] left-6 text-3xl animate-bounce pointer-events-none z-0">🦊</div>
+          <div class="absolute top-[45%] right-8 text-4xl pointer-events-none z-0">🌳</div>
+          <div class="absolute top-[62%] left-8 text-3xl pointer-events-none z-0">🍄</div>
+          <div class="absolute bottom-16 right-8 text-4xl animate-float pointer-events-none z-0">🌳</div>
+          <div class="absolute bottom-6 left-10 text-3xl pointer-events-none z-0">🪨</div>
         </template>
         
         <template v-else-if="unit.color === 'sky' || unit.color === 'blue'">
-          <div class="absolute top-4 right-4 text-4xl animate-float pointer-events-none z-0">☁️</div>
-          <div class="absolute top-12 left-4 text-3xl pointer-events-none z-0">🏔️</div>
-          <div class="absolute top-[32%] left-3 text-3xl animate-float pointer-events-none z-0">🕊️</div>
-          <div class="absolute top-[50%] right-4 text-3xl pointer-events-none z-0">☃️</div>
-          <div class="absolute bottom-20 left-4 text-3xl animate-bounce pointer-events-none z-0">🌈</div>
+          <div class="absolute top-6 right-8 text-4xl animate-float pointer-events-none z-0">☁️</div>
+          <div class="absolute top-14 left-8 text-3xl pointer-events-none z-0">🏔️</div>
+          <div class="absolute top-[32%] left-6 text-3xl animate-float pointer-events-none z-0">🕊️</div>
+          <div class="absolute top-[50%] right-8 text-3xl pointer-events-none z-0">☃️</div>
+          <div class="absolute bottom-20 left-8 text-4xl animate-bounce pointer-events-none z-0">🌈</div>
         </template>
 
         <template v-else-if="unit.color === 'amber'">
-          <div class="absolute top-6 left-4 text-4xl animate-float pointer-events-none z-0">🌻</div>
-          <div class="absolute top-14 right-4 text-3xl pointer-events-none z-0">🏰</div>
-          <div class="absolute top-[35%] right-3 text-3xl pointer-events-none z-0">🌴</div>
-          <div class="absolute top-[55%] left-3 text-3xl pointer-events-none z-0">🦁</div>
-          <div class="absolute bottom-16 right-5 text-4xl animate-float pointer-events-none z-0">✨</div>
+          <div class="absolute top-8 left-8 text-4xl animate-float pointer-events-none z-0">🌻</div>
+          <div class="absolute top-16 right-8 text-4xl pointer-events-none z-0">🏰</div>
+          <div class="absolute top-[35%] right-6 text-3xl pointer-events-none z-0">🌴</div>
+          <div class="absolute top-[55%] left-6 text-3xl pointer-events-none z-0">🦁</div>
+          <div class="absolute bottom-16 right-8 text-4xl animate-float pointer-events-none z-0">✨</div>
         </template>
 
         <template v-else-if="unit.color === 'rose'">
-          <div class="absolute top-6 right-4 text-4xl animate-float pointer-events-none z-0">🧁</div>
-          <div class="absolute top-14 left-4 text-3xl pointer-events-none z-0">🍭</div>
-          <div class="absolute top-[35%] left-3 text-3xl animate-bounce pointer-events-none z-0">🌸</div>
-          <div class="absolute top-[58%] right-3 text-3xl pointer-events-none z-0">🍬</div>
-          <div class="absolute bottom-16 left-4 text-4xl animate-float pointer-events-none z-0">⭐</div>
+          <div class="absolute top-8 right-8 text-4xl animate-float pointer-events-none z-0">🧁</div>
+          <div class="absolute top-16 left-8 text-3xl pointer-events-none z-0">🍭</div>
+          <div class="absolute top-[35%] left-6 text-3xl animate-bounce pointer-events-none z-0">🌸</div>
+          <div class="absolute top-[58%] right-6 text-3xl pointer-events-none z-0">🍬</div>
+          <div class="absolute bottom-16 left-8 text-4xl animate-float pointer-events-none z-0">⭐</div>
         </template>
 
         <!-- Node Items Loop -->
@@ -221,7 +222,7 @@
           v-for="(item, itemIdx) in getUnitNodeItems(unit)" 
           :key="item.id"
           class="absolute z-10 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group"
-          :style="{ left: `${item.x}px`, top: `${item.y}px` }"
+          :style="{ left: `${(item.x / 600) * 100}%`, top: `${item.y}px` }"
         >
           <!-- Kiko Mascot Standing on Active Next Node -->
           <div 
@@ -437,14 +438,14 @@ const currentCompletedCheckpoints = computed(() => {
   return userStore.getCompletedCheckpointsForCourse(activeCourseId.value)
 })
 
-// Calculate list of items (lessons + checkpoint) with safe (X, Y) coordinates on 400px canvas
+// Calculate list of items (lessons + checkpoint) with responsive 600px viewBox canvas
 const getUnitNodeItems = (unit) => {
   const items = []
-  const baseWidth = 400
+  const baseWidth = 600
   const startY = 85
   const ySpacing = 150
-  // Safe wave amplitude [-70px, +70px] centered at 200px
-  const waveOffsets = [-70, 70, -70, 70]
+  // Responsive wave amplitude [-140px, +140px] centered at 300px
+  const waveOffsets = [-140, 140, -140, 140]
 
   unit.lessons.forEach((lesson, index) => {
     const offset = waveOffsets[index % waveOffsets.length]
