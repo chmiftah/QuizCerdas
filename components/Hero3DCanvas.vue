@@ -3,18 +3,11 @@
     <!-- Transparent 3D WebGL Canvas Container (Frameless & Borderless) -->
     <div ref="canvasContainer" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
 
-    <!-- Floating Interactive Badge Header -->
-    <div class="absolute top-2 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
-      <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-duo-green/40 text-duo-green text-xs sm:text-sm font-heading font-black shadow-lg animate-bounce">
-        <span>✨ 3D Interactive World (Teks & Mascot 3D)</span>
-      </span>
-    </div>
-
     <!-- Bottom Interactive Pill Hint -->
     <div class="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-4 py-2 bg-slate-900/80 text-white backdrop-blur-md rounded-full border border-slate-700 shadow-xl pointer-events-none">
       <span class="w-2.5 h-2.5 rounded-full bg-duo-green animate-ping"></span>
       <span class="text-xs font-heading font-extrabold tracking-wide">
-        🖱️ Putar & Klik Karakter 3D Kiko!
+        ✨ Sentuh & Klik Burung Kiko Untuk Melompat! 🚀
       </span>
     </div>
 
