@@ -1,25 +1,25 @@
 <template>
-  <div v-if="hasVisual" class="my-4 animate-pop select-none">
+  <div v-if="hasVisual" class="my-2 sm:my-4 animate-pop select-none">
     <!-- 1. Dynamic Book Illustration Card -->
     <div 
       v-if="visualData" 
-      class="max-w-md mx-auto rounded-3xl border-4 border-duo-gray-100 bg-gradient-to-b from-slate-50 to-amber-50/50 p-4 sm:p-5 shadow-md relative overflow-hidden"
+      class="max-w-md mx-auto rounded-2xl sm:rounded-3xl border-2 sm:border-4 border-duo-gray-100 bg-gradient-to-b from-slate-50 to-amber-50/50 p-2.5 sm:p-5 shadow-md relative overflow-hidden"
     >
       <!-- Clean Top Header Bar (No overlapping) -->
-      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-        <div v-if="visualData.type === 'objects'" class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 font-heading text-xs font-extrabold border border-emerald-300 shadow-2xs">
+      <div class="flex flex-wrap items-center justify-between gap-1.5 mb-2 sm:mb-3">
+        <div v-if="visualData.type === 'objects'" class="inline-flex items-center gap-1 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-emerald-100 text-emerald-800 font-heading text-[11px] sm:text-xs font-extrabold border border-emerald-300 shadow-2xs">
           <span>👆 Tekan objek untuk menghitung:</span>
         </div>
-        <div v-else-if="visualData.type === 'ten_frame'" class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-100 text-amber-900 font-heading text-xs font-extrabold border border-amber-300 shadow-2xs">
+        <div v-else-if="visualData.type === 'ten_frame'" class="inline-flex items-center gap-1 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-amber-100 text-amber-900 font-heading text-[11px] sm:text-xs font-extrabold border border-amber-300 shadow-2xs">
           <span>🎯 Bingkai Sepuluh ({{ visualData.filled }}/10)</span>
         </div>
-        <div v-else-if="visualData.type === 'sequence'" class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-indigo-100 text-indigo-800 font-heading text-xs font-extrabold border border-indigo-300 shadow-2xs">
+        <div v-else-if="visualData.type === 'sequence'" class="inline-flex items-center gap-1 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-indigo-100 text-indigo-800 font-heading text-[11px] sm:text-xs font-extrabold border border-indigo-300 shadow-2xs">
           <span>🔢 Urutan Angka:</span>
         </div>
         <div v-else></div>
 
         <!-- Book Illustration Corner Tag -->
-        <span class="bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full border border-duo-gray-200 text-[10px] font-heading font-extrabold text-slate-500 uppercase tracking-wider shrink-0 shadow-2xs">
+        <span class="bg-white/90 backdrop-blur-sm px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full border border-duo-gray-200 text-[9px] sm:text-[10px] font-heading font-extrabold text-slate-500 uppercase tracking-wider shrink-0 shadow-2xs">
           📖 ILUSTRASI SOAL
         </span>
       </div>

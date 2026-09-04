@@ -1,15 +1,15 @@
 <template>
   <div class="min-h-screen bg-slate-50 flex flex-col justify-between pb-32">
     <!-- Lesson Runner Top Header Bar -->
-    <header class="p-4 bg-white border-b-2 border-duo-gray-100 sticky top-0 z-30">
-      <div class="max-w-3xl mx-auto flex items-center gap-4">
+    <header class="p-2.5 sm:p-4 bg-white border-b-2 border-duo-gray-100 sticky top-0 z-30 shadow-2xs">
+      <div class="max-w-3xl mx-auto flex items-center justify-between gap-1.5 sm:gap-4">
         <!-- Close / Quit Button -->
-        <NuxtLink to="/" class="p-2 text-duo-gray-400 hover:text-slate-800 transition-colors rounded-xl hover:bg-duo-gray-50">
-          <X class="w-7 h-7 stroke-[3]" />
+        <NuxtLink to="/" class="p-1 text-duo-gray-400 hover:text-slate-800 transition-colors rounded-xl hover:bg-duo-gray-50 shrink-0">
+          <X class="w-6 h-6 sm:w-7 sm:h-7 stroke-[3]" />
         </NuxtLink>
 
         <!-- Progress Bar Track -->
-        <div class="flex-1 bg-duo-gray-100 h-4 rounded-full overflow-hidden p-0.5 border border-duo-gray-200">
+        <div class="flex-1 bg-duo-gray-100 h-3 sm:h-4 rounded-full overflow-hidden p-0.5 border border-duo-gray-200 min-w-0">
           <div 
             class="bg-duo-green h-full rounded-full transition-all duration-300 shadow-sm"
             :style="{ width: `${engine.progressPercentage}%` }"
@@ -19,30 +19,31 @@
         <!-- Toggle Progress Path Button -->
         <button 
           @click="isPathOpen = !isPathOpen"
-          class="flex items-center gap-1.5 px-3 py-1 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 font-heading font-bold text-xs sm:text-sm rounded-2xl transition-colors cursor-pointer shrink-0 shadow-2xs"
+          class="flex items-center gap-1 px-2 sm:px-3 py-1 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 font-heading font-bold text-[11px] sm:text-xs rounded-xl sm:rounded-2xl transition-colors cursor-pointer shrink-0 shadow-2xs"
           title="Tampilkan / Sembunyikan Peta Jalur Belajar"
         >
-          <span>🗺️ Peta Jalur</span>
-          <ChevronDown v-if="!isPathOpen" class="w-4 h-4 text-amber-700" />
-          <ChevronUp v-else class="w-4 h-4 text-amber-700" />
+          <span>🗺️</span>
+          <span class="hidden sm:inline">Peta Jalur</span>
+          <ChevronDown v-if="!isPathOpen" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-700" />
+          <ChevronUp v-else class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-700" />
         </button>
 
         <!-- Active Combo Multiplier Badge -->
-        <div v-if="engine.comboCount >= 2" class="flex items-center gap-1.5 px-3 py-1 bg-amber-500 text-white rounded-2xl border-2 border-amber-300 font-heading font-black text-xs sm:text-sm animate-bounce shadow-md" title="Combo Jawab Benar!">
-          <span>🔥 Combo x{{ engine.comboCount }}!</span>
+        <div v-if="engine.comboCount >= 2" class="flex items-center gap-1 px-2 sm:px-3 py-1 bg-amber-500 text-white rounded-xl sm:rounded-2xl border-2 border-amber-300 font-heading font-black text-[11px] sm:text-xs animate-bounce shadow-md shrink-0" title="Combo Jawab Benar!">
+          <span>🔥 <span class="hidden sm:inline">Combo </span>x{{ engine.comboCount }}!</span>
         </div>
 
         <!-- Remaining Hearts -->
-        <div class="flex items-center gap-1.5 px-3 py-1 bg-rose-50 rounded-2xl border border-rose-200 text-duo-red font-heading font-extrabold text-sm">
-          <Heart class="w-5 h-5 fill-duo-red" />
+        <div class="flex items-center gap-1 px-2 sm:px-3 py-1 bg-rose-50 rounded-xl sm:rounded-2xl border border-rose-200 text-duo-red font-heading font-extrabold text-[11px] sm:text-sm shrink-0">
+          <Heart class="w-4 h-4 sm:w-5 sm:h-5 fill-duo-red" />
           <span>{{ userStore.hearts }}</span>
         </div>
       </div>
     </header>
 
     <!-- Main Question Container -->
-    <main class="max-w-2xl mx-auto w-full px-4 py-8 flex-1">
-      <div v-if="engine.currentExercise" class="space-y-8 animate-pop">
+    <main class="max-w-2xl mx-auto w-full px-3 sm:px-4 py-4 sm:py-8 flex-1">
+      <div v-if="engine.currentExercise" class="space-y-4 sm:space-y-8 animate-pop">
         <!-- Lesson Summary Header & Hint Button -->
         <div class="flex items-center justify-between gap-3">
           <div v-if="lessonSummary" class="bg-blue-50 border-2 border-duo-blue/30 rounded-2xl p-3 flex items-center gap-2 flex-1">

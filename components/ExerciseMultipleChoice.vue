@@ -1,32 +1,32 @@
 <template>
-  <div class="space-y-6">
+  <div class="space-y-4 sm:space-y-6">
     <!-- Question Text with Audio Player Button -->
-    <div class="flex items-center gap-3">
-      <h2 class="font-heading text-2xl sm:text-3xl text-slate-800 font-bold leading-tight">
+    <div class="flex items-center gap-2 sm:gap-3">
+      <h2 class="font-heading text-lg sm:text-2xl md:text-3xl text-slate-800 font-bold leading-snug flex-1">
         {{ exercise.question }}
       </h2>
       <AudioPlayerButton :text="exercise.question" />
     </div>
 
     <!-- Option Cards Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4 pt-1 sm:pt-2">
       <button 
         v-for="(option, idx) in exercise.options" 
         :key="idx"
         @click="$emit('select', option)"
         :disabled="isChecked"
-        class="relative p-4 sm:p-5 rounded-2xl border-2 transition-all duration-150 text-left flex items-center justify-between gap-3 group cursor-pointer select-none min-h-[64px]"
+        class="relative p-3 sm:p-5 rounded-xl sm:rounded-2xl border-2 transition-all duration-150 text-left flex items-center justify-between gap-2.5 sm:gap-3 group cursor-pointer select-none min-h-[52px] sm:min-h-[64px]"
         :class="getOptionClass(option)"
       >
-        <div class="flex items-center gap-3 min-w-0">
+        <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
           <!-- Keyboard / Number Badge -->
-          <span class="w-8 h-8 rounded-xl flex items-center justify-center font-heading font-bold text-sm border-2 transition-colors shrink-0"
+          <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl flex items-center justify-center font-heading font-bold text-xs sm:text-sm border-2 transition-colors shrink-0"
                 :class="getBadgeClass(option)">
             {{ idx + 1 }}
           </span>
 
           <!-- Pexels Photo Thumbnail if available -->
-          <div v-if="getObjectImageUrl(option)" class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden shadow-xs border-2 border-slate-200 shrink-0 bg-slate-50">
+          <div v-if="getObjectImageUrl(option)" class="w-10 h-10 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl overflow-hidden shadow-xs border-2 border-slate-200 shrink-0 bg-slate-50">
             <img 
               :src="getObjectImageUrl(option)" 
               :alt="option" 
@@ -35,7 +35,7 @@
             />
           </div>
 
-          <span class="font-heading font-bold text-base sm:text-lg text-slate-800 truncate">
+          <span class="font-heading font-bold text-sm sm:text-lg text-slate-800 truncate">
             {{ option }}
           </span>
         </div>
