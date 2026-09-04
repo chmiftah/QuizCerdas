@@ -261,119 +261,143 @@
             </p>
           </div>
 
-          <!-- 3D Tactile Features Grid -->
+          <!-- 3D Tactile Features Grid WITH THREE.JS CANVAS -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Feature Card 1: Peta Jalur -->
-            <div class="group relative bg-slate-800/80 hover:bg-slate-800 border-2 border-emerald-500/40 hover:border-emerald-400 rounded-3xl p-6 space-y-5 transition-all duration-300 hover:-translate-y-2 shadow-xl hover:shadow-2xl hover:shadow-emerald-500/20 flex flex-col justify-between overflow-hidden">
+            <!-- Feature Card 1: Peta Jalur 3D -->
+            <div class="group relative bg-slate-800/80 hover:bg-slate-800 border-2 border-emerald-500/40 hover:border-emerald-400 rounded-3xl p-5 space-y-4 transition-all duration-300 hover:-translate-y-2 shadow-xl hover:shadow-2xl hover:shadow-emerald-500/20 flex flex-col justify-between overflow-hidden">
               <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
               
-              <div class="space-y-4">
-                <div class="flex items-center justify-between">
-                  <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-500 to-green-400 text-white flex items-center justify-center font-heading text-3xl shadow-lg shadow-emerald-500/30 border-b-4 border-emerald-700 group-hover:scale-110 group-hover:rotate-3 transition-transform">
-                    🗺️
+              <div class="space-y-3">
+                <!-- 3D WebGL Scene Canvas -->
+                <ClientOnly>
+                  <Feature3DCanvas feature="map" />
+                </ClientOnly>
+
+                <div class="flex items-center justify-between pt-1">
+                  <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-green-400 text-white flex items-center justify-center font-heading text-xl shadow-lg shadow-emerald-500/30 border-b-2 border-emerald-700">
+                      🗺️
+                    </div>
+                    <h3 class="font-heading text-lg font-black text-white group-hover:text-emerald-300 transition-colors">
+                      Peta Jalur Bertahap
+                    </h3>
                   </div>
-                  <span class="px-2.5 py-1 bg-emerald-500/20 text-emerald-300 rounded-full font-heading font-extrabold text-[10px] tracking-wide border border-emerald-500/30">
-                    7 LEVEL JALUR
+                  <span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 rounded-full font-heading font-extrabold text-[10px] tracking-wide border border-emerald-500/30">
+                    7 LEVEL
                   </span>
                 </div>
-
-                <h3 class="font-heading text-xl font-black text-white group-hover:text-emerald-300 transition-colors">
-                  Peta Jalur Bertahap
-                </h3>
                 
-                <p class="text-xs sm:text-sm text-slate-300 font-body leading-relaxed">
+                <p class="text-xs text-slate-300 font-body leading-relaxed">
                   Materi disusun bertingkat mulai dari pengenalan visual sederhana hingga soal cerita kontekstual dengan *checkpoint* evaluasi.
                 </p>
               </div>
 
-              <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between text-xs font-heading font-bold text-emerald-400">
+              <div class="pt-3 border-t border-slate-700/60 flex items-center justify-between text-xs font-heading font-bold text-emerald-400">
                 <span>⚡ 98% Pemahaman Terukur</span>
                 <span class="group-hover:translate-x-1 transition-transform">➔</span>
               </div>
             </div>
 
-            <!-- Feature Card 2: Streak & XP -->
-            <div class="group relative bg-slate-800/80 hover:bg-slate-800 border-2 border-amber-500/40 hover:border-amber-400 rounded-3xl p-6 space-y-5 transition-all duration-300 hover:-translate-y-2 shadow-xl hover:shadow-2xl hover:shadow-amber-500/20 flex flex-col justify-between overflow-hidden">
+            <!-- Feature Card 2: Streak & XP 3D -->
+            <div class="group relative bg-slate-800/80 hover:bg-slate-800 border-2 border-amber-500/40 hover:border-amber-400 rounded-3xl p-5 space-y-4 transition-all duration-300 hover:-translate-y-2 shadow-xl hover:shadow-2xl hover:shadow-amber-500/20 flex flex-col justify-between overflow-hidden">
               <div class="absolute top-0 right-0 w-24 h-24 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition-all"></div>
               
-              <div class="space-y-4">
-                <div class="flex items-center justify-between">
-                  <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-400 text-white flex items-center justify-center font-heading text-3xl shadow-lg shadow-amber-500/30 border-b-4 border-amber-700 group-hover:scale-110 group-hover:rotate-3 transition-transform">
-                    🔥
+              <div class="space-y-3">
+                <!-- 3D WebGL Scene Canvas -->
+                <ClientOnly>
+                  <Feature3DCanvas feature="streak" />
+                </ClientOnly>
+
+                <div class="flex items-center justify-between pt-1">
+                  <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-400 text-white flex items-center justify-center font-heading text-xl shadow-lg shadow-amber-500/30 border-b-2 border-amber-700">
+                      🔥
+                    </div>
+                    <h3 class="font-heading text-lg font-black text-white group-hover:text-amber-300 transition-colors">
+                      Streak & XP Harian
+                    </h3>
                   </div>
-                  <span class="px-2.5 py-1 bg-amber-500/20 text-amber-300 rounded-full font-heading font-extrabold text-[10px] tracking-wide border border-amber-500/30">
-                    MOTIVASI HARIAN
+                  <span class="px-2 py-0.5 bg-amber-500/20 text-amber-300 rounded-full font-heading font-extrabold text-[10px] tracking-wide border border-amber-500/30">
+                    STREAK HARIAN
                   </span>
                 </div>
-
-                <h3 class="font-heading text-xl font-black text-white group-hover:text-amber-300 transition-colors">
-                  Streak & XP Harian
-                </h3>
                 
-                <p class="text-xs sm:text-sm text-slate-300 font-body leading-relaxed">
+                <p class="text-xs text-slate-300 font-body leading-relaxed">
                   Menjaga konsistensi belajar anak setiap hari lewat sistem nyawa, pembakar *Streak* harian, dan bonus *XP reward*.
                 </p>
               </div>
 
-              <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between text-xs font-heading font-bold text-amber-400">
+              <div class="pt-3 border-t border-slate-700/60 flex items-center justify-between text-xs font-heading font-bold text-amber-400">
                 <span>🔥 +50 XP Setiap Hari</span>
                 <span class="group-hover:translate-x-1 transition-transform">➔</span>
               </div>
             </div>
 
-            <!-- Feature Card 3: Spaced Repetition -->
-            <div class="group relative bg-slate-800/80 hover:bg-slate-800 border-2 border-yellow-500/40 hover:border-yellow-400 rounded-3xl p-6 space-y-5 transition-all duration-300 hover:-translate-y-2 shadow-xl hover:shadow-2xl hover:shadow-yellow-500/20 flex flex-col justify-between overflow-hidden">
+            <!-- Feature Card 3: Spaced Repetition 3D -->
+            <div class="group relative bg-slate-800/80 hover:bg-slate-800 border-2 border-yellow-500/40 hover:border-yellow-400 rounded-3xl p-5 space-y-4 transition-all duration-300 hover:-translate-y-2 shadow-xl hover:shadow-2xl hover:shadow-yellow-500/20 flex flex-col justify-between overflow-hidden">
               <div class="absolute top-0 right-0 w-24 h-24 bg-yellow-500/10 rounded-full blur-2xl group-hover:bg-yellow-500/20 transition-all"></div>
               
-              <div class="space-y-4">
-                <div class="flex items-center justify-between">
-                  <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-yellow-400 to-amber-400 text-slate-900 flex items-center justify-center font-heading text-3xl shadow-lg shadow-yellow-500/30 border-b-4 border-yellow-600 group-hover:scale-110 group-hover:rotate-3 transition-transform">
-                    🧠
+              <div class="space-y-3">
+                <!-- 3D WebGL Scene Canvas -->
+                <ClientOnly>
+                  <Feature3DCanvas feature="brain" />
+                </ClientOnly>
+
+                <div class="flex items-center justify-between pt-1">
+                  <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-400 to-amber-400 text-slate-900 flex items-center justify-center font-heading text-xl shadow-lg shadow-yellow-500/30 border-b-2 border-yellow-600">
+                      🧠
+                    </div>
+                    <h3 class="font-heading text-lg font-black text-white group-hover:text-yellow-300 transition-colors">
+                      Pengulangan Cerdas
+                    </h3>
                   </div>
-                  <span class="px-2.5 py-1 bg-yellow-500/20 text-yellow-300 rounded-full font-heading font-extrabold text-[10px] tracking-wide border border-yellow-500/30">
-                    ALGORITMA CERDAS
+                  <span class="px-2 py-0.5 bg-yellow-500/20 text-yellow-300 rounded-full font-heading font-extrabold text-[10px] tracking-wide border border-yellow-500/30">
+                    ALGORITMA
                   </span>
                 </div>
-
-                <h3 class="font-heading text-xl font-black text-white group-hover:text-yellow-300 transition-colors">
-                  Pengulangan Cerdas
-                </h3>
                 
-                <p class="text-xs sm:text-sm text-slate-300 font-body leading-relaxed">
+                <p class="text-xs text-slate-300 font-body leading-relaxed">
                   Algoritma *Spaced Repetition* otomatis menyajikan ulang soal yang pernah keliru hingga ingatan konsep anak makin kuat.
                 </p>
               </div>
 
-              <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between text-xs font-heading font-bold text-yellow-400">
+              <div class="pt-3 border-t border-slate-700/60 flex items-center justify-between text-xs font-heading font-bold text-yellow-400">
                 <span>🧠 Retensi Ingatan 3x Kuat</span>
                 <span class="group-hover:translate-x-1 transition-transform">➔</span>
               </div>
             </div>
 
-            <!-- Feature Card 4: Audio Visual -->
-            <div class="group relative bg-slate-800/80 hover:bg-slate-800 border-2 border-purple-500/40 hover:border-purple-400 rounded-3xl p-6 space-y-5 transition-all duration-300 hover:-translate-y-2 shadow-xl hover:shadow-2xl hover:shadow-purple-500/20 flex flex-col justify-between overflow-hidden">
+            <!-- Feature Card 4: Audio Visual 3D -->
+            <div class="group relative bg-slate-800/80 hover:bg-slate-800 border-2 border-purple-500/40 hover:border-purple-400 rounded-3xl p-5 space-y-4 transition-all duration-300 hover:-translate-y-2 shadow-xl hover:shadow-2xl hover:shadow-purple-500/20 flex flex-col justify-between overflow-hidden">
               <div class="absolute top-0 right-0 w-24 h-24 bg-purple-500/10 rounded-full blur-2xl group-hover:bg-purple-500/20 transition-all"></div>
               
-              <div class="space-y-4">
-                <div class="flex items-center justify-between">
-                  <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-500 to-pink-500 text-white flex items-center justify-center font-heading text-3xl shadow-lg shadow-purple-500/30 border-b-4 border-purple-700 group-hover:scale-110 group-hover:rotate-3 transition-transform">
-                    🎨
+              <div class="space-y-3">
+                <!-- 3D WebGL Scene Canvas -->
+                <ClientOnly>
+                  <Feature3DCanvas feature="media" />
+                </ClientOnly>
+
+                <div class="flex items-center justify-between pt-1">
+                  <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-500 to-pink-500 text-white flex items-center justify-center font-heading text-xl shadow-lg shadow-purple-500/30 border-b-2 border-purple-700">
+                      🎨
+                    </div>
+                    <h3 class="font-heading text-lg font-black text-white group-hover:text-purple-300 transition-colors">
+                      Visual & Audio Jelas
+                    </h3>
                   </div>
-                  <span class="px-2.5 py-1 bg-purple-500/20 text-purple-300 rounded-full font-heading font-extrabold text-[10px] tracking-wide border border-purple-500/30">
-                    MULTIMEDIA 4K
+                  <span class="px-2 py-0.5 bg-purple-500/20 text-purple-300 rounded-full font-heading font-extrabold text-[10px] tracking-wide border border-purple-500/30">
+                    MULTIMEDIA
                   </span>
                 </div>
-
-                <h3 class="font-heading text-xl font-black text-white group-hover:text-purple-300 transition-colors">
-                  Visual & Audio Jelas
-                </h3>
                 
-                <p class="text-xs sm:text-sm text-slate-300 font-body leading-relaxed">
+                <p class="text-xs text-slate-300 font-body leading-relaxed">
                   Soal dilengkapi ilustrasi objek nyata (hewan, buah, warna) dan pengucapan audio suara jernih ramah anak usia dini.
                 </p>
               </div>
 
-              <div class="pt-4 border-t border-slate-700/60 flex items-center justify-between text-xs font-heading font-bold text-purple-400">
+              <div class="pt-3 border-t border-slate-700/60 flex items-center justify-between text-xs font-heading font-bold text-purple-400">
                 <span>🎧 Pengucapan Audio Suara</span>
                 <span class="group-hover:translate-x-1 transition-transform">➔</span>
               </div>
