@@ -376,7 +376,7 @@ const userStore = useUserStore()
 const showAuthModal = ref(false)
 const pendingTargetUrl = ref('')
 const selectedNodeId = ref(null)
-const pathViewMode = ref('3d')
+const pathViewMode = ref('2d')
 
 const handle3DNodeClick = ({ unitId, itemId, type }) => {
   confirmStartNode(unitId, itemId, type)

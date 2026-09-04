@@ -97,7 +97,7 @@ const emit = defineEmits(['node-click'])
 
 const canvasContainer = ref<HTMLDivElement | null>(null)
 const hoveredNode = ref<any | null>(null)
-const isAutoRotating = ref(true)
+const isAutoRotating = ref(false)
 
 let scene: THREE.Scene
 let camera: THREE.PerspectiveCamera
