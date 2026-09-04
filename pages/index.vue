@@ -90,68 +90,132 @@
         <div class="absolute top-10 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-tr from-blue-200/30 to-emerald-200/30 rounded-full blur-3xl -z-10 pointer-events-none"></div>
       </section>
 
-      <!-- SUBJECTS SHOWCASE SECTION -->
-      <section class="py-16 px-4 bg-white border-y border-slate-200" aria-label="Mata Pelajaran">
+      <!-- SUBJECTS SHOWCASE SECTION WITH 3D THREE.JS -->
+      <section class="py-20 px-4 bg-gradient-to-b from-sky-50/50 via-white to-slate-50 border-y border-slate-200" aria-label="Mata Pelajaran">
         <div class="max-w-6xl mx-auto space-y-12">
           <div class="text-center space-y-3 max-w-2xl mx-auto">
-            <span class="px-3 py-1 bg-duo-purple/10 text-duo-purple rounded-full font-heading font-extrabold text-xs">
-              🎓 Ragam Mata Pelajaran
+            <span class="inline-flex items-center gap-2 px-4 py-1 bg-duo-purple/10 border border-duo-purple/30 text-duo-purple rounded-full font-heading font-black text-xs uppercase tracking-wider shadow-2xs">
+              🎓 Visualisasi 3D Interaktif
             </span>
-            <h2 class="font-heading text-3xl sm:text-4xl font-black text-slate-800">
-              Satu Aplikasi Untuk Semua Pembelajaran Dasar Anak
+            <h2 class="font-heading text-3xl sm:text-5xl font-black text-slate-800 tracking-tight">
+              Satu Aplikasi Untuk Semua <span class="text-duo-blue">Pembelajaran Dasar</span> Anak 🚀
             </h2>
             <p class="text-slate-600 text-sm sm:text-base font-body">
-              Materi disusun bertahap mulai dari pengenalan dasar hingga soal konteks kehidupan sehari-hari.
+              Setiap mata pelajaran dilengkapi dunia 3D Three.js interaktif. Gerakkan kursor di atas objek 3D untuk memutarnya!
             </p>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Subject Card 1: Math -->
-            <div class="bg-gradient-to-b from-emerald-50/80 to-white rounded-3xl border-2 border-emerald-200 p-6 space-y-4 hover:shadow-xl transition-all hover:-translate-y-1 group">
-              <div class="w-14 h-14 rounded-2xl bg-duo-green text-white flex items-center justify-center font-heading text-2xl shadow-duo-green group-hover:scale-110 transition-transform">
-                🔢
+            <!-- Subject Card 1: Math 3D -->
+            <div class="bg-gradient-to-b from-emerald-50/90 via-white to-emerald-50/30 rounded-3xl border-2 border-emerald-300/80 p-5 space-y-4 hover:shadow-2xl hover:border-emerald-400 transition-all hover:-translate-y-2 group flex flex-col justify-between">
+              <div class="space-y-3">
+                <!-- Three.js 3D WebGL Scene Canvas -->
+                <ClientOnly>
+                  <Subject3DCanvas subject="math" />
+                </ClientOnly>
+
+                <div class="flex items-center gap-2.5 pt-1">
+                  <div class="w-10 h-10 rounded-xl bg-duo-green text-white flex items-center justify-center font-heading text-xl shadow-duo-green group-hover:scale-110 transition-transform">
+                    🔢
+                  </div>
+                  <h3 class="font-heading text-lg font-black text-slate-800 group-hover:text-duo-green transition-colors">
+                    Matematika & Berhitung
+                  </h3>
+                </div>
+
+                <p class="text-xs text-slate-600 font-body leading-relaxed">
+                  Mengenal angka 1-20, penjumlahan, pengurangan, perbandingan jumlah, dan tebak pola gambar.
+                </p>
               </div>
-              <h3 class="font-heading text-xl font-bold text-slate-800">Matematika & Berhitung</h3>
-              <p class="text-xs sm:text-sm text-slate-600 font-body leading-relaxed">
-                Mengenal angka 1-20, penjumlahan, pengurangan, perbandingan jumlah, dan tebak pola gambar.
-              </p>
-              <span class="inline-block text-xs font-heading font-extrabold text-duo-green">9 Jenis Soal Interaktif ➔</span>
+
+              <div class="pt-3 border-t border-emerald-100 flex items-center justify-between">
+                <span class="text-xs font-heading font-extrabold text-duo-green">9 Jenis Soal Interaktif</span>
+                <span class="text-xs font-heading font-black text-duo-green group-hover:translate-x-1 transition-transform">➔</span>
+              </div>
             </div>
 
-            <!-- Subject Card 2: Science & Animals -->
-            <div class="bg-gradient-to-b from-amber-50/80 to-white rounded-3xl border-2 border-amber-200 p-6 space-y-4 hover:shadow-xl transition-all hover:-translate-y-1 group">
-              <div class="w-14 h-14 rounded-2xl bg-amber-500 text-white flex items-center justify-center font-heading text-2xl shadow-md group-hover:scale-110 transition-transform">
-                🦁
+            <!-- Subject Card 2: Science 3D -->
+            <div class="bg-gradient-to-b from-amber-50/90 via-white to-amber-50/30 rounded-3xl border-2 border-amber-300/80 p-5 space-y-4 hover:shadow-2xl hover:border-amber-400 transition-all hover:-translate-y-2 group flex flex-col justify-between">
+              <div class="space-y-3">
+                <!-- Three.js 3D WebGL Scene Canvas -->
+                <ClientOnly>
+                  <Subject3DCanvas subject="science" />
+                </ClientOnly>
+
+                <div class="flex items-center gap-2.5 pt-1">
+                  <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center font-heading text-xl shadow-md group-hover:scale-110 transition-transform">
+                    🦁
+                  </div>
+                  <h3 class="font-heading text-lg font-black text-slate-800 group-hover:text-amber-600 transition-colors">
+                    Dunia Hewan & Sains
+                  </h3>
+                </div>
+
+                <p class="text-xs text-slate-600 font-body leading-relaxed">
+                  Belajar mengenal nama hewan peliharaan & liar, habitat alam, suara binatang, dan pengelompokan mamalia.
+                </p>
               </div>
-              <h3 class="font-heading text-xl font-bold text-slate-800">Dunia Hewan & Sains</h3>
-              <p class="text-xs sm:text-sm text-slate-600 font-body leading-relaxed">
-                Belajar mengenal nama hewan peliharaan & liar, habitat alam, suara binatang, dan pengelompokan mamalia.
-              </p>
-              <span class="inline-block text-xs font-heading font-extrabold text-amber-600">5 Unit Tematik Hewan ➔</span>
+
+              <div class="pt-3 border-t border-amber-100 flex items-center justify-between">
+                <span class="text-xs font-heading font-extrabold text-amber-600">5 Unit Tematik Hewan</span>
+                <span class="text-xs font-heading font-black text-amber-600 group-hover:translate-x-1 transition-transform">➔</span>
+              </div>
             </div>
 
-            <!-- Subject Card 3: Language -->
-            <div class="bg-gradient-to-b from-purple-50/80 to-white rounded-3xl border-2 border-purple-200 p-6 space-y-4 hover:shadow-xl transition-all hover:-translate-y-1 group">
-              <div class="w-14 h-14 rounded-2xl bg-duo-purple text-white flex items-center justify-center font-heading text-2xl shadow-md group-hover:scale-110 transition-transform">
-                📖
+            <!-- Subject Card 3: Language 3D -->
+            <div class="bg-gradient-to-b from-purple-50/90 via-white to-purple-50/30 rounded-3xl border-2 border-purple-300/80 p-5 space-y-4 hover:shadow-2xl hover:border-purple-400 transition-all hover:-translate-y-2 group flex flex-col justify-between">
+              <div class="space-y-3">
+                <!-- Three.js 3D WebGL Scene Canvas -->
+                <ClientOnly>
+                  <Subject3DCanvas subject="language" />
+                </ClientOnly>
+
+                <div class="flex items-center gap-2.5 pt-1">
+                  <div class="w-10 h-10 rounded-xl bg-duo-purple text-white flex items-center justify-center font-heading text-xl shadow-md group-hover:scale-110 transition-transform">
+                    📖
+                  </div>
+                  <h3 class="font-heading text-lg font-black text-slate-800 group-hover:text-duo-purple transition-colors">
+                    Bahasa Indonesia
+                  </h3>
+                </div>
+
+                <p class="text-xs text-slate-600 font-body leading-relaxed">
+                  Mengenal abjad, huruf vokal & konsonan, mencocokkan kata bergambar, serta latihan membaca sederhana.
+                </p>
               </div>
-              <h3 class="font-heading text-xl font-bold text-slate-800">Bahasa Indonesia</h3>
-              <p class="text-xs sm:text-sm text-slate-600 font-body leading-relaxed">
-                Mengenal abjad, huruf vokal & konsonan, mencocokkan kata bergambar, serta latihan membaca sederhana.
-              </p>
-              <span class="inline-block text-xs font-heading font-extrabold text-duo-purple">Audio Suara Jelas 🎤 ➔</span>
+
+              <div class="pt-3 border-t border-purple-100 flex items-center justify-between">
+                <span class="text-xs font-heading font-extrabold text-duo-purple">Audio Suara Jelas 🎤</span>
+                <span class="text-xs font-heading font-black text-duo-purple group-hover:translate-x-1 transition-transform">➔</span>
+              </div>
             </div>
 
-            <!-- Subject Card 4: Art & Logic -->
-            <div class="bg-gradient-to-b from-sky-50/80 to-white rounded-3xl border-2 border-sky-200 p-6 space-y-4 hover:shadow-xl transition-all hover:-translate-y-1 group">
-              <div class="w-14 h-14 rounded-2xl bg-duo-blue text-white flex items-center justify-center font-heading text-2xl shadow-duo-blue group-hover:scale-110 transition-transform">
-                🎨
+            <!-- Subject Card 4: Art & Logic 3D -->
+            <div class="bg-gradient-to-b from-sky-50/90 via-white to-sky-50/30 rounded-3xl border-2 border-sky-300/80 p-5 space-y-4 hover:shadow-2xl hover:border-sky-400 transition-all hover:-translate-y-2 group flex flex-col justify-between">
+              <div class="space-y-3">
+                <!-- Three.js 3D WebGL Scene Canvas -->
+                <ClientOnly>
+                  <Subject3DCanvas subject="art" />
+                </ClientOnly>
+
+                <div class="flex items-center gap-2.5 pt-1">
+                  <div class="w-10 h-10 rounded-xl bg-duo-blue text-white flex items-center justify-center font-heading text-xl shadow-duo-blue group-hover:scale-110 transition-transform">
+                    🎨
+                  </div>
+                  <h3 class="font-heading text-lg font-black text-slate-800 group-hover:text-duo-blue transition-colors">
+                    Seni, Warna & Logika
+                  </h3>
+                </div>
+
+                <p class="text-xs text-slate-600 font-body leading-relaxed">
+                  Mengenal warna-warni, bentuk geometri dasar, menjiplak angka/huruf, dan teka-teki logika visual.
+                </p>
               </div>
-              <h3 class="font-heading text-xl font-bold text-slate-800">Seni, Warna & Logika</h3>
-              <p class="text-xs sm:text-sm text-slate-600 font-body leading-relaxed">
-                Mengenal warna-warni, bentuk geometri dasar, menjiplak angka/huruf, dan teka-teki logika visual.
-              </p>
-              <span class="inline-block text-xs font-heading font-extrabold text-duo-blue">Latihan Kreativitas ➔</span>
+
+              <div class="pt-3 border-t border-sky-100 flex items-center justify-between">
+                <span class="text-xs font-heading font-extrabold text-duo-blue">Latihan Kreativitas</span>
+                <span class="text-xs font-heading font-black text-duo-blue group-hover:translate-x-1 transition-transform">➔</span>
+              </div>
             </div>
           </div>
         </div>
