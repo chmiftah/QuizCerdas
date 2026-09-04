@@ -32,41 +32,43 @@
       </div>
     </div>
 
-    <!-- Duolingo-Style Sticky Top Active Unit Header Bar (Pins active unit on scroll) -->
-    <div 
-      v-if="courseStore.units.length > 0"
-      class="sticky top-4 z-40 w-full rounded-2xl p-3 sm:p-4 text-white shadow-xl border-4 border-black/10 backdrop-blur-md flex items-center justify-between gap-3 transition-all duration-300 animate-pop select-none"
-      :class="getUnitHeaderTheme(currentVisibleUnit?.color || 'emerald')"
-    >
-      <div class="flex items-center gap-3 min-w-0">
-        <!-- Target Pin Button: Jump to active node -->
-        <button 
-          @click="scrollToActiveNode" 
-          class="w-10 h-10 rounded-xl bg-white/20 hover:bg-white/35 active:scale-95 text-white flex items-center justify-center font-heading font-black text-base shrink-0 border border-white/30 shadow-md cursor-pointer transition-all"
-          title="Lompat ke Posisi Aktif Belajar"
-        >
-          🎯
-        </button>
-        <div class="min-w-0 space-y-0.5">
-          <div class="text-[10px] font-heading font-black uppercase tracking-wider text-white/95 truncate flex items-center gap-1.5">
-            <span>{{ getUnitBiomeIcon(currentVisibleUnit?.color || 'emerald') }}</span>
-            <span>BAGIAN 1, UNIT {{ currentVisibleUnit?.order || 1 }}</span>
+    <!-- Duolingo-Style Sticky Top Active Unit Header Bar (Pins active unit on scroll without overlapping navbar) -->
+    <Transition name="slide-down">
+      <div 
+        v-if="showStickyHeader && courseStore.units.length > 0"
+        class="sticky top-20 z-30 w-full rounded-2xl p-3 sm:p-4 text-white shadow-2xl border-4 border-black/15 backdrop-blur-md flex items-center justify-between gap-3 transition-all duration-300 select-none"
+        :class="getUnitHeaderTheme(currentVisibleUnit?.color || 'emerald')"
+      >
+        <div class="flex items-center gap-3 min-w-0">
+          <!-- Target Pin Button: Jump to active node -->
+          <button 
+            @click="scrollToActiveNode" 
+            class="w-10 h-10 rounded-xl bg-white/20 hover:bg-white/35 active:scale-95 text-white flex items-center justify-center font-heading font-black text-base shrink-0 border border-white/30 shadow-md cursor-pointer transition-all"
+            title="Lompat ke Posisi Aktif Belajar"
+          >
+            🎯
+          </button>
+          <div class="min-w-0 space-y-0.5">
+            <div class="text-[10px] font-heading font-black uppercase tracking-wider text-white/95 truncate flex items-center gap-1.5">
+              <span>{{ getUnitBiomeIcon(currentVisibleUnit?.color || 'emerald') }}</span>
+              <span>BAGIAN 1, UNIT {{ currentVisibleUnit?.order || 1 }}</span>
+            </div>
+            <h4 class="font-heading font-black text-sm sm:text-base text-white truncate drop-shadow-xs">
+              {{ currentVisibleUnit?.title || 'Petualangan Belajar' }}
+            </h4>
           </div>
-          <h4 class="font-heading font-black text-sm sm:text-base text-white truncate drop-shadow-xs">
-            {{ currentVisibleUnit?.title || 'Petualangan Belajar' }}
-          </h4>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0">
+          <button 
+            @click="scrollToActiveNode" 
+            class="px-3.5 py-2 bg-white/25 hover:bg-white/40 active:scale-95 text-white rounded-xl font-heading font-black text-xs flex items-center gap-1.5 border border-white/30 shadow-md cursor-pointer transition-all"
+          >
+            <span>📖 BUKU PANDUAN</span>
+          </button>
         </div>
       </div>
-
-      <div class="flex items-center gap-2 shrink-0">
-        <button 
-          @click="scrollToActiveNode" 
-          class="px-3.5 py-2 bg-white/25 hover:bg-white/40 active:scale-95 text-white rounded-xl font-heading font-black text-xs flex items-center gap-1.5 border border-white/30 shadow-md cursor-pointer transition-all"
-        >
-          <span>📖 BUKU PANDUAN</span>
-        </button>
-      </div>
-    </div>
+    </Transition>
 
     <!-- Empty / Loading State -->
     <div v-if="courseStore.units.length === 0" class="bg-white rounded-3xl p-8 text-center border-4 border-dashed border-slate-300 space-y-4 shadow-sm animate-pop">
@@ -480,6 +482,7 @@ const selectedNodeId = ref(null)
 const pathViewMode = ref('3d')
 const collapsedUnits = ref({})
 const currentVisibleUnit = ref(null)
+const showStickyHeader = ref(false)
 
 const toggleUnitCollapse = (unitId) => {
   collapsedUnits.value[unitId] = !collapsedUnits.value[unitId]
@@ -490,13 +493,18 @@ const isUnitCollapsed = (unitId) => {
 }
 
 const updateActiveUnitOnScroll = () => {
+  if (typeof window !== 'undefined') {
+    // Only show sticky unit header when scrolled down past top hero/banner (> 250px)
+    showStickyHeader.value = window.scrollY > 250
+  }
+
   if (!courseStore.units || courseStore.units.length === 0) return
   let current = courseStore.units[0]
   for (const unit of courseStore.units) {
     const el = document.getElementById(`unit-container-${unit.id}`)
     if (el) {
       const rect = el.getBoundingClientRect()
-      if (rect.top <= 250) {
+      if (rect.top <= 280) {
         current = unit
       }
     }
@@ -751,6 +759,16 @@ const getNodeClass = (unitId, itemId, type, color) => {
 </script>
 
 <style scoped>
+.slide-down-enter-active,
+.slide-down-leave-active {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.slide-down-enter-from,
+.slide-down-leave-to {
+  opacity: 0;
+  transform: translateY(-16px);
+}
+
 .bounce-popover-enter-active {
   animation: duo-pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
