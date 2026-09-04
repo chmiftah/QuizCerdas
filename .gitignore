@@ -1,0 +1,49 @@
+# Nuxt 3 build and output
+.nuxt
+.output
+dist
+.vercel
+
+# Dependencies
+node_modules
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables & secrets
+.env
+.env.*
+!.env.example
+
+# IDE & Text Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Scratch & temporary files
+scratch/
+
+# Local databases
+*.db
+*.sqlite
+dev.db
+
+# Large media / PDFs (Opsional)
+Counting.pdf
