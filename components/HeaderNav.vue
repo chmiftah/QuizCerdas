@@ -175,24 +175,24 @@
         <!-- Gamification Indicators (Only when logged in) -->
         <template v-if="userStore.isLoggedIn">
           <!-- Streak Indicator -->
-          <div class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-2xl bg-orange-50 border-2 border-orange-200 text-duo-orange-dark font-heading font-bold text-xs sm:text-sm shadow-2xs" title="Streak Hari Ini">
-            <Flame class="w-4 h-4 sm:w-5 sm:h-5 fill-duo-orange text-duo-orange animate-pulse" />
+          <div class="flex items-center gap-1 px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-orange-50 border sm:border-2 border-orange-200 text-duo-orange-dark font-heading font-bold text-[11px] sm:text-sm shadow-2xs" title="Streak Hari Ini">
+            <Flame class="w-3.5 h-3.5 sm:w-5 sm:h-5 fill-duo-orange text-duo-orange animate-pulse" />
             <span>{{ userStore.streak }}</span>
           </div>
 
           <!-- XP Badge -->
-          <div class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-2xl bg-amber-50 border-2 border-amber-200 text-amber-800 font-heading font-bold text-xs sm:text-sm shadow-2xs" title="Total XP Kamu">
-            <Zap class="w-4 h-4 sm:w-5 sm:h-5 fill-duo-yellow text-duo-yellow-dark" />
-            <span>{{ userStore.xp }} XP</span>
+          <div class="flex items-center gap-1 px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-amber-50 border sm:border-2 border-amber-200 text-amber-800 font-heading font-bold text-[11px] sm:text-sm shadow-2xs" title="Total XP Kamu">
+            <Zap class="w-3.5 h-3.5 sm:w-5 sm:h-5 fill-duo-yellow text-duo-yellow-dark" />
+            <span class="font-extrabold">{{ userStore.xp }} <span class="hidden sm:inline">XP</span></span>
           </div>
 
           <!-- Hearts Indicator -->
           <div 
             @click="showHeartModal = true"
-            class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-2xl bg-rose-50 border-2 border-rose-200 text-rose-600 font-heading font-bold text-xs sm:text-sm shadow-2xs cursor-pointer hover:bg-rose-100 transition-colors" 
+            class="flex items-center gap-1 px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-rose-50 border sm:border-2 border-rose-200 text-rose-600 font-heading font-bold text-[11px] sm:text-sm shadow-2xs cursor-pointer hover:bg-rose-100 transition-colors" 
             title="Nyawa Kamu (Klik untuk isi)"
           >
-            <Heart class="w-4 h-4 sm:w-5 sm:h-5 fill-duo-red text-duo-red" />
+            <Heart class="w-3.5 h-3.5 sm:w-5 sm:h-5 fill-duo-red text-duo-red" />
             <span>{{ userStore.hearts }}</span>
           </div>
         </template>

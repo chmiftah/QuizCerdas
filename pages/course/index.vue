@@ -7,19 +7,19 @@
     <main class="max-w-4xl mx-auto w-full px-4 py-6 sm:py-8 flex-1 space-y-6 safe-mobile-padding">
       
       <!-- Top Breadcrumb Navigation & Active Badge -->
-      <div class="flex flex-wrap items-center justify-between gap-3">
+      <div class="flex flex-wrap items-center justify-between gap-2">
         <NuxtLink 
           to="/catalog" 
-          class="inline-flex items-center gap-2 px-4 py-2.5 bg-white rounded-2xl border-2 border-slate-200 text-slate-700 hover:text-slate-900 hover:border-duo-blue font-heading font-extrabold text-xs sm:text-sm shadow-2xs transition-all hover:scale-105 active:scale-95"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white rounded-xl sm:rounded-2xl border border-slate-200 text-slate-700 hover:text-slate-900 hover:border-duo-blue font-heading font-extrabold text-xs shadow-2xs transition-all active:scale-95 shrink-0"
         >
-          <span class="text-base">←</span>
-          <span>Katalog Pembelajaran</span>
+          <span class="text-sm">←</span>
+          <span>Katalog</span>
         </NuxtLink>
         
-        <div class="flex items-center gap-2">
-          <span class="px-3.5 py-1.5 bg-emerald-100 border border-emerald-300 text-emerald-800 rounded-full font-heading font-extrabold text-xs flex items-center gap-1.5 shadow-2xs">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-            🎯 Modul Aktif: {{ courseStore.course.title }}
+        <div class="flex items-center gap-1.5 min-w-0 max-w-[210px] sm:max-w-none">
+          <span class="px-2.5 py-1 bg-emerald-100 border border-emerald-300 text-emerald-800 rounded-full font-heading font-extrabold text-[11px] sm:text-xs flex items-center gap-1 shadow-2xs truncate">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0"></span>
+            <span class="truncate">Modul: {{ courseStore.course.title }}</span>
           </span>
         </div>
       </div>

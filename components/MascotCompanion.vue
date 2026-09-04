@@ -1,9 +1,9 @@
 <template>
-  <div class="fixed bottom-24 right-4 z-30 flex items-end gap-2 pointer-events-none select-none">
+  <div class="fixed bottom-24 sm:bottom-28 right-3 sm:right-4 z-25 flex items-end gap-2 pointer-events-none select-none">
     <!-- Speech Bubble -->
     <div 
       v-if="speechBubbleText"
-      class="bg-white px-4 py-2.5 rounded-2xl border-3 shadow-xl max-w-xs text-xs sm:text-sm font-heading font-extrabold animate-pop pointer-events-auto flex items-center gap-1.5"
+      class="bg-white px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-2xl border-2 sm:border-3 shadow-xl max-w-[170px] sm:max-w-xs text-[11px] sm:text-sm font-heading font-extrabold animate-pop pointer-events-auto flex items-center gap-1.5"
       :class="isCorrect ? 'border-duo-green text-duo-green-dark bg-emerald-50' : isChecked ? 'border-duo-red text-duo-red-dark bg-rose-50' : 'border-amber-300 text-amber-900 bg-amber-50'"
     >
       <span>{{ speechBubbleText }}</span>

@@ -4,16 +4,17 @@
     <div ref="canvasContainer" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
 
     <!-- Interactive Controls Helper Badge & Reset View Button -->
-    <div class="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none z-20">
-      <div class="px-3 py-1.5 bg-white/90 backdrop-blur-md rounded-2xl border border-emerald-400/80 text-slate-800 font-heading text-[11px] font-black flex items-center gap-1.5 shadow-md">
-        <span>🎮 Tahan & Geser untuk Putar 3D</span>
+    <!-- Interactive Controls Helper Badge & Reset View Button -->
+    <div class="absolute top-3 left-3 right-3 flex items-center justify-between gap-2 pointer-events-none z-20">
+      <div class="px-2.5 sm:px-3 py-1 sm:py-1.5 bg-white/90 backdrop-blur-md rounded-xl sm:rounded-2xl border border-emerald-400/80 text-slate-800 font-heading text-[10px] sm:text-[11px] font-black flex items-center gap-1 shadow-md truncate">
+        <span>🎮 <span class="hidden sm:inline">Tahan & Geser untuk </span>Putar 3D</span>
       </div>
 
       <button 
         @click="resetCamera"
-        class="px-3 py-1.5 bg-white/90 hover:bg-white text-emerald-700 border border-emerald-300 rounded-xl font-heading font-extrabold text-[11px] shadow-md transition-all cursor-pointer flex items-center gap-1 pointer-events-auto"
+        class="px-2.5 sm:px-3 py-1 sm:py-1.5 bg-white/90 hover:bg-white text-emerald-700 border border-emerald-300 rounded-xl font-heading font-extrabold text-[10px] sm:text-[11px] shadow-md transition-all cursor-pointer flex items-center gap-1 pointer-events-auto shrink-0"
       >
-        <span>🔄 Reset Sudut</span>
+        <span>🔄 Reset<span class="hidden sm:inline"> Sudut</span></span>
       </button>
     </div>
 
@@ -22,28 +23,28 @@
       <div 
         v-for="node in projectedNodes" 
         :key="node.id"
-        class="absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-75 pointer-events-auto cursor-pointer flex flex-col items-center"
+        class="absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-75 pointer-events-auto cursor-pointer flex flex-col items-center max-w-[110px] sm:max-w-[160px]"
         :style="{ left: `${node.screenX}px`, top: `${node.screenY}px` }"
         @click="onBadgeClick(node)"
       >
         <!-- Blinking "Lanjut di Sini!" Mascot Callout for Current Active Node -->
         <div 
           v-if="node.isUnlocked && !node.isCompleted && node.type === 'lesson'"
-          class="mb-1.5 px-2.5 py-0.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-full text-[10px] font-heading font-black shadow-lg border-2 border-white flex items-center gap-1 animate-bounce animate-pulse"
+          class="mb-1 px-2 py-0.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-full text-[9px] sm:text-[10px] font-heading font-black shadow-lg border border-white flex items-center gap-1 animate-bounce animate-pulse shrink-0"
         >
-          <span class="w-2 h-2 rounded-full bg-amber-300 animate-ping"></span>
-          <span>🦉 Lanjut di sini!</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-300 animate-ping"></span>
+          <span>🦉 Lanjut!</span>
         </div>
 
         <!-- Node Title Badge (Matching 2D Skill Tree Style) -->
         <div 
-          class="px-3 py-1.5 rounded-2xl border-2 shadow-lg text-center max-w-[150px] font-heading font-black text-[11px] truncate backdrop-blur-md transition-transform hover:scale-105 active:scale-95"
+          class="px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl border-2 shadow-lg text-center w-full font-heading font-black text-[10px] sm:text-[11px] truncate backdrop-blur-md transition-transform hover:scale-105 active:scale-95"
           :class="getNodeBadgeClass(node)"
         >
-          <span v-if="!node.isUnlocked" class="mr-1">🔒</span>
-          <span v-else-if="node.isCompleted" class="mr-1 text-emerald-600">✓</span>
-          <span v-else class="mr-1 text-amber-500">⭐</span>
-          <span>{{ node.title }}</span>
+          <span v-if="!node.isUnlocked" class="mr-0.5">🔒</span>
+          <span v-else-if="node.isCompleted" class="mr-0.5 text-emerald-600">✓</span>
+          <span v-else class="mr-0.5 text-amber-500">⭐</span>
+          <span class="truncate">{{ node.title }}</span>
         </div>
       </div>
     </div>
@@ -52,11 +53,11 @@
     <Transition name="bounce-popover">
       <div 
         v-if="activeCardNode"
-        class="absolute bottom-4 left-1/2 -translate-x-1/2 px-5 py-3.5 bg-white/95 backdrop-blur-xl border-4 rounded-3xl text-slate-800 font-heading shadow-2xl z-30 pointer-events-auto flex items-center gap-3.5 max-w-sm w-[90%] animate-pop"
+        class="absolute bottom-3 left-1/2 -translate-x-1/2 px-3.5 sm:px-5 py-2.5 sm:py-3.5 bg-white/95 backdrop-blur-xl border-2 sm:border-4 rounded-2xl sm:rounded-3xl text-slate-800 font-heading shadow-2xl z-30 pointer-events-auto flex items-center gap-2.5 sm:gap-3.5 w-[92%] max-w-sm animate-pop"
         :class="activeCardNode.type === 'checkpoint' ? 'border-amber-400' : 'border-emerald-400'"
       >
         <div 
-          class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0 shadow-md cursor-pointer"
+          class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center text-xl sm:text-2xl shrink-0 shadow-md cursor-pointer"
           :class="activeCardNode.type === 'checkpoint' ? 'bg-gradient-to-br from-amber-400 to-yellow-500 text-amber-950' : 'bg-gradient-to-br from-emerald-400 to-teal-600 text-white'"
           @click="launchQuiz(activeCardNode)"
         >
@@ -64,26 +65,23 @@
         </div>
 
         <div class="text-left space-y-0.5 flex-1 min-w-0 cursor-pointer" @click="launchQuiz(activeCardNode)">
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1.5 flex-wrap">
             <span 
-              class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider shadow-2xs"
+              class="px-2 py-0.5 rounded-full text-[8px] sm:text-[9px] font-black uppercase tracking-wider shadow-2xs"
               :class="activeCardNode.type === 'checkpoint' ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-emerald-100 text-emerald-900 border border-emerald-300'"
             >
-              {{ activeCardNode.type === 'checkpoint' ? '👑 UJIAN CHECKPOINT' : `🎯 PELAJARAN ${activeCardNode.order}` }}
+              {{ activeCardNode.type === 'checkpoint' ? '👑 CHECKPOINT' : `🎯 PELAJARAN ${activeCardNode.order}` }}
             </span>
-            <span class="text-[10px] text-amber-600 font-black">+{{ activeCardNode.type === 'checkpoint' ? '50' : '20' }} XP</span>
+            <span class="text-[9px] sm:text-[10px] text-amber-600 font-black">+{{ activeCardNode.type === 'checkpoint' ? '50' : '20' }} XP</span>
           </div>
 
-          <h4 class="text-sm font-black text-slate-800 truncate">{{ activeCardNode.title }}</h4>
-          <p class="text-[11px] text-slate-500 font-body truncate">
-            {{ activeCardNode.isCompleted ? '✅ Selesai! Klik untuk mengulang' : (activeCardNode.isUnlocked ? '🚀 Klik tombol untuk mulai kuis!' : '🔒 Terkunci. Selesaikan materi sebelumnya') }}
-          </p>
+          <h4 class="text-xs sm:text-sm font-black text-slate-800 truncate">{{ activeCardNode.title }}</h4>
         </div>
 
         <div class="flex items-center gap-1.5 shrink-0">
           <button 
             @click="launchQuiz(activeCardNode)"
-            class="px-3.5 py-2 rounded-xl font-heading font-black text-xs shadow-md cursor-pointer transition-transform hover:scale-105 active:scale-95"
+            class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl font-heading font-black text-xs shadow-md cursor-pointer transition-transform hover:scale-105 active:scale-95"
             :class="activeCardNode.type === 'checkpoint' ? 'duo-btn-yellow' : 'duo-btn-green'"
           >
             MULAI
