@@ -1,7 +1,7 @@
 <template>
   <div class="relative w-full h-[620px] sm:h-[720px] rounded-[36px] overflow-hidden bg-gradient-to-b from-sky-200 via-sky-100 to-emerald-50 border-4 border-sky-300 shadow-2xl select-none group">
     <!-- WebGL Canvas Container -->
-    <div ref="canvasContainer" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
+    <div ref="canvasContainer" class="w-full h-full cursor-pointer"></div>
 
     <!-- Floating Top Bar Badge & Controls -->
     <div class="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none z-10">
@@ -20,56 +20,67 @@
       </div>
     </div>
 
-    <!-- Active Hover Node Tooltip Popover HUD -->
+    <!-- Persistent & Hover Active Node Popover HUD Card -->
     <Transition name="bounce-popover">
       <div 
-        v-if="hoveredNode"
-        class="absolute bottom-6 left-1/2 -translate-x-1/2 px-6 py-4 bg-white/95 backdrop-blur-xl border-4 rounded-3xl text-slate-800 font-heading shadow-2xl z-20 pointer-events-auto cursor-pointer animate-pop flex items-center gap-4 max-w-md w-[92%]"
-        :class="hoveredNode.type === 'checkpoint' ? 'border-amber-400' : 'border-emerald-400'"
-        @click="onStartNode(hoveredNode)"
+        v-if="activeCardNode"
+        class="absolute bottom-6 left-1/2 -translate-x-1/2 px-6 py-4 bg-white/95 backdrop-blur-xl border-4 rounded-3xl text-slate-800 font-heading shadow-2xl z-30 pointer-events-auto flex items-center gap-4 max-w-md w-[92%] animate-pop"
+        :class="activeCardNode.type === 'checkpoint' ? 'border-amber-400' : 'border-emerald-400'"
       >
         <div 
-          class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shrink-0 shadow-lg"
-          :class="hoveredNode.type === 'checkpoint' ? 'bg-gradient-to-br from-amber-400 to-yellow-500 text-amber-950' : 'bg-gradient-to-br from-emerald-400 to-teal-600 text-white'"
+          class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shrink-0 shadow-lg cursor-pointer"
+          :class="activeCardNode.type === 'checkpoint' ? 'bg-gradient-to-br from-amber-400 to-yellow-500 text-amber-950' : 'bg-gradient-to-br from-emerald-400 to-teal-600 text-white'"
+          @click="onStartNode(activeCardNode)"
         >
-          {{ hoveredNode.type === 'checkpoint' ? '👑' : (hoveredNode.isCompleted ? '✓' : '⭐') }}
+          {{ activeCardNode.type === 'checkpoint' ? '👑' : (activeCardNode.isCompleted ? '✓' : '⭐') }}
         </div>
 
-        <div class="text-left space-y-1 flex-1 min-w-0">
+        <div class="text-left space-y-1 flex-1 min-w-0 cursor-pointer" @click="onStartNode(activeCardNode)">
           <div class="flex items-center gap-2">
             <span 
               class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-2xs"
-              :class="hoveredNode.type === 'checkpoint' ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-emerald-100 text-emerald-900 border border-emerald-300'"
+              :class="activeCardNode.type === 'checkpoint' ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-emerald-100 text-emerald-900 border border-emerald-300'"
             >
-              {{ hoveredNode.type === 'checkpoint' ? '👑 UJIAN CHECKPOINT 3D' : '🎯 PELAJARAN 3D' }}
+              {{ activeCardNode.type === 'checkpoint' ? '👑 UJIAN CHECKPOINT' : `🎯 PELAJARAN ${activeCardNode.order}` }}
             </span>
-            <span class="text-[10px] text-amber-600 font-black">+{{ hoveredNode.type === 'checkpoint' ? '50' : '20' }} XP</span>
+            <span class="text-[10px] text-amber-600 font-black">+{{ activeCardNode.type === 'checkpoint' ? '50' : '20' }} XP</span>
           </div>
 
-          <h4 class="text-base font-black text-slate-800 truncate">{{ hoveredNode.title }}</h4>
+          <h4 class="text-base font-black text-slate-800 truncate">{{ activeCardNode.title }}</h4>
           <p class="text-xs text-slate-600 font-body truncate">
-            {{ hoveredNode.isCompleted ? '✅ Pelajaran telah diselesaikan!' : (hoveredNode.isUnlocked ? '🚀 Klik untuk mulai kuis interaktif!' : '🔒 Selesaikan pelajaran sebelumnya') }}
+            {{ activeCardNode.isCompleted ? '✅ Selesai! Klik untuk mengulang' : (activeCardNode.isUnlocked ? '🚀 Klik tombol untuk mulai kuis!' : '🔒 Terkunci. Selesaikan materi sebelumnya') }}
           </p>
         </div>
 
-        <button 
-          class="px-4 py-2.5 rounded-xl font-heading font-black text-xs shadow-lg shrink-0 cursor-pointer"
-          :class="hoveredNode.type === 'checkpoint' ? 'duo-btn-yellow' : 'duo-btn-green'"
-        >
-          MULAI
-        </button>
+        <div class="flex items-center gap-1.5 shrink-0">
+          <button 
+            @click="onStartNode(activeCardNode)"
+            class="px-4 py-2.5 rounded-xl font-heading font-black text-xs shadow-lg cursor-pointer transition-transform hover:scale-105 active:scale-95"
+            :class="activeCardNode.type === 'checkpoint' ? 'duo-btn-yellow' : 'duo-btn-green'"
+          >
+            MULAI
+          </button>
+          
+          <button 
+            @click="selectedNode = null"
+            class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 text-xs font-black flex items-center justify-center cursor-pointer border border-slate-300"
+            title="Tutup Popup"
+          >
+            ✕
+          </button>
+        </div>
       </div>
     </Transition>
 
     <!-- Bottom Helper Overlay -->
     <div class="absolute bottom-3 left-4 text-xs font-heading font-bold text-slate-700 bg-white/80 px-3.5 py-1.5 rounded-xl backdrop-blur-sm pointer-events-none shadow-xs border border-white">
-      💡 Peta Jalur Vertical Terrain 3D • Klik node untuk mengerjakan soal
+      💡 Klik node 3D mana saja untuk memilih & memulai kuis!
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import * as THREE from 'three'
 
 const props = defineProps({
@@ -91,6 +102,10 @@ const emit = defineEmits(['node-click'])
 
 const canvasContainer = ref<HTMLDivElement | null>(null)
 const hoveredNode = ref<any | null>(null)
+const selectedNode = ref<any | null>(null)
+
+// Compute active node card: selectedNode takes priority so card stays open when mouse moves!
+const activeCardNode = computed(() => selectedNode.value || hoveredNode.value)
 
 let scene: THREE.Scene
 let camera: THREE.PerspectiveCamera
@@ -113,7 +128,7 @@ const getVerticalTrackNodes = () => {
   const lessons = props.unit.lessons || []
   const totalCount = lessons.length + 1 // lessons + checkpoint
 
-  // Vertical Z layout from Top (Z = -4.5) to Bottom (Z = +4.5)
+  // Vertical Z layout from Top (Z = -4.2) to Bottom (Z = +4.2)
   const startZ = -4.2
   const zSpacing = 8.4 / Math.max(totalCount - 1, 1)
   const xOffsets = [-1.5, 1.5, -1.5, 1.5, -1.5, 1.5]
@@ -162,10 +177,9 @@ const init3D = () => {
   const height = canvasContainer.value.clientHeight
 
   scene = new THREE.Scene()
-  scene.background = new THREE.Color(0xe0f2fe) // Soft sky light blue
+  scene.background = new THREE.Color(0xe0f2fe)
   scene.fog = new THREE.FogExp2(0xe0f2fe, 0.025)
 
-  // Camera looking down vertically at the terrain island
   camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100)
   camera.position.set(0, 14.5, 3.5)
   camera.lookAt(0, 0, 0)
@@ -178,7 +192,7 @@ const init3D = () => {
   renderer.shadowMap.type = THREE.PCFSoftShadowMap
   canvasContainer.value.appendChild(renderer.domElement)
 
-  // Bright Nature Sun & Ambient Lighting
+  // Lights
   const ambientLight = new THREE.AmbientLight(0xffffff, 2.0)
   scene.add(ambientLight)
 
@@ -193,7 +207,6 @@ const init3D = () => {
   scene.add(terrainGroup)
 
   // --- 1. VERTICAL 3D TERRAIN ISLAND PLATFORM ---
-  // Dirt Cliff Base
   const baseBoxGeo = new THREE.BoxGeometry(6.5, 1.0, 11.5)
   const cliffMat = new THREE.MeshStandardMaterial({ color: 0x8d6e63, roughness: 0.8 })
   const baseCliff = new THREE.Mesh(baseBoxGeo, cliffMat)
@@ -201,7 +214,6 @@ const init3D = () => {
   baseCliff.receiveShadow = true
   terrainGroup.add(baseCliff)
 
-  // Lush Green Grass Surface Top
   const grassTopGeo = new THREE.BoxGeometry(6.4, 0.35, 11.4)
   const grassMat = new THREE.MeshStandardMaterial({ color: 0x4caf50, roughness: 0.5 })
   const grassSurface = new THREE.Mesh(grassTopGeo, grassMat)
@@ -209,26 +221,24 @@ const init3D = () => {
   grassSurface.receiveShadow = true
   terrainGroup.add(grassSurface)
 
-  // --- 2. WINDING BLUE/YELLOW DASHED ROAD PATHWAY ---
+  // --- 2. WINDING BLUE/YELLOW PATHWAY ---
   const nodes = getVerticalTrackNodes()
   const pathPoints = nodes.map(n => new THREE.Vector3(n.position.x, 0.68, n.position.z))
   const curve = new THREE.CatmullRomCurve3(pathPoints)
 
-  // Outer Blue Track Base
   const roadTubeGeo = new THREE.TubeGeometry(curve, 64, 0.5, 12, false)
   const roadMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, roughness: 0.3 })
   const road = new THREE.Mesh(roadTubeGeo, roadMat)
   road.receiveShadow = true
   terrainGroup.add(road)
 
-  // Inner Yellow Paved Center Line
   const innerTubeGeo = new THREE.TubeGeometry(curve, 64, 0.15, 8, false)
   const innerMat = new THREE.MeshStandardMaterial({ color: 0xffd700, roughness: 0.2 })
   const innerRoad = new THREE.Mesh(innerTubeGeo, innerMat)
   innerRoad.position.y = 0.72
   terrainGroup.add(innerRoad)
 
-  // --- 3. 3D DECORATIVE ENVIRONMENT (TREES, MUSHROOMS, CLOUDS) ---
+  // --- 3. 3D ENVIRONMENT DECORATIONS ---
   const treeSidePositions = [
     { x: -2.6, z: -5.0 },
     { x: 2.6, z: -3.2 },
@@ -260,7 +270,7 @@ const init3D = () => {
     terrainGroup.add(tGroup)
   })
 
-  // 3D Fluffy White Clouds in Sky
+  // 3D Fluffy Clouds
   const cloudPositions = [
     { x: 2.8, z: -4.0, y: 3.2 },
     { x: -2.8, z: -0.5, y: 3.5 },
@@ -302,7 +312,6 @@ const init3D = () => {
     nodeMeshes.push(ring)
 
     if (node.type === 'checkpoint') {
-      // 3D Golden Checkpoint Box
       const cpBoxGeo = new THREE.BoxGeometry(1.2, 0.7, 1.2)
       const cpBoxMat = new THREE.MeshStandardMaterial({ color: 0xff9800, roughness: 0.2, metalness: 0.5 })
       const cpBox = new THREE.Mesh(cpBoxGeo, cpBoxMat)
@@ -312,14 +321,12 @@ const init3D = () => {
       nodeGroup.add(cpBox)
       nodeMeshes.push(cpBox)
 
-      // Floating Crown 3D
       const crownGeo = new THREE.OctahedronGeometry(0.45, 0)
       const crownMat = new THREE.MeshStandardMaterial({ color: 0xffd700, roughness: 0.1, metalness: 0.8 })
       const crown = new THREE.Mesh(crownGeo, crownMat)
       crown.position.y = 1.4
       nodeGroup.add(crown)
     } else {
-      // 3D Round Node Sphere
       const gemGeo = new THREE.SphereGeometry(0.55, 24, 24)
       const gemMat = new THREE.MeshStandardMaterial({ 
         color: node.isCompleted ? 0xffd54f : (node.isUnlocked ? 0x66bb6a : 0xcbd5e1),
@@ -350,14 +357,12 @@ const init3D = () => {
     mascotGroup.position.set(nodes[0].position.x, nodes[0].position.y + 1.1, nodes[0].position.z)
   }
 
-  // Mascot Body
   const bodyGeo = new THREE.SphereGeometry(0.38, 20, 20)
   const bodyMat = new THREE.MeshStandardMaterial({ color: 0x58cc02, roughness: 0.3 })
   const body = new THREE.Mesh(bodyGeo, bodyMat)
   body.castShadow = true
   mascotGroup.add(body)
 
-  // Beak
   const beakGeo = new THREE.ConeGeometry(0.12, 0.25, 12)
   const beakMat = new THREE.MeshStandardMaterial({ color: 0xffb700, roughness: 0.2 })
   const beak = new THREE.Mesh(beakGeo, beakMat)
@@ -365,7 +370,6 @@ const init3D = () => {
   beak.position.set(0, 0, 0.38)
   mascotGroup.add(beak)
 
-  // Eyes
   const eyeMat = new THREE.MeshBasicMaterial({ color: 0xffffff })
   const pupilMat = new THREE.MeshBasicMaterial({ color: 0x000000 })
   const lEye = new THREE.Mesh(new THREE.SphereGeometry(0.08, 12, 12), eyeMat)
@@ -384,17 +388,18 @@ const init3D = () => {
 
   terrainGroup.add(mascotGroup)
 
-  // Mouse Interactions
+  // Mouse & Click Listeners
   const dom = renderer.domElement
   dom.addEventListener('mousedown', onMouseDown)
   dom.addEventListener('mousemove', onMouseMove)
   dom.addEventListener('mouseup', onMouseUp)
+  dom.addEventListener('click', onClickCanvas)
 
   animate()
 }
 
 const onMouseDown = (e: MouseEvent) => {
-  mouse.isDragging = true
+  mouse.isDragging = false
   mouse.previousMouseX = e.clientX
   mouse.previousMouseY = e.clientY
 }
@@ -404,13 +409,6 @@ const onMouseMove = (e: MouseEvent) => {
   const rect = canvasContainer.value.getBoundingClientRect()
   mouseVector.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
   mouseVector.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
-
-  if (mouse.isDragging && terrainGroup) {
-    const deltaX = e.clientX - mouse.previousMouseX
-    terrainGroup.rotation.y += deltaX * 0.003
-    mouse.previousMouseX = e.clientX
-    mouse.previousMouseY = e.clientY
-  }
 
   // Raycasting hover
   if (camera && scene) {
@@ -443,13 +441,36 @@ const onMouseUp = () => {
   mouse.isDragging = false
 }
 
+// Click Canvas Direct Trigger Handler
+const onClickCanvas = () => {
+  if (camera && scene) {
+    raycaster.setFromCamera(mouseVector, camera)
+    const intersects = raycaster.intersectObjects(nodeMeshes)
+
+    if (intersects.length > 0) {
+      const hitObj = intersects[0].object
+      const data = hitObj.userData.nodeData
+      if (data) {
+        selectedNode.value = data
+        // If node is unlocked, immediately launch quiz or keep card persistent
+        if (data.isUnlocked) {
+          onStartNode(data)
+        }
+      }
+    }
+  }
+}
+
 const onStartNode = (node: any) => {
   if (node) {
+    selectedNode.value = node
     emit('node-click', { unitId: props.unit.id, itemId: node.id, type: node.type })
   }
 }
 
 const resetCamera = () => {
+  selectedNode.value = null
+  hoveredNode.value = null
   if (terrainGroup) terrainGroup.rotation.y = 0
   camera.position.set(0, 14.5, 3.5)
   camera.lookAt(0, 0, 0)
@@ -462,7 +483,6 @@ const animate = () => {
 
   const time = clock.getElapsedTime()
 
-  // Mascot Hopping animation
   if (mascotGroup) {
     mascotGroup.position.y = 1.1 + Math.abs(Math.sin(time * 4)) * 0.2
   }
