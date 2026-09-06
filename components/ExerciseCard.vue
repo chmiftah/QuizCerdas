@@ -53,6 +53,12 @@
             </p>
           </div>
 
+          <!-- Exercise Type Badge -->
+          <div v-if="engine.currentExercise" class="px-3 py-1.5 bg-purple-50 border-2 border-purple-300 rounded-2xl text-xs font-heading font-extrabold text-purple-800 shrink-0 shadow-2xs">
+            <span class="hidden sm:inline">{{ getExerciseTypeLabel(engine.currentExercise.type) }}</span>
+            <span class="sm:hidden">{{ getExerciseTypeIcon(engine.currentExercise.type) }}</span>
+          </div>
+
           <button
             @click="toggleHint"
             type="button"
@@ -121,6 +127,15 @@
           @unpair="engine.unpairMatching"
         />
 
+        <ExerciseShadowMatch
+          v-else-if="engine.currentExercise.type === 'shadow_matching'"
+          :exercise="engine.currentExercise"
+          :selectedOption="engine.selectedOption"
+          :isChecked="engine.isChecked"
+          :isCorrect="engine.isCorrect"
+          @select="engine.selectOption"
+        />
+
         <ExerciseSequence
           v-else-if="engine.currentExercise.type === 'sequence_ordering'"
           :exercise="engine.currentExercise"
@@ -175,8 +190,88 @@
           @updateMatchCount="(val) => engine.memoryMatchCount = val"
         />
 
-        <ExerciseShadowMatch
-          v-else-if="engine.currentExercise.type === 'shadow_matching'"
+        <ExerciseTrueFalseImage
+          v-else-if="engine.currentExercise.type === 'true_false_image'"
+          :exercise="engine.currentExercise"
+          :selectedOption="engine.selectedOption"
+          :isChecked="engine.isChecked"
+          @select="engine.handleTrueFalseImage"
+        />
+
+        <ExerciseHotspot
+          v-else-if="engine.currentExercise.type === 'hotspot'"
+          :exercise="engine.currentExercise"
+          :selectedOption="engine.selectedOption"
+          :isChecked="engine.isChecked"
+          @select="engine.selectOption"
+        />
+
+        <ExerciseWordBuilding
+          v-else-if="engine.currentExercise.type === 'word_building'"
+          :exercise="engine.currentExercise"
+          :selectedOption="engine.selectedOption"
+          :isChecked="engine.isChecked"
+          @select="engine.selectOption"
+        />
+
+        <ExerciseSoundMatching
+          v-else-if="engine.currentExercise.type === 'sound_matching'"
+          :exercise="engine.currentExercise"
+          :selectedOption="engine.selectedOption"
+          :isChecked="engine.isChecked"
+          @select="engine.selectOption"
+        />
+
+        <ExercisePuzzleAssembly
+          v-else-if="engine.currentExercise.type === 'puzzle_assembly'"
+          :exercise="engine.currentExercise"
+          :selectedOption="engine.selectedOption"
+          :isChecked="engine.isChecked"
+          @select="engine.selectOption"
+        />
+
+        <ExerciseFillMissingNumber
+          v-else-if="engine.currentExercise.type === 'fill_missing_number'"
+          :exercise="engine.currentExercise"
+          :fillBlankInput="engine.fillBlankInput"
+          @update:fillBlankInput="(val) => engine.fillBlankInput = val"
+          :isChecked="engine.isChecked"
+        />
+
+        <ExerciseTimeReading
+          v-else-if="engine.currentExercise.type === 'time_reading'"
+          :exercise="engine.currentExercise"
+          :selectedOption="engine.selectedOption"
+          :isChecked="engine.isChecked"
+          :isCorrect="engine.isCorrect"
+          @select="engine.selectOption"
+        />
+
+        <ExerciseShapeTransform
+          v-else-if="engine.currentExercise.type === 'shape_transform'"
+          :exercise="engine.currentExercise"
+          :selectedOption="engine.selectedOption"
+          :isChecked="engine.isChecked"
+          @select="engine.selectOption"
+        />
+
+        <ExerciseCountSelect
+          v-else-if="engine.currentExercise.type === 'count_select'"
+          :exercise="engine.currentExercise"
+          :selectedOption="engine.selectedOption"
+          :isChecked="engine.isChecked"
+          @select="engine.selectOption"
+        />
+
+        <ExerciseDragToSort
+          v-else-if="engine.currentExercise.type === 'drag_to_sort'"
+          :exercise="engine.currentExercise"
+          :isChecked="engine.isChecked"
+          @updateCategoryMap="(val) => engine.dragToSortCategoryMap = val"
+        />
+
+        <ExerciseNumberTracing
+          v-else-if="engine.currentExercise.type === 'number_tracing'"
           :exercise="engine.currentExercise"
           :selectedOption="engine.selectedOption"
           :isChecked="engine.isChecked"
@@ -258,18 +353,18 @@ const canCheck = computed(() => {
   const ex = unref(props.engine.currentExercise)
   if (!ex) return false
 
-  if (ex.type === 'multiple_choice' || ex.type === 'true_false' || ex.type === 'sequence_ordering' || ex.type === 'comparison' || ex.type === 'pattern_matching' || ex.type === 'odd_one_out' || ex.type === 'shadow_matching') {
+  if (ex.type === 'multiple_choice' || ex.type === 'true_false' || ex.type === 'true_false_image' || ex.type === 'sequence_ordering' || ex.type === 'comparison' || ex.type === 'pattern_matching' || ex.type === 'odd_one_out' || ex.type === 'shadow_matching' || ex.type === 'hotspot' || ex.type === 'word_building' || ex.type === 'sound_matching' || ex.type === 'puzzle_assembly' || ex.type === 'time_reading' || ex.type === 'shape_transform' || ex.type === 'count_select' || ex.type === 'number_tracing') {
     return !!unref(props.engine.selectedOption)
   }
-  if (ex.type === 'fill_in_blank') {
+  if (ex.type === 'fill_in_blank' || ex.type === 'fill_missing_number') {
     const val = unref(props.engine.fillBlankInput) || ''
     return !!val.trim()
   }
   if (ex.type === 'drag_and_drop' || ex.type === 'seek_find') {
     return unref(props.engine.dragDropCount) >= 0
   }
-  if (ex.type === 'category_sorting') {
-    return !!unref(props.engine.categoryMap)
+  if (ex.type === 'category_sorting' || ex.type === 'drag_to_sort') {
+    return !!unref(props.engine.categoryMap) || !!unref(props.engine.dragToSortCategoryMap)
   }
   if (ex.type === 'memory_flip') {
     return unref(props.engine.memoryMatchCount) > 0
@@ -285,7 +380,7 @@ const handleVoiceSelection = (val) => {
   const ex = unref(props.engine.currentExercise)
   if (!ex) return
 
-  if (ex.type === 'multiple_choice' || ex.type === 'true_false' || ex.type === 'sequence_ordering' || ex.type === 'comparison' || ex.type === 'pattern_matching') {
+  if (ex.type === 'multiple_choice' || ex.type === 'true_false' || ex.type === 'sequence_ordering' || ex.type === 'comparison' || ex.type === 'pattern_matching' || ex.type === 'number_tracing') {
     props.engine.selectOption(val)
   } else if (ex.type === 'fill_in_blank') {
     props.engine.fillBlankInput = val
@@ -323,5 +418,65 @@ const toggleHint = () => {
     utterance.lang = 'id-ID'
     window.speechSynthesis.speak(utterance)
   }
+}
+
+const getExerciseTypeLabel = (type) => {
+  const typeMap = {
+    'multiple_choice': 'Pilihan Ganda',
+    'true_false': 'Benar/Salah',
+    'fill_in_blank': 'Isi Kosong',
+    'matching': 'Mencocokkan',
+    'drag_and_drop': 'Seret & Lepas',
+    'shadow_matching': 'Cocok Bayangan',
+    'sequence_ordering': 'Urutkan',
+    'pattern_matching': 'Pola',
+    'odd_one_out': 'Yang Beda',
+    'memory_flip': 'Kartu Memori',
+    'seek_find': 'Cari Objek',
+    'comparison': 'Perbandingan',
+    'category_sorting': 'Kelompokkan',
+    'drag_to_sort': 'Seret ke Kategori',
+    'true_false_image': 'Benar/Salah Gambar',
+    'hotspot': 'Klik Area',
+    'word_building': 'Susun Kata',
+    'sound_matching': 'Cocok Suara',
+    'puzzle_assembly': 'Susun Puzzle',
+    'fill_missing_number': 'Angka Hilang',
+    'time_reading': 'Baca Jam',
+    'shape_transform': 'Transformasi Bentuk',
+    'count_select': 'Hitung & Pilih',
+    'number_tracing': 'Tebalkan Angka'
+  }
+  return typeMap[type] || 'Soal'
+}
+
+const getExerciseTypeIcon = (type) => {
+  const iconMap = {
+    'multiple_choice': '📝',
+    'true_false': '✅',
+    'fill_in_blank': '✏️',
+    'matching': '🔗',
+    'drag_and_drop': '🎯',
+    'shadow_matching': '👥',
+    'sequence_ordering': '📊',
+    'pattern_matching': '🧩',
+    'odd_one_out': '🚫',
+    'memory_flip': '🃏',
+    'seek_find': '🔍',
+    'comparison': '⚖️',
+    'category_sorting': '📦',
+    'drag_to_sort': '📦',
+    'true_false_image': '🖼️',
+    'hotspot': '🎯',
+    'word_building': '🔤',
+    'sound_matching': '🔊',
+    'puzzle_assembly': '🧩',
+    'fill_missing_number': '🔢',
+    'time_reading': '⏰',
+    'shape_transform': '🔄',
+    'count_select': '🔢',
+    'number_tracing': '✏️'
+  }
+  return iconMap[type] || '🎮'
 }
 </script>

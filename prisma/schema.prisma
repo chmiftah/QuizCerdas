@@ -31,10 +31,22 @@ model User {
   updatedAt               DateTime @updatedAt
 
   progressLogs            ProgressLog[]
+  sessions                Session[]
 
   @@map("users")
 }
 
+model Session {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
 model ProgressLog {
   id         String   @id @default(uuid())
   userId     String

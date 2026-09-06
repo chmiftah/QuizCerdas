@@ -40,19 +40,45 @@
         </div>
       </div>
 
-      <!-- Admin Tab Navigation -->
-      <div class="flex items-center gap-2 bg-white p-2 rounded-2xl border-2 border-slate-200 shadow-sm overflow-x-auto">
-        <button 
-          v-for="tab in tabs" 
-          :key="tab.id"
-          @click="activeTab = tab.id"
-          type="button"
-          class="px-4 py-2.5 rounded-xl font-heading font-extrabold text-xs sm:text-sm transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer"
-          :class="activeTab === tab.id ? 'bg-purple-600 text-white shadow-md scale-[1.02]' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'"
-        >
-          <span>{{ tab.icon }}</span>
-          <span>{{ tab.label }}</span>
-        </button>
+      <!-- Admin Tab Navigation with Search -->
+      <div class="space-y-4">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div class="flex items-center gap-2 bg-white p-2 rounded-2xl border-2 border-slate-200 shadow-sm overflow-x-auto">
+            <button 
+              v-for="tab in tabs" 
+              :key="tab.id"
+              @click="activeTab = tab.id"
+              type="button"
+              class="px-4 py-2.5 rounded-xl font-heading font-extrabold text-xs sm:text-sm transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer"
+              :class="activeTab === tab.id ? 'bg-purple-600 text-white shadow-md scale-[1.02]' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'"
+            >
+              <span>{{ tab.icon }}</span>
+              <span>{{ tab.label }}</span>
+            </button>
+          </div>
+          
+          <!-- Quick Stats -->
+          <div class="flex items-center gap-2 px-4 py-2 bg-purple-100 rounded-xl text-xs font-heading font-bold text-purple-800">
+            <span>📊 {{ adminStore.totalUsers }} User</span>
+            <span>•</span>
+            <span>🎓 {{ adminStore.totalStudents }} Siswa</span>
+            <span>•</span>
+            <span>📚 {{ courseStore.catalogRegistry.length }} Kursus</span>
+          </div>
+        </div>
+        
+        <!-- Search Filter -->
+        <div class="relative group">
+          <input 
+            v-model="searchQuery" 
+            type="text" 
+            placeholder="🔍 Cari kursus, user, atau stiker..." 
+            class="w-full px-4 py-3 pl-10 rounded-2xl border-2 border-purple-200 bg-white text-slate-800 font-heading font-bold placeholder-slate-400 focus:border-purple-500 focus:outline-none focus:ring-4 focus:ring-purple-100 transition-all shadow-sm"
+          />
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-purple-600">
+            🔍
+          </span>
+        </div>
       </div>
 
       <!-- TAB 1: OVERVIEW & STATS -->
@@ -333,22 +359,33 @@
                         </div>
 
                         <div>
-                          <label class="font-bold text-slate-600">Tipe Soal (13 Tipe Interaktif)</label>
-                          <select v-model="ex.type" class="w-full p-2 rounded-lg border border-slate-300 bg-white font-bold">
-                            <option value="multiple_choice">Pilihan Ganda (Multiple Choice)</option>
-                            <option value="drag_and_drop">Seret Objek (Drag & Drop)</option>
-                            <option value="seek_find">Cari & Temukan (Seek & Find)</option>
-                            <option value="matching">Pasangan / Tarik Garis (Matching)</option>
-                            <option value="comparison">Bandingkan Jumlah (Comparison)</option>
-                            <option value="sequence_ordering">Urutan Angka / Objek (Sequence)</option>
-                            <option value="pattern_matching">Pola Gambar (Pattern)</option>
-                            <option value="fill_in_blank">Isian Singkat (Fill Blank)</option>
-                            <option value="true_false">Benar / Salah (True/False)</option>
-                            <option value="category_sorting">Kelompokkan Kategori (Category Sort)</option>
-                            <option value="odd_one_out">Temukan yang Berbeda (Odd One Out)</option>
-                            <option value="memory_flip">Kartu Memori (Memory Flip)</option>
-                            <option value="shadow_matching">Pencocokan Bayangan (Shadow Match)</option>
-                          </select>
+                          <label class="font-bold text-slate-600">Tipe Soal (24 Tipe Interaktif)</label>
+                            <select v-model="ex.type" class="w-full p-2 rounded-lg border border-slate-300 bg-white font-bold">
+                              <option value="multiple_choice">Pilihan Ganda</option>
+                              <option value="true_false">Benar/Salah</option>
+                              <option value="true_false_image">Benar/Salah Gambar</option>
+                              <option value="fill_in_blank">Isian Singkat</option>
+                              <option value="matching">Mencocokkan</option>
+                              <option value="drag_and_drop">Seret & Lepas</option>
+                              <option value="drag_to_sort">Seret ke Kategori</option>
+                              <option value="shadow_matching">Cocok Bayangan</option>
+                              <option value="sequence_ordering">Urutkan</option>
+                              <option value="pattern_matching">Pola Gambar</option>
+                              <option value="odd_one_out">Temukan yang Berbeda</option>
+                              <option value="memory_flip">Kartu Memori</option>
+                              <option value="seek_find">Cari & Temukan</option>
+                              <option value="comparison">Perbandingan</option>
+                              <option value="category_sorting">Kelompokkan Kategori</option>
+                              <option value="hotspot">Klik Area</option>
+                              <option value="word_building">Susun Kata</option>
+                              <option value="sound_matching">Cocok Suara</option>
+                              <option value="puzzle_assembly">Susun Puzzle</option>
+                              <option value="fill_missing_number">Angka Hilang</option>
+                              <option value="time_reading">Baca Jam</option>
+                              <option value="shape_transform">Transformasi Bentuk</option>
+                              <option value="count_select">Hitung & Pilih</option>
+                              <option value="number_tracing">Tebalkan Angka (Tracing)</option>
+                            </select>
                         </div>
 
                         <div>
@@ -733,6 +770,7 @@ watch(() => userStore.currentUser?.role, (newRole) => {
   }
 })
 
+const searchQuery = ref('')
 const activeTab = ref('overview')
 const courseEditorMode = ref('gui')
 

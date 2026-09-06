@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export interface Exercise {
   id: string
-  type: 'multiple_choice' | 'true_false' | 'fill_in_blank' | 'matching'
+  type: 'multiple_choice' | 'true_false' | 'fill_in_blank' | 'matching' | 'drag_and_drop' | 'shadow_matching' | 'sequence_ordering' | 'pattern_matching' | 'odd_one_out' | 'memory_flip' | 'seek_find' | 'comparison' | 'category_sorting' | 'drag_to_sort' | 'true_false_image' | 'hotspot' | 'word_building' | 'sound_matching' | 'puzzle_assembly' | 'fill_missing_number' | 'time_reading' | 'shape_transform' | 'count_select' | 'number_tracing'
   difficulty: 'easy' | 'medium' | 'hard'
   question: string
   options: string[]
@@ -11,6 +11,9 @@ export interface Exercise {
   image?: string
   visual?: Record<string, any>
   spaced_repetition?: boolean
+  hotspots?: { id: string, x: number, y: number, width: number, height: number, label?: string }[]
+  audioText?: string
+  pairs?: { left: string, right: string }[]
 }
 
 export interface Lesson {
@@ -260,6 +263,14 @@ export const useCourseStore = defineStore('course', {
         }
       }
       await this.fetchCoursesFromApi()
+
+      if (typeof window !== 'undefined') {
+        const redirectPath = localStorage.getItem('redirectAfterLoad')
+        if (redirectPath && this.courses[this.activeCourseId]) {
+          localStorage.removeItem('redirectAfterLoad')
+          navigateTo(redirectPath)
+        }
+      }
     },
 
     async loadCourses() {

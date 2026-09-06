@@ -209,8 +209,8 @@ const visualData = computed(() => {
   }
 
   // 2. Automatic fallback deduction based on Question & Options
-  // Skip automatic object-counting fallback for exercise types that already render their own components (sequence, matching, fill_in_blank without count)
-  if (ex.type === 'sequence_ordering' || ex.type === 'matching' || ex.type === 'fill_in_blank') {
+  // Skip automatic object-counting fallback for exercise types that already render their own components (sequence, matching, fill_in_blank, category sorting, etc.)
+  if (ex.type === 'sequence_ordering' || ex.type === 'matching' || ex.type === 'fill_in_blank' || ex.type === 'category_sorting' || ex.type === 'drag_to_sort') {
     return null
   }
 
@@ -265,6 +265,21 @@ const visualData = computed(() => {
 })
 
 const hasVisual = computed(() => {
+  const hiddenTypes = [
+    'drag_and_drop', 
+    'pattern_matching', 
+    'true_false_image', 
+    'count_select', 
+    'number_tracing', 
+    'shadow_matching', 
+    'time_reading',
+    'category_sorting',
+    'drag_to_sort',
+    'hotspot',
+    'seek_find',
+    'odd_one_out'
+  ]
+  if (hiddenTypes.includes(props.exercise.type)) return false
   return !!(props.exercise?.image || visualData.value)
 })
 

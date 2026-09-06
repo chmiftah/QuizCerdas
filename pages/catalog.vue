@@ -50,7 +50,7 @@
             </h2>
             <p class="text-xs font-heading font-semibold text-slate-500 mt-0.5 flex items-center gap-1.5">
               <span>Pilih pulau modul 3D atau daftar kartu ({{ filteredCourses.length }} Modul)</span>
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+  
             </p>
           </div>
 
@@ -101,28 +101,121 @@
           </div>
         </div>
 
-        <div v-else class="relative group/carousel pt-2">
-          <!-- Left Scroll Button -->
-          <button 
-            v-if="viewMode === 'carousel' && filteredCourses.length > 2"
-            @click="scrollCarousel('left')"
-            class="absolute left-[-20px] top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white rounded-full shadow-lg border-2 border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:border-slate-300 transition-all opacity-0 group-hover/carousel:opacity-100 hidden sm:flex cursor-pointer active:scale-95"
-          >
-            <span class="text-2xl font-bold">←</span>
-          </button>
+        <div v-else class="space-y-12">
+          <!-- Multi-Row Auto Loop Carousel -->
+          <div v-if="viewMode === 'carousel'" class="space-y-12 relative group/carousel">
+            <!-- Left Scroll Arrow Button -->
+            <button 
+              @click="scrollRows('left')"
+              class="absolute left-[-20px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white rounded-full shadow-lg border-2 border-slate-200 flex items-center justify-center text-slate-600 hover:text-slate-900 hover:border-slate-300 transition-all opacity-0 group-hover/carousel:opacity-100 hidden sm:flex cursor-pointer active:scale-95"
+              aria-label="Scroll Kiri"
+            >
+              <span class="text-2xl font-bold">←</span>
+            </button>
 
+            <div 
+              v-for="row in 2" 
+              :key="row"
+              :ref="el => rowRefs[row - 1] = el"
+              class="relative overflow-hidden scroll-smooth"
+            >
+              <div 
+                class="flex gap-6 animate-scroll hover:[animation-play-state:paused]"
+                :class="row === 2 ? 'direction-reverse' : ''"
+              >
+                <!-- Duplicate items for seamless loop -->
+                <div 
+                  v-for="item in [...filteredCourses, ...filteredCourses, ...filteredCourses]" 
+                  :key="`${row}-${item.id}-${Math.random()}`"
+                  class="bg-white rounded-3xl border-4 p-6 shadow-lg hover:shadow-xl transition-all duration-200 flex flex-col justify-between group relative overflow-hidden shrink-0 w-[85vw] sm:w-[400px]"
+                  :class="[getCardBorderClass(item.themeColor)]"
+                >
+                  <div class="space-y-4">
+                    <!-- Top Banner & Badge -->
+                    <div class="flex items-start justify-between gap-2">
+                      <div 
+                        class="w-16 h-16 rounded-2xl flex items-center justify-center font-heading text-3xl font-bold group-hover:scale-110 transition-transform"
+                        :class="getIconBgClass(item.themeColor)"
+                      >
+                        {{ item.icon }}
+                      </div>
+
+                      <div class="flex flex-col items-end gap-1">
+                        <span 
+                          v-if="item.isReady"
+                          class="px-3 py-1 bg-emerald-100 border border-emerald-300 text-emerald-800 rounded-full font-heading font-extrabold text-xs shadow-2xs"
+                        >
+                          ✨ {{ item.target_audience }}
+                        </span>
+                        <span 
+                          class="px-2.5 py-0.5 bg-blue-50 border border-blue-200 text-blue-700 rounded-full font-heading font-black text-[10px] shadow-2xs inline-flex items-center gap-1"
+                        >
+                          <span>🐘 Database PostgreSQL</span>
+                        </span>
+                      </div>
+                    </div>
+
+                    <!-- Title & Description -->
+                    <div class="space-y-1.5">
+                      <h3 class="font-heading text-2xl font-black text-slate-800 transition-colors">
+                        {{ item.title }}
+                      </h3>
+                      <p class="text-xs sm:text-sm text-slate-600 font-body leading-relaxed line-clamp-2">
+                        {{ item.description }}
+                      </p>
+                    </div>
+
+                    <!-- Course Metadata Stats -->
+                    <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs font-heading font-bold text-slate-600">
+                      <span v-if="item.isReady">
+                        {{ getCourseStats(item).units }} Unit • {{ getCourseStats(item).lessons }} Pelajaran
+                      </span>
+                      <span v-else>
+                        Materi Dalam Pengembangan
+                      </span>
+
+                      <span v-if="item.isReady" class="text-duo-green-dark font-extrabold">
+                        {{ getCourseStats(item).progress }}% Selesai
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Action Button -->
+                  <div class="pt-6">
+                    <button 
+                      v-if="item.isReady"
+                      @click="selectAndOpenCourse(item.id)" 
+                      class="w-full py-4 text-center text-base font-heading font-extrabold flex items-center justify-center gap-2 shadow-lg group-hover:scale-[1.02] transition-transform cursor-pointer rounded-2xl"
+                      :class="getButtonClass(item.themeColor)"
+                    >
+                      <span>🚀 Buka Peta Jalur</span>
+                      <span class="text-xl">➔</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Scroll Arrow Button -->
+            <button 
+              @click="scrollRows('right')"
+              class="absolute right-[-20px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white rounded-full shadow-lg border-2 border-slate-200 flex items-center justify-center text-slate-600 hover:text-slate-900 hover:border-slate-300 transition-all opacity-0 group-hover/carousel:opacity-100 hidden sm:flex cursor-pointer active:scale-95"
+              aria-label="Scroll Kanan"
+            >
+              <span class="text-2xl font-bold">→</span>
+            </button>
+          </div>
+
+          <!-- Standard Grid Mode -->
           <div 
-            ref="carouselContainer"
-            class="transition-all scroll-smooth" 
-            :class="viewMode === 'carousel' ? 'flex overflow-x-auto snap-x snap-mandatory gap-6 pb-6' : 'grid grid-cols-1 md:grid-cols-2 gap-6'" 
-            style="scrollbar-width: none;"
+            v-else
+            class="grid grid-cols-1 md:grid-cols-2 gap-6"
           >
-          
             <div 
               v-for="item in filteredCourses" 
               :key="item.id"
               class="bg-white rounded-3xl border-4 p-6 shadow-lg hover:shadow-xl transition-all duration-200 flex flex-col justify-between group relative overflow-hidden animate-pop"
-              :class="[getCardBorderClass(item.themeColor), viewMode === 'carousel' ? 'snap-center shrink-0 w-[85vw] sm:w-[400px]' : 'w-full']"
+              :class="[getCardBorderClass(item.themeColor)]"
             >
               <div class="space-y-4">
                 <!-- Top Banner & Badge -->
@@ -141,11 +234,6 @@
                     >
                       ✨ {{ item.target_audience }}
                     </span>
-                    <span 
-                      class="px-2.5 py-0.5 bg-blue-50 border border-blue-200 text-blue-700 rounded-full font-heading font-black text-[10px] shadow-2xs inline-flex items-center gap-1"
-                    >
-                      <span>🐘 Database PostgreSQL</span>
-                    </span>
                   </div>
                 </div>
 
@@ -159,31 +247,13 @@
                   </p>
                 </div>
 
-                <!-- Module Features Pills -->
-                <div class="flex flex-wrap gap-1.5 pt-1">
-                  <span 
-                    v-for="(feat, idx) in item.features" 
-                    :key="idx"
-                    class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-700 font-heading font-bold text-[11px] border border-slate-200"
-                  >
-                    {{ feat }}
-                  </span>
-                </div>
-
                 <!-- Course Metadata Stats -->
                 <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs font-heading font-bold text-slate-600">
                   <span v-if="item.isReady">
                     {{ getCourseStats(item).units }} Unit • {{ getCourseStats(item).lessons }} Pelajaran
                   </span>
-                  <span v-else>
-                    Materi Dalam Pengembangan
-                  </span>
-
                   <span v-if="item.isReady" class="text-duo-green-dark font-extrabold">
                     {{ getCourseStats(item).progress }}% Progress Selesai
-                  </span>
-                  <span v-else class="text-slate-400 font-bold">
-                    Segera Hadir
                   </span>
                 </div>
               </div>
@@ -193,32 +263,15 @@
                 <button 
                   v-if="item.isReady"
                   @click="selectAndOpenCourse(item.id)" 
-                  class="w-full py-4 text-center text-base font-heading font-extrabold flex items-center justify-center gap-2 shadow-lg group-hover:scale-[1.02] transition-transform cursor-pointer"
+                  class="w-full py-4 text-center text-base font-heading font-extrabold flex items-center justify-center gap-2 shadow-lg group-hover:scale-[1.02] transition-transform cursor-pointer rounded-2xl"
                   :class="getButtonClass(item.themeColor)"
                 >
                   <span>🚀 Buka Peta Jalur Belajar</span>
                   <span class="text-xl">➔</span>
                 </button>
-
-                <button 
-                  v-else
-                  disabled
-                  class="w-full py-4 text-center text-base font-heading font-extrabold flex items-center justify-center gap-2 bg-slate-200 text-slate-400 rounded-2xl cursor-not-allowed"
-                >
-                  <span>🔒 Modul Belum Tersedia</span>
-                </button>
               </div>
             </div>
           </div>
-
-          <!-- Right Scroll Button -->
-          <button 
-            v-if="viewMode === 'carousel' && filteredCourses.length > 2"
-            @click="scrollCarousel('right')"
-            class="absolute right-[-20px] top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white rounded-full shadow-lg border-2 border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:border-slate-300 transition-all opacity-0 group-hover/carousel:opacity-100 hidden sm:flex cursor-pointer active:scale-95"
-          >
-            <span class="text-2xl font-bold">→</span>
-          </button>
         </div>
       </div>
     </main>
@@ -243,18 +296,19 @@ const courseStore = useCourseStore()
 
 const activeCategory = ref('all')
 const viewMode = ref('carousel')
-const carouselContainer = ref(null)
+const rowRefs = ref([])
 
-const scrollCarousel = (direction) => {
-  if (!carouselContainer.value) return
-  // Standard card width (400px) + gap (24px)
-  const scrollAmount = 424 
-  if (direction === 'left') {
-    carouselContainer.value.scrollBy({ left: -scrollAmount, behavior: 'smooth' })
-  } else {
-    carouselContainer.value.scrollBy({ left: scrollAmount, behavior: 'smooth' })
-  }
+const scrollRows = (direction) => {
+  rowRefs.value.forEach(el => {
+    if (el) {
+      const scrollAmount = 424
+      el.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' })
+    }
+  })
 }
+
+
+
 
 const categories = [
   { id: 'all', label: '⭐ Semua Modul' },

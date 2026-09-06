@@ -1,23 +1,33 @@
 import prisma from '~/server/utils/prisma'
+import { validateSessionToken } from '../../utils/security'
 
 export default defineEventHandler(async (event) => {
-  const query = getQuery(event)
-  const userId = query.userId as string
-  const email = query.email as string
-
-  if (!userId && !email) {
+  const token = getCookie(event, 'auth_session')
+  if (!token) {
     throw createError({
-      statusCode: 400,
-      statusMessage: 'Parameter userId atau email wajib disertakan'
+      statusCode: 401,
+      statusMessage: 'Sesi tidak valid. Silakan login kembali.'
     })
   }
+
+  const session = validateSessionToken(token)
+  if (!session) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: 'Sesi tidak valid atau sudah kadaluarsa. Silakan login kembali.'
+    })
+  }
+
+  // Use userId from session, ignore client-provided userId/email
+  const userId = session.userId
+  const email = session.email
 
   try {
     const user = await prisma.user.findFirst({
       where: {
         OR: [
-          ...(userId ? [{ id: userId }] : []),
-          ...(email ? [{ email: email }] : [])
+          { id: userId },
+          { email: email }
         ]
       },
       select: {
@@ -63,3 +73,4 @@ export default defineEventHandler(async (event) => {
     })
   }
 })
+

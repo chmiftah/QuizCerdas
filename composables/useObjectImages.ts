@@ -46,5 +46,11 @@ export function getObjectImageUrl(item: any): string | null {
   const clean = item.trim().toLowerCase()
   if (EMOJI_TO_IMAGE_MAP[clean]) return EMOJI_TO_IMAGE_MAP[clean]
   if (EMOJI_TO_IMAGE_MAP[item]) return EMOJI_TO_IMAGE_MAP[item]
+
+  for (const [key, path] of Object.entries(EMOJI_TO_IMAGE_MAP)) {
+    if (clean.includes(key.toLowerCase()) || item.includes(key)) {
+      return path
+    }
+  }
   return null
 }

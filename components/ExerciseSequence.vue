@@ -9,34 +9,47 @@
     </div>
 
     <!-- Sequence Cards Display -->
-    <div class="p-5 sm:p-6 bg-amber-50/80 rounded-3xl border-3 border-amber-300 shadow-md flex justify-center items-center gap-2.5 sm:gap-3.5 flex-wrap">
-      <button
-        v-for="(item, idx) in currentSequence"
-        :key="idx"
-        @click="handleCardClick(idx)"
-        type="button"
-        class="rounded-2xl font-heading font-black flex items-center justify-center border-4 shadow-md transition-all duration-200 cursor-pointer active:scale-95 px-3 py-2.5 sm:px-5 sm:py-3.5"
-        :class="[
-          isLongText(item) 
-            ? 'min-w-[110px] sm:min-w-[130px] h-16 sm:h-20 text-sm sm:text-base md:text-lg whitespace-nowrap' 
-            : 'w-16 h-20 sm:w-20 sm:h-24 text-3xl sm:text-4xl',
-          item === '?' 
-            ? 'bg-amber-300 text-amber-950 border-amber-500 animate-pulse' 
-            : selectedIdx === idx 
-              ? 'bg-amber-400 text-white border-amber-600 scale-105 shadow-lg ring-4 ring-amber-300/50' 
-              : 'bg-white text-slate-800 border-slate-200 hover:border-amber-400'
-        ]"
-      >
-        <div class="flex items-center justify-center gap-2">
-          <img 
-            v-if="getObjectImageUrl(item)" 
-            :src="getObjectImageUrl(item)" 
-            :alt="item" 
-            class="w-8 h-8 sm:w-10 sm:h-10 object-cover rounded-lg shadow-2xs border border-slate-200 shrink-0" 
-          />
-          <span>{{ item }}</span>
-        </div>
-      </button>
+    <div class="space-y-4">
+      <div class="p-5 sm:p-6 bg-amber-50/80 rounded-3xl border-3 border-amber-300 shadow-md flex justify-center items-center gap-2.5 sm:gap-3.5 flex-wrap">
+        <button
+          v-for="(item, idx) in currentSequence"
+          :key="idx"
+          @click="handleCardClick(idx)"
+          type="button"
+          class="rounded-2xl font-heading font-black flex items-center justify-center border-4 shadow-md transition-all duration-200 cursor-pointer active:scale-95 px-3 py-2.5 sm:px-5 sm:py-3.5"
+          :class="[
+            isLongText(item) 
+              ? 'min-w-[110px] sm:min-w-[130px] h-16 sm:h-20 text-sm sm:text-base md:text-lg whitespace-nowrap' 
+              : 'w-16 h-20 sm:w-20 sm:h-24 text-3xl sm:text-4xl',
+            item === '?' 
+              ? 'bg-amber-300 text-amber-950 border-amber-500 animate-pulse' 
+              : selectedIdx === idx 
+                ? 'bg-amber-400 text-white border-amber-600 scale-105 shadow-lg ring-4 ring-amber-300/50' 
+                : 'bg-white text-slate-800 border-slate-200 hover:border-amber-400'
+          ]"
+        >
+          <div class="flex items-center justify-center gap-2">
+            <img 
+              v-if="getObjectImageUrl(item)" 
+              :src="getObjectImageUrl(item)" 
+              :alt="item" 
+              class="w-8 h-8 sm:w-10 sm:h-10 object-cover rounded-lg shadow-2xs border border-slate-200 shrink-0" 
+            />
+            <span>{{ item }}</span>
+          </div>
+        </button>
+      </div>
+
+      <!-- Reset Button -->
+      <div class="flex justify-center">
+        <button 
+          @click="initSequence" 
+          type="button"
+          class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl font-heading font-bold text-xs flex items-center gap-2 transition-colors cursor-pointer border border-slate-200"
+        >
+          <span>🔄 Reset Urutan</span>
+        </button>
+      </div>
     </div>
 
     <!-- Options Palette -->
@@ -102,6 +115,9 @@ const hasLongTextOptions = computed(() => {
 const initSequence = () => {
   if (props.exercise.visual?.sequence) {
     currentSequence.value = [...props.exercise.visual.sequence]
+  } else if (props.exercise.options && props.exercise.options.length > 0) {
+    // Jika tidak ada visual.sequence, gunakan options (untuk soal urutan lengkap)
+    currentSequence.value = [...props.exercise.options]
   } else {
     currentSequence.value = ['1', '2', '?', '4']
   }

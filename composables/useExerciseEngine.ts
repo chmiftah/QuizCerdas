@@ -11,6 +11,7 @@ export function useExerciseEngine(exercises: Exercise[], onLessonComplete?: (xp:
   const fillBlankInput = ref<string>('')
   const dragDropCount = ref<number>(0)
   const categoryMap = ref<string>('')
+  const dragToSortCategoryMap = ref<string>('')
   const memoryMatchCount = ref<number>(0)
   const matchingSelections = ref<Record<string, string>>({}) // leftItem -> rightItem
   const activeMatchingLeft = ref<string | null>(null)
@@ -104,9 +105,19 @@ export function useExerciseEngine(exercises: Exercise[], onLessonComplete?: (xp:
     if (isChecked.value) return
     selectedOption.value = opt
   }
+  
+  const handleTrueFalseImage = (opt: string) => {
+    if (isChecked.value) return
+    selectedOption.value = opt
+  }
 
   const handleMatchingClick = (left: string, right: string) => {
     if (isChecked.value) return
+    for (const key of Object.keys(matchingSelections.value)) {
+      if (matchingSelections.value[key] === right) {
+        delete matchingSelections.value[key]
+      }
+    }
     matchingSelections.value[left] = right
   }
 
@@ -126,15 +137,21 @@ export function useExerciseEngine(exercises: Exercise[], onLessonComplete?: (xp:
     const ex = currentExercise.value
     let correct = false
 
-    if (ex.type === 'multiple_choice' || ex.type === 'true_false' || ex.type === 'sequence_ordering' || ex.type === 'comparison' || ex.type === 'pattern_matching' || ex.type === 'odd_one_out' || ex.type === 'shadow_matching') {
+    if (ex.type === 'multiple_choice' || ex.type === 'true_false' || ex.type === 'true_false_image' || ex.type === 'comparison' || ex.type === 'pattern_matching' || ex.type === 'odd_one_out' || ex.type === 'shadow_matching' || ex.type === 'hotspot' || ex.type === 'sound_matching' || ex.type === 'time_reading' || ex.type === 'shape_transform' || ex.type === 'count_select' || ex.type === 'number_tracing') {
       correct = selectedOption.value.trim().toLowerCase() === ex.correct_answer.trim().toLowerCase()
-    } else if (ex.type === 'fill_in_blank') {
+    } else if (ex.type === 'sequence_ordering') {
+      const userSeq = selectedOption.value.split(',').map(s => s.trim().toLowerCase())
+      const targetSeq = ex.correct_answer.split(',').map(s => s.trim().toLowerCase())
+      correct = userSeq.length === targetSeq.length && userSeq.every((val, idx) => val === targetSeq[idx])
+    } else if (ex.type === 'fill_in_blank' || ex.type === 'fill_missing_number') {
       correct = fillBlankInput.value.trim().toLowerCase() === ex.correct_answer.trim().toLowerCase()
     } else if (ex.type === 'drag_and_drop' || ex.type === 'seek_find') {
       correct = String(dragDropCount.value).trim() === ex.correct_answer.trim()
     } else if (ex.type === 'memory_flip') {
       const expectedPairCount = ex.pairs?.length || 2
       correct = memoryMatchCount.value >= expectedPairCount
+    } else if (ex.type === 'word_building' || ex.type === 'puzzle_assembly') {
+      correct = selectedOption.value.trim().toLowerCase() === ex.correct_answer.trim().toLowerCase()
     } else if (ex.type === 'category_sorting') {
       const expectedMap = ex.correct_answer.split('|').reduce((acc, str) => {
         const [item, cat] = str.split('::')
@@ -143,6 +160,20 @@ export function useExerciseEngine(exercises: Exercise[], onLessonComplete?: (xp:
       }, {} as Record<string, string>)
 
       const userMap = categoryMap.value.split('|').reduce((acc, str) => {
+        const [item, cat] = str.split('::')
+        if (item && cat) acc[item.trim()] = cat.trim()
+        return acc
+      }, {} as Record<string, string>)
+
+      correct = Object.keys(expectedMap).length > 0 && Object.keys(expectedMap).every(k => userMap[k] === expectedMap[k])
+    } else if (ex.type === 'drag_to_sort') {
+      const expectedMap = ex.correct_answer.split('|').reduce((acc, str) => {
+        const [item, cat] = str.split('::')
+        if (item && cat) acc[item.trim()] = cat.trim()
+        return acc
+      }, {} as Record<string, string>)
+
+      const userMap = dragToSortCategoryMap.value.split('|').reduce((acc, str) => {
         const [item, cat] = str.split('::')
         if (item && cat) acc[item.trim()] = cat.trim()
         return acc
@@ -196,12 +227,13 @@ export function useExerciseEngine(exercises: Exercise[], onLessonComplete?: (xp:
     isChecked.value = false
     showHint.value = false
     selectedOption.value = ''
-    fillBlankInput.value = ''
-    categoryMap.value = ''
-    memoryMatchCount.value = 0
-    matchingSelections.value = {}
-    activeMatchingLeft.value = null
-    feedbackExplanation.value = ''
+      fillBlankInput.value = ''
+      categoryMap.value = ''
+      memoryMatchCount.value = 0
+      matchingSelections.value = {}
+      activeMatchingLeft.value = null
+      feedbackExplanation.value = ''
+      dragToSortCategoryMap.value = ''
 
     if (currentIndex.value < totalExercises.value - 1) {
       currentIndex.value++
@@ -266,7 +298,9 @@ export function useExerciseEngine(exercises: Exercise[], onLessonComplete?: (xp:
     feedbackExplanation,
     isLessonFinished,
     correctCount,
+    dragToSortCategoryMap,
     selectOption,
+    handleTrueFalseImage,
     handleMatchingClick,
     resetMatching,
     unpairMatching,

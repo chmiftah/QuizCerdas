@@ -1,5 +1,6 @@
 import prisma from '~/server/utils/prisma'
 import bcrypt from 'bcryptjs'
+import { createSessionToken } from '../../utils/security'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
@@ -33,16 +34,24 @@ export default defineEventHandler(async (event) => {
 
     // Compare bcrypt password
     const isPasswordValid = await bcrypt.compare(body.password, user.password)
-    
-    // Fallback comparison for demo accounts created before hashing
-    const isDemoPassword = body.password === 'siswa123' || body.password === 'guru123' || body.password === 'default_password'
 
-    if (!isPasswordValid && !isDemoPassword) {
+    if (!isPasswordValid) {
       throw createError({
         statusCode: 401,
         statusMessage: 'Kata sandi salah. Silakan coba lagi.'
       })
     }
+
+    // Generate secure session token
+    const token = createSessionToken(user.id, user.email)
+
+    // Set secure HTTP-only cookie
+    setCookie(event, 'auth_session', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60 // 1 day
+    })
 
     console.log(`[POSTGRESQL] User logged in: ${user.email} (ID: ${user.id})`)
 

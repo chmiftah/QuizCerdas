@@ -3,7 +3,8 @@ import mengenalAngkaTk from '~/data/course_mengenal_angka_tk.json'
 import courseCounting from '~/data/course_counting.json'
 import courseBerhitungTk01 from '~/data/course_berhitung_tk_01.json'
 import courseHewanTkSd from '~/data/course_hewan_tk_sd.json'
-import courseMasterTypes from '~/data/course_master_13_types.json'
+import course23Types from '~/data/course_23_types.json'
+import course24Types1Unit from '~/data/course_24_types_1unit.json'
 import coursePenjumlahanBuah from '~/data/course_penjumlahan_buah.json'
 
 export default defineEventHandler(async (event) => {
@@ -35,24 +36,37 @@ export default defineEventHandler(async (event) => {
         }
       }))
 
-      // Inject the local Master Showcase to guarantee we use the fixed JSON
-      const masterCourse = {
-        id: 'course_master_types',
-        title: 'Master Showcase: 13 Tipe Interaktif',
-        description: 'Modul demonstrasi khusus yang merangkum keseluruhan 13 jenis variasi soal interaktif dalam satu tempat.',
-        target_audience: 'Semua Umur',
-        category: 'science',
-        icon: '🕹️',
-        themeColor: 'red',
-        features: ['Menampilkan 13 Tipe Soal', 'Seret & Lepas', 'Tarik Garis', 'Soal Bergambar'],
+      // Inject the local Master Showcases
+      const master1UnitCourse = {
+        id: 'course_24_types_1unit',
+        title: '🏆 Modul 1 Unit: 24 Jenis Soal Lengkap',
+        description: 'Kursus 1 Unit yang menyajikan seluruh 24 jenis tipe soal interaktif secara lengkap dalam satu jalur belajar petualangan.',
+        target_audience: 'Anak TK & SD (4-9 tahun)',
+        category: 'math',
+        icon: '🏆',
+        themeColor: 'green',
+        features: ['1 Unit Praktis', '24 Jenis Soal Lengkap', 'Marathon & Sesi Bertahap'],
         isReady: true,
-        courseData: courseMasterTypes.course
+        courseData: course24Types1Unit.course
+      }
+
+      const masterCourse = {
+        id: 'course_23_types',
+        title: '🎓 Kursus 24 Jenis Soal Interaktif',
+        description: 'Modul lengkap dengan 24 jenis soal interaktif untuk anak usia 4-9 tahun.',
+        target_audience: 'Anak TK & SD (4-9 tahun)',
+        category: 'math',
+        icon: '🎮',
+        themeColor: 'green',
+        features: ['24 Jenis Soal', 'Scaffolding 7 Level', 'Audio & Visual'],
+        isReady: true,
+        courseData: course23Types.course
       }
       
       // Remove any DB version of master course to prevent duplicates
-      const filteredDbCourses = mappedDbCourses.filter(c => c.id !== 'course_master_types')
+      const filteredDbCourses = mappedDbCourses.filter(c => c.id !== 'course_23_types' && c.id !== 'course_24_types_1unit')
       
-      return [masterCourse, ...filteredDbCourses]
+      return [master1UnitCourse, masterCourse, ...filteredDbCourses]
     }
   } catch (error: any) {
     console.warn('[POSTGRESQL] Database empty or offline, serving local fallback JSONs:', error.message)
@@ -61,16 +75,28 @@ export default defineEventHandler(async (event) => {
   // Fallback local courses
   return [
     {
-      id: 'course_master_types',
-      title: 'Master Showcase: 13 Tipe Interaktif',
-      description: 'Modul demonstrasi khusus yang merangkum keseluruhan 13 jenis variasi soal interaktif dalam satu tempat.',
-      target_audience: 'Semua Umur',
-      category: 'science',
-      icon: '🕹️',
-      themeColor: 'red',
-      features: ['Menampilkan 13 Tipe Soal', 'Seret & Lepas', 'Tarik Garis', 'Soal Bergambar'],
+      id: 'course_24_types_1unit',
+      title: '🏆 Modul 1 Unit: 24 Jenis Soal Lengkap',
+      description: 'Kursus 1 Unit yang menyajikan seluruh 24 jenis tipe soal interaktif secara lengkap dalam satu jalur belajar petualangan.',
+      target_audience: 'Anak TK & SD (4-9 tahun)',
+      category: 'math',
+      icon: '🏆',
+      themeColor: 'green',
+      features: ['1 Unit Praktis', '24 Jenis Soal Lengkap', 'Marathon & Sesi Bertahap'],
       isReady: true,
-      courseData: courseMasterTypes.course
+      courseData: course24Types1Unit.course
+    },
+    {
+      id: 'course_23_types',
+      title: '🎓 Kursus 24 Jenis Soal Interaktif',
+      description: 'Modul lengkap dengan 24 jenis soal interaktif untuk anak usia 4-9 tahun.',
+      target_audience: 'Anak TK & SD (4-9 tahun)',
+      category: 'math',
+      icon: '🎮',
+      themeColor: 'green',
+      features: ['24 Jenis Soal', 'Scaffolding 7 Level', 'Audio & Visual'],
+      isReady: true,
+      courseData: course23Types.course
     },
     {
       id: 'course_hewan_tk_sd',

@@ -22,11 +22,11 @@
             </div>
 
             <h1 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-black text-slate-800 tracking-tight leading-[1.15]">
-              Membangun <span class="text-duo-green underline decoration-duo-yellow decoration-wavy">Kemandirian Belajar Anak</span> Sejak Dini Secara <span class="text-duo-blue">Interaktif & Efektif.</span> 🦉
+              Belajar Anak Kini <span class="text-duo-green underline decoration-duo-yellow decoration-wavy">Jauh Lebih Seru</span> & <span class="text-duo-blue">Efektif!</span> 🦉
             </h1>
 
             <p class="text-base sm:text-lg text-slate-600 font-body leading-relaxed max-w-2xl mx-auto lg:mx-0">
-              CountingDuo mengintegrasikan kurikulum Matematika, Sains, dan Bahasa Indonesia dengan metode gamifikasi edukatif. Membantu anak usia 4–9 tahun belajar secara mandiri, konsisten, dan menyenangkan — <strong class="text-slate-800">100% gratis & tanpa iklan.</strong>
+              95% Orang Tua laporkan peningkatan motivasi belajar anak dalam 2 minggu. CountingDuo: gamifikasi edukatif Matematika, Sains, Bahasa. Anak usia 4–9 tahun belajar mandiri, konsisten, menyenangkan — <strong class="text-slate-800">100% gratis & tanpa iklan.</strong>
             </p>
 
             <!-- Primary CTA -->
@@ -36,7 +36,7 @@
                 class="w-full sm:w-auto px-6 py-3.5 sm:px-8 sm:py-4 duo-btn-green text-sm sm:text-base lg:text-lg font-extrabold whitespace-nowrap shadow-xl group hover:scale-105 transition-transform"
                 id="btn-hero-register"
               >
-                <span>🚀 Mulai Belajar Gratis — Sekarang!</span>
+                <span>🚀 Mulai Belajar Gratis — Hanya Hari Ini!</span>
               </NuxtLink>
               <NuxtLink 
                 to="/catalog" 
@@ -75,6 +75,7 @@
             </div>
           </div>
 
+          <!-- Right Hero 3D Interactive Mascot Visual -->
           <!-- Right Hero 3D Interactive Mascot Visual -->
           <div class="lg:col-span-5 relative flex justify-center z-10">
             <div class="relative w-full max-w-xl">

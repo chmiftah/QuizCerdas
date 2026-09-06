@@ -100,9 +100,16 @@ const engine = shallowRef(null)
 
 onMounted(() => {
   userStore.loadFromStorage()
-  courseStore.loadActiveCourse()
-
+  
+  if (!courseStore.courses[courseStore.activeCourseId]) {
+    courseStore.loadActiveCourse()
+  }
+  
   if (!lesson.value) {
+    const currentPath = `/course/${unitId}/${lessonId}`
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('redirectAfterLoad', currentPath)
+    }
     router.push('/course')
     return
   }

@@ -1,5 +1,6 @@
 import prisma from '~/server/utils/prisma'
 import bcrypt from 'bcryptjs'
+import { createSessionToken } from '../../utils/security'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
@@ -55,6 +56,17 @@ export default defineEventHandler(async (event) => {
         hearts: 5,
         streak: 1
       }
+    })
+
+    // Generate secure session token for auto-login after registration
+    const token = createSessionToken(newUser.id, newUser.email)
+
+    // Set secure HTTP-only cookie
+    setCookie(event, 'auth_session', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60 // 1 day
     })
 
     console.log(`[POSTGRESQL] User registered successfully: ${newUser.email} (ID: ${newUser.id})`)

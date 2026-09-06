@@ -65,13 +65,32 @@
   animation: duo-pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-@keyframes duo-pulse-glow {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(88, 204, 2, 0.4); }
-  50% { transform: scale(1.05); box-shadow: 0 0 0 14px rgba(88, 204, 2, 0); }
-}
+  @keyframes duo-pulse-glow {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(88, 204, 2, 0.4); }
+    50% { transform: scale(1.05); box-shadow: 0 0 0 14px rgba(88, 204, 2, 0); }
+  }
+
+  @keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  @keyframes scroll-reverse {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+  }
+
 
 .animate-pulse-glow {
   animation: duo-pulse-glow 2s infinite;
+}
+
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+}
+
+.direction-reverse {
+  animation: scroll-reverse 30s linear infinite;
 }
 
 @layer utilities {

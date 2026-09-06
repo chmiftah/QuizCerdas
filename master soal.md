@@ -7,20 +7,20 @@ Tugasmu adalah membuat materi pembelajaran lengkap dalam format JSON yang VALID 
 
 Setiap Pelajaran (Lesson) WAJIB berisi **7 Soal** yang disusun bertahap secara sistematis dari yang paling mudah ke yang lebih menantang (scaffolding approach):
 
-1. **Soal 1 (Level 1 - Pengenalan Visual Langsung)**:
-   - Memilih objek atau angka langsung dengan bantuan gambar/emoji (Contoh: *"Ada berapa buah apel di gambar?"*). Tipe: `multiple_choice` / `true_false`.
-2. **Soal 2 (Level 2 - Interaksi Seret Objek)**:
-   - Menghitung & memindahkan objek ke keranjang (Contoh: *"Masukkan 2 pisang 🍌 ke keranjang"*). Tipe: `drag_and_drop`.
-3. **Soal 3 (Level 3 - Cari & Temukan)**:
-   - Mencari & menemukan objek tersembunyi (Contoh: *"Temukan 3 ekor kucing 🐱 di taman!"*). Tipe: `seek_find`.
-4. **Soal 4 (Level 4 - Mencocokkan Pasangan)**:
-   - Mencocokkan angka dengan jumlah gambar (Contoh: *"Pasangkan angka 1, 2, 3 dengan jumlah gambarnya"*). Tipe: `matching`.
-5. **Soal 5 (Level 5 - Membandingkan Jumlah)**:
-   - Membandingkan dua kelompok objek (Contoh: *"Mana kelompok yang LEBIH BANYAK?"*). Tipe: `comparison`.
-6. **Soal 6 (Level 6 - Urutan & Pola Logika)**:
-   - Melengkapi angka hilang atau pola gambar berulang (Contoh: *"1, 2, ?, 4. Berapa angka di tanda tanya?"*). Tipe: `sequence_ordering` / `pattern_matching`.
-7. **Soal 7 (Level 7 - Tantangan Soal Cerita & Isian)**:
-   - Soal cerita sederhana / pemecahan masalah (Contoh: *"Ani punya 1 balon 🎈, lalu Ibu memberi 1 balon lagi. Berapa total balon Ani?"*). Tipe: `fill_in_blank`.
+1. **Soal 1 (Level 1 - Pengenalan Visual & Motorik Awal)**:
+   - Memilih objek/angka visual langsung atau menjiplak angka sederhana. Tipe: `multiple_choice` / `true_false` / `number_tracing`.
+2. **Soal 2 (Level 2 - Interaksi Fisik / Seret Objek)**:
+   - Menghitung & memindahkan objek ke keranjang atau menjiplak. Tipe: `drag_and_drop` / `count_select` / `number_tracing`.
+3. **Soal 3 (Level 3 - Cari & Temukan / Visual Attention)**:
+   - Mencari & menemukan objek tersembunyi atau gambar benar/salah. Tipe: `seek_find` / `true_false_image` / `hotspot`.
+4. **Soal 4 (Level 4 - Mencocokkan Pasangan & Relasi)**:
+   - Mencocokkan angka dengan gambar, bayangan, atau suara. Tipe: `matching` / `shadow_matching` / `sound_matching`.
+5. **Soal 5 (Level 5 - Membandingkan & Mengelompokkan)**:
+   - Membandingkan jumlah atau menyortir kategori. Tipe: `comparison` / `category_sorting` / `drag_to_sort` / `odd_one_out`.
+6. **Soal 6 (Level 6 - Urutan, Waktu, & Pola Logika)**:
+   - Melengkapi pola berulang, barisan angka, membaca jam, atau puzzle. Tipe: `sequence_ordering` / `pattern_matching` / `fill_missing_number` / `time_reading` / `puzzle_assembly` / `shape_transform`.
+7. **Soal 7 (Level 7 - Tantangan Soal Cerita, Isian, & Susun Kata)**:
+   - Soal cerita pemecahan masalah atau menyusun kata mandiri. Tipe: `fill_in_blank` / `word_building` / `memory_flip`.
 
 ---
 ### 📌 INFORMASI MATERI YANG INGIN DIBUAT:
@@ -34,75 +34,132 @@ Setiap Pelajaran (Lesson) WAJIB berisi **7 Soal** yang disusun bertahap secara s
 ### ⚙️ ATURAN STRUKTUR JSON (HARUS SESUAI SKEMA):
 
 1. Format utama harus berupa JSON Object tunggal dengan kunci `"course"`.
-2. Tipe soal (`"type"`) HARUS salah satu dari 13 tipe interaktif berikut:
+2. Tipe soal (`"type"`) HARUS salah satu dari **24 tipe interaktif** berikut:
 
-   - **`"multiple_choice"`** : Pilihan ganda.
-     * `"options"`: Array 4 teks/angka pilihan `["1", "2", "3", "4"]`.
-     * `"correct_answer"`: Teks pilihan yang benar.
+   - **1. `"multiple_choice"`** : Pilihan ganda standar.
+     * `"options"`: Array 4 pilihan `["1", "2", "3", "4"]`.
+     * `"correct_answer"`: Teks pilihan benar `"3"`.
      * `"visual"`: `{ "type": "objects", "label": "🍎", "count": 3 }`.
 
-   - **`"true_false"`** : Benar atau salah.
+   - **2. `"true_false"`** : Pernyataan benar atau salah teks.
      * `"options"`: `["Benar", "Salah"]`.
      * `"correct_answer"`: `"Benar"` atau `"Salah"`.
 
-   - **`"fill_in_blank"`** : Isian singkat / angka.
-     * `"options"`: `[]`.
-     * `"correct_answer"`: Teks/angka jawaban singkat.
+   - **3. `"true_false_image"`** : Benar atau salah dengan visualisasi gambar utama.
+     * `"options"`: `["Benar", "Salah"]`.
+     * `"correct_answer"`: `"Benar"`.
+     * `"image"`: URL gambar atau nama file ilustrasi.
 
-   - **`"matching"`** : Mencocokkan pasangan.
+   - **4. `"fill_in_blank"`** : Isian singkat bebas (angka/teks).
+     * `"options"`: `[]` (atau daftar chip kata bantuan opsional).
+     * `"correct_answer"`: Teks/angka jawaban benar `"5"`.
+
+   - **5. `"fill_missing_number"`** : Mengisi angka yang hilang pada baris hitungan.
+     * `"options"`: `[]`.
+     * `"correct_answer"`: `"4"`.
+     * `"visual"`: `{ "sequence": ["2", "3", "?", "5"] }`.
+
+   - **6. `"matching"`** : Menghubungkan pasangan kiri dan kanan.
      * `"options"`: `["1::🍎", "2::🍎🍎", "3::🍎🍎🍎"]`.
-     * `"correct_answer"`: `"1::🍎|2::🍎🍎|3::🍎🍎🍎"` (dipisahkan garis tegak `|`).
+     * `"correct_answer"`: `"1::🍎|2::🍎🍎|3::🍎🍎🍎"` (dipisahkan baris pipa `|`).
 
-   - **`"drag_and_drop"`** : Seret & masukkan objek ke keranjang.
-     * `"options"`: `[]`.
-     * `"correct_answer"`: `"3"` (jumlah target objek).
-     * `"visual"`: `{ "type": "objects", "label": "🍎", "count": 5 }`.
-
-   - **`"sequence_ordering"`** : Urutan angka & angka hilang.
-     * `"options"`: `["1", "2", "3", "4"]`.
-     * `"correct_answer"`: `"3"` (angka yang mengisi tanda `?`).
-     * `"visual"`: `{ "sequence": ["1", "2", "?", "4"] }`.
-
-   - **`"comparison"`** : Bandingkan jumlah (Lebih banyak / lebih sedikit / sama).
-     * `"options"`: `["A", "B", "Sama"]`.
-     * `"correct_answer"`: `"B"` (pilihan kelompok yang benar).
-     * `"visual"`: `{ "groupA": { "count": 3, "icon": "🍎", "label": "Kelompok A" }, "groupB": { "count": 5, "icon": "🍌", "label": "Kelompok B" } }`.
-
-   - **`"pattern_matching"`** : Tebak pola gambar berulang.
-     * `"options"`: `["🍎", "🍌", "🍇", "🍊"]`.
-     * `"correct_answer"`: `"🍎"`.
-     * `"visual"`: `{ "pattern": ["🍎", "🍌", "🍎", "🍌", "?"] }`.
-
-   - **`"seek_find"`** : Cari & temukan objek tersembunyi.
-     * `"options"`: `[]`.
-     * `"correct_answer"`: `"4"` (jumlah objek tersembunyi yang wajib dicari).
-     * `"visual"`: `{ "label": "🦋", "items": [{ "x": 15, "y": 20, "icon": "🦋" }, { "x": 75, "y": 15, "icon": "🦋" }] }`.
-
-   - **`"category_sorting"`** : Kelompokkan objek sesuai kategori.
-     * `"categories"`: `["Darat", "Laut"]`.
-     * `"items"`: `[{ "id": "1", "name": "Kucing 🐱", "category": "Darat" }, { "id": "2", "name": "Ikan 🐟", "category": "Laut" }]`.
-
-   - **`"odd_one_out"`** : Pilih satu objek yang berbeda dari yang lain.
-     * `"options"`: `["Kucing 🐱", "Anjing 🐶", "Mobil 🚗", "Kelinci 🐰"]`.
-     * `"correct_answer"`: `"Mobil 🚗"`.
-
-   - **`"memory_flip"`** : Permainan balik kartu memori.
-     * `"options"`: `["🍎::Apel", "🍌::Pisang", "🍇::Anggur"]`.
-     * `"correct_answer"`: `"3"` (total pasangan kartu yang cocok).
-
-   - **`"shadow_matching"`** : Mencocokkan objek dengan bayangannya.
+   - **7. `"shadow_matching"`** : Mencocokkan objek dengan bayangan/siluetnya.
      * `"options"`: `["Kucing", "Gajah", "Burung"]`.
      * `"correct_answer"`: `"Kucing"`.
      * `"visual"`: `{ "target": "🐱" }`.
 
-3. Properti Visual Opsional (`"visual"`):
+   - **8. `"drag_and_drop"`** : Menyeret objek ke dalam keranjang.
+     * `"options"`: `[]`.
+     * `"correct_answer"`: `"3"` (jumlah target yang harus dimasukkan).
+     * `"visual"`: `{ "type": "objects", "label": "🍎", "count": 5 }`.
+
+   - **9. `"drag_to_sort"`** : Menyeret item ke dalam kotak kategori masing-masing.
+     * `"options"`: `["Darat", "Laut"]`.
+     * `"correct_answer"`: `"Kucing::Darat|Ikan::Laut"`.
+
+   - **10. `"category_sorting"`** : Mengelompokkan berbagai item ke dalam kategori.
+     * `"categories"`: `["Darat", "Laut"]`.
+     * `"items"`: `[{ "id": "1", "name": "Kucing 🐱", "category": "Darat" }, { "id": "2", "name": "Ikan 🐟", "category": "Laut" }]`.
+     * `"correct_answer"`: `"Kucing 🐱::Darat|Ikan 🐟::Laut"`.
+
+   - **11. `"sequence_ordering"`** : Mengurutkan deretan angka/item dari kecil ke besar.
+     * `"options"`: `["1", "2", "3", "4"]`.
+     * `"correct_answer"`: `"1,2,3,4"` atau angka tanda tanya `"3"`.
+     * `"visual"`: `{ "sequence": ["1", "2", "?", "4"] }`.
+
+   - **12. `"pattern_matching"`** : Melanjutkan pola gambar berulang.
+     * `"options"`: `["🍎", "🍌", "🍇", "🍊"]`.
+     * `"correct_answer"`: `"🍎"`.
+     * `"visual"`: `{ "pattern": ["🍎", "🍌", "🍎", "🍌", "?"] }`.
+
+   - **13. `"odd_one_out"`** : Memilih 1 objek yang paling berbeda/tidak sekelompok.
+     * `"options"`: `["Kucing 🐱", "Anjing 🐶", "Mobil 🚗", "Kelinci 🐰"]`.
+     * `"correct_answer"`: `"Mobil 🚗"`.
+
+   - **14. `"comparison"`** : Membandingkan jumlah dua kelompok (Lebih Banyak / Lebih Sedikit / Sama).
+     * `"options"`: `["A", "B", "Sama"]`.
+     * `"correct_answer"`: `"B"`.
+     * `"visual"`: `{ "groupA": { "count": 3, "icon": "🍎", "label": "Kelompok A" }, "groupB": { "count": 5, "icon": "🍌", "label": "Kelompok B" } }`.
+
+   - **15. `"memory_flip"`** : Permainan mengingat dan membalik kartu kembar.
+     * `"pairs"`: `[{ "id": 1, "front": "🍎", "match": "1" }, { "id": 2, "front": "🍌", "match": "2" }]`.
+     * `"options"`: `["🍎::1", "🍌::2"]`.
+     * `"correct_answer"`: `"2"` (total pasang kartu).
+
+   - **16. `"seek_find"`** : Mencari & menemukan objek tersembunyi pada pemandangan.
+     * `"options"`: `[]`.
+     * `"correct_answer"`: `"3"` (jumlah target objek).
+     * `"visual"`: `{ "label": "🦋", "items": [{ "x": 15, "y": 20, "icon": "🦋" }, { "x": 75, "y": 15, "icon": "🦋" }, { "x": 40, "y": 60, "icon": "🦋" }] }`.
+
+   - **17. `"count_select"`** : Menghitung kumpulan objek dan memilih total angka yang pas.
+     * `"options"`: `["3", "4", "5", "6", "7"]`.
+     * `"correct_answer"`: `"5"`.
+     * `"visual"`: `{ "label": "⭐", "count": 5 }`.
+
+   - **18. `"hotspot"`** : Mengklik titik/area tertentu yang dimaksud pada gambar.
+     * `"options"`: `["Kepala", "Kaki", "Ekor"]`.
+     * `"correct_answer"`: `"Kepala"`.
+     * `"visual"`: `{ "image": "...", "hotspots": [...] }`.
+
+   - **19. `"word_building"`** : Menyusun kepingan huruf acak menjadi kata utuh.
+     * `"options"`: `["B", "U", "K", "U"]`.
+     * `"correct_answer"`: `"BUKU"`.
+
+   - **20. `"sound_matching"`** : Mendengarkan bunyi/suara dan memilih objek/kata yang tepat.
+     * `"options"`: `["Kambing 🐐", "Sapi 🐄", "Ayam 🐓"]`.
+     * `"correct_answer"`: `"Sapi 🐄"`.
+     * `"visual"`: `{ "audioText": "Mooo... Mooo..." }`.
+
+   - **21. `"puzzle_assembly"`** : Menyusun potongan kepingan puzzle secara urut.
+     * `"options"`: `["1", "2", "3"]`.
+     * `"correct_answer"`: `"1,2,3"`.
+
+   - **22. `"time_reading"`** : Membaca jarum jam analog (waktu).
+     * `"options"`: `["03:00", "06:00", "09:00", "12:00"]`.
+     * `"correct_answer"`: `"03:00"`.
+     * `"visual"`: `{ "hour": 3, "minute": 0 }`.
+
+   - **23. `"shape_transform"`** : Menentukan hasil transformasi/rotasi/pencerminan bentuk.
+     * `"options"`: `["🔺", "🔻"]`.
+     * `"correct_answer"`: `"🔻"`.
+     * `"visual"`: `{ "shape": "🔺", "transform": "Rotasi", "degree": 180 }`.
+
+   - **24. `"number_tracing"`** : Kanvas interaktif menjiplak & menebalkan garis angka (motorik halus).
+     * `"options"`: `[]`.
+     * `"correct_answer"`: `"5"` (angka yang harus ditebalkan, antara 1 sampai 10).
+     * `"visual"`: `{ "target": 5 }`.
+
+3. **Properti Visual Opsional (`"visual"`):**
    - Visual Ten Frame: `{ "type": "ten_frame", "value": 6 }`
    - Visual Objek Emoji: `{ "type": "objects", "label": "🍎", "count": 4 }`
+   - Visual Urutan: `{ "sequence": ["1", "2", "?", "4"] }`
+   - Visual Jam: `{ "hour": 3, "minute": 0 }`
+   - Visual Target Angka Tracing: `{ "target": 5 }`
 
 4. Setiap Unit WAJIB memiliki `"checkpoint"` yang berisi **7 Soal Ujian Akhir Unit** gabungan bertahap dari pelajaran di unit tersebut.
 
 ---
-### 📐 CONTOH TEMPLATE OUTPUT JSON (7 SOAL PER PELAJARAN):
+### 📐 CONTOH TEMPLATE OUTPUT JSON LENGKAP:
 
 ```json
 {
@@ -123,7 +180,7 @@ Setiap Pelajaran (Lesson) WAJIB berisi **7 Soal** yang disusun bertahap secara s
             "id": "u1_lesson1",
             "title": "Satu dan Dua yang Lucu",
             "order": 1,
-            "summary": "Belajar mengenali bentuk dan jumlah angka 1 dan 2.",
+            "summary": "Belajar mengenali bentuk, cara menulis, dan jumlah angka 1 dan 2.",
             "exercises": [
               {
                 "id": "u1l1_ex1",
@@ -138,6 +195,17 @@ Setiap Pelajaran (Lesson) WAJIB berisi **7 Soal** yang disusun bertahap secara s
               },
               {
                 "id": "u1l1_ex2",
+                "type": "number_tracing",
+                "difficulty": "easy",
+                "question": "Tebalkan garis putus-putus untuk menulis angka 1!",
+                "options": [],
+                "correct_answer": "1",
+                "explanation": "Hebat! Kamu berhasil menulis angka 1 dengan sangat rapi!",
+                "spaced_repetition": true,
+                "visual": { "target": 1 }
+              },
+              {
+                "id": "u1l1_ex3",
                 "type": "drag_and_drop",
                 "difficulty": "easy",
                 "question": "Taruh 2 buah pisang 🍌 ke dalam keranjang!",
@@ -148,7 +216,7 @@ Setiap Pelajaran (Lesson) WAJIB berisi **7 Soal** yang disusun bertahap secara s
                 "visual": { "type": "objects", "label": "🍌", "count": 4 }
               },
               {
-                "id": "u1l1_ex3",
+                "id": "u1l1_ex4",
                 "type": "seek_find",
                 "difficulty": "easy",
                 "question": "Cari & temukan 1 ekor Kucing 🐱 di taman!",
@@ -159,7 +227,7 @@ Setiap Pelajaran (Lesson) WAJIB berisi **7 Soal** yang disusun bertahap secara s
                 "visual": { "label": "🐱", "items": [{ "x": 45, "y": 40, "icon": "🐱" }] }
               },
               {
-                "id": "u1l1_ex4",
+                "id": "u1l1_ex5",
                 "type": "matching",
                 "difficulty": "medium",
                 "question": "Pasangkan angka dengan jumlah buah yang sesuai!",
@@ -169,7 +237,7 @@ Setiap Pelajaran (Lesson) WAJIB berisi **7 Soal** yang disusun bertahap secara s
                 "spaced_repetition": false
               },
               {
-                "id": "u1l1_ex5",
+                "id": "u1l1_ex6",
                 "type": "comparison",
                 "difficulty": "medium",
                 "question": "Kelompok mana yang jumlahnya LEBIH BANYAK?",
@@ -181,17 +249,6 @@ Setiap Pelajaran (Lesson) WAJIB berisi **7 Soal** yang disusun bertahap secara s
                   "groupA": { "count": 1, "icon": "🍎", "label": "Kelompok A" },
                   "groupB": { "count": 2, "icon": "🍎", "label": "Kelompok B" }
                 }
-              },
-              {
-                "id": "u1l1_ex6",
-                "type": "sequence_ordering",
-                "difficulty": "medium",
-                "question": "Berapa angka yang hilang pada urutan ini?",
-                "options": ["1", "2", "3", "4"],
-                "correct_answer": "2",
-                "explanation": "Benar sekali! Urutan yang lengkap adalah 1, 2, 3.",
-                "spaced_repetition": false,
-                "visual": { "sequence": ["1", "?", "3"] }
               },
               {
                 "id": "u1l1_ex7",
@@ -218,4 +275,4 @@ Setiap Pelajaran (Lesson) WAJIB berisi **7 Soal** yang disusun bertahap secara s
 }
 ```
 
-Tolong hasilkan JSON lengkap tanpa memotong isi (jangan gunakan titik-titik "..." di dalam JSON). Pastikan valid JSON!
+Tolong hasilkan JSON lengkap tanpa memotong isi (jangan gunakan tanda elipsis "..." di dalam payload JSON). Pastikan valid JSON!

@@ -1,0 +1,742 @@
+{
+  "course": {
+    "id": "comprehensive_23_types",
+    "title": "🎓 Kursus 24 Jenis Soal Interaktif",
+    "description": "Kursus lengkap dengan 24 jenis soal interaktif untuk anak usia 4-9 tahun.",
+    "target_audience": "Anak TK & SD (4-9 tahun)",
+    "units": [
+      {
+        "id": "unit_1",
+        "title": "Unit 1: Soal Pilihan Ganda & Benar/Salah",
+        "order": 1,
+        "icon": "📝",
+        "color": "green",
+        "lessons": [
+          {
+            "id": "u1_lesson1",
+            "title": "Level 1: Pilihan Ganda & Benar/Salah",
+            "order": 1,
+            "summary": "Mengenal soal pilihan ganda dan benar/salah.",
+            "exercises": [
+              {
+                "id": "u1l1_ex1",
+                "type": "multiple_choice",
+                "difficulty": "easy",
+                "question": "Ada berapa buah apel di gambar?",
+                "options": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+                ],
+                "correct_answer": "3",
+                "explanation": "Ada 3 apel merah di gambar.",
+                "visual": {
+                  "type": "objects",
+                  "label": "🍎",
+                  "count": 3
+                }
+              },
+              {
+                "id": "u1l1_ex2",
+                "type": "true_false",
+                "difficulty": "easy",
+                "question": "Apakah ini adalah kucing?",
+                "options": [
+                  "Benar",
+                  "Salah"
+                ],
+                "correct_answer": "Salah",
+                "explanation": "Ini adalah anjing, bukan kucing.",
+                "image": "https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=200"
+              },
+              {
+                "id": "u1l1_ex3",
+                "type": "true_false_image",
+                "difficulty": "easy",
+                "question": "Apakah ini adalah buah apel?",
+                "options": [
+                  "Benar",
+                  "Salah"
+                ],
+                "correct_answer": "Benar",
+                "explanation": "Ya, ini adalah apel merah segar.",
+                "image": "https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?auto=compress&cs=tinysrgb&w=200"
+              },
+              {
+                "id": "u1l1_ex4",
+                "type": "multiple_choice",
+                "difficulty": "medium",
+                "question": "Pilih hewan yang hidup di air!",
+                "options": [
+                  "Gajah 🐘",
+                  "Ikan 🐟",
+                  "Kucing 🐱",
+                  "Burung 🦅"
+                ],
+                "correct_answer": "Ikan 🐟",
+                "explanation": "Ikan hidup di dalam air."
+              },
+              {
+                "id": "u1l1_ex5",
+                "type": "multiple_choice",
+                "difficulty": "medium",
+                "question": "Warna daun yang segar adalah...",
+                "options": [
+                  "Merah",
+                  "Hijau",
+                  "Biru",
+                  "Kuning"
+                ],
+                "correct_answer": "Hijau",
+                "explanation": "Daun yang sehat dan segar berwarna hijau."
+              },
+              {
+                "id": "u1l1_ex6",
+                "type": "true_false",
+                "difficulty": "medium",
+                "question": "Matahari terbit di sebelah timur.",
+                "options": [
+                  "Benar",
+                  "Salah"
+                ],
+                "correct_answer": "Benar",
+                "explanation": "Matahari selalu terbit di timur."
+              },
+              {
+                "id": "u1l1_ex7",
+                "type": "multiple_choice",
+                "difficulty": "hard",
+                "question": "Hasil dari 2 + 2 adalah...",
+                "options": [
+                  "3",
+                  "4",
+                  "5",
+                  "6"
+                ],
+                "correct_answer": "4",
+                "explanation": "2 ditambah 2 sama dengan 4."
+              }
+            ]
+          }
+        ],
+        "checkpoint": {
+          "id": "unit1_checkpoint",
+          "title": "Ujian Checkpoint Unit 1",
+          "exercises": [
+            {
+              "id": "u1_cp_ex1",
+              "type": "multiple_choice",
+              "difficulty": "medium",
+              "question": "Berapa jumlah bintang?",
+              "options": [
+                "3",
+                "4",
+                "5",
+                "6"
+              ],
+              "correct_answer": "5",
+              "explanation": "Ada 5 bintang emas.",
+              "visual": {
+                "type": "objects",
+                "label": "⭐",
+                "count": 5
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "unit_2",
+        "title": "Unit 2: Interaksi Seret, Isian & Matching",
+        "order": 2,
+        "icon": "✏️",
+        "color": "blue",
+        "lessons": [
+          {
+            "id": "u2_lesson1",
+            "title": "Seret, Isi & Pasangkan",
+            "order": 1,
+            "summary": "Melatih kemampuan motorik halus dan pemahaman konsep.",
+            "exercises": [
+              {
+                "id": "u2l1_ex1",
+                "type": "fill_in_blank",
+                "difficulty": "easy",
+                "question": "Hewan yang mengeong adalah...",
+                "options": [],
+                "correct_answer": "kucing",
+                "explanation": "Kucing mengeluarkan suara meong."
+              },
+              {
+                "id": "u2l1_ex2",
+                "type": "drag_and_drop",
+                "difficulty": "easy",
+                "question": "Seret 3 apel 🍎 ke dalam keranjang!",
+                "options": [],
+                "correct_answer": "3",
+                "explanation": "Hebat! 3 apel dimasukkan.",
+                "visual": {
+                  "label": "🍎",
+                  "count": 3
+                }
+              },
+              {
+                "id": "u2l1_ex3",
+                "type": "drag_to_sort",
+                "difficulty": "medium",
+                "question": "Seret hewan ke tempatnya!",
+                "options": [
+                  "🐘",
+                  "🐟",
+                  "🦅"
+                ],
+                "correct_answer": "🐘::darat|🐟::air|🦅::udara",
+                "explanation": "Sempurna! Semua hewan di habitat yang pas.",
+                "visual": {
+                  "items": [
+                    "🐘",
+                    "🐟",
+                    "🦅"
+                  ]
+                }
+              },
+              {
+                "id": "u2l1_ex4",
+                "type": "matching",
+                "difficulty": "medium",
+                "question": "Pasangkan hewan dengan makanannya!",
+                "options": [
+                  "Kucing::Ikan",
+                  "Kelinci::Wortel"
+                ],
+                "correct_answer": "Kucing::Ikan|Kelinci::Wortel",
+                "explanation": "Pasangan tepat!"
+              },
+              {
+                "id": "u2l1_ex5",
+                "type": "word_building",
+                "difficulty": "medium",
+                "question": "Susun huruf menjadi kata: BUKU",
+                "options": [],
+                "correct_answer": "BUKU",
+                "explanation": "B-U-K-U membentuk kata BUKU."
+              },
+              {
+                "id": "u2l1_ex6",
+                "type": "fill_missing_number",
+                "difficulty": "medium",
+                "question": "Isi angka yang hilang: 5, 6, ?, 8",
+                "options": [],
+                "correct_answer": "7",
+                "explanation": "Angka setelah 6 adalah 7.",
+                "visual": {
+                  "sequence": [
+                    5,
+                    6,
+                    "?",
+                    8
+                  ]
+                }
+              },
+              {
+                "id": "u2l1_ex7",
+                "type": "puzzle_assembly",
+                "difficulty": "hard",
+                "question": "Susun potongan puzzle pisang!",
+                "options": [],
+                "correct_answer": "🍌,🍌",
+                "explanation": "Puzzle selesai!"
+              }
+            ]
+          }
+        ],
+        "checkpoint": {
+          "id": "unit2_checkpoint",
+          "title": "Ujian Checkpoint Unit 2",
+          "exercises": [
+            {
+              "id": "u2_cp_ex1",
+              "type": "fill_in_blank",
+              "difficulty": "medium",
+              "question": "Hewan yang suka bermain di air adalah...",
+              "options": [],
+              "correct_answer": "ikan",
+              "explanation": "Ikan hidup di air dan suka bermain."
+            },
+            {
+              "id": "u2_cp_ex2",
+              "type": "drag_and_drop",
+              "difficulty": "easy",
+              "question": "Seret 2 apel ke keranjang!",
+              "options": [],
+              "correct_answer": "2",
+              "explanation": "Hebat! 2 apel dimasukkan.",
+              "visual": {
+                "label": "🍎",
+                "count": 2
+              }
+            },
+            {
+              "id": "u2_cp_ex3",
+              "type": "matching",
+              "difficulty": "medium",
+              "question": "Pasangkan hewan dengan suaranya!",
+              "options": [
+                "🐶::Gonggong",
+                "🐱::Meong"
+              ],
+              "correct_answer": "🐶::Gonggong|🐱::Meong",
+              "explanation": "Pasangan tepat!"
+            },
+            {
+              "id": "u2_cp_ex4",
+              "type": "fill_missing_number",
+              "difficulty": "medium",
+              "question": "Isi angka yang hilang: 10, 11, ?, 13",
+              "options": [],
+              "correct_answer": "12",
+              "explanation": "Angka setelah 11 adalah 12.",
+              "visual": {
+                "sequence": [
+                  10,
+                  11,
+                  "?",
+                  13
+                ]
+              }
+            },
+            {
+              "id": "u2_cp_ex5",
+              "type": "sequence_ordering",
+              "difficulty": "hard",
+              "question": "Urutkan: 4, 2, 1, 3",
+              "options": [
+                "1",
+                "2",
+                "3",
+                "4"
+              ],
+              "correct_answer": "1,2,3,4",
+              "explanation": "Urutan benar: 1, 2, 3, 4."
+            },
+            {
+              "id": "u2_cp_ex6",
+              "type": "puzzle_assembly",
+              "difficulty": "hard",
+              "question": "Susun potongan puzzle jeruk!",
+              "options": [],
+              "correct_answer": "🍊,🍊,🍊",
+              "explanation": "Puzzle jeruk selesai!"
+            },
+            {
+              "id": "u2_cp_ex7",
+              "type": "word_building",
+              "difficulty": "hard",
+              "question": "Susun huruf menjadi kata: KERAJAAN",
+              "options": [],
+              "correct_answer": "KERAJAAN",
+              "explanation": "K-E-R-A-J-A-A-N membentuk KERAJAAN."
+            }
+          ]
+        }
+      },
+      {
+        "id": "unit_3",
+        "title": "Unit 3: Cari, Temukan & Visual",
+        "order": 3,
+        "icon": "🔍",
+        "color": "amber",
+        "lessons": [
+          {
+            "id": "u3_lesson1",
+            "title": "Pengamatan Visual & Detail",
+            "order": 1,
+            "summary": "Latihan fokus dan kecermatan mata.",
+            "exercises": [
+              {
+                "id": "u3l1_ex1",
+                "type": "seek_find",
+                "difficulty": "easy",
+                "question": "Cari & temukan 2 ekor Burung 🐦!",
+                "options": [],
+                "correct_answer": "2",
+                "explanation": "Hebat! 2 burung ditemukan.",
+                "visual": {
+                  "label": "🐦",
+                  "items": [
+                    {
+                      "x": 20,
+                      "y": 30,
+                      "icon": "🐦"
+                    },
+                    {
+                      "x": 70,
+                      "y": 50,
+                      "icon": "🐦"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "u3l1_ex2",
+                "type": "hotspot",
+                "difficulty": "easy",
+                "question": "Klik hidung pada wajah!",
+                "options": [],
+                "correct_answer": "nose",
+                "explanation": "Tepat! Itu adalah hidung.",
+                "image": "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=200",
+                "hotspots": [
+                  {
+                    "id": "nose",
+                    "x": 50,
+                    "y": 45,
+                    "width": 10,
+                    "height": 8,
+                    "label": "👃"
+                  }
+                ]
+              },
+              {
+                "id": "u3l1_ex4",
+                "type": "odd_one_out",
+                "difficulty": "medium",
+                "question": "Mana yang BUKAN merupakan buah?",
+                "options": [
+                  "Apel 🍎",
+                  "Pisang 🍌",
+                  "Mobil 🚗",
+                  "Jeruk 🍊"
+                ],
+                "correct_answer": "Mobil 🚗",
+                "explanation": "Mobil adalah kendaraan, bukan buah."
+              },
+              {
+                "id": "u3l1_ex5",
+                "type": "memory_flip",
+                "difficulty": "medium",
+                "question": "Temukan pasangan kartu yang sama!",
+                "options": [],
+                "correct_answer": "2",
+                "explanation": "Semua pasangan cocok!",
+                "pairs": [
+                  {
+                    "left": "🐶",
+                    "right": "🐶"
+                  },
+                  {
+                    "left": "🐱",
+                    "right": "🐱"
+                  }
+                ]
+              },
+              {
+                "id": "u3l1_ex6",
+                "type": "count_select",
+                "difficulty": "medium",
+                "question": "Hitung jumlah balon lalu pilih angkanya!",
+                "options": [
+                  "3",
+                  "4",
+                  "5",
+                  "6"
+                ],
+                "correct_answer": "5",
+                "explanation": "Ada 5 balon.",
+                "visual": {
+                  "label": "🎈",
+                  "count": 5
+                }
+              },
+              {
+                "id": "u3l1_ex7",
+                "type": "sound_matching",
+                "difficulty": "hard",
+                "question": "Dengarkan suara 'guk guk', pilih hewan yang tepat!",
+                "options": [
+                  "🐶",
+                  "🐱",
+                  "🐥"
+                ],
+                "correct_answer": "🐶",
+                "explanation": "Suara 'guk guk' milik anjing.",
+                "audioText": "guk guk"
+              }
+            ]
+          }
+        ],
+        "checkpoint": {
+          "id": "unit3_checkpoint",
+          "title": "Ujian Checkpoint Unit 3",
+          "exercises": [
+            {
+              "id": "u3_cp_ex1",
+              "type": "seek_find",
+              "difficulty": "medium",
+              "question": "Cari 3 ekor kucing 🐱 di taman!",
+              "options": [],
+              "correct_answer": "3",
+              "explanation": "Hebat! 3 kucing ditemukan.",
+              "visual": {
+                "label": "🐱",
+                "items": [
+                  {
+                    "x": 30,
+                    "y": 30,
+                    "icon": "🐱"
+                  },
+                  {
+                    "x": 60,
+                    "y": 40,
+                    "icon": "🐱"
+                  },
+                  {
+                    "x": 45,
+                    "y": 60,
+                    "icon": "🐱"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "u3_cp_ex2",
+              "type": "hotspot",
+              "difficulty": "medium",
+              "question": "Klik mata di wajah ini!",
+              "options": [],
+              "correct_answer": "eye",
+              "explanation": "Tepat! Itu adalah mata.",
+              "image": "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=200",
+              "hotspots": [
+                {
+                  "id": "eye",
+                  "x": 50,
+                  "y": 35,
+                  "width": 8,
+                  "height": 8,
+                  "label": "👁️"
+                }
+              ]
+            },
+            {
+              "id": "u3_cp_ex3",
+              "type": "shadow_matching",
+              "difficulty": "medium",
+              "question": "Cocokkan bayangan kucing!",
+              "options": [
+                "🦁",
+                "🐱",
+                "🐯"
+              ],
+              "correct_answer": "🐱",
+              "explanation": "Kucing cocok dengan bayangannya."
+            },
+            {
+              "id": "u3_cp_ex4",
+              "type": "odd_one_out",
+              "difficulty": "medium",
+              "question": "Mana yang bukan hewan?",
+              "options": [
+                "Kucing 🐱",
+                "Bambu 🐼",
+                "Pohon 🌳",
+                "Burung 🦅"
+              ],
+              "correct_answer": "Pohon 🌳",
+              "explanation": "Pohon adalah tumbuhan, bukan hewan."
+            },
+            {
+              "id": "u3_cp_ex5",
+              "type": "count_select",
+              "difficulty": "medium",
+              "question": "Hitung jumlah bintang!",
+              "options": [
+                "3",
+                "4",
+                "5",
+                "6"
+              ],
+              "correct_answer": "4",
+              "explanation": "Ada 4 bintang.",
+              "visual": {
+                "label": "⭐",
+                "count": 4
+              }
+            },
+            {
+              "id": "u3_cp_ex6",
+              "type": "sound_matching",
+              "difficulty": "hard",
+              "question": "Dengarkan suara 'cuk cuk', pilih hewan yang benar!",
+              "options": [
+                "🐥",
+                "🐶",
+                "🐱"
+              ],
+              "correct_answer": "🐥",
+              "explanation": "Suara 'cuk cuk' milik anak ayam.",
+              "audioText": "cuk cuk"
+            },
+            {
+              "id": "u3_cp_ex7",
+              "type": "word_building",
+              "difficulty": "hard",
+              "question": "Susun huruf menjadi kata: BINTANG",
+              "options": [],
+              "correct_answer": "BINTANG",
+              "explanation": "B-I-N-T-A-N-G membentuk BINTANG."
+            }
+          ]
+        }
+      },
+      {
+        "id": "unit_4",
+        "title": "Unit 4: Logika, Urutan & Jam",
+        "order": 4,
+        "icon": "⏰",
+        "color": "purple",
+        "lessons": [
+          {
+            "id": "u4_lesson1",
+            "title": "Logika Matematika & Waktu",
+            "order": 1,
+            "summary": "Memahami konsep perbandingan, waktu dan transformasi.",
+            "exercises": [
+              {
+                "id": "u4l1_ex1",
+                "type": "sequence_ordering",
+                "difficulty": "easy",
+                "question": "Urutkan angka dari kecil ke besar!",
+                "options": [
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+                ],
+                "correct_answer": "1,2,3,4",
+                "explanation": "Urutan benar: 1, 2, 3, 4."
+              },
+              {
+                "id": "u4l1_ex2",
+                "type": "pattern_matching",
+                "difficulty": "easy",
+                "question": "Lanjutkan pola: 🔴 🟡 🔴 ?",
+                "options": [
+                  "🟡",
+                  "🔴",
+                  "🟢"
+                ],
+                "correct_answer": "🟡",
+                "explanation": "Pola berganti merah dan kuning."
+              },
+              {
+                "id": "u4l1_ex3",
+                "type": "comparison",
+                "difficulty": "medium",
+                "question": "Kelompok mana yang LEBIH BANYAK?",
+                "options": [
+                  "A",
+                  "B",
+                  "Sama"
+                ],
+                "correct_answer": "B",
+                "explanation": "Kelompok B (4) lebih banyak dari A (2).",
+                "visual": {
+                  "groupA": {
+                    "count": 2,
+                    "icon": "🍎",
+                    "label": "Kelompok A"
+                  },
+                  "groupB": {
+                    "count": 4,
+                    "icon": "🍎",
+                    "label": "Kelompok B"
+                  }
+                }
+              },
+              {
+                "id": "u4l1_ex4",
+                "type": "category_sorting",
+                "difficulty": "medium",
+                "question": "Kelompokkan buah dan sayur!",
+                "options": [
+                  "🍎",
+                  "🥦"
+                ],
+                "correct_answer": "🍎::buah|🥦::sayur",
+                "explanation": "Apel adalah buah, brokoli adalah sayur."
+              },
+              {
+                "id": "u4l1_ex5",
+                "type": "time_reading",
+                "difficulty": "medium",
+                "question": "Jam berapa pada gambar?",
+                "options": [
+                  "03:00",
+                  "06:00",
+                  "09:00",
+                  "12:00"
+                ],
+                "correct_answer": "03:00",
+                "explanation": "Jam menunjukkan pukul 03:00.",
+                "visual": {
+                  "hour": 3,
+                  "minute": 0
+                }
+              },
+              {
+                "id": "u4l1_ex6",
+                "type": "shape_transform",
+                "difficulty": "hard",
+                "question": "Bentuk segitiga diputar 180 derajat:",
+                "options": [
+                  "🔺",
+                  "🔻"
+                ],
+                "correct_answer": "🔻",
+                "explanation": "Diputar 180 derajat membuat ujungnya menghadap ke bawah.",
+                "visual": {
+                  "shape": "🔺",
+                  "transform": "Rotasi",
+                  "degree": 180
+                }
+              },
+              {
+                "id": "u4l1_ex7",
+                "type": "comparison",
+                "difficulty": "hard",
+                "question": "10 dikurangi 3 hasilnya adalah...",
+                "options": [
+                  "6",
+                  "7",
+                  "8"
+                ],
+                "correct_answer": "7",
+                "explanation": "10 - 3 = 7."
+              }
+            ]
+          }
+        ],
+        "checkpoint": {
+          "id": "unit4_checkpoint",
+          "title": "Ujian Checkpoint Unit 4",
+          "exercises": [
+            {
+              "id": "u4_cp_ex1",
+              "type": "number_tracing",
+              "difficulty": "medium",
+              "question": "Tebalkan garis putus-putus untuk menulis angka 5!",
+              "options": [],
+              "correct_answer": "5",
+              "explanation": "Luar biasa! Kamu berhasil menjiplak dan menulis angka 5 dengan rapi!",
+              "visual": {
+                "target": 5
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

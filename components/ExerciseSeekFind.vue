@@ -1,52 +1,69 @@
 <template>
-  <div class="space-y-6 select-none">
-    <!-- Header -->
-    <div class="flex items-center gap-3">
-      <h2 class="font-heading text-2xl sm:text-3xl text-slate-800 font-bold leading-tight">
-        {{ exercise.question }}
-      </h2>
-      <AudioPlayerButton :text="exercise.question" />
+  <div class="space-y-5 sm:space-y-6 select-none max-w-lg mx-auto w-full">
+    <!-- Question Header & Audio Player Button -->
+    <div class="flex items-center justify-between gap-3 bg-white p-3.5 sm:p-4 rounded-3xl border-2 border-duo-gray-100 shadow-xs">
+      <div class="flex items-center gap-2.5">
+        <h2 class="font-heading text-lg sm:text-2xl text-slate-800 font-black leading-snug">
+          {{ exercise.question }}
+        </h2>
+        <AudioPlayerButton :text="exercise.question" />
+      </div>
+
+      <!-- Seek & Find Badge -->
+      <div class="hidden sm:flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-900 border-2 border-emerald-300 rounded-2xl font-heading font-black text-xs shrink-0 shadow-2xs">
+        <span>🔎 Cari Objek</span>
+      </div>
     </div>
 
     <!-- Status Bar & Hint Toast -->
-    <div class="space-y-2 max-w-lg mx-auto">
-      <div class="flex items-center justify-between px-4 py-2 bg-emerald-50 rounded-2xl border-2 border-emerald-200 text-emerald-900 font-heading font-extrabold text-sm shadow-2xs">
-        <span class="flex items-center gap-1.5">
-          <span>🔍 Cari Target:</span>
-          <strong class="text-emerald-700 font-black flex items-center gap-1">
-            <img v-if="getObjectImageUrl(targetIcon)" :src="getObjectImageUrl(targetIcon)" class="w-6 h-6 object-cover rounded-md" />
-            <span>{{ targetIcon }}</span>
-          </strong>
+    <div class="space-y-2 max-w-lg mx-auto w-full">
+      <div class="flex items-center justify-between px-3.5 py-2.5 sm:px-4 sm:py-2.5 bg-emerald-50 rounded-2xl border-2 border-emerald-200 text-emerald-950 font-heading font-extrabold text-sm shadow-2xs">
+        <span class="flex items-center gap-2">
+          <span class="text-base">🔍</span>
+          <span class="text-slate-700">Cari Target:</span>
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white rounded-xl border border-emerald-200 shadow-2xs">
+            <span class="text-2xl animate-bounce">{{ targetIcon }}</span>
+            <span class="text-xs font-black text-emerald-800">{{ targetName }}</span>
+          </span>
         </span>
-        <span class="px-3.5 py-1 bg-emerald-500 text-white rounded-full text-xs font-heading font-black shadow-xs">
+        <span 
+          class="px-3 py-1 rounded-full text-xs font-heading font-black shadow-xs transition-colors"
+          :class="foundCount >= targetCount ? 'bg-emerald-500 text-white animate-bounce' : 'bg-amber-400 text-amber-950'"
+        >
           {{ foundCount }} / {{ targetCount }} Ditemukan
         </span>
       </div>
 
       <!-- Decoy Hint Toast -->
       <transition name="fade">
-        <div v-if="decoyHintText" class="px-4 py-2 bg-amber-100 border-2 border-amber-300 rounded-2xl text-amber-900 font-heading font-bold text-xs text-center shadow-sm animate-bounce">
-          {{ decoyHintText }}
+        <div 
+          v-if="decoyHintText" 
+          class="px-4 py-2 bg-amber-100 border-2 border-amber-300 rounded-2xl text-amber-900 font-heading font-extrabold text-xs text-center shadow-sm animate-bounce flex items-center justify-center gap-1.5"
+        >
+          <span>💡</span>
+          <span>{{ decoyHintText }}</span>
         </div>
       </transition>
     </div>
 
-    <!-- Interactive Scene Box -->
-    <div class="relative bg-emerald-50 rounded-3xl border-4 border-emerald-300 shadow-xl min-h-[320px] sm:min-h-[360px] overflow-hidden max-w-lg mx-auto p-4">
-      <!-- Background Scenery Details -->
-      <span class="absolute bottom-2 left-3 text-4xl opacity-30 pointer-events-none">🌳</span>
-      <span class="absolute top-3 right-5 text-4xl opacity-30 pointer-events-none">☀️</span>
-      <span class="absolute bottom-3 right-6 text-4xl opacity-30 pointer-events-none">🌸</span>
-      <span class="absolute top-12 left-6 text-3xl opacity-20 pointer-events-none">☁️</span>
-      <span class="absolute bottom-16 right-20 text-3xl opacity-25 pointer-events-none">🍄</span>
+    <!-- Interactive Garden Scene Box -->
+    <div class="relative bg-linear-to-b from-emerald-100/90 to-emerald-200/80 rounded-3xl border-4 border-emerald-300 shadow-xl min-h-[340px] sm:min-h-[380px] overflow-hidden max-w-lg mx-auto p-4 select-none">
+      <!-- Cartoon Garden Background Decor (Trees, Flowers, Sun, Clouds) -->
+      <span class="absolute bottom-2 left-3 text-4xl opacity-40 pointer-events-none select-none">🌳</span>
+      <span class="absolute top-3 right-4 text-4xl opacity-40 pointer-events-none select-none">☀️</span>
+      <span class="absolute bottom-3 right-4 text-4xl opacity-40 pointer-events-none select-none">🌸</span>
+      <span class="absolute top-4 left-6 text-3xl opacity-30 pointer-events-none select-none">☁️</span>
+      <span class="absolute bottom-16 right-16 text-3xl opacity-35 pointer-events-none select-none">🍄</span>
+      <span class="absolute top-24 left-1/3 text-2xl opacity-25 pointer-events-none select-none">🌿</span>
 
-      <!-- Scattered Hidden Objects (Targets + Decoys) -->
+      <!-- Scattered Hidden Objects (Targets + Garden Themed Decoys) -->
       <button
         v-for="(item, idx) in hiddenItems"
         :key="idx"
         @click="tapItem(item, idx)"
         type="button"
-        class="absolute w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center transition-all duration-200 cursor-pointer shadow-md overflow-hidden"
+        :disabled="isChecked"
+        class="absolute w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center transition-all duration-200 cursor-pointer shadow-md overflow-visible active:scale-95 group"
         :class="[
           foundIndices.has(idx) 
             ? 'bg-amber-300 border-3 border-amber-500 scale-110 shadow-lg ring-4 ring-amber-300/50 z-20' 
@@ -55,22 +72,17 @@
               : 'bg-white/95 border-2 border-emerald-200 hover:scale-110 hover:border-emerald-400 hover:shadow-lg z-10'
         ]"
         :style="{ left: `${item.x}%`, top: `${item.y}%` }"
+        :title="item.isTarget ? targetName : 'Benda lain'"
       >
-        <img 
-          v-if="getObjectImageUrl(item.icon)" 
-          :src="getObjectImageUrl(item.icon)" 
-          :alt="item.icon" 
-          @error="(e) => (e.target.style.display = 'none')"
-          class="w-full h-full object-cover" 
-        />
-        <span v-else class="text-2xl sm:text-3xl flex items-center justify-center w-full h-full">
+        <!-- Clean, Consistent Cartoon/Emoji Object -->
+        <span class="text-3xl sm:text-4xl flex items-center justify-center w-full h-full select-none filter drop-shadow-xs group-hover:scale-110 transition-transform">
           {{ item.icon }}
         </span>
 
-        <!-- Target Found Badge -->
+        <!-- Target Found Checkmark Badge -->
         <span 
           v-if="foundIndices.has(idx)" 
-          class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-emerald-600 text-white text-[10px] font-heading font-black flex items-center justify-center shadow-sm border-2 border-white animate-pop"
+          class="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-emerald-600 text-white text-xs font-heading font-black flex items-center justify-center shadow-md border-2 border-white animate-pop"
         >
           ✓
         </span>
@@ -82,7 +94,6 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
 import { useSoundEffects } from '~/composables/useSoundEffects'
-import { getObjectImageUrl } from '~/composables/useObjectImages'
 
 const props = defineProps({
   exercise: { type: Object, required: true },
@@ -90,7 +101,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['updateCount'])
-const { playPop, playError } = useSoundEffects()
+const { playPop, playError, playCorrect } = useSoundEffects()
 
 const foundIndices = ref(new Set())
 const wrongShakeIdx = ref(null)
@@ -99,21 +110,46 @@ let decoyTimer = null
 
 const targetCount = computed(() => parseInt(props.exercise.correct_answer) || 2)
 
-const targetIcon = computed(() => {
-  if (props.exercise.visual?.label) return props.exercise.visual.label
+const TARGET_MAP = {
+  kupu: { icon: '🦋', name: 'Kupu-kupu' },
+  kelinci: { icon: '🐰', name: 'Kelinci' },
+  kucing: { icon: '🐱', name: 'Kucing' },
+  bebek: { icon: '🦆', name: 'Bebek' },
+  ayam: { icon: '🐔', name: 'Ayam' },
+  singa: { icon: '🦁', name: 'Singa' },
+  gajah: { icon: '🐘', name: 'Gajah' },
+  apel: { icon: '🍎', name: 'Apel' },
+  bintang: { icon: '⭐', name: 'Bintang' },
+  ikan: { icon: '🐟', name: 'Ikan' },
+  bunga: { icon: '🌸', name: 'Bunga' }
+}
+
+const targetInfo = computed(() => {
+  const label = props.exercise.visual?.label
+  if (label) {
+    for (const [k, val] of Object.entries(TARGET_MAP)) {
+      if (label.includes(val.icon) || label.toLowerCase().includes(k)) {
+        return val
+      }
+    }
+    return { icon: label, name: 'Target' }
+  }
+
   const q = (props.exercise.question || '').toLowerCase()
-  if (q.includes('kelinci')) return '🐰'
-  if (q.includes('kucing')) return '🐱'
-  if (q.includes('bebek')) return '🦆'
-  if (q.includes('ayam')) return '🐔'
-  if (q.includes('singa')) return '🦁'
-  if (q.includes('gajah')) return '🐘'
-  if (q.includes('apel')) return '🍎'
-  if (q.includes('kupu')) return '🦋'
-  return '🐰'
+  for (const [k, val] of Object.entries(TARGET_MAP)) {
+    if (q.includes(k)) {
+      return val
+    }
+  }
+
+  return { icon: '🦋', name: 'Kupu-kupu' }
 })
 
-const DECOY_POOL = ['🐱', '🦆', '🐔', '🌸', '🍄', '🦋', '🐝', '🐞', '🐸', '🍎', '🍌']
+const targetIcon = computed(() => targetInfo.value.icon)
+const targetName = computed(() => targetInfo.value.name)
+
+// Harmonious, nature-friendly garden decoys
+const GARDEN_DECOY_POOL = ['🌸', '🍄', '🐞', '🐝', '🐸', '🌿', '🌼', '🌻', '🍎']
 
 const hiddenItems = ref([])
 
@@ -122,11 +158,11 @@ function generateScatteredItems() {
   const count = targetCount.value
   const target = targetIcon.value
 
-  // Preset non-overlapping coordinate slots in % (left 10-80, top 10-75)
+  // Preset non-overlapping coordinate slots in %
   const slots = [
-    { x: 12, y: 15 }, { x: 72, y: 18 }, { x: 42, y: 22 },
-    { x: 20, y: 48 }, { x: 78, y: 52 }, { x: 50, y: 65 },
-    { x: 15, y: 78 }, { x: 70, y: 78 }, { x: 38, y: 42 }
+    { x: 12, y: 15 }, { x: 72, y: 16 }, { x: 40, y: 22 },
+    { x: 18, y: 48 }, { x: 76, y: 48 }, { x: 48, y: 64 },
+    { x: 14, y: 76 }, { x: 68, y: 76 }, { x: 36, y: 42 }
   ].sort(() => Math.random() - 0.5)
 
   // 1. Spawn target items
@@ -140,8 +176,8 @@ function generateScatteredItems() {
     })
   }
 
-  // 2. Spawn 4 to 5 decoy items
-  const availableDecoys = DECOY_POOL.filter(d => d !== target).sort(() => Math.random() - 0.5)
+  // 2. Spawn garden themed decoys
+  const availableDecoys = GARDEN_DECOY_POOL.filter(d => d !== target).sort(() => Math.random() - 0.5)
   const decoyCount = Math.min(4, slots.length)
 
   for (let i = 0; i < decoyCount; i++) {
@@ -155,7 +191,7 @@ function generateScatteredItems() {
     })
   }
 
-  // Shuffle items so targets are at random array positions
+  // Shuffle so targets are in random DOM positions
   hiddenItems.value = items.sort(() => Math.random() - 0.5)
 }
 
@@ -166,10 +202,17 @@ const tapItem = (item, idx) => {
 
   if (item.isTarget) {
     if (!foundIndices.value.has(idx)) {
-      playPop()
       foundIndices.value.add(idx)
       emit('updateCount', foundIndices.value.size)
-      speakWord(`${foundIndices.value.size}!`)
+
+      if (foundIndices.value.size >= targetCount.value) {
+        playCorrect()
+        speakWord(`Hebat! Semua ${targetName.value} sudah ditemukan!`)
+      } else {
+        playPop()
+        speakWord(`${foundIndices.value.size}!`)
+      }
+
       decoyHintText.value = ''
     }
   } else {
@@ -178,10 +221,10 @@ const tapItem = (item, idx) => {
     wrongShakeIdx.value = idx
     setTimeout(() => { wrongShakeIdx.value = null }, 500)
 
-    decoyHintText.value = `💡 Oops! Itu ${item.icon}. Cari ${targetIcon.value} yang bersembunyi!`
+    decoyHintText.value = `Oops! Itu ${item.icon}. Cari ${targetName.value} ${targetIcon.value} yang bersembunyi ya!`
     if (decoyTimer) clearTimeout(decoyTimer)
     decoyTimer = setTimeout(() => { decoyHintText.value = '' }, 2500)
-    speakWord(`Cari ${targetIcon.value}!`)
+    speakWord(`Cari ${targetName.value}!`)
   }
 }
 
