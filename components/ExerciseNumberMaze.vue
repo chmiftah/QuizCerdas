@@ -6,9 +6,12 @@
         <span>🌀</span>
         <span>Labirin Logika Angka</span>
       </div>
-      <h2 class="font-heading text-lg sm:text-2xl text-slate-800 font-black leading-snug">
-        {{ exercise.question || 'Bantu Kiko melewati labirin dengan melangkah sesuai aturan!' }}
-      </h2>
+      <div class="flex items-center justify-center gap-3">
+        <h2 class="font-heading text-lg sm:text-2xl text-slate-800 font-black leading-snug">
+          {{ exercise.question || 'Bantu Kiko melewati labirin dengan melangkah sesuai aturan!' }}
+        </h2>
+        <AudioPlayerButton :text="`${exercise.question || 'Bantu Kiko melewati labirin!'}. Aturannya: ${mazeRule}`" />
+      </div>
       
       <!-- Rule Banner -->
       <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-amber-50 border-2 border-amber-300 rounded-2xl text-xs sm:text-sm font-heading font-black text-amber-900 shadow-xs animate-pop">

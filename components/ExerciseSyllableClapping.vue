@@ -6,9 +6,12 @@
         <span>👏</span>
         <span>Ketukan Suku Kata (Phonics Rhythm)</span>
       </div>
-      <h2 class="font-heading text-lg sm:text-2xl text-slate-800 font-black leading-snug">
-        {{ exercise.question || 'Hitung berapa ketukan suku kata pada kata berikut!' }}
-      </h2>
+      <div class="flex items-center justify-center gap-3">
+        <h2 class="font-heading text-lg sm:text-2xl text-slate-800 font-black leading-snug">
+          {{ exercise.question || 'Hitung berapa ketukan suku kata pada kata berikut!' }}
+        </h2>
+        <AudioPlayerButton :text="exercise.question || 'Hitung berapa ketukan suku kata pada kata berikut!'" />
+      </div>
     </div>
 
     <!-- Main Word & Clapping Card Container -->

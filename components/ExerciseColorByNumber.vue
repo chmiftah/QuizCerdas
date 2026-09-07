@@ -6,9 +6,12 @@
         <span>🎨</span>
         <span>Mewarnai Berdasarkan Angka</span>
       </div>
-      <h2 class="font-heading text-lg sm:text-2xl text-slate-800 font-black leading-snug">
-        {{ exercise.question || 'Warnai setiap bagian gambar sesuai nomor pada palet cat!' }}
-      </h2>
+      <div class="flex items-center justify-center gap-3">
+        <h2 class="font-heading text-lg sm:text-2xl text-slate-800 font-black leading-snug">
+          {{ exercise.question || 'Warnai setiap bagian gambar sesuai nomor pada palet cat!' }}
+        </h2>
+        <AudioPlayerButton :text="exercise.question || 'Warnai setiap bagian gambar sesuai nomor pada palet cat!'" />
+      </div>
     </div>
 
     <!-- Main Canvas Card Container -->

@@ -14,33 +14,35 @@
         </NuxtLink>
 
         <!-- Desktop Navigation Tabs (Hidden on Mobile) -->
-        <nav class="hidden md:flex items-center gap-1 bg-slate-100/80 p-1 rounded-2xl border border-slate-200">
+        <nav class="hidden md:flex items-center gap-1 bg-slate-100/80 p-1 rounded-2xl border border-slate-200 shrink-0">
           <NuxtLink 
             to="/" 
-            class="px-3.5 py-1.5 rounded-xl text-xs font-heading font-extrabold transition-all"
+            class="px-3 py-1.5 rounded-xl text-xs font-heading font-extrabold transition-all whitespace-nowrap shrink-0 flex items-center gap-1.5"
             exact-active-class="bg-white text-slate-800 shadow-2xs"
           >
-            🏠 Beranda
+            <span>🏠</span>
+            <span>Beranda</span>
           </NuxtLink>
 
           <NuxtLink 
             to="/catalog" 
-            class="px-3.5 py-1.5 rounded-xl text-xs font-heading font-extrabold transition-all"
+            class="px-3 py-1.5 rounded-xl text-xs font-heading font-extrabold transition-all whitespace-nowrap shrink-0 flex items-center gap-1.5"
             active-class="bg-white text-slate-800 shadow-2xs"
           >
-            📚 Katalog
+            <span>📚</span>
+            <span>Katalog</span>
           </NuxtLink>
 
           <NuxtLink 
             to="/leaderboard" 
-            class="px-3.5 py-1.5 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center gap-1.5 relative"
+            class="px-3 py-1.5 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center gap-1.5 relative whitespace-nowrap shrink-0"
             active-class="bg-white text-slate-800 shadow-2xs"
           >
             <span>🏆</span>
             <span>Liga & Misi</span>
             <span 
               v-if="userStore.unclaimedQuestsCount > 0" 
-              class="w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] font-black flex items-center justify-center animate-bounce shadow-xs"
+              class="px-1.5 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-black leading-none animate-bounce shadow-xs"
             >
               {{ userStore.unclaimedQuestsCount }}
             </span>
@@ -48,25 +50,24 @@
 
           <NuxtLink 
             to="/about" 
-            class="px-3.5 py-1.5 rounded-xl text-xs font-heading font-extrabold transition-all"
+            class="hidden xl:flex px-3 py-1.5 rounded-xl text-xs font-heading font-extrabold transition-all whitespace-nowrap shrink-0 items-center gap-1.5"
             active-class="bg-white text-slate-800 shadow-2xs"
           >
-            ℹ️ Tentang Kami
+            <span>ℹ️</span>
+            <span>Tentang</span>
           </NuxtLink>
 
-        
-
           <!-- Aktivitas Dropdown Menu -->
-          <div class="relative">
+          <div class="relative shrink-0">
             <button 
               @click="showActivitiesMenu = !showActivitiesMenu"
               type="button"
-              class="px-3.5 py-1.5 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center gap-1.5 cursor-pointer"
+              class="px-3 py-1.5 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
               :class="isActivityActive ? 'bg-duo-blue text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200'"
             >
               <span>🎯</span>
               <span>Aktivitas</span>
-              <ChevronDown class="w-3.5 h-3.5 transition-transform duration-200" :class="{ 'rotate-180': showActivitiesMenu }" />
+              <ChevronDown class="w-3.5 h-3.5 transition-transform duration-200 shrink-0" :class="{ 'rotate-180': showActivitiesMenu }" />
             </button>
 
             <!-- Dropdown Menu Content -->
@@ -193,42 +194,42 @@
 
       <!-- Gamification Indicators & Auth Profile -->
       <ClientOnly>
-        <div class="flex items-center gap-2 sm:gap-3">
+        <div class="flex items-center gap-1.5 sm:gap-2.5 lg:gap-3 shrink-0">
           <!-- Gamification Indicators (Only when logged in) -->
           <template v-if="userStore.isLoggedIn">
             <!-- Streak Indicator -->
-            <div class="flex items-center gap-1 px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-orange-50 border sm:border-2 border-orange-200 text-duo-orange-dark font-heading font-bold text-[11px] sm:text-sm shadow-2xs" title="Streak Hari Ini">
-              <Flame class="w-3.5 h-3.5 sm:w-5 sm:h-5 fill-duo-orange text-duo-orange animate-pulse" />
+            <div class="flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-orange-50 border sm:border-2 border-orange-200 text-duo-orange-dark font-heading font-bold text-[11px] sm:text-sm shadow-2xs shrink-0 whitespace-nowrap" title="Streak Hari Ini">
+              <Flame class="w-3.5 h-3.5 sm:w-5 sm:h-5 fill-duo-orange text-duo-orange animate-pulse shrink-0" />
               <span>{{ userStore.streak }}</span>
             </div>
 
             <!-- XP Badge -->
-            <div class="flex items-center gap-1 px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-amber-50 border sm:border-2 border-amber-200 text-amber-800 font-heading font-bold text-[11px] sm:text-sm shadow-2xs" title="Total XP Kamu">
-              <Zap class="w-3.5 h-3.5 sm:w-5 sm:h-5 fill-duo-yellow text-duo-yellow-dark" />
+            <div class="flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-amber-50 border sm:border-2 border-amber-200 text-amber-800 font-heading font-bold text-[11px] sm:text-sm shadow-2xs shrink-0 whitespace-nowrap" title="Total XP Kamu">
+              <Zap class="w-3.5 h-3.5 sm:w-5 sm:h-5 fill-duo-yellow text-duo-yellow-dark shrink-0" />
               <span class="font-extrabold">{{ userStore.xp }} <span class="hidden sm:inline">XP</span></span>
             </div>
 
             <!-- Hearts Indicator -->
             <div 
               @click="showHeartModal = true"
-              class="flex items-center gap-1 px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-rose-50 border sm:border-2 border-rose-200 text-rose-600 font-heading font-bold text-[11px] sm:text-sm shadow-2xs cursor-pointer hover:bg-rose-100 transition-colors" 
+              class="flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-rose-50 border sm:border-2 border-rose-200 text-rose-600 font-heading font-bold text-[11px] sm:text-sm shadow-2xs cursor-pointer hover:bg-rose-100 transition-colors shrink-0 whitespace-nowrap" 
               title="Nyawa Kamu (Klik untuk isi)"
             >
-              <Heart class="w-3.5 h-3.5 sm:w-5 sm:h-5 fill-duo-red text-duo-red" />
+              <Heart class="w-3.5 h-3.5 sm:w-5 sm:h-5 fill-duo-red text-duo-red shrink-0" />
               <span>{{ userStore.hearts }}</span>
             </div>
           </template>
 
           <!-- User Profile Dropdown or Auth Buttons -->
-          <div v-if="userStore.isLoggedIn" class="relative">
+          <div v-if="userStore.isLoggedIn" class="relative shrink-0">
             <button 
               @click="showProfileMenu = !showProfileMenu"
               type="button"
-              class="flex items-center gap-1.5 pl-2 pr-3 py-1 rounded-2xl bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-colors font-heading text-xs font-bold text-slate-700 cursor-pointer"
+              class="flex items-center gap-1.5 pl-2 pr-3 py-1 sm:py-1.5 rounded-2xl bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-colors font-heading text-xs font-bold text-slate-700 cursor-pointer whitespace-nowrap shrink-0"
             >
               <span class="text-base sm:text-lg">{{ userStore.userAvatar }}</span>
-              <span class="hidden md:inline max-w-[100px] truncate">{{ userStore.userDisplayName }}</span>
-              <ChevronDown class="w-3.5 h-3.5 text-slate-500" />
+              <span class="hidden lg:inline max-w-[110px] truncate">{{ userStore.userDisplayName }}</span>
+              <ChevronDown class="w-3.5 h-3.5 text-slate-500 shrink-0" />
             </button>
 
             <!-- Dropdown Menu -->

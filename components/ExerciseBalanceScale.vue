@@ -6,9 +6,12 @@
         <span>⚖️</span>
         <span>Timbangan Neraca Seimbang</span>
       </div>
-      <h2 class="font-heading text-lg sm:text-2xl text-slate-800 font-black leading-snug">
-        {{ exercise.question || 'Tambahkan bobot yang pas di piring kanan agar timbangan seimbang!' }}
-      </h2>
+      <div class="flex items-center justify-center gap-3">
+        <h2 class="font-heading text-lg sm:text-2xl text-slate-800 font-black leading-snug">
+          {{ exercise.question || 'Tambahkan bobot yang pas di piring kanan agar timbangan seimbang!' }}
+        </h2>
+        <AudioPlayerButton :text="exercise.question || 'Tambahkan bobot yang pas di piring kanan agar timbangan seimbang!'" />
+      </div>
     </div>
 
     <!-- Main Scale Simulation Card -->

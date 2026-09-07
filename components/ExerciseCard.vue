@@ -47,6 +47,17 @@
           <span>🔥 x{{ engine.comboCount }}!</span>
         </div>
 
+        <!-- Petunjuk Kiko Button -->
+        <button
+          @click="toggleHint"
+          type="button"
+          class="px-2.5 sm:px-3.5 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-900 border-2 border-amber-300 rounded-2xl font-heading font-black text-xs sm:text-sm flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs shrink-0 active:scale-95"
+          title="Petunjuk Kiko"
+        >
+          <span>💡</span>
+          <span class="hidden sm:inline">Petunjuk</span>
+        </button>
+
         <!-- Remaining Hearts with Tactile Badge -->
         <div class="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 bg-rose-50 rounded-2xl border-2 border-rose-200 text-rose-600 font-heading font-black text-xs sm:text-sm shrink-0 shadow-2xs">
           <Heart class="w-4 h-4 sm:w-5 sm:h-5 fill-rose-500 text-rose-500 animate-pulse" />
@@ -58,22 +69,12 @@
     <!-- Main Question Container -->
     <main class="max-w-2xl mx-auto w-full px-3 sm:px-4 py-4 sm:py-8 flex-1 overflow-x-hidden">
       <div v-if="engine.currentExercise" class="space-y-4 sm:space-y-8 animate-pop w-full min-w-0">
-        <!-- Unified Sleek Question & Voice Narrator Bar -->
-        <KikoVoiceNarrator 
-          :questionText="engine.currentExercise.question" 
-          :instruction="getExerciseInstruction(engine.currentExercise.type)"
-          :typeLabel="getExerciseTypeLabel(engine.currentExercise.type)"
-          :mascotAvatar="userStore.userAvatar || '🦉'"
-          :showHint="engine.showHint"
-          @toggle-hint="toggleHint"
-        />
-
         <!-- Hint Text Drawer (Opens when Hint button is clicked) -->
         <div v-if="engine.showHint" class="p-3.5 sm:p-4 bg-amber-50 border-2 border-amber-300 rounded-2xl text-xs sm:text-sm font-heading font-bold text-amber-900 animate-pop flex items-center gap-3 shadow-sm">
-          <span class="text-2xl">💡</span>
+          <span class="text-2xl sm:text-3xl">💡</span>
           <div>
             <span class="block font-black text-amber-950">Petunjuk Kiko:</span>
-            <span>"Hitung objek satu per satu secara teliti dari kiri ke kanan ya, kamu pasti bisa!"</span>
+            <span>{{ getExerciseInstruction(engine.currentExercise.type) || 'Hitung objek satu per satu secara teliti dari kiri ke kanan ya, kamu pasti bisa!' }}</span>
           </div>
         </div>
 
@@ -376,7 +377,6 @@
 import { ref, computed, unref, watch, onUnmounted } from 'vue'
 import { useUserStore } from '~/stores/user'
 import { useVoiceNarrator } from '~/composables/useVoiceNarrator'
-import KikoVoiceNarrator from '~/components/KikoVoiceNarrator.vue'
 import { X, Heart, ChevronDown, ChevronUp } from 'lucide-vue-next'
 
 const props = defineProps({
@@ -458,11 +458,19 @@ const handleManualCheckAnswer = () => {
 const toggleHint = () => {
   props.engine.showHint = !props.engine.showHint
   if (props.engine.showHint) {
-    narrator.speak('Hitung objek satu per satu secara teliti dari kiri ke kanan ya, kamu pasti bisa!', true)
+    const tip = getExerciseInstruction(props.engine.currentExercise?.type) || 'Hitung objek satu per satu secara teliti dari kiri ke kanan ya, kamu pasti bisa!'
+    narrator.speak(`Petunjuk: ${tip}`, true)
   } else {
     narrator.stop()
   }
 }
+
+// Auto-speak question on new question load
+watch(() => props.engine.currentExercise?.id, (newId) => {
+  if (newId && props.engine.currentExercise?.question) {
+    narrator.autoSpeak(props.engine.currentExercise.question)
+  }
+}, { immediate: true })
 
 // Stop narrator speech when answer is checked or component unmounts
 watch(() => props.engine.isChecked, (checked) => {
