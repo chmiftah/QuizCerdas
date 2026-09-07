@@ -91,6 +91,13 @@
           </div>
         </div>
 
+        <!-- Voice Narrator: Kiko Talking Mascot & Kid-Friendly Speech Reader -->
+        <KikoVoiceNarrator 
+          :questionText="engine.currentExercise.question" 
+          :instruction="getExerciseInstruction(engine.currentExercise.type)"
+          :mascotAvatar="userStore.userAvatar || '🦉'"
+        />
+
         <!-- Book-Style Question Visual Illustration -->
         <QuestionVisual :exercise="engine.currentExercise" />
 
@@ -387,8 +394,10 @@
 </template>
 
 <script setup>
-import { ref, computed, unref } from 'vue'
+import { ref, computed, unref, watch, onUnmounted } from 'vue'
 import { useUserStore } from '~/stores/user'
+import { useVoiceNarrator } from '~/composables/useVoiceNarrator'
+import KikoVoiceNarrator from '~/components/KikoVoiceNarrator.vue'
 import { X, Heart, ChevronDown, ChevronUp } from 'lucide-vue-next'
 
 const props = defineProps({
@@ -397,6 +406,7 @@ const props = defineProps({
 })
 
 const userStore = useUserStore()
+const narrator = useVoiceNarrator()
 const isPathOpen = ref(false)
 
 const currentExerciseOptions = computed(() => {
@@ -457,27 +467,68 @@ const handleVoiceSelection = (val) => {
 }
 
 const handleManualCheckAnswer = () => {
+  narrator.stop()
   if (canCheck.value) {
     props.engine.checkAnswer()
   } else {
     props.engine.showHint = true
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel()
-      const utterance = new SpeechSynthesisUtterance('Pilih atau katakan jawabanmu terlebih dahulu ya!')
-      utterance.lang = 'id-ID'
-      window.speechSynthesis.speak(utterance)
-    }
+    narrator.speak('Pilih atau tentukan jawabanmu terlebih dahulu ya!', true)
   }
 }
 
 const toggleHint = () => {
   props.engine.showHint = !props.engine.showHint
-  if (props.engine.showHint && typeof window !== 'undefined' && 'speechSynthesis' in window) {
-    window.speechSynthesis.cancel()
-    const utterance = new SpeechSynthesisUtterance('Hitung objek satu per satu secara teliti dari kiri ke kanan ya, kamu pasti bisa!')
-    utterance.lang = 'id-ID'
-    window.speechSynthesis.speak(utterance)
+  if (props.engine.showHint) {
+    narrator.speak('Hitung objek satu per satu secara teliti dari kiri ke kanan ya, kamu pasti bisa!', true)
+  } else {
+    narrator.stop()
   }
+}
+
+// Stop narrator speech when answer is checked or component unmounts
+watch(() => props.engine.isChecked, (checked) => {
+  if (checked) {
+    narrator.stop()
+  }
+})
+
+onUnmounted(() => {
+  narrator.stop()
+})
+
+const getExerciseInstruction = (type) => {
+  const instructionMap = {
+    'multiple_choice': 'Pilih satu jawaban yang paling tepat ya!',
+    'true_false': 'Pilih apakah pernyataan ini Benar atau Salah!',
+    'true_false_image': 'Perhatikan gambar, lalu pilih Benar atau Salah!',
+    'fill_in_blank': 'Tulis jawabanmu di kotak yang tersedia!',
+    'matching': 'Tarik garis untuk memasangkan gambar yang cocok!',
+    'drag_and_drop': 'Seret objek ke kotak jawaban yang sesuai!',
+    'shadow_matching': 'Cocokkan objek dengan bentuk bayangannya!',
+    'sequence_ordering': 'Susun urutan angka atau gambar secara benar!',
+    'pattern_matching': 'Lanjutkan pola berulang yang tepat berikutnya!',
+    'odd_one_out': 'Temukan satu gambar yang paling berbeda!',
+    'memory_flip': 'Buka kartu dan temukan pasangan yang sama!',
+    'seek_find': 'Cari dan hitung objek tersembunyi di gambar!',
+    'comparison': 'Tentukan kelompok mana yang lebih banyak atau sedikit!',
+    'category_sorting': 'Kelompokkan objek ke kategori yang sesuai!',
+    'drag_to_sort': 'Tarik objek ke keranjang kategori yang benar!',
+    'hotspot': 'Sentuh atau klik area yang diminta pada gambar!',
+    'word_building': 'Susun huruf-huruf menjadi kata yang benar!',
+    'sound_matching': 'Dengarkan suara dan pilih gambar yang cocok!',
+    'puzzle_assembly': 'Susun potongan puzzle menjadi gambar utuh!',
+    'fill_missing_number': 'Tebak angka yang hilang di barisan ini!',
+    'time_reading': 'Lihat jarum jam dan pilih waktu yang tepat!',
+    'shape_transform': 'Perhatikan perubahan bentuk geometri ini!',
+    'count_select': 'Hitung jumlah objeknya, lalu pilih angkanya!',
+    'number_tracing': 'Tebalkan garis pola angka ini dengan jarimu!',
+    'reading': 'Ucapkan atau baca teks ini dengan nyaring!',
+    'number_maze': 'Ikuti jalur labirin angka yang benar!',
+    'balance_scale': 'Seimbangkan timbangan dengan jumlah yang sama!',
+    'color_by_number': 'Warnai bagian gambar sesuai nomor angkanya!',
+    'syllable_clapping': 'Hitung ketukan suku kata dari kata tersebut!'
+  }
+  return instructionMap[type] || 'Ayo selesaikan tantangan ini!'
 }
 
 const getExerciseTypeLabel = (type) => {
