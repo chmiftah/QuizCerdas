@@ -1,26 +1,26 @@
 <template>
-  <div class="relative w-full aspect-square max-w-[620px] mx-auto select-none pointer-events-auto">
+  <div class="relative w-full aspect-square min-h-[300px] sm:min-h-[380px] max-w-[580px] mx-auto select-none pointer-events-auto">
     <!-- Transparent 3D WebGL Canvas Container (Frameless & Borderless) -->
-    <div ref="canvasContainer" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
+    <div ref="canvasContainer" class="w-full h-full min-h-[300px] sm:min-h-[380px] cursor-grab active:cursor-grabbing"></div>
 
     <!-- Bottom Interactive Pill Hint -->
-    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-4 py-2 bg-slate-900/80 text-white backdrop-blur-md rounded-full border border-slate-700 shadow-xl pointer-events-none">
-      <span class="w-2.5 h-2.5 rounded-full bg-duo-green animate-ping"></span>
-      <span class="text-xs font-heading font-extrabold tracking-wide">
-        ✨ Sentuh & Klik Burung Kiko Untuk Melompat! 🚀
+    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-slate-900/85 text-white backdrop-blur-md rounded-full border border-slate-700 shadow-xl pointer-events-none whitespace-nowrap">
+      <span class="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-duo-green animate-ping shrink-0"></span>
+      <span class="text-[10px] sm:text-xs font-heading font-extrabold tracking-wide">
+        ✨ Sentuh & Klik Kiko Untuk Melompat! 🚀
       </span>
     </div>
 
     <!-- Loading Fallback Spinner -->
-    <div v-if="loading" class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-transparent gap-3">
-      <div class="w-12 h-12 border-4 border-duo-green border-t-transparent rounded-full animate-spin"></div>
-      <span class="text-xs font-heading font-bold text-slate-700">Memuat Teks 3D & Mascot Kiko...</span>
+    <div v-if="loading" class="absolute inset-0 z-30 flex flex-col items-center justify-center bg-sky-50/40 backdrop-blur-xs gap-3 rounded-3xl">
+      <div class="w-10 h-10 sm:w-12 sm:h-12 border-4 border-duo-green border-t-transparent rounded-full animate-spin"></div>
+      <span class="text-xs font-heading font-bold text-slate-700">Memuat 3D Kiko...</span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import * as THREE from 'three'
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
@@ -64,20 +64,41 @@ let clickBounceTime = 0
 const init3D = () => {
   if (!canvasContainer.value) return
 
-  const width = canvasContainer.value.clientWidth
-  const height = canvasContainer.value.clientHeight
+  // Clean existing canvas elements
+  while (canvasContainer.value.firstChild) {
+    canvasContainer.value.removeChild(canvasContainer.value.firstChild)
+  }
+
+  const containerRect = canvasContainer.value.getBoundingClientRect()
+  const width = Math.round(containerRect.width || canvasContainer.value.clientWidth || window.innerWidth || 340)
+  let height = Math.round(containerRect.height || canvasContainer.value.clientHeight || 0)
+  if (height <= 50) {
+    height = Math.max(width, 300)
+  }
+  const aspect = width / height
 
   // 1. Scene
   scene = new THREE.Scene()
 
-  // 2. Camera (Positioned for balanced FOV)
-  camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000)
-  camera.position.set(0, 0, 9.2)
+  // 2. Camera (Adaptive distance and FOV for mobile vs desktop)
+  const isMobile = width < 640
+  const cameraZ = isMobile ? 10.6 : 9.2
+  camera = new THREE.PerspectiveCamera(isMobile ? 54 : 50, aspect, 0.1, 1000)
+  camera.position.set(0, 0, cameraZ)
 
-  // 3. Renderer (Alpha enabled for transparent background)
-  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+  // 3. Renderer with safe WebGL fallback
+  try {
+    renderer = new THREE.WebGLRenderer({ 
+      antialias: true, 
+      alpha: true, 
+      powerPreference: 'high-performance' 
+    })
+  } catch (e) {
+    renderer = new THREE.WebGLRenderer({ alpha: true })
+  }
+
   renderer.setSize(width, height)
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
   renderer.shadowMap.enabled = true
   renderer.shadowMap.type = THREE.PCFSoftShadowMap
   renderer.toneMapping = THREE.ACESFilmicToneMapping
@@ -123,9 +144,11 @@ const init3D = () => {
   // 8. Create Star Dust Particles
   createSparkles()
 
-  // Listeners
+  // Listeners (Mouse, Touch, and Resize)
   window.addEventListener('mousemove', onMouseMove)
   canvasContainer.value.addEventListener('click', onClickCanvas)
+  canvasContainer.value.addEventListener('touchstart', onTouchStart, { passive: true })
+  canvasContainer.value.addEventListener('touchmove', onTouchMove, { passive: true })
   window.addEventListener('resize', onWindowResize)
 
   loading.value = false
@@ -472,12 +495,24 @@ const createSparkles = () => {
   scene.add(particlesMesh)
 }
 
-// Mouse Tracking
+// Mouse & Touch Tracking
 const onMouseMove = (event: MouseEvent) => {
   if (!canvasContainer.value) return
   const rect = canvasContainer.value.getBoundingClientRect()
   mouse.targetX = ((event.clientX - rect.left) / rect.width) * 2 - 1
   mouse.targetY = -((event.clientY - rect.top) / rect.height) * 2 + 1
+}
+
+const onTouchMove = (event: TouchEvent) => {
+  if (!canvasContainer.value || !event.touches[0]) return
+  const rect = canvasContainer.value.getBoundingClientRect()
+  const touch = event.touches[0]
+  mouse.targetX = ((touch.clientX - rect.left) / rect.width) * 2 - 1
+  mouse.targetY = -((touch.clientY - rect.top) / rect.height) * 2 + 1
+}
+
+const onTouchStart = () => {
+  clickBounceTime = 1.0
 }
 
 // Click Trigger for 3D Mascot Jump
@@ -488,8 +523,15 @@ const onClickCanvas = () => {
 // Window Resize
 const onWindowResize = () => {
   if (!canvasContainer.value || !renderer || !camera) return
-  const width = canvasContainer.value.clientWidth
-  const height = canvasContainer.value.clientHeight
+  const containerRect = canvasContainer.value.getBoundingClientRect()
+  const width = Math.round(containerRect.width || canvasContainer.value.clientWidth || window.innerWidth || 340)
+  let height = Math.round(containerRect.height || canvasContainer.value.clientHeight || 0)
+  if (height <= 50) {
+    height = Math.max(width, 300)
+  }
+  const isMobile = width < 640
+  camera.position.z = isMobile ? 10.6 : 9.2
+  camera.fov = isMobile ? 54 : 50
   camera.aspect = width / height
   camera.updateProjectionMatrix()
   renderer.setSize(width, height)
@@ -577,13 +619,22 @@ const animate = () => {
 const clock = new THREE.Clock()
 
 onMounted(() => {
-  init3D()
+  nextTick(() => {
+    setTimeout(() => {
+      init3D()
+    }, 60)
+  })
 })
 
 onBeforeUnmount(() => {
   cancelAnimationFrame(animationFrameId)
   window.removeEventListener('mousemove', onMouseMove)
   window.removeEventListener('resize', onWindowResize)
+  if (canvasContainer.value) {
+    canvasContainer.value.removeEventListener('click', onClickCanvas)
+    canvasContainer.value.removeEventListener('touchstart', onTouchStart)
+    canvasContainer.value.removeEventListener('touchmove', onTouchMove)
+  }
   if (renderer && renderer.domElement) {
     renderer.dispose()
   }

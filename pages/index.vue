@@ -76,11 +76,10 @@
           </div>
 
           <!-- Right Hero 3D Interactive Mascot Visual -->
-          <!-- Right Hero 3D Interactive Mascot Visual -->
-          <div class="lg:col-span-5 relative flex justify-center z-10">
-            <div class="relative w-full max-w-xl">
+          <div class="lg:col-span-5 relative flex justify-center z-10 w-full">
+            <div class="relative w-full max-w-sm sm:max-w-md lg:max-w-xl min-h-[300px] sm:min-h-[380px]">
               <!-- Background Ambient Blur Glow -->
-              <div class="absolute -inset-6 bg-duo-green/20 rounded-3xl blur-3xl pointer-events-none"></div>
+              <div class="absolute -inset-4 sm:-inset-6 bg-duo-green/20 rounded-3xl blur-3xl pointer-events-none"></div>
 
               <!-- 3D Interactive Hero Canvas Component -->
               <ClientOnly>
