@@ -58,45 +58,24 @@
     <!-- Main Question Container -->
     <main class="max-w-2xl mx-auto w-full px-3 sm:px-4 py-4 sm:py-8 flex-1 overflow-x-hidden">
       <div v-if="engine.currentExercise" class="space-y-4 sm:space-y-8 animate-pop w-full min-w-0">
-        <!-- Lesson Summary Header & Hint Button -->
-        <div class="flex items-center justify-between gap-2 sm:gap-3 w-full min-w-0">
-          <div v-if="lessonSummary" class="bg-blue-50 border-2 border-duo-blue/30 rounded-2xl p-2.5 sm:p-3 flex items-center gap-2 flex-1 min-w-0 overflow-hidden">
-            <span class="text-base shrink-0">💡</span>
-            <p class="text-xs font-heading font-semibold text-slate-700 truncate min-w-0">
-              {{ lessonSummary }}
-            </p>
-          </div>
+        <!-- Unified Sleek Question & Voice Narrator Bar -->
+        <KikoVoiceNarrator 
+          :questionText="engine.currentExercise.question" 
+          :instruction="getExerciseInstruction(engine.currentExercise.type)"
+          :typeLabel="getExerciseTypeLabel(engine.currentExercise.type)"
+          :mascotAvatar="userStore.userAvatar || '🦉'"
+          :showHint="engine.showHint"
+          @toggle-hint="toggleHint"
+        />
 
-          <!-- Exercise Type Badge -->
-          <div v-if="engine.currentExercise" class="px-3 py-1.5 bg-purple-50 border-2 border-purple-300 rounded-2xl text-xs font-heading font-extrabold text-purple-800 shrink-0 shadow-2xs">
-            <span class="hidden sm:inline">{{ getExerciseTypeLabel(engine.currentExercise.type) }}</span>
-            <span class="sm:hidden">{{ getExerciseTypeIcon(engine.currentExercise.type) }}</span>
-          </div>
-
-          <button
-            @click="toggleHint"
-            type="button"
-            class="px-3.5 py-2 bg-amber-100 hover:bg-amber-200 text-amber-900 border-2 border-amber-300 rounded-2xl font-heading font-extrabold text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs shrink-0 active:scale-95"
-          >
-            <span>💡 Petunjuk Kiko</span>
-          </button>
-        </div>
-
-        <!-- Hint Text Drawer -->
-        <div v-if="engine.showHint" class="p-4 bg-amber-50 border-3 border-amber-300 rounded-2xl text-xs sm:text-sm font-heading font-bold text-amber-900 animate-pop flex items-center gap-3 shadow-md">
-          <span class="text-2xl">🐼</span>
+        <!-- Hint Text Drawer (Opens when Hint button is clicked) -->
+        <div v-if="engine.showHint" class="p-3.5 sm:p-4 bg-amber-50 border-2 border-amber-300 rounded-2xl text-xs sm:text-sm font-heading font-bold text-amber-900 animate-pop flex items-center gap-3 shadow-sm">
+          <span class="text-2xl">💡</span>
           <div>
             <span class="block font-black text-amber-950">Petunjuk Kiko:</span>
             <span>"Hitung objek satu per satu secara teliti dari kiri ke kanan ya, kamu pasti bisa!"</span>
           </div>
         </div>
-
-        <!-- Voice Narrator: Kiko Talking Mascot & Kid-Friendly Speech Reader -->
-        <KikoVoiceNarrator 
-          :questionText="engine.currentExercise.question" 
-          :instruction="getExerciseInstruction(engine.currentExercise.type)"
-          :mascotAvatar="userStore.userAvatar || '🦉'"
-        />
 
         <!-- Book-Style Question Visual Illustration -->
         <QuestionVisual :exercise="engine.currentExercise" />
