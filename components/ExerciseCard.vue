@@ -1,41 +1,55 @@
 <template>
-  <div class="min-h-screen bg-slate-50 flex flex-col justify-between pb-32 overflow-x-hidden w-full max-w-full">
+  <div 
+    class="min-h-screen bg-slate-50 flex flex-col justify-between pb-32 overflow-x-hidden w-full max-w-full transition-all duration-300"
+    :class="engine.comboCount >= 3 ? 'ring-4 ring-amber-400/60' : ''"
+  >
     <!-- Lesson Runner Top Header Bar -->
-    <header class="p-2.5 sm:p-4 bg-white border-b-2 border-duo-gray-100 sticky top-0 z-30 shadow-2xs overflow-hidden">
-      <div class="max-w-3xl mx-auto flex items-center justify-between gap-1.5 sm:gap-4 w-full min-w-0">
+    <header class="p-2.5 sm:p-4 bg-white/95 backdrop-blur-md border-b-2 border-slate-200 sticky top-0 z-30 shadow-2xs overflow-hidden">
+      <div class="max-w-3xl mx-auto flex items-center justify-between gap-2 sm:gap-4 w-full min-w-0">
         <!-- Close / Quit Button -->
-        <NuxtLink to="/" class="p-1 text-duo-gray-400 hover:text-slate-800 transition-colors rounded-xl hover:bg-duo-gray-50 shrink-0">
-          <X class="w-6 h-6 sm:w-7 sm:h-7 stroke-[3]" />
+        <NuxtLink 
+          to="/" 
+          class="w-10 h-10 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center transition-transform active:scale-90 shrink-0 border border-slate-200"
+          title="Keluar ke Dashboard"
+        >
+          <X class="w-6 h-6 stroke-[3]" />
         </NuxtLink>
 
-        <!-- Progress Bar Track -->
-        <div class="flex-1 bg-duo-gray-100 h-3 sm:h-4 rounded-full overflow-hidden p-0.5 border border-duo-gray-200 min-w-0">
+        <!-- Liquid Shimmer Progress Bar Track -->
+        <div class="flex-1 bg-slate-100 h-4 sm:h-5 rounded-full overflow-hidden p-0.5 border-2 border-slate-200 min-w-0 relative shadow-inner">
           <div 
-            class="bg-duo-green h-full rounded-full transition-all duration-300 shadow-sm"
-            :style="{ width: `${engine.progressPercentage}%` }"
-          ></div>
+            class="bg-gradient-to-r from-emerald-400 via-emerald-500 to-[#58cc02] h-full rounded-full transition-all duration-500 shadow-md relative overflow-hidden flex items-center justify-end pr-1"
+            :style="{ width: `${Math.max(engine.progressPercentage, 4)}%` }"
+          >
+            <!-- Liquid Shimmer Overlay -->
+            <div class="absolute inset-0 bg-liquid-shimmer pointer-events-none opacity-50"></div>
+          </div>
         </div>
 
         <!-- Toggle Progress Path Button -->
         <button 
           @click="isPathOpen = !isPathOpen"
-          class="flex items-center gap-1 px-2 sm:px-3 py-1 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 font-heading font-bold text-[11px] sm:text-xs rounded-xl sm:rounded-2xl transition-colors cursor-pointer shrink-0 shadow-2xs"
+          class="flex items-center gap-1 px-2.5 sm:px-3.5 py-1.5 bg-amber-50 hover:bg-amber-100 border-2 border-amber-300 text-amber-900 font-heading font-black text-[11px] sm:text-xs rounded-2xl transition-all cursor-pointer shrink-0 shadow-2xs active:scale-95"
           title="Tampilkan / Sembunyikan Peta Jalur Belajar"
         >
           <span>🗺️</span>
-          <span class="hidden sm:inline">Peta Jalur</span>
-          <ChevronDown v-if="!isPathOpen" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-700" />
-          <ChevronUp v-else class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-700" />
+          <span class="hidden sm:inline">Peta</span>
+          <ChevronDown v-if="!isPathOpen" class="w-3.5 h-3.5 text-amber-700" />
+          <ChevronUp v-else class="w-3.5 h-3.5 text-amber-700" />
         </button>
 
-        <!-- Active Combo Multiplier Badge -->
-        <div v-if="engine.comboCount >= 2" class="flex items-center gap-1 px-2 sm:px-3 py-1 bg-amber-500 text-white rounded-xl sm:rounded-2xl border-2 border-amber-300 font-heading font-black text-[11px] sm:text-xs animate-bounce shadow-md shrink-0" title="Combo Jawab Benar!">
-          <span>🔥 <span class="hidden sm:inline">Combo </span>x{{ engine.comboCount }}!</span>
+        <!-- Active Combo Multiplier Badge with Fiery Glow -->
+        <div 
+          v-if="engine.comboCount >= 2" 
+          class="flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 text-white rounded-2xl border-2 border-white font-heading font-black text-[11px] sm:text-xs animate-bounce shadow-lg shrink-0" 
+          title="Combo Beruntun!"
+        >
+          <span>🔥 x{{ engine.comboCount }}!</span>
         </div>
 
-        <!-- Remaining Hearts -->
-        <div class="flex items-center gap-1 px-2 sm:px-3 py-1 bg-rose-50 rounded-xl sm:rounded-2xl border border-rose-200 text-duo-red font-heading font-extrabold text-[11px] sm:text-sm shrink-0">
-          <Heart class="w-4 h-4 sm:w-5 sm:h-5 fill-duo-red" />
+        <!-- Remaining Hearts with Tactile Badge -->
+        <div class="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 bg-rose-50 rounded-2xl border-2 border-rose-200 text-rose-600 font-heading font-black text-xs sm:text-sm shrink-0 shadow-2xs">
+          <Heart class="w-4 h-4 sm:w-5 sm:h-5 fill-rose-500 text-rose-500 animate-pulse" />
           <span>{{ userStore.hearts }}</span>
         </div>
       </div>
@@ -327,8 +341,8 @@
     </main>
 
     <!-- Bottom Check Answer Bar (Visible when not checked) -->
-    <footer v-if="!engine.isChecked" class="fixed bottom-0 left-0 right-0 z-20 bg-white/95 backdrop-blur-md border-t-2 border-duo-gray-100 p-2.5 sm:p-4 shadow-lg">
-      <div class="max-w-2xl mx-auto flex items-center justify-between gap-2 sm:gap-4 w-full">
+    <footer v-if="!engine.isChecked" class="fixed bottom-0 left-0 right-0 z-20 bg-white/95 backdrop-blur-md border-t-2 border-slate-200 p-3 sm:p-4 shadow-[0_-8px_30px_rgba(0,0,0,0.08)]">
+      <div class="max-w-2xl mx-auto flex items-center justify-between gap-3 sm:gap-4 w-full">
         <!-- Voice Answer Microphone Button -->
         <VoiceAnswerButton 
           :disabled="engine.isChecked"
@@ -339,9 +353,12 @@
         <button 
           @click="handleManualCheckAnswer"
           type="button"
-          class="flex-1 px-3 sm:px-8 py-3 sm:py-4 text-xs xs:text-sm sm:text-base font-heading font-black duo-btn-green rounded-xl sm:rounded-2xl shadow-md transition-transform active:scale-95 cursor-pointer text-center justify-center min-w-0"
+          class="flex-1 px-4 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-heading font-black rounded-2xl transition-all cursor-pointer text-center justify-center min-w-0 select-none active:translate-y-1"
+          :class="canCheck 
+            ? 'duo-btn-green border-b-6 border-emerald-700 shadow-lg shadow-emerald-500/30 hover:scale-[1.01] active:border-b-2' 
+            : 'bg-slate-200 border-2 border-b-4 border-slate-300 text-slate-400 cursor-not-allowed'"
         >
-          <span class="truncate">CEK JAWABAN 🚀</span>
+          <span class="truncate">PERIKSA JAWABAN 🚀</span>
         </button>
       </div>
     </footer>

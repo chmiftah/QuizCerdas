@@ -239,19 +239,58 @@
         </div>
       </div>
 
-      <!-- TAB 3: SOAL & KURSUS -->
+      <!-- TAB 3: SOAL & KURSUS (SIMPLE 3-LEVEL DRILLDOWN) -->
       <div v-if="activeTab === 'courses'" class="space-y-6 animate-pop">
         
-        <!-- Top Control Bar: Mode Toggle, Course Switcher, Actions -->
+        <!-- Top Control Bar: Breadcrumb Navigation & Global Actions -->
         <div class="bg-white p-5 rounded-3xl border-2 border-slate-200 shadow-sm space-y-4">
           <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="text-2xl">📚</span>
-                <h3 class="font-heading text-xl font-black text-slate-800">Manajemen Kursus & Bank Soal Interaktif</h3>
-              </div>
-              <p class="text-xs text-slate-500 font-heading mt-0.5">
-                Kelola kurikulum kuis bertingkat, struktur unit & pelajaran, edit soal dengan 29 tipe interaktif, dan uji preview langsung.
+            
+            <!-- Breadcrumbs / Level Indicator -->
+            <div class="space-y-1">
+              <nav class="flex items-center gap-2 text-xs font-heading font-extrabold flex-wrap">
+                <!-- Level 1: Semua Kursus -->
+                <button 
+                  @click="goToCoursesList"
+                  type="button"
+                  class="cursor-pointer transition-colors flex items-center gap-1.5"
+                  :class="courseDrillLevel === 'courses' ? 'text-purple-800 font-black' : 'text-slate-500 hover:text-purple-700'"
+                >
+                  <span>📚</span>
+                  <span>Semua Kursus</span>
+                </button>
+
+                <!-- Separator 1 -->
+                <span v-if="courseDrillLevel === 'units' || courseDrillLevel === 'lessons'" class="text-slate-300 font-bold">/</span>
+
+                <!-- Level 2: Detail Unit Kursus -->
+                <button 
+                  v-if="courseDrillLevel === 'units' || courseDrillLevel === 'lessons'"
+                  @click="courseDrillLevel = 'units'"
+                  type="button"
+                  class="cursor-pointer transition-colors flex items-center gap-1"
+                  :class="courseDrillLevel === 'units' ? 'text-purple-800 font-black' : 'text-slate-500 hover:text-purple-700'"
+                >
+                  <span>{{ guiCourseForm.icon || '⭐' }}</span>
+                  <span class="max-w-[200px] truncate">{{ guiCourseForm.title }}</span>
+                  <span class="text-[10px] px-1.5 py-0.5 bg-purple-100 text-purple-800 rounded-md ml-0.5">Unit</span>
+                </button>
+
+                <!-- Separator 2 -->
+                <span v-if="courseDrillLevel === 'lessons'" class="text-slate-300 font-bold">/</span>
+
+                <!-- Level 3: Bank Soal & Pelajaran -->
+                <span v-if="courseDrillLevel === 'lessons'" class="text-purple-900 font-black flex items-center gap-1">
+                  <span>📖</span>
+                  <span>Unit {{ selectedUnitIndex + 1 }}: {{ activeUnit?.title }}</span>
+                  <span class="text-[10px] px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded-md ml-0.5">Soal</span>
+                </span>
+              </nav>
+
+              <p class="text-xs text-slate-500 font-heading">
+                <span v-if="courseDrillLevel === 'courses'">Pilih kursus di tabel untuk mengelola unit & butir soal kuis bertingkat.</span>
+                <span v-else-if="courseDrillLevel === 'units'">Daftar unit pembelajaran dalam kursus. Klik <strong>"Buka Pelajaran & Soal"</strong> untuk mengelola butir soal.</span>
+                <span v-else>Kelola butir soal interaktif di pelajaran ini. Gunakan <strong>Generator Soal</strong> atau <strong>Preview</strong> untuk menguji.</span>
               </p>
             </div>
 
@@ -265,7 +304,7 @@
                   class="px-3.5 py-2 rounded-xl transition-all cursor-pointer flex items-center gap-1.5"
                   :class="courseEditorMode === 'gui' ? 'bg-purple-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'"
                 >
-                  <span>🗂️</span> Explorer & Soal
+                  <span>🗂️</span> Tampilan Tabel & Explorer
                 </button>
                 <button 
                   @click="courseEditorMode = 'json'"
@@ -287,78 +326,228 @@
                 <span>Buat Kursus Baru</span>
               </button>
 
-              <!-- Save Changes to PostgreSQL Button -->
+              <!-- Save Changes to PostgreSQL Button (Active when in units or lessons) -->
               <button 
+                v-if="courseDrillLevel !== 'courses' || courseEditorMode === 'json'"
                 @click="saveGuiCourse(true)"
                 type="button"
                 class="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl shadow-md transition-all active:scale-95 cursor-pointer flex items-center gap-1.5"
               >
                 <span>💾</span>
-                <span>Simpan ke Database</span>
+                <span>Simpan Perubahan</span>
               </button>
             </div>
           </div>
 
-          <!-- Course Switcher Strip -->
-          <div class="pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div class="flex items-center gap-3 w-full sm:w-auto">
-              <label class="font-heading font-bold text-xs text-slate-500 shrink-0">Pilih Kursus:</label>
-              <div class="relative flex-1 sm:w-80">
-                <select 
-                  :value="selectedCourseId" 
-                  @change="(e) => selectCourseToManage(e.target.value)"
-                  class="w-full p-2.5 pl-3 pr-8 rounded-xl border-2 border-purple-200 bg-purple-50/50 font-heading font-black text-xs text-purple-950 focus:border-purple-500 focus:outline-none cursor-pointer appearance-none"
-                >
-                  <option 
-                    v-for="c in courseStore.catalogRegistry" 
-                    :key="c.id" 
-                    :value="c.id"
-                  >
-                    {{ c.icon || '⭐' }} {{ c.title }} ({{ c.id }})
-                  </option>
-                </select>
-                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-purple-500 pointer-events-none text-xs">▼</span>
-              </div>
-            </div>
-
-            <!-- Status Banner Notification -->
-            <div v-if="guiStatus" class="px-3 py-1.5 rounded-xl text-xs font-heading font-extrabold flex items-center gap-1.5" :class="guiStatus.error ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-emerald-50 text-emerald-800 border border-emerald-200'">
+          <!-- Status Notification Banner -->
+          <div v-if="guiStatus" class="p-3 rounded-2xl text-xs font-heading font-extrabold flex items-center justify-between gap-2" :class="guiStatus.error ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-emerald-50 text-emerald-800 border border-emerald-200'">
+            <div class="flex items-center gap-2">
               <span>{{ guiStatus.error ? '⚠️' : '✅' }}</span>
               <span>{{ guiStatus.message }}</span>
             </div>
+            <button @click="guiStatus = null" class="text-slate-400 hover:text-slate-600 font-black cursor-pointer">✕</button>
           </div>
         </div>
 
-        <!-- MODE 1: HIERARCHICAL EXPLORER & QUESTION MANAGER -->
-        <div v-if="courseEditorMode === 'gui'" class="space-y-6 animate-pop">
+        <!-- ========================================================================= -->
+        <!-- LEVEL 1: TABEL KURSUS (CLEAN, SCANNABLE, SIMPLE) -->
+        <!-- ========================================================================= -->
+        <div v-if="courseEditorMode === 'gui' && courseDrillLevel === 'courses'" class="space-y-4 animate-pop">
           
-          <!-- Course Metadata Summary Card -->
+          <div class="bg-white rounded-3xl border-2 border-slate-200 shadow-sm overflow-hidden font-heading">
+            <!-- Table Header Strip -->
+            <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-slate-50/50">
+              <div class="flex items-center gap-2">
+                <span class="text-xl">📋</span>
+                <div>
+                  <h4 class="font-black text-slate-800 text-base">Tabel Kursus & Modul Kuis</h4>
+                  <p class="text-xs text-slate-400">Total {{ filteredCourses.length }} kursus terdaftar. Klik "Kelola Unit & Soal" untuk mengedit materi.</p>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button 
+                  @click="openNewCourseModal"
+                  type="button"
+                  class="px-3.5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-black cursor-pointer flex items-center gap-1.5 shadow-xs transition-all active:scale-95"
+                >
+                  <span>➕</span>
+                  <span>Tambah Kursus Baru</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Responsive Courses Table -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr class="bg-slate-100/80 text-slate-500 font-extrabold uppercase text-[11px] tracking-wider border-b border-slate-200">
+                    <th class="p-4 pl-6">Kursus & Modul</th>
+                    <th class="p-4">Kategori & Sasaran</th>
+                    <th class="p-4">Struktur Konten</th>
+                    <th class="p-4 pr-6 text-right">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr 
+                    v-for="c in filteredCourses" 
+                    :key="c.id"
+                    class="hover:bg-purple-50/40 transition-colors group"
+                  >
+                    <!-- Column 1: Course Info -->
+                    <td class="p-4 pl-6">
+                      <div class="flex items-start gap-3.5">
+                        <div class="w-12 h-12 rounded-2xl bg-purple-100 border-2 border-purple-200 flex items-center justify-center text-2xl shrink-0 group-hover:scale-105 transition-transform shadow-2xs">
+                          {{ c.icon || '⭐' }}
+                        </div>
+                        <div class="space-y-1">
+                          <div class="flex items-center gap-2 flex-wrap">
+                            <span class="font-black text-slate-800 text-sm group-hover:text-purple-900 transition-colors">
+                              {{ c.title }}
+                            </span>
+                            <code class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-[10px] font-mono border border-slate-200">
+                              {{ c.id }}
+                            </code>
+                          </div>
+                          <p class="text-slate-500 text-xs line-clamp-1 max-w-md font-medium">
+                            {{ c.description || 'Tidak ada deskripsi kursus.' }}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+
+                    <!-- Column 2: Category & Audience -->
+                    <td class="p-4">
+                      <div class="flex flex-col gap-1.5 items-start">
+                        <span class="px-2.5 py-0.5 bg-purple-100 text-purple-800 rounded-lg text-[10px] font-black uppercase">
+                          {{ c.category === 'math' ? '📐 Matematika' : c.category === 'indonesian' ? '📚 Bahasa Indonesia' : c.category === 'science' ? '🔬 Sains & Alam' : '🎨 Seni & Kreatif' }}
+                        </span>
+                        <span class="px-2.5 py-0.5 bg-amber-100 text-amber-900 rounded-lg text-[10px] font-extrabold">
+                          🎯 {{ c.target_audience || 'Semua Siswa' }}
+                        </span>
+                      </div>
+                    </td>
+
+                    <!-- Column 3: Stats -->
+                    <td class="p-4">
+                      <div class="flex items-center gap-2 flex-wrap text-[11px] font-bold">
+                        <span class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg border border-slate-200 flex items-center gap-1">
+                          <span>🗺️</span>
+                          <strong>{{ getCourseStats(c).unitsCount }}</strong> Unit
+                        </span>
+                        <span class="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg border border-slate-200 flex items-center gap-1">
+                          <span>📖</span>
+                          <strong>{{ getCourseStats(c).lessonsCount }}</strong> Pelajaran
+                        </span>
+                        <span class="px-2.5 py-1 bg-purple-100 text-purple-800 rounded-lg border border-purple-200 flex items-center gap-1">
+                          <span>❓</span>
+                          <strong>{{ getCourseStats(c).exercisesCount }}</strong> Soal
+                        </span>
+                      </div>
+                    </td>
+
+                    <!-- Column 4: Actions -->
+                    <td class="p-4 pr-6 text-right">
+                      <div class="flex items-center justify-end gap-2 flex-wrap">
+                        <!-- PRIMARY DRILL-DOWN BUTTON: GO TO UNITS -->
+                        <button 
+                          @click="goToUnitsList(c.id)"
+                          type="button"
+                          class="px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-black shadow-xs transition-all active:scale-95 cursor-pointer flex items-center gap-1.5"
+                          title="Buka dan Kelola Unit serta Soal di dalam kursus ini"
+                        >
+                          <span>📋</span>
+                          <span>Kelola Unit & Soal</span>
+                          <span>➔</span>
+                        </button>
+
+                        <!-- Edit Metadata Modal -->
+                        <button 
+                          @click="selectCourseToManage(c.id); openCourseMetadataModal()"
+                          type="button"
+                          class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+                          title="Edit Judul & Info Kursus"
+                        >
+                          <span>✏️</span>
+                        </button>
+
+                        <!-- Delete Course -->
+                        <button 
+                          @click="confirmDeleteCourse(c)"
+                          type="button"
+                          class="px-2.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+                          title="Hapus Kursus"
+                        >
+                          <span>🗑️</span>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Empty Courses Table State -->
+            <div v-if="filteredCourses.length === 0" class="text-center py-12 px-4 space-y-3">
+              <span class="text-4xl block">🔍</span>
+              <p class="font-bold text-slate-700 text-sm">Tidak ada kursus yang sesuai dengan kata kunci pencarian.</p>
+              <button 
+                @click="searchQuery = ''"
+                type="button" 
+                class="px-4 py-2 bg-purple-100 text-purple-800 rounded-xl text-xs font-black cursor-pointer"
+              >
+                Reset Pencarian
+              </button>
+            </div>
+
+            <!-- Bottom Summary Bar -->
+            <div class="p-4 border-t border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 font-bold gap-2">
+              <span>Menampilkan {{ filteredCourses.length }} dari {{ courseStore.catalogRegistry.length }} kursus aktif</span>
+              <span>💡 Klik <strong>"Kelola Unit & Soal"</strong> untuk masuk ke jenjang Unit dan Bank Soal</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- LEVEL 2: DAFTAR UNIT DALAM KURSUS TERPILIH -->
+        <!-- ========================================================================= -->
+        <div v-if="courseEditorMode === 'gui' && courseDrillLevel === 'units'" class="space-y-6 animate-pop font-heading">
+          
+          <!-- Course Header Hero Card -->
           <div class="bg-gradient-to-r from-purple-700 via-purple-800 to-indigo-800 text-white p-6 rounded-3xl shadow-md relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div class="space-y-2 z-10">
+              <button 
+                @click="goToCoursesList" 
+                type="button"
+                class="inline-flex items-center gap-1.5 text-xs font-extrabold text-purple-200 hover:text-white bg-white/15 px-3 py-1.5 rounded-xl cursor-pointer transition-colors mb-1"
+              >
+                <span>←</span>
+                <span>Kembali ke Tabel Semua Kursus</span>
+              </button>
               <div class="flex items-center gap-2 flex-wrap">
-                <span class="px-2.5 py-1 bg-white/20 rounded-lg text-xs font-heading font-black text-purple-100 uppercase">
+                <span class="px-2.5 py-0.5 bg-white/20 rounded-lg text-[10px] font-black uppercase">
                   {{ guiCourseForm.category || 'math' }}
                 </span>
-                <span class="px-2.5 py-1 bg-amber-400 text-amber-950 rounded-lg text-xs font-heading font-black uppercase">
+                <span class="px-2.5 py-0.5 bg-amber-400 text-amber-950 rounded-lg text-[10px] font-black uppercase">
                   🎯 {{ guiCourseForm.target_audience || 'Semua Siswa' }}
                 </span>
-                <code class="px-2 py-0.5 bg-black/30 text-purple-200 rounded text-[11px] font-mono">
+                <code class="px-2 py-0.5 bg-black/30 text-purple-200 rounded text-[10px] font-mono">
                   ID: {{ guiCourseForm.id }}
                 </code>
               </div>
-              <h2 class="font-heading text-2xl sm:text-3xl font-black flex items-center gap-2">
+              <h2 class="text-2xl sm:text-3xl font-black flex items-center gap-2">
                 <span>{{ guiCourseForm.icon || '⭐' }}</span>
                 <span>{{ guiCourseForm.title }}</span>
               </h2>
-              <p class="text-purple-100 text-xs sm:text-sm font-heading max-w-2xl line-clamp-2">
+              <p class="text-purple-100 text-xs sm:text-sm max-w-2xl line-clamp-2">
                 {{ guiCourseForm.description || 'Tidak ada deskripsi kursus.' }}
               </p>
             </div>
 
-            <!-- Course Meta Actions & Stats -->
+            <!-- Stats & Quick Actions -->
             <div class="flex flex-col sm:flex-row md:flex-col items-start md:items-end gap-3 z-10 shrink-0">
-              <!-- Quick Stats Pill -->
-              <div class="flex items-center gap-2 px-3.5 py-1.5 bg-white/10 backdrop-blur-md rounded-xl text-xs font-heading font-bold text-white border border-white/15">
+              <div class="flex items-center gap-2 px-3.5 py-2 bg-white/10 backdrop-blur-md rounded-xl text-xs font-bold text-white border border-white/15">
                 <span>🗺️ {{ guiCourseForm.units?.length || 0 }} Unit</span>
                 <span>•</span>
                 <span>📖 {{ (guiCourseForm.units || []).reduce((acc, u) => acc + (u.lessons?.length || 0), 0) }} Pelajaran</span>
@@ -366,155 +555,218 @@
                 <span>❓ {{ totalExercisesCount }} Soal</span>
               </div>
 
-              <!-- Buttons -->
               <div class="flex items-center gap-2 flex-wrap">
                 <button 
                   @click="openCourseMetadataModal"
                   type="button"
-                  class="px-3 py-1.5 bg-white text-purple-900 hover:bg-purple-50 rounded-xl text-xs font-heading font-black transition-all cursor-pointer flex items-center gap-1 shadow-sm"
+                  class="px-3 py-1.5 bg-white text-purple-900 hover:bg-purple-50 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1 shadow-sm"
                 >
-                  <span>✏️</span>
-                  <span>Edit Info Kursus</span>
+                  <span>✏️</span> Edit Info Kursus
                 </button>
                 <button 
                   @click="exportCourseJson"
                   type="button"
-                  class="px-3 py-1.5 bg-white/15 hover:bg-white/25 text-white rounded-xl text-xs font-heading font-bold transition-all cursor-pointer flex items-center gap-1"
-                  title="Salin JSON Kursus"
+                  class="px-3 py-1.5 bg-white/15 hover:bg-white/25 text-white rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1"
                 >
-                  <span>📋</span>
-                  <span>Salin JSON</span>
+                  <span>📋</span> Salin JSON
                 </button>
                 <button 
                   @click="confirmDeleteCourse({ id: guiCourseForm.id, title: guiCourseForm.title })"
                   type="button"
-                  class="px-3 py-1.5 bg-rose-500/80 hover:bg-rose-600 text-white rounded-xl text-xs font-heading font-bold transition-all cursor-pointer flex items-center gap-1"
+                  class="px-3 py-1.5 bg-rose-500/80 hover:bg-rose-600 text-white rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1"
                 >
                   <span>🗑️</span>
-                  <span>Hapus</span>
                 </button>
               </div>
             </div>
           </div>
 
-          <!-- STEP-DOWN NAVIGATOR: LEVEL 1 (UNITS) -->
-          <div class="bg-white p-5 rounded-3xl border-2 border-slate-200 shadow-sm space-y-4">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <span class="text-xl">🗺️</span>
-                <div>
-                  <h4 class="font-heading font-black text-sm text-slate-800 uppercase">
-                    Struktur Unit Kursus ({{ guiCourseForm.units?.length || 0 }} Unit)
-                  </h4>
-                  <p class="text-[11px] text-slate-400 font-heading">Pilih unit untuk melihat dan mengelola pelajaran di dalamnya.</p>
+          <!-- Units Table & Management Card -->
+          <div class="bg-white p-6 rounded-3xl border-2 border-slate-200 shadow-sm space-y-5">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-2xl">🗺️</span>
+                  <h3 class="font-black text-lg text-slate-800">
+                    Daftar Unit Pembelajaran ({{ guiCourseForm.units?.length || 0 }} Unit)
+                  </h3>
                 </div>
+                <p class="text-xs text-slate-400 mt-0.5">
+                  Setiap unit berisi beberapa pelajaran dan butir soal kuis. Klik tombol <strong>"Buka Pelajaran & Soal"</strong> untuk masuk ke bank soal.
+                </p>
               </div>
 
               <button 
                 @click="addUnit"
                 type="button"
-                class="px-3.5 py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 rounded-xl text-xs font-heading font-black cursor-pointer transition-colors flex items-center gap-1"
+                class="px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-black cursor-pointer flex items-center gap-1.5 shadow-sm transition-all active:scale-95"
               >
                 <span>➕</span>
                 <span>Tambah Unit Baru</span>
               </button>
             </div>
 
-            <!-- Unit Pills Bar -->
-            <div class="flex items-center gap-2 overflow-x-auto pb-2 font-heading text-xs">
-              <button 
+            <!-- Units List / Table -->
+            <div class="space-y-3">
+              <div 
                 v-for="(unit, uIdx) in (guiCourseForm.units || [])" 
                 :key="unit.id || uIdx"
-                @click="selectedUnitIndex = uIdx; selectedLessonIndex = 0"
-                type="button"
-                class="px-4 py-2.5 rounded-2xl border-2 transition-all cursor-pointer flex items-center gap-2 shrink-0 font-extrabold"
-                :class="selectedUnitIndex === uIdx ? 'bg-purple-600 text-white border-purple-600 shadow-sm scale-[1.02]' : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'"
+                class="p-4 sm:p-5 rounded-2xl border-2 border-slate-200 hover:border-purple-300 bg-slate-50/60 hover:bg-purple-50/20 transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-4"
               >
-                <span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black" :class="selectedUnitIndex === uIdx ? 'bg-white text-purple-700' : 'bg-purple-200 text-purple-900'">
-                  {{ uIdx + 1 }}
-                </span>
-                <span class="truncate max-w-[160px]">{{ unit.title }}</span>
-                <span class="text-[10px] px-1.5 py-0.5 rounded-md" :class="selectedUnitIndex === uIdx ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'">
-                  {{ unit.lessons?.length || 0 }} Pelajaran
-                </span>
-              </button>
+                <!-- Left: Unit Number & Editable Title -->
+                <div class="flex items-start sm:items-center gap-3.5 flex-1 min-w-0">
+                  <div class="w-12 h-12 rounded-2xl bg-purple-600 text-white flex flex-col items-center justify-center font-black shrink-0 shadow-xs">
+                    <span class="text-[10px] uppercase tracking-wider text-purple-200">UNIT</span>
+                    <span class="text-base leading-none">{{ uIdx + 1 }}</span>
+                  </div>
+
+                  <div class="flex-1 min-w-0 space-y-1">
+                    <div class="flex items-center gap-2">
+                      <span class="text-xs font-black text-slate-400 uppercase">Judul Unit:</span>
+                    </div>
+                    <input 
+                      v-model="unit.title" 
+                      type="text" 
+                      class="w-full p-2.5 rounded-xl border border-slate-300 font-black text-sm bg-white text-slate-800 focus:border-purple-500 focus:outline-none"
+                      placeholder="Masukkan judul unit..."
+                    />
+                  </div>
+                </div>
+
+                <!-- Middle: Stats in Unit -->
+                <div class="flex items-center gap-3 shrink-0 text-xs font-bold">
+                  <span class="px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-slate-700 flex items-center gap-1">
+                    <span>📖</span>
+                    <strong>{{ unit.lessons?.length || 0 }}</strong> Pelajaran
+                  </span>
+                  <span class="px-3 py-1.5 bg-purple-100 text-purple-800 rounded-xl border border-purple-200 flex items-center gap-1">
+                    <span>❓</span>
+                    <strong>{{ unit.lessons?.reduce((acc, l) => acc + (l.exercises?.length || 0), 0) }}</strong> Soal
+                  </span>
+                </div>
+
+                <!-- Right: Drill-down & Delete Buttons -->
+                <div class="flex items-center gap-2 shrink-0 justify-end border-t lg:border-t-0 pt-2 lg:pt-0 border-slate-200">
+                  <!-- PRIMARY BUTTON TO LEVEL 3 (EXERCISES) -->
+                  <button 
+                    @click="goToLessonExercises(uIdx, 0)"
+                    type="button"
+                    class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black shadow-xs transition-all active:scale-95 cursor-pointer flex items-center gap-1.5"
+                    title="Buka Pelajaran dan Bank Soal dalam Unit Ini"
+                  >
+                    <span>📖</span>
+                    <span>Buka Pelajaran & Soal</span>
+                    <span>➔</span>
+                  </button>
+
+                  <!-- Delete Unit Button -->
+                  <button 
+                    v-if="(guiCourseForm.units || []).length > 1"
+                    @click="deleteUnit(uIdx)"
+                    type="button"
+                    class="px-2.5 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+                    title="Hapus Unit Ini"
+                  >
+                    <span>🗑️</span>
+                  </button>
+                </div>
+              </div>
             </div>
 
-            <!-- Selected Unit Active Controls -->
-            <div v-if="activeUnit" class="bg-purple-50/60 p-4 rounded-2xl border border-purple-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-heading">
-              <div class="flex items-center gap-2 flex-1 w-full sm:w-auto">
-                <span class="font-black text-purple-900 uppercase shrink-0">Judul Unit {{ selectedUnitIndex + 1 }}:</span>
-                <input 
-                  v-model="activeUnit.title" 
-                  type="text" 
-                  class="flex-1 p-2 rounded-xl border border-purple-300 font-black text-xs bg-white text-slate-800"
-                  placeholder="Judul Unit..."
-                />
-              </div>
-
-              <div class="flex items-center gap-2 shrink-0">
-                <button 
-                  v-if="(guiCourseForm.units || []).length > 1"
-                  @click="deleteUnit(selectedUnitIndex)"
-                  type="button"
-                  class="px-3 py-1.5 text-rose-600 hover:bg-rose-100 rounded-lg font-bold text-xs cursor-pointer transition-colors"
-                >
-                  🗑️ Hapus Unit Ini
-                </button>
-              </div>
+            <!-- Bottom Add Unit Button -->
+            <div class="pt-2 flex justify-center">
+              <button 
+                @click="addUnit"
+                type="button"
+                class="px-6 py-2.5 bg-purple-50 hover:bg-purple-100 text-purple-900 font-black text-xs rounded-xl border border-dashed border-purple-300 transition-colors cursor-pointer flex items-center gap-2"
+              >
+                <span>➕</span>
+                <span>Tambah Unit Baru ke Kursus Ini</span>
+              </button>
             </div>
           </div>
 
-          <!-- STEP-DOWN NAVIGATOR: LEVEL 2 (LESSONS) -->
-          <div v-if="activeUnit" class="bg-white p-5 rounded-3xl border-2 border-slate-200 shadow-sm space-y-4">
-            <div class="flex items-center justify-between">
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- LEVEL 3: BANK SOAL & PELAJARAN DALAM UNIT TERPILIH -->
+        <!-- ========================================================================= -->
+        <div v-if="courseEditorMode === 'gui' && courseDrillLevel === 'lessons'" class="space-y-6 animate-pop font-heading">
+          
+          <!-- Back Navigation Bar -->
+          <div class="flex items-center justify-between">
+            <button 
+              @click="courseDrillLevel = 'units'"
+              type="button"
+              class="px-4 py-2 bg-white hover:bg-slate-100 text-purple-900 border-2 border-slate-200 rounded-2xl text-xs font-black cursor-pointer transition-colors inline-flex items-center gap-2 shadow-2xs"
+            >
+              <span>←</span>
+              <span>Kembali ke Daftar Unit ({{ guiCourseForm.title }})</span>
+            </button>
+
+            <!-- Save DB Button -->
+            <button 
+              @click="saveGuiCourse(true)"
+              type="button"
+              class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl text-xs font-black cursor-pointer transition-all active:scale-95 shadow-sm inline-flex items-center gap-1.5"
+            >
+              <span>💾</span>
+              <span>Simpan Perubahan ke Database</span>
+            </button>
+          </div>
+
+          <!-- Unit & Lesson Switcher Card -->
+          <div class="bg-white p-5 rounded-3xl border-2 border-slate-200 shadow-sm space-y-4">
+            
+            <!-- Unit Title Banner -->
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
               <div class="flex items-center gap-2">
-                <span class="text-xl">📖</span>
+                <span class="w-8 h-8 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black text-xs shrink-0">
+                  U{{ selectedUnitIndex + 1 }}
+                </span>
                 <div>
-                  <h4 class="font-heading font-black text-sm text-slate-800 uppercase">
-                    Pelajaran dalam {{ activeUnit.title }} ({{ activeUnit.lessons?.length || 0 }} Pelajaran)
-                  </h4>
-                  <p class="text-[11px] text-slate-400 font-heading">Pilih pelajaran untuk mengelola bank soal kuis bertahap di dalamnya.</p>
+                  <h3 class="font-black text-base text-slate-800">{{ activeUnit?.title }}</h3>
+                  <p class="text-[11px] text-slate-400">Pilih salah satu pelajaran di bawah untuk melihat dan mengedit butir soalnya.</p>
                 </div>
               </div>
 
               <button 
                 @click="addLesson"
                 type="button"
-                class="px-3.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-xl text-xs font-heading font-black cursor-pointer transition-colors flex items-center gap-1"
+                class="px-3.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-xl text-xs font-black cursor-pointer transition-colors flex items-center gap-1"
               >
                 <span>➕</span>
                 <span>Tambah Pelajaran Baru</span>
               </button>
             </div>
 
-            <!-- Lesson Pills Bar -->
-            <div class="flex items-center gap-2 overflow-x-auto pb-2 font-heading text-xs">
+            <!-- Lesson Tabs Bar -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-2 text-xs">
               <button 
-                v-for="(lesson, lIdx) in (activeUnit.lessons || [])" 
+                v-for="(lesson, lIdx) in (activeUnit?.lessons || [])" 
                 :key="lesson.id || lIdx"
                 @click="selectedLessonIndex = lIdx"
                 type="button"
-                class="px-4 py-2 rounded-xl border-2 transition-all cursor-pointer flex items-center gap-2 shrink-0 font-extrabold"
-                :class="selectedLessonIndex === lIdx ? 'bg-blue-600 text-white border-blue-600 shadow-xs' : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'"
+                class="px-4 py-2.5 rounded-2xl border-2 transition-all cursor-pointer flex items-center gap-2 shrink-0 font-extrabold"
+                :class="selectedLessonIndex === lIdx ? 'bg-blue-600 text-white border-blue-600 shadow-sm scale-[1.02]' : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'"
               >
                 <span>Pelajaran {{ lIdx + 1 }}:</span>
-                <span class="truncate max-w-[140px]">{{ lesson.title }}</span>
-                <span class="text-[10px] px-1.5 py-0.5 rounded-md font-black" :class="selectedLessonIndex === lIdx ? 'bg-white/20 text-white' : 'bg-purple-100 text-purple-800'">
+                <span class="truncate max-w-[150px]">{{ lesson.title }}</span>
+                <span class="text-[10px] px-2 py-0.5 rounded-lg font-black" :class="selectedLessonIndex === lIdx ? 'bg-white/20 text-white' : 'bg-blue-100 text-blue-800'">
                   {{ lesson.exercises?.length || 0 }} Soal
                 </span>
               </button>
             </div>
 
-            <!-- Selected Lesson Active Controls -->
-            <div v-if="activeLesson" class="bg-blue-50/50 p-4 rounded-2xl border border-blue-200 space-y-3 text-xs font-heading">
+            <!-- Active Lesson Settings Strip -->
+            <div v-if="activeLesson" class="bg-blue-50/60 p-4 rounded-2xl border border-blue-200 space-y-3 text-xs">
               <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div class="flex items-center gap-2 flex-1 w-full sm:w-auto">
                   <span class="font-black text-blue-900 uppercase shrink-0">Judul Pelajaran {{ selectedLessonIndex + 1 }}:</span>
                   <input 
                     v-model="activeLesson.title" 
                     type="text" 
-                    class="flex-1 p-2 rounded-xl border border-blue-300 font-black text-xs bg-white text-slate-800"
+                    class="flex-1 p-2 rounded-xl border border-blue-300 font-black text-xs bg-white text-slate-800 focus:outline-none focus:border-blue-500"
                     placeholder="Judul Pelajaran..."
                   />
                 </div>
@@ -531,172 +783,212 @@
                 </div>
               </div>
 
-              <!-- Lesson Summary / Description -->
               <div class="flex items-center gap-2">
                 <span class="font-bold text-slate-500 shrink-0">Ringkasan Materi:</span>
                 <input 
                   v-model="activeLesson.summary" 
                   type="text" 
-                  class="flex-1 p-2 rounded-xl border border-slate-300 font-semibold text-xs bg-white text-slate-700"
+                  class="flex-1 p-2 rounded-xl border border-slate-300 font-semibold text-xs bg-white text-slate-700 focus:outline-none focus:border-blue-500"
                   placeholder="Ringkasan singkat apa yang dipelajari siswa di bab ini..."
                 />
               </div>
             </div>
           </div>
 
-          <!-- STEP-DOWN NAVIGATOR: LEVEL 3 (EXERCISES HUB & LIVE PREVIEWS) -->
-          <div v-if="activeLesson" class="bg-white p-5 sm:p-6 rounded-3xl border-2 border-slate-200 shadow-sm space-y-5">
+          <!-- Question Bank Table Card (Simple, Clean, Scannable) -->
+          <div v-if="activeLesson" class="bg-white p-6 rounded-3xl border-2 border-slate-200 shadow-sm space-y-5">
             
-            <!-- Hub Header -->
+            <!-- Table Header Strip -->
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
               <div>
                 <div class="flex items-center gap-2">
                   <span class="text-2xl">❓</span>
-                  <h4 class="font-heading font-black text-base sm:text-lg text-slate-800">
-                    Bank Soal Pelajaran Ini ({{ currentExercises.length }} Soal Bertahap)
+                  <h4 class="font-black text-base sm:text-lg text-slate-800">
+                    Bank Soal: Pelajaran {{ selectedLessonIndex + 1 }} ({{ currentExercises.length }} Soal)
                   </h4>
                 </div>
-                <p class="text-xs text-slate-500 font-heading mt-0.5">
-                  Setiap soal dikerjakan berurutan oleh siswa. Gunakan tombol <strong>Preview Soal</strong> untuk menguji tampilan & interaksi secara langsung!
+                <p class="text-xs text-slate-500 mt-0.5">
+                  Siswa mengerjakan soal berurutan. Klik tombol <strong>Preview</strong> untuk menguji langsung interaksinya.
                 </p>
               </div>
 
-              <button 
-                @click="openNewExerciseModal"
-                type="button"
-                class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-heading font-black text-xs sm:text-sm rounded-2xl shadow-md transition-all active:scale-95 cursor-pointer flex items-center gap-2 shrink-0"
-              >
-                <span>➕</span>
-                <span>Tambah Soal Baru</span>
-              </button>
+              <!-- Question Action Buttons -->
+              <div class="flex items-center gap-2 flex-wrap shrink-0">
+                <!-- AI / Math / JSON Generator Button -->
+                <button 
+                  @click="openQuestionGenerator"
+                  type="button"
+                  class="px-5 py-2.5 bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 hover:from-purple-700 hover:to-indigo-700 text-white font-black text-xs rounded-2xl shadow-md transition-all active:scale-95 cursor-pointer flex items-center gap-2 border border-purple-300"
+                >
+                  <span>⚡</span>
+                  <span>Generator & Import Soal</span>
+                </button>
+
+                <!-- Manual Add Button -->
+                <button 
+                  @click="openNewExerciseModal"
+                  type="button"
+                  class="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xs rounded-2xl shadow-md transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+                >
+                  <span>➕</span>
+                  <span>Tambah Manual</span>
+                </button>
+              </div>
             </div>
 
             <!-- Empty State -->
-            <div v-if="currentExercises.length === 0" class="text-center py-12 px-4 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 space-y-3 font-heading">
+            <div v-if="currentExercises.length === 0" class="text-center py-12 px-4 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 space-y-4">
               <span class="text-4xl block">📝</span>
-              <h5 class="font-black text-slate-700 text-base">Belum Ada Soal di Pelajaran Ini</h5>
-              <p class="text-xs text-slate-500 max-w-md mx-auto">
-                Pelajaran ini masih kosong. Buat soal pertama dengan berbagai tipe interaktif (Pilihan Ganda, Mencocokkan Pasangan, Tebalkan Angka, dll.)!
-              </p>
-              <button 
-                @click="openNewExerciseModal"
-                type="button"
-                class="px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-black text-xs rounded-xl shadow-md cursor-pointer transition-all inline-flex items-center gap-1.5"
-              >
-                <span>➕</span>
-                <span>Buat Soal Pertama Sekarang</span>
-              </button>
+              <div class="space-y-1">
+                <h5 class="font-black text-slate-700 text-base">Belum Ada Soal di Pelajaran Ini</h5>
+                <p class="text-xs text-slate-500 max-w-md mx-auto">
+                  Gunakan Generator Otomatis (AI atau Rumus Matematika) untuk membuat paket soal dalam hitungan detik tanpa input satu per satu!
+                </p>
+              </div>
+              <div class="flex items-center justify-center gap-3 flex-wrap">
+                <button 
+                  @click="openQuestionGenerator"
+                  type="button"
+                  class="px-5 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-black text-xs rounded-xl shadow-md cursor-pointer transition-all inline-flex items-center gap-2 active:scale-95"
+                >
+                  <span>⚡</span>
+                  <span>Buka Generator Otomatis</span>
+                </button>
+                <button 
+                  @click="openNewExerciseModal"
+                  type="button"
+                  class="px-4 py-2.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-black text-xs rounded-xl cursor-pointer transition-all inline-flex items-center gap-1.5"
+                >
+                  <span>➕</span>
+                  <span>Buat Soal Manual</span>
+                </button>
+              </div>
             </div>
 
-            <!-- Exercises Cards List -->
-            <div v-else class="space-y-3">
-              <div 
-                v-for="(ex, exIdx) in currentExercises" 
-                :key="ex.id || exIdx"
-                class="bg-slate-50 hover:bg-purple-50/30 p-4 sm:p-5 rounded-2xl border-2 border-slate-200 hover:border-purple-300 transition-all shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-4 font-heading"
-              >
-                <!-- Left: Order Badge & Question Overview -->
-                <div class="flex items-start gap-3.5 flex-1 min-w-0">
-                  <!-- Step Number & Type Icon Badge -->
-                  <div class="w-12 h-12 rounded-2xl bg-white border-2 border-purple-200 shadow-2xs flex flex-col items-center justify-center shrink-0">
-                    <span class="text-base leading-none">{{ ex.visual_emoji || ex.visual?.label || getExerciseTypeIcon(ex.type) }}</span>
-                    <span class="text-[10px] font-black text-purple-700 mt-0.5">#{{ exIdx + 1 }}</span>
-                  </div>
+            <!-- Exercises Table View (Simple & Clean) -->
+            <div v-else class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr class="bg-slate-100/80 text-slate-500 font-extrabold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                    <th class="p-3 pl-4 w-16 text-center">No</th>
+                    <th class="p-3 w-40">Tipe Soal</th>
+                    <th class="p-3">Pertanyaan & Opsi</th>
+                    <th class="p-3 w-32">Kunci Jawaban</th>
+                    <th class="p-3 w-28">Kesulitan</th>
+                    <th class="p-3 pr-4 text-right w-48">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr 
+                    v-for="(ex, exIdx) in currentExercises" 
+                    :key="ex.id || exIdx"
+                    class="hover:bg-purple-50/30 transition-colors group"
+                  >
+                    <!-- No & Emoji Badge -->
+                    <td class="p-3 pl-4 text-center">
+                      <div class="w-9 h-9 mx-auto rounded-xl bg-purple-100 border border-purple-200 flex flex-col items-center justify-center font-black">
+                        <span class="text-xs leading-none">{{ ex.visual_emoji || ex.visual?.label || getExerciseTypeIcon(ex.type) }}</span>
+                        <span class="text-[9px] text-purple-800 mt-0.5">#{{ exIdx + 1 }}</span>
+                      </div>
+                    </td>
 
-                  <!-- Text Details -->
-                  <div class="space-y-1.5 flex-1 min-w-0">
-                    <!-- Badges Row -->
-                    <div class="flex items-center gap-2 flex-wrap text-[10px] font-black uppercase">
-                      <!-- Type Badge -->
-                      <span class="px-2.5 py-0.5 bg-purple-100 text-purple-800 rounded-lg flex items-center gap-1">
+                    <!-- Exercise Type Badge -->
+                    <td class="p-3">
+                      <span class="px-2.5 py-1 bg-purple-100 text-purple-800 rounded-lg text-[10px] font-black inline-flex items-center gap-1">
                         <span>{{ getExerciseTypeIcon(ex.type) }}</span>
-                        <span>{{ getExerciseTypeLabel(ex.type) }}</span>
+                        <span class="truncate max-w-[120px]">{{ getExerciseTypeLabel(ex.type) }}</span>
                       </span>
+                    </td>
 
-                      <!-- Difficulty Badge -->
+                    <!-- Question Prompt & Options -->
+                    <td class="p-3 space-y-1">
+                      <p class="font-black text-slate-800 text-xs leading-snug">
+                        {{ ex.question || '(Belum ada teks pertanyaan)' }}
+                      </p>
+                      
+                      <!-- Options Snippets -->
+                      <div v-if="ex.options && (Array.isArray(ex.options) ? ex.options.length > 0 : ex.options)" class="flex items-center gap-1 flex-wrap text-[10px]">
+                        <span class="text-slate-400 font-bold">Pilihan:</span>
+                        <span 
+                          v-for="(opt, optIdx) in (Array.isArray(ex.options) ? ex.options : ex.options.split(','))" 
+                          :key="optIdx"
+                          class="px-2 py-0.5 bg-slate-100 border border-slate-200 rounded-md text-slate-700 font-extrabold"
+                          :class="String(opt).trim() === String(ex.correct_answer).trim() ? 'border-emerald-400 text-emerald-800 bg-emerald-50' : ''"
+                        >
+                          {{ opt }}
+                        </span>
+                      </div>
+
+                      <p v-if="ex.explanation" class="text-[10px] text-slate-400 line-clamp-1 italic">
+                        💡 {{ ex.explanation }}
+                      </p>
+                    </td>
+
+                    <!-- Correct Answer Badge -->
+                    <td class="p-3">
+                      <span class="px-2.5 py-1 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg font-mono font-black text-xs inline-block">
+                        {{ ex.correct_answer || ex.answer || '-' }}
+                      </span>
+                    </td>
+
+                    <!-- Difficulty Badge -->
+                    <td class="p-3">
                       <span 
-                        class="px-2 py-0.5 rounded-lg"
+                        class="px-2.5 py-0.5 rounded-lg text-[10px] font-black"
                         :class="ex.difficulty === 'hard' ? 'bg-rose-100 text-rose-800' : ex.difficulty === 'medium' ? 'bg-amber-100 text-amber-900' : 'bg-emerald-100 text-emerald-800'"
                       >
-                        {{ ex.difficulty === 'hard' ? '🔴 Menantang' : ex.difficulty === 'medium' ? '🟡 Sedang' : '🟢 Mudah' }}
+                        {{ ex.difficulty === 'hard' ? 'Menantang' : ex.difficulty === 'medium' ? 'Sedang' : 'Mudah' }}
                       </span>
+                    </td>
 
-                      <!-- Correct Answer Badge -->
-                      <span class="px-2 py-0.5 bg-slate-200/80 text-slate-800 rounded-lg font-mono">
-                        Kunci: <strong class="text-emerald-700">{{ ex.correct_answer || ex.answer || '-' }}</strong>
-                      </span>
-                    </div>
+                    <!-- Actions -->
+                    <td class="p-3 pr-4 text-right">
+                      <div class="flex items-center justify-end gap-1.5">
+                        <!-- PREVIEW BUTTON -->
+                        <button 
+                          @click="openPreview(ex)"
+                          type="button"
+                          class="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-black flex items-center gap-1 shadow-2xs transition-all active:scale-95 cursor-pointer"
+                          title="Uji Preview Soal Interaktif"
+                        >
+                          <span>👁️</span>
+                          <span>Preview</span>
+                        </button>
 
-                    <!-- Question Prompt -->
-                    <h5 class="font-black text-sm text-slate-800 leading-snug">
-                      {{ ex.question || '(Belum ada teks pertanyaan)' }}
-                    </h5>
+                        <!-- EDIT BUTTON -->
+                        <button 
+                          @click="openEditorForExercise(ex, exIdx)"
+                          type="button"
+                          class="px-2.5 py-1.5 bg-white hover:bg-purple-50 text-slate-700 hover:text-purple-900 border border-slate-200 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+                          title="Edit Soal"
+                        >
+                          <span>✏️</span>
+                        </button>
 
-                    <!-- Options Preview Tags -->
-                    <div v-if="ex.options && (Array.isArray(ex.options) ? ex.options.length > 0 : ex.options)" class="flex items-center gap-1.5 flex-wrap text-[11px] text-slate-500 font-bold">
-                      <span class="text-slate-400">Pilihan:</span>
-                      <span 
-                        v-for="(opt, optIdx) in (Array.isArray(ex.options) ? ex.options : ex.options.split(','))" 
-                        :key="optIdx"
-                        class="px-2 py-0.5 bg-white border border-slate-200 rounded-md text-[10px] text-slate-700 font-black"
-                        :class="String(opt).trim() === String(ex.correct_answer).trim() ? 'border-emerald-400 text-emerald-800 bg-emerald-50/50' : ''"
-                      >
-                        {{ opt }}
-                      </span>
-                    </div>
+                        <!-- DUPLICATE BUTTON -->
+                        <button 
+                          @click="duplicateExercise(exIdx)"
+                          type="button"
+                          class="px-2 py-1.5 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+                          title="Duplikasi Soal"
+                        >
+                          📋
+                        </button>
 
-                    <!-- Explanation Snippet -->
-                    <p v-if="ex.explanation" class="text-[11px] text-slate-400 font-semibold line-clamp-1">
-                      💡 <em>{{ ex.explanation }}</em>
-                    </p>
-                  </div>
-                </div>
-
-                <!-- Right: Action Buttons -->
-                <div class="flex items-center gap-2 shrink-0 self-end lg:self-center border-t lg:border-t-0 pt-2 lg:pt-0 border-slate-200/60 w-full lg:w-auto justify-end">
-                  <!-- LIVE PREVIEW BUTTON -->
-                  <button 
-                    @click="openPreview(ex)"
-                    type="button"
-                    class="px-3.5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-black flex items-center gap-1.5 shadow-sm transition-all active:scale-95 cursor-pointer"
-                    title="Uji Preview Soal Ini Secara Interaktif"
-                  >
-                    <span>👁️</span>
-                    <span>Preview</span>
-                  </button>
-
-                  <!-- EDIT BUTTON -->
-                  <button 
-                    @click="openEditorForExercise(ex, exIdx)"
-                    type="button"
-                    class="px-3 py-2 bg-white hover:bg-purple-50 text-slate-700 hover:text-purple-900 border border-slate-200 rounded-xl text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer"
-                    title="Edit Data Soal"
-                  >
-                    <span>✏️</span>
-                    <span>Edit</span>
-                  </button>
-
-                  <!-- DUPLICATE BUTTON -->
-                  <button 
-                    @click="duplicateExercise(exIdx)"
-                    type="button"
-                    class="px-2.5 py-2 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-xl text-xs font-bold transition-colors cursor-pointer"
-                    title="Duplikasi Soal"
-                  >
-                    📋
-                  </button>
-
-                  <!-- DELETE BUTTON -->
-                  <button 
-                    @click="deleteExercise(exIdx)"
-                    type="button"
-                    class="px-2.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-xl text-xs font-bold transition-colors cursor-pointer"
-                    title="Hapus Soal"
-                  >
-                    🗑️
-                  </button>
-                </div>
-              </div>
+                        <!-- DELETE BUTTON -->
+                        <button 
+                          @click="deleteExercise(exIdx)"
+                          type="button"
+                          class="px-2 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+                          title="Hapus Soal"
+                        >
+                          🗑️
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             <!-- Bottom Add Exercise Button -->
@@ -704,7 +996,7 @@
               <button 
                 @click="openNewExerciseModal"
                 type="button"
-                class="px-6 py-2.5 bg-slate-100 hover:bg-purple-100 text-purple-900 font-heading font-black text-xs rounded-xl border border-dashed border-purple-300 transition-colors cursor-pointer flex items-center gap-2"
+                class="px-6 py-2.5 bg-slate-100 hover:bg-purple-100 text-purple-900 font-black text-xs rounded-xl border border-dashed border-purple-300 transition-colors cursor-pointer flex items-center gap-2"
               >
                 <span>➕</span>
                 <span>Tambah Soal Lain ke Pelajaran Ini</span>
@@ -715,11 +1007,16 @@
 
         </div>
 
+        <!-- ========================================================================= -->
         <!-- MODE 2: TEKS JSON IMPORTER & EDITOR -->
+        <!-- ========================================================================= -->
         <div v-if="courseEditorMode === 'json'" class="bg-white p-6 rounded-3xl border-2 border-slate-200 shadow-sm space-y-4 animate-pop font-heading">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h3 class="font-heading text-xl font-black text-slate-800">💻 Impor / Edit Kursus via Kode JSON</h3>
+              <div class="flex items-center gap-2">
+                <button @click="courseEditorMode = 'gui'" type="button" class="text-xs text-purple-700 font-black hover:underline cursor-pointer">← Kembali ke Tampilan Tabel</button>
+              </div>
+              <h3 class="font-heading text-xl font-black text-slate-800 mt-1">💻 Impor / Edit Kursus via Kode JSON</h3>
               <p class="text-xs text-slate-500">Tempelkan format JSON kuis bertahap untuk disimpan langsung ke database PostgreSQL.</p>
             </div>
             <div class="flex items-center gap-2">
@@ -756,62 +1053,6 @@
             >
               🚀 Impor & Simpan Kursus JSON
             </button>
-          </div>
-        </div>
-
-        <!-- Active Courses Catalog Quick Grid -->
-        <div class="bg-white p-6 rounded-3xl border-2 border-slate-200 shadow-sm space-y-4 font-heading">
-          <div class="flex items-center justify-between">
-            <h4 class="font-black text-slate-800 text-base">Semua Kursus Aktif di Aplikasi ({{ courseStore.catalogRegistry.length }} Kursus)</h4>
-            <span class="text-xs text-slate-400 font-bold">Pilih kursus untuk langsung mengelola bank soal</span>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div 
-              v-for="c in courseStore.catalogRegistry" 
-              :key="c.id" 
-              class="p-4 rounded-2xl border-2 transition-all flex flex-col justify-between"
-              :class="selectedCourseId === c.id ? 'border-purple-500 bg-purple-50/40 shadow-sm ring-2 ring-purple-200' : 'border-slate-200 bg-slate-50 hover:bg-white'"
-            >
-              <div class="space-y-2">
-                <div class="flex items-center justify-between">
-                  <span class="px-2.5 py-0.5 bg-purple-100 text-purple-800 rounded-lg text-xs font-black">{{ c.icon || '⭐' }} {{ c.id }}</span>
-                  <span class="text-xs text-slate-400 font-extrabold">{{ c.courseData?.units?.length || 0 }} Unit</span>
-                </div>
-                <h5 class="font-black text-slate-800 text-sm line-clamp-1">{{ c.title }}</h5>
-                <p class="text-xs text-slate-600 line-clamp-2">{{ c.description }}</p>
-              </div>
-
-              <div class="pt-3 mt-3 flex items-center gap-2 border-t border-slate-200/60">
-                <button 
-                  @click="selectCourseToManage(c.id); courseEditorMode = 'gui'"
-                  type="button" 
-                  class="px-3 py-1.5 rounded-xl text-xs font-black flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
-                  :class="selectedCourseId === c.id ? 'bg-purple-600 text-white' : 'bg-slate-200 hover:bg-purple-600 hover:text-white text-slate-700'"
-                >
-                  <span>🗂️</span>
-                  <span>{{ selectedCourseId === c.id ? 'Sedang Dikelola' : 'Buka Kursus' }}</span>
-                </button>
-                
-                <button 
-                  @click="editExistingCourse(c)" 
-                  type="button" 
-                  class="px-2.5 py-1.5 bg-white hover:bg-purple-50 text-purple-800 border border-slate-200 rounded-xl text-xs font-bold transition-colors cursor-pointer"
-                  title="Edit Kode JSON"
-                >
-                  💻 JSON
-                </button>
-
-                <button 
-                  @click="confirmDeleteCourse(c)" 
-                  type="button" 
-                  class="ml-auto px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-xl text-xs font-bold transition-colors cursor-pointer"
-                  title="Hapus Kursus"
-                >
-                  🗑️
-                </button>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -1203,6 +1444,14 @@
       </div>
     </Teleport>
 
+    <!-- Question Generator Suite Modal (AI / Math / Bulk JSON) -->
+    <QuestionGeneratorModal 
+      :isOpen="showGeneratorModal"
+      :targetLessonLabel="activeLesson ? activeLesson.title : 'Pelajaran Aktif'"
+      @close="showGeneratorModal = false"
+      @import-exercises="handleImportExercises"
+    />
+
   </div>
 </template>
 
@@ -1213,6 +1462,7 @@ import { useCourseStore } from '~/stores/course'
 import { useAdminStore } from '~/stores/admin'
 import ExercisePreviewModal from '~/components/admin/ExercisePreviewModal.vue'
 import ExerciseEditorModal from '~/components/admin/ExerciseEditorModal.vue'
+import QuestionGeneratorModal from '~/components/admin/QuestionGeneratorModal.vue'
 
 definePageMeta({
   middleware: ['admin']
@@ -1232,6 +1482,27 @@ watch(() => userStore.currentUser?.role, (newRole) => {
 const searchQuery = ref('')
 const activeTab = ref('overview')
 const courseEditorMode = ref('gui')
+
+const showGeneratorModal = ref(false)
+const openQuestionGenerator = () => {
+  showGeneratorModal.value = true
+}
+
+const handleImportExercises = async (exercises) => {
+  if (!activeLesson.value) {
+    alert('Pilih pelajaran terlebih dahulu!')
+    return
+  }
+  if (!activeLesson.value.exercises) {
+    activeLesson.value.exercises = []
+  }
+  activeLesson.value.exercises.push(...exercises)
+  await saveGuiCourse(true)
+  guiStatus.value = { 
+    error: false, 
+    message: `Berhasil menambahkan ${exercises.length} butir soal baru ke pelajaran "${activeLesson.value.title}" dan tersimpan ke Database!` 
+  }
+}
 
 const jsonInput = ref('')
 const jsonStatus = ref(null)
@@ -1265,10 +1536,59 @@ const newCourseForm = ref({
   themeColor: 'purple'
 })
 
-// Hierarchical Navigation State
+// Hierarchical 3-Level Drilldown Navigation State:
+// 'courses' (Tabel Kursus) | 'units' (Daftar Unit dalam Kursus) | 'lessons' (Pelajaran & Bank Soal)
+const courseDrillLevel = ref('courses')
 const selectedCourseId = ref('')
 const selectedUnitIndex = ref(0)
 const selectedLessonIndex = ref(0)
+
+const goToCoursesList = () => {
+  courseDrillLevel.value = 'courses'
+}
+
+const goToUnitsList = (courseId) => {
+  if (courseId) {
+    selectCourseToManage(courseId)
+  }
+  courseDrillLevel.value = 'units'
+}
+
+const goToLessonExercises = (unitIdx, lessonIdx = 0) => {
+  selectedUnitIndex.value = unitIdx
+  selectedLessonIndex.value = lessonIdx
+  courseDrillLevel.value = 'lessons'
+}
+
+const getCourseStats = (c) => {
+  const data = courseStore.courses[c.id] || c.courseData || (guiCourseForm.value?.id === c.id ? guiCourseForm.value : c)
+  const units = data?.units || []
+  let lessonsCount = 0
+  let exercisesCount = 0
+  units.forEach(u => {
+    const lessons = u.lessons || []
+    lessonsCount += lessons.length
+    lessons.forEach(l => {
+      exercisesCount += (l.exercises || []).length
+    })
+  })
+  return {
+    unitsCount: units.length,
+    lessonsCount,
+    exercisesCount
+  }
+}
+
+const filteredCourses = computed(() => {
+  const query = searchQuery.value?.toLowerCase().trim()
+  if (!query) return courseStore.catalogRegistry
+  return courseStore.catalogRegistry.filter(c => 
+    c.title?.toLowerCase().includes(query) ||
+    c.id?.toLowerCase().includes(query) ||
+    c.category?.toLowerCase().includes(query) ||
+    c.description?.toLowerCase().includes(query)
+  )
+})
 
 const tabs = [
   { id: 'overview', label: 'Overview', icon: '📊' },
@@ -1730,6 +2050,7 @@ const createNewCourse = async () => {
   courseStore.addCustomCourse(newCourseData)
   await courseStore.loadCourses()
   selectCourseToManage(newCourseData.id)
+  courseDrillLevel.value = 'units'
   showNewCourseModal.value = false
   guiStatus.value = { error: false, message: `Kursus baru '${newCourseData.title}' berhasil dibuat!` }
 }
@@ -1835,6 +2156,7 @@ const executeCourseDelete = async () => {
     showDeleteCourseModal.value = false
     courseToDelete.value = null
     deleteStatus.value = null
+    courseDrillLevel.value = 'courses'
 
     // Reload courses to refresh the list
     await courseStore.loadCourses()
@@ -1849,6 +2171,7 @@ const executeCourseDelete = async () => {
     showDeleteCourseModal.value = false
     courseToDelete.value = null
     deleteStatus.value = null
+    courseDrillLevel.value = 'courses'
   }
 }
 </script>

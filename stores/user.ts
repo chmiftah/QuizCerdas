@@ -9,6 +9,7 @@ export interface UserProfile {
   grade: string
   dailyGoalMinutes: number
   role: 'student' | 'parent' | 'guest' | 'admin'
+  accountRole?: 'student' | 'parent' | 'guest' | 'admin'
 }
 
 export interface DailyQuest {
@@ -45,6 +46,7 @@ export interface UserState {
   streakFreezeCount: number
   lastQuestResetDate: string | null
   dailyQuests: DailyQuest[]
+  claimedChests: string[]
 }
 
 const createDefaultDailyQuests = (): DailyQuest[] => [
@@ -107,7 +109,8 @@ export const useUserStore = defineStore('user', {
     equippedAvatar: 'avatar_kiko',
     streakFreezeCount: 0,
     lastQuestResetDate: new Date().toDateString(),
-    dailyQuests: createDefaultDailyQuests()
+    dailyQuests: createDefaultDailyQuests(),
+    claimedChests: []
   }),
 
   getters: {
@@ -116,6 +119,7 @@ export const useUserStore = defineStore('user', {
     hasHearts: (state) => state.hearts > 0,
     isLoggedIn: (state) => state.isAuthenticated && !!state.currentUser,
     isAdmin: (state) => state.currentUser?.role === 'admin',
+    isActualAdmin: (state) => state.currentUser?.accountRole === 'admin' || state.currentUser?.role === 'admin',
     userDisplayName: (state) => state.currentUser ? state.currentUser.name : 'Penjelajah Muda',
     userAvatar: (state) => state.currentUser ? state.currentUser.avatar : '🦉',
 
@@ -143,6 +147,10 @@ export const useUserStore = defineStore('user', {
         return courseCheckpoints.includes(checkpointId)
       }
       return state.completedCheckpoints.includes(checkpointId)
+    },
+
+    isChestClaimed: (state) => (chestId: string) => {
+      return state.claimedChests.includes(chestId)
     },
 
     leagueTier: (state) => {
@@ -182,7 +190,8 @@ export const useUserStore = defineStore('user', {
             avatar: res.user.avatar || '🦉',
             grade: res.user.grade || 'Kelas 1 SD',
             dailyGoalMinutes: res.user.dailyGoalMinutes || 10,
-            role: res.user.role || 'student'
+            role: res.user.role || 'student',
+            accountRole: res.user.role || 'student'
           }
           if (res.user.xp !== undefined) this.xp = res.user.xp
           if (res.user.hearts !== undefined) this.hearts = res.user.hearts
@@ -217,7 +226,8 @@ export const useUserStore = defineStore('user', {
             avatar: res.user.avatar || '🦉',
             grade: res.user.grade || 'Kelas 1 SD',
             dailyGoalMinutes: res.user.dailyGoalMinutes || 10,
-            role: res.user.role || 'student'
+            role: (res.user.role as any) || 'student',
+            accountRole: (res.user.role as any) || 'student'
           }
           if (res.user.xp !== undefined) this.xp = res.user.xp
           this.isAuthenticated = true
@@ -248,13 +258,17 @@ export const useUserStore = defineStore('user', {
     },
 
     toggleAdminRole() {
-      if (!this.currentUser) {
-        this.loginAsGuest()
+      if (!this.currentUser) return
+      // Keamanan: Hanya akun yang berhak (memiliki role admin) yang dapat beralih peran
+      const isCurrentlyAdmin = this.currentUser.role === 'admin'
+      const isOriginalAdmin = this.currentUser.accountRole === 'admin' || isCurrentlyAdmin
+      if (!isOriginalAdmin) return
+
+      if (!this.currentUser.accountRole) {
+        this.currentUser.accountRole = 'admin'
       }
-      if (this.currentUser) {
-        this.currentUser.role = this.currentUser.role === 'admin' ? 'student' : 'admin'
-        this.saveToStorage()
-      }
+      this.currentUser.role = isCurrentlyAdmin ? 'student' : 'admin'
+      this.saveToStorage()
     },
 
     async logout() {
@@ -529,6 +543,7 @@ export const useUserStore = defineStore('user', {
             this.weeklyXP = data.weeklyXP ?? 120
             this.lastQuestResetDate = data.lastQuestResetDate ?? new Date().toDateString()
             this.dailyQuests = data.dailyQuests ?? createDefaultDailyQuests()
+            this.claimedChests = data.claimedChests ?? []
 
             this.rebuildFlatCompletedArrays()
             this.checkAndResetDailyQuests()
@@ -541,6 +556,14 @@ export const useUserStore = defineStore('user', {
           this.fetchProgressFromDatabase()
         }
       }
+    },
+
+    claimChest(chestId: string, xpBonus: number = 30) {
+      if (!this.claimedChests.includes(chestId)) {
+        this.claimedChests.push(chestId)
+      }
+      this.addXP(xpBonus)
+      this.saveToStorage({ xpEarned: xpBonus })
     },
 
     buyItem(itemId: string, price: number) {
@@ -590,7 +613,8 @@ export const useUserStore = defineStore('user', {
           equippedAvatar: this.equippedAvatar,
           streakFreezeCount: this.streakFreezeCount,
           lastQuestResetDate: this.lastQuestResetDate,
-          dailyQuests: this.dailyQuests
+          dailyQuests: this.dailyQuests,
+          claimedChests: this.claimedChests
         }
         localStorage.setItem('duo_user_progress', JSON.stringify(payload))
 

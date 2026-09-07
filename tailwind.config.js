@@ -66,6 +66,9 @@ export default {
         'duo-red': '0 4px 0 #ea2b2b',
         'duo-gray': '0 4px 0 #e5e5e5',
         'duo-dark-gray': '0 4px 0 #afafaf'
+      },
+      borderWidth: {
+        '6': '6px'
       }
     }
   },

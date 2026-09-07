@@ -245,26 +245,29 @@
                 </span>
               </div>
 
-              <NuxtLink 
-                v-if="userStore.isAdmin"
-                to="/admin" 
-                @click="showProfileMenu = false"
-                class="w-full px-3 py-2 text-left text-xs font-heading font-extrabold text-purple-700 hover:bg-purple-50 flex items-center gap-2"
-              >
-                <span>🛡️</span> Dashboard Admin
-              </NuxtLink>
+              <!-- Menu Khusus Akun Admin (Hanya Tampil untuk Role Admin) -->
+              <template v-if="userStore.isActualAdmin">
+                <NuxtLink 
+                  v-if="userStore.isAdmin"
+                  to="/admin" 
+                  @click="showProfileMenu = false"
+                  class="w-full px-3 py-2 text-left text-xs font-heading font-extrabold text-purple-700 hover:bg-purple-50 flex items-center gap-2"
+                >
+                  <span>🛡️</span> Dashboard Admin
+                </NuxtLink>
 
-              <button 
-                @click="handleToggleAdmin"
-                class="w-full px-3 py-2 text-left text-xs font-heading font-bold text-slate-700 hover:bg-slate-100 flex items-center justify-between cursor-pointer"
-              >
-                <span class="flex items-center gap-2">
-                  <span>⚙️</span> Switch Admin Mode
-                </span>
-                <span class="px-1.5 py-0.5 text-[9px] rounded font-black uppercase" :class="userStore.isAdmin ? 'bg-purple-100 text-purple-700' : 'bg-slate-200 text-slate-600'">
-                  {{ userStore.isAdmin ? 'ON' : 'OFF' }}
-                </span>
-              </button>
+                <button 
+                  @click="handleToggleAdmin"
+                  class="w-full px-3 py-2 text-left text-xs font-heading font-bold text-slate-700 hover:bg-slate-100 flex items-center justify-between cursor-pointer"
+                >
+                  <span class="flex items-center gap-2">
+                    <span>⚙️</span> Switch Admin Mode
+                  </span>
+                  <span class="px-1.5 py-0.5 text-[9px] rounded font-black uppercase" :class="userStore.isAdmin ? 'bg-purple-100 text-purple-700' : 'bg-slate-200 text-slate-600'">
+                    {{ userStore.isAdmin ? 'ON' : 'OFF' }}
+                  </span>
+                </button>
+              </template>
 
               <NuxtLink 
                 to="/shop" 

@@ -8,32 +8,32 @@
       <AudioPlayerButton :text="exercise.question" />
     </div>
 
-    <!-- Big Benar / Salah Buttons -->
-    <div class="grid grid-cols-2 gap-6 pt-4 max-w-lg mx-auto">
+    <!-- Big Chunky 3D Benar / Salah Buttons -->
+    <div class="grid grid-cols-2 gap-4 sm:gap-6 pt-4 max-w-md mx-auto">
       <!-- Benar Button -->
       <button 
-        @click="$emit('select', 'Benar')"
+        @click="handleSelect('Benar')"
         :disabled="isChecked"
-        class="p-6 rounded-3xl border-4 flex flex-col items-center justify-center gap-3 transition-all duration-150 cursor-pointer select-none group"
+        class="p-6 rounded-3xl border-2 border-b-8 flex flex-col items-center justify-center gap-3 transition-all duration-150 cursor-pointer select-none group active:translate-y-1 active:border-b-2"
         :class="getTrueClass()"
       >
-        <div class="w-14 h-14 rounded-2xl bg-emerald-100 flex items-center justify-center text-duo-green group-hover:scale-110 transition-transform">
-          <CheckCircle2 class="w-10 h-10 stroke-[2.5]" />
+        <div class="w-16 h-16 rounded-2xl bg-emerald-100 flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform shadow-xs">
+          <CheckCircle2 class="w-11 h-11 stroke-[3]" />
         </div>
-        <span class="font-heading text-2xl font-bold">Benar</span>
+        <span class="font-heading text-xl sm:text-2xl font-black">BENAR</span>
       </button>
 
       <!-- Salah Button -->
       <button 
-        @click="$emit('select', 'Salah')"
+        @click="handleSelect('Salah')"
         :disabled="isChecked"
-        class="p-6 rounded-3xl border-4 flex flex-col items-center justify-center gap-3 transition-all duration-150 cursor-pointer select-none group"
+        class="p-6 rounded-3xl border-2 border-b-8 flex flex-col items-center justify-center gap-3 transition-all duration-150 cursor-pointer select-none group active:translate-y-1 active:border-b-2"
         :class="getFalseClass()"
       >
-        <div class="w-14 h-14 rounded-2xl bg-rose-100 flex items-center justify-center text-duo-red group-hover:scale-110 transition-transform">
-          <XCircle class="w-10 h-10 stroke-[2.5]" />
+        <div class="w-16 h-16 rounded-2xl bg-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition-transform shadow-xs">
+          <XCircle class="w-11 h-11 stroke-[3]" />
         </div>
-        <span class="font-heading text-2xl font-bold">Salah</span>
+        <span class="font-heading text-xl sm:text-2xl font-black">SALAH</span>
       </button>
     </div>
   </div>
@@ -41,6 +41,7 @@
 
 <script setup>
 import { CheckCircle2, XCircle } from 'lucide-vue-next'
+import { useSoundEffects } from '~/composables/useSoundEffects'
 
 const props = defineProps({
   exercise: { type: Object, required: true },
@@ -49,41 +50,48 @@ const props = defineProps({
   isCorrect: { type: Boolean, default: false }
 })
 
-defineEmits(['select'])
+const emit = defineEmits(['select'])
+const { playPop } = useSoundEffects()
+
+const handleSelect = (val) => {
+  if (props.isChecked) return
+  playPop()
+  emit('select', val)
+}
 
 const getTrueClass = () => {
   if (props.isChecked) {
     if (props.exercise.correct_answer === 'Benar') {
-      return 'bg-emerald-50 border-duo-green text-duo-green-dark shadow-duo-green scale-[1.03]'
+      return 'bg-emerald-100 border-emerald-500 border-b-emerald-700 text-emerald-900 shadow-emerald-500/20 animate-jelly'
     }
     if (props.selectedOption === 'Benar' && !props.isCorrect) {
-      return 'bg-rose-50 border-duo-red text-duo-red-dark shadow-duo-red'
+      return 'bg-rose-100 border-rose-500 border-b-rose-700 text-rose-900 shadow-rose-500/20 animate-shake'
     }
-    return 'bg-white border-duo-gray-100 opacity-40 cursor-not-allowed'
+    return 'bg-slate-50 border-slate-200 border-b-slate-300 opacity-40 cursor-not-allowed'
   }
 
   if (props.selectedOption === 'Benar') {
-    return 'bg-emerald-50 border-duo-green text-duo-green-dark shadow-duo-green scale-[1.03]'
+    return 'bg-emerald-50 border-emerald-500 border-b-emerald-600 text-emerald-900 shadow-lg scale-[1.03]'
   }
 
-  return 'bg-white border-duo-gray-100 shadow-duo-gray hover:border-duo-green hover:bg-emerald-50/50'
+  return 'bg-white border-slate-200 border-b-slate-300 shadow-sm hover:border-emerald-400 hover:bg-emerald-50/40'
 }
 
 const getFalseClass = () => {
   if (props.isChecked) {
     if (props.exercise.correct_answer === 'Salah') {
-      return 'bg-emerald-50 border-duo-green text-duo-green-dark shadow-duo-green scale-[1.03]'
+      return 'bg-emerald-100 border-emerald-500 border-b-emerald-700 text-emerald-900 shadow-emerald-500/20 animate-jelly'
     }
     if (props.selectedOption === 'Salah' && !props.isCorrect) {
-      return 'bg-rose-50 border-duo-red text-duo-red-dark shadow-duo-red'
+      return 'bg-rose-100 border-rose-500 border-b-rose-700 text-rose-900 shadow-rose-500/20 animate-shake'
     }
-    return 'bg-white border-duo-gray-100 opacity-40 cursor-not-allowed'
+    return 'bg-slate-50 border-slate-200 border-b-slate-300 opacity-40 cursor-not-allowed'
   }
 
   if (props.selectedOption === 'Salah') {
-    return 'bg-rose-50 border-duo-red text-duo-red-dark shadow-duo-red scale-[1.03]'
+    return 'bg-rose-50 border-rose-500 border-b-rose-600 text-rose-900 shadow-lg scale-[1.03]'
   }
 
-  return 'bg-white border-duo-gray-100 shadow-duo-gray hover:border-duo-red hover:bg-rose-50/50'
+  return 'bg-white border-slate-200 border-b-slate-300 shadow-sm hover:border-rose-400 hover:bg-rose-50/40'
 }
 </script>
