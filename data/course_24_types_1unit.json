@@ -1,22 +1,22 @@
 {
   "course": {
     "id": "course_24_types_1unit",
-    "title": "🏆 Modul 1 Unit: 24 Jenis Soal Lengkap",
-    "description": "Kursus 1 Unit yang menyajikan seluruh 24 jenis tipe soal interaktif secara lengkap dalam satu jalur belajar petualangan.",
+    "title": "🏆 Modul 1 Unit: 29 Jenis Soal Lengkap",
+    "description": "Kursus 1 Unit yang menyajikan seluruh 29 jenis tipe soal interaktif secara lengkap dalam satu jalur belajar petualangan.",
     "target_audience": "Anak TK & SD (4-9 tahun)",
     "units": [
       {
         "id": "unit_1",
-        "title": "Unit 1: Petualangan 24 Jenis Soal Interaktif",
+        "title": "Unit 1: Petualangan 29 Jenis Soal Interaktif",
         "order": 1,
         "icon": "🏆",
         "color": "green",
         "lessons": [
           {
             "id": "u1_lesson_marathon",
-            "title": "Tantangan Marathon 24 Jenis Soal",
+            "title": "Tantangan Marathon 29 Jenis Soal",
             "order": 1,
-            "summary": "Mainkan seluruh 24 jenis tipe soal interaktif dari nomor 1 sampai 24 secara berurutan!",
+            "summary": "Mainkan seluruh 29 jenis tipe soal interaktif dari nomor 1 sampai 29 secara berurutan!",
             "exercises": [
               {
                 "id": "m1_ex1_mc",
@@ -269,6 +269,72 @@
                 "correct_answer": "🔻",
                 "explanation": "Benar! Diputar 180° membuat ujung segitiga mengarah ke bawah (🔻).",
                 "visual": { "shape": "🔺", "transform": "Rotasi", "degree": 180 }
+              },
+              {
+                "id": "m1_ex25_reading",
+                "type": "reading",
+                "difficulty": "medium",
+                "question": "25. [Membaca Nyaring] Bacalah kalimat berikut dengan suara lantang dan jelas:",
+                "options": [],
+                "correct_answer": "Budi suka membaca buku cerita.",
+                "explanation": "Luar biasa! Kamu membaca kalimat dengan sangat lancar dan artikulasi yang jelas!"
+              },
+              {
+                "id": "m1_ex26_maze",
+                "type": "number_maze",
+                "difficulty": "medium",
+                "question": "26. [Labirin Logika Angka] Bantu Kiko melewati labirin dengan melangkah pada angka genap!",
+                "options": [],
+                "correct_answer": "2,4,6,8,10",
+                "explanation": "Pintar sekali! Kiko berhasil mencapai bendera selesai mengikuti deret angka genap 2, 4, 6, 8, 10.",
+                "visual": {
+                  "grid": [
+                    [2, 3, 7],
+                    [4, 6, 9],
+                    [5, 8, 10]
+                  ],
+                  "start": [0, 0],
+                  "end": [2, 2],
+                  "rule": "Angka Genap: 2 ➔ 4 ➔ 6 ➔ 8 ➔ 10"
+                }
+              },
+              {
+                "id": "m1_ex27_balance",
+                "type": "balance_scale",
+                "difficulty": "medium",
+                "question": "27. [Timbangan Seimbang] Piring kiri bermassa 5kg apel. Berapa bobot jeruk yang harus ditambahkan di piring kanan agar seimbang?",
+                "options": ["1", "2", "3", "4", "5"],
+                "correct_answer": "3",
+                "explanation": "Tepat sekali! 2kg + 3kg = 5kg. Timbangan kini seimbang sempurna!",
+                "visual": {
+                  "leftWeight": 5,
+                  "initialRightWeight": 2,
+                  "leftFruit": "🍎",
+                  "rightFruit": "🍊"
+                }
+              },
+              {
+                "id": "m1_ex28_color",
+                "type": "color_by_number",
+                "difficulty": "easy",
+                "question": "28. [Mewarnai Angka] Warnai sayap dan badan kupu-kupu sesuai nomor warna pada palet!",
+                "options": [],
+                "correct_answer": "completed",
+                "explanation": "Keren! Gambar kupu-kupu sudah kamu warnai dengan lengkap dan sangat indah!"
+              },
+              {
+                "id": "m1_ex29_syllable",
+                "type": "syllable_clapping",
+                "difficulty": "easy",
+                "question": "29. [Ketukan Suku Kata] Dengarkan kata 'KU-CING' 🐱. Ada berapa ketukan suku kata pada kata ini?",
+                "options": ["1", "2", "3", "4"],
+                "correct_answer": "2",
+                "explanation": "Bagus sekali! KU - CING terdiri dari 2 suku kata (2 ketukan tepukan tangan).",
+                "visual": {
+                  "word": "KU-CING",
+                  "emoji": "🐱",
+                  "syllables": ["KU", "CING"]
+                }
               }
             ]
           },
@@ -553,13 +619,79 @@
                 "correct_answer": "🔻",
                 "explanation": "Diputar 180° membuat ujungnya mengarah ke bawah (🔻).",
                 "visual": { "shape": "🔺", "transform": "Rotasi", "degree": 180 }
+              },
+              {
+                "id": "u1l4_ex7",
+                "type": "reading",
+                "difficulty": "medium",
+                "question": "Bacalah kalimat berikut dengan lantang:",
+                "options": [],
+                "correct_answer": "Kucing hitam melompat sangat tinggi.",
+                "explanation": "Hebat! Pelafalan kata-kata membaca nyaring kamu sangat tepat!"
+              },
+              {
+                "id": "u1l4_ex8",
+                "type": "number_maze",
+                "difficulty": "medium",
+                "question": "Bantu Kiko melewati labirin dengan melangkah pada angka genap!",
+                "options": [],
+                "correct_answer": "2,4,6,8,10",
+                "explanation": "Hebat! Kiko berhasil mencapai bendera selesai mengikuti deret angka genap 2, 4, 6, 8, 10.",
+                "visual": {
+                  "grid": [
+                    [2, 3, 7],
+                    [4, 6, 9],
+                    [5, 8, 10]
+                  ],
+                  "start": [0, 0],
+                  "end": [2, 2],
+                  "rule": "Angka Genap: 2 ➔ 4 ➔ 6 ➔ 8 ➔ 10"
+                }
+              },
+              {
+                "id": "u1l4_ex9",
+                "type": "balance_scale",
+                "difficulty": "medium",
+                "question": "Piring kiri bermassa 5kg apel. Berapa bobot jeruk yang harus ditambahkan di piring kanan agar seimbang?",
+                "options": ["1", "2", "3", "4", "5"],
+                "correct_answer": "3",
+                "explanation": "Tepat sekali! 2kg + 3kg = 5kg. Timbangan kini seimbang sempurna!",
+                "visual": {
+                  "leftWeight": 5,
+                  "initialRightWeight": 2,
+                  "leftFruit": "🍎",
+                  "rightFruit": "🍊"
+                }
+              },
+              {
+                "id": "u1l4_ex10",
+                "type": "color_by_number",
+                "difficulty": "easy",
+                "question": "Warnai sayap dan badan kupu-kupu sesuai nomor warna pada palet!",
+                "options": [],
+                "correct_answer": "completed",
+                "explanation": "Keren! Gambar kupu-kupu sudah kamu warnai dengan lengkap dan sangat indah!"
+              },
+              {
+                "id": "u1l4_ex11",
+                "type": "syllable_clapping",
+                "difficulty": "easy",
+                "question": "Dengarkan kata 'KU-CING' 🐱. Ada berapa ketukan suku kata pada kata ini?",
+                "options": ["1", "2", "3", "4"],
+                "correct_answer": "2",
+                "explanation": "Bagus sekali! KU - CING terdiri dari 2 suku kata (2 ketukan tepukan tangan).",
+                "visual": {
+                  "word": "KU-CING",
+                  "emoji": "🐱",
+                  "syllables": ["KU", "CING"]
+                }
               }
             ]
           }
         ],
         "checkpoint": {
           "id": "unit1_checkpoint",
-          "title": "Ujian Checkpoint Unit: 24 Jenis Soal",
+          "title": "Ujian Checkpoint Unit: 29 Jenis Soal",
           "exercises": [
             {
               "id": "u1cp_ex1",

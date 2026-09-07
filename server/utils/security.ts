@@ -27,29 +27,70 @@ export async function checkRateLimit(event: any, type: 'auth' | 'general' = 'gen
   }
 }
 
-// In-memory / stateless token generator and validator for secure session management
-const activeSessions = new Map<string, { userId: string; email: string; expiresAt: number }>()
+// Cryptographically secure, stateless session token generator & validator
+// Persists sessions across server restarts and Nitro worker reloads
+const SESSION_SECRET = process.env.SESSION_SECRET || 'duo_edtech_hmac_secret_salt_2026_x9k2p'
+const revokedTokens = new Set<string>()
 
-export function createSessionToken(userId: string, email: string): string {
-  const token = crypto.randomBytes(32).toString('hex')
-  const expiresAt = Date.now() + 24 * 60 * 60 * 1000 // 24 hours
-  activeSessions.set(token, { userId, email, expiresAt })
-  return token
+export interface SessionData {
+  userId: string
+  email: string
+  expiresAt: number
 }
 
-export function validateSessionToken(token?: string) {
-  if (!token) return null
-  const session = activeSessions.get(token)
-  if (!session) return null
-  if (Date.now() > session.expiresAt) {
-    activeSessions.delete(token)
+export function createSessionToken(userId: string, email: string): string {
+  const expiresAt = Date.now() + 24 * 60 * 60 * 1000 // 24 hours validity
+  const payload = {
+    userId,
+    email,
+    expiresAt,
+    issuedAt: Date.now()
+  }
+  const data = Buffer.from(JSON.stringify(payload)).toString('base64url')
+  const signature = crypto.createHmac('sha256', SESSION_SECRET).update(data).digest('base64url')
+  return `${data}.${signature}`
+}
+
+export function validateSessionToken(token?: string): SessionData | null {
+  if (!token || typeof token !== 'string') return null
+  if (revokedTokens.has(token)) return null
+
+  const parts = token.split('.')
+  if (parts.length !== 2) return null
+
+  const [data, signature] = parts
+
+  try {
+    const expectedSig = crypto.createHmac('sha256', SESSION_SECRET).update(data).digest('base64url')
+    const sigBuffer = Buffer.from(signature)
+    const expectedBuffer = Buffer.from(expectedSig)
+
+    if (sigBuffer.length !== expectedBuffer.length || !crypto.timingSafeEqual(sigBuffer, expectedBuffer)) {
+      return null
+    }
+
+    const payload = JSON.parse(Buffer.from(data, 'base64url').toString('utf8'))
+    if (!payload.userId || !payload.expiresAt || typeof payload.expiresAt !== 'number') {
+      return null
+    }
+
+    if (Date.now() > payload.expiresAt) {
+      return null
+    }
+
+    return {
+      userId: payload.userId,
+      email: payload.email,
+      expiresAt: payload.expiresAt
+    }
+  } catch {
     return null
   }
-  return session
 }
 
 export function destroySessionToken(token?: string) {
   if (token) {
-    activeSessions.delete(token)
+    revokedTokens.add(token)
   }
 }
+

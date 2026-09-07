@@ -34,7 +34,15 @@
         </div>
 
         <!-- Notification Error / Alert Banner -->
-        <div v-if="authRequiredMessage" class="p-4 bg-amber-50 border-2 border-amber-300 rounded-2xl text-amber-900 text-xs font-heading font-extrabold flex items-center gap-3 animate-pop shadow-sm">
+        <div v-if="sessionExpiredMessage" class="p-4 bg-amber-50 border-2 border-amber-300 rounded-2xl text-amber-900 text-xs font-heading font-extrabold flex items-center gap-3 animate-pop shadow-sm">
+          <span class="text-xl">⏰</span>
+          <div>
+            <p class="font-black text-sm">Sesi Belajar Telah Berakhir</p>
+            <p class="text-[11px] font-body text-amber-800">Sesi kamu sudah kadaluarsa atau tidak valid. Silakan masuk kembali untuk melanjutkan progres belajarmu.</p>
+          </div>
+        </div>
+
+        <div v-else-if="authRequiredMessage" class="p-4 bg-amber-50 border-2 border-amber-300 rounded-2xl text-amber-900 text-xs font-heading font-extrabold flex items-center gap-3 animate-pop shadow-sm">
           <span class="text-xl">🔒</span>
           <div>
             <p class="font-black text-sm">Wajib Login Terlebih Dahulu!</p>
@@ -185,8 +193,12 @@ const showPassword = ref(false)
 const loading = ref(false)
 const errorMessage = ref('')
 
+const sessionExpiredMessage = computed(() => {
+  return route.query.reason === 'session_expired'
+})
+
 const authRequiredMessage = computed(() => {
-  return route.query.reason === 'auth_required' || route.query.redirect
+  return (route.query.reason === 'auth_required' || route.query.redirect) && route.query.reason !== 'session_expired'
 })
 
 const handleSubmit = async () => {

@@ -24,12 +24,13 @@ export default defineEventHandler(async (event) => {
       message: `Kursus dengan ID '${courseId}' berhasil dihapus dari database.`
     }
   } catch (error: any) {
-    // P2025 = record not found
+    // P2025 = record not found in database (already removed or was local-only)
     if (error.code === 'P2025') {
-      throw createError({
-        statusCode: 404,
-        statusMessage: `Kursus dengan ID '${courseId}' tidak ditemukan di database.`
-      })
+      console.log(`[POSTGRESQL ADMIN] Course '${courseId}' not found in database, treated as successfully deleted`)
+      return {
+        success: true,
+        message: `Kursus dengan ID '${courseId}' telah dihapus.`
+      }
     }
     console.error('[POSTGRESQL ADMIN] Course delete error:', error.message)
     throw createError({

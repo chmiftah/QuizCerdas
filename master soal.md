@@ -34,7 +34,7 @@ Setiap Pelajaran (Lesson) WAJIB berisi **7 Soal** yang disusun bertahap secara s
 ### ⚙️ ATURAN STRUKTUR JSON (HARUS SESUAI SKEMA):
 
 1. Format utama harus berupa JSON Object tunggal dengan kunci `"course"`.
-2. Tipe soal (`"type"`) HARUS salah satu dari **24 tipe interaktif** berikut:
+2. Tipe soal (`"type"`) HARUS salah satu dari **29 tipe interaktif** berikut:
 
    - **1. `"multiple_choice"`** : Pilihan ganda standar.
      * `"options"`: Array 4 pilihan `["1", "2", "3", "4"]`.
@@ -148,6 +148,30 @@ Setiap Pelajaran (Lesson) WAJIB berisi **7 Soal** yang disusun bertahap secara s
      * `"options"`: `[]`.
      * `"correct_answer"`: `"5"` (angka yang harus ditebalkan, antara 1 sampai 10).
      * `"visual"`: `{ "target": 5 }`.
+
+   - **25. `"reading"`** : Membaca nyaring dengan Speech Recognition AI dan model suara TTS.
+     * `"options"`: `[]`.
+     * `"correct_answer"`: `"Budi suka membaca buku cerita."` (teks kalimat/kata target).
+     * `"audioText"`: `"Budi suka membaca buku cerita."` (opsional teks pelafalan).
+
+   - **26. `"number_maze"`** : Petak labirin logika angka yang dilalui bersama Kiko.
+     * `"options"`: `[]`.
+     * `"correct_answer"`: `"2,4,6,8,10"`.
+     * `"visual"`: `{ "grid": [[2,3,7],[4,6,9],[5,8,10]], "start": [0,0], "end": [2,2], "rule": "Angka Genap" }`.
+
+   - **27. `"balance_scale"`** : Neraca timbangan fisika untuk kesetaraan bobot buah.
+     * `"options"`: `["1", "2", "3", "4", "5"]`.
+     * `"correct_answer"`: `"3"` (berat yang harus ditambahkan ke piring kanan).
+     * `"visual"`: `{ "leftWeight": 5, "initialRightWeight": 2, "leftFruit": "🍎", "rightFruit": "🍊" }`.
+
+   - **28. `"color_by_number"`** : Mewarnai bidang gambar SVG berdasarkan kode nomor warna pada palet.
+     * `"options"`: `[]`.
+     * `"correct_answer"`: `"completed"`.
+
+   - **29. `"syllable_clapping"`** : Segmentasi fonik suku kata ritmik dengan ketukan tepuk tangan beranimasi.
+     * `"options"`: `["1", "2", "3", "4"]`.
+     * `"correct_answer"`: `"2"` (jumlah ketukan suku kata).
+     * `"visual"`: `{ "word": "KU-CING", "emoji": "🐱", "syllables": ["KU", "CING"] }`.
 
 3. **Properti Visual Opsional (`"visual"`):**
    - Visual Ten Frame: `{ "type": "ten_frame", "value": 6 }`

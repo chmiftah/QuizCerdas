@@ -16,7 +16,7 @@ async function seed24Types1UnitCourse() {
         category: 'math',
         icon: '🏆',
         themeColor: 'green',
-        features: ['1 Unit Praktis', '24 Jenis Soal Lengkap', 'Marathon & Sesi Bertahap'],
+        features: ['1 Unit Praktis', '29 Jenis Soal Lengkap', 'Marathon & Sesi Bertahap'],
         isReady: true,
         units: c.units
       },
@@ -28,13 +28,13 @@ async function seed24Types1UnitCourse() {
         category: 'math',
         icon: '🏆',
         themeColor: 'green',
-        features: ['1 Unit Praktis', '24 Jenis Soal Lengkap', 'Marathon & Sesi Bertahap'],
+        features: ['1 Unit Praktis', '29 Jenis Soal Lengkap', 'Marathon & Sesi Bertahap'],
         isReady: true,
         units: c.units
       }
     })
 
-    console.log('✅ Course 1 Unit 24 Jenis Soal berhasil di-seed!')
+    console.log('✅ Course 1 Unit 29 Jenis Soal berhasil di-seed!')
   } catch (err) {
     console.error('❌ Error seeding course_24_types_1unit:', err)
   } finally {

@@ -19,18 +19,31 @@
           </p>
         </div>
 
-        <div class="flex items-center gap-4 bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 z-10 shrink-0">
-          <div class="w-14 h-14 rounded-2xl bg-indigo-500 flex items-center justify-center text-3xl shadow-md">
-            {{ userStore.userAvatar }}
+        <ClientOnly>
+          <div class="flex items-center gap-4 bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 z-10 shrink-0">
+            <div class="w-14 h-14 rounded-2xl bg-indigo-500 flex items-center justify-center text-3xl shadow-md">
+              {{ userStore.userAvatar }}
+            </div>
+            <div>
+              <h3 class="font-heading font-extrabold text-base">{{ userStore.userDisplayName }}</h3>
+              <p class="text-xs text-indigo-200 font-heading">{{ userStore.currentUser?.grade || 'TK B / Kelas 1' }}</p>
+              <span class="inline-block mt-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-heading font-bold text-[10px]">
+                Active Learner
+              </span>
+            </div>
           </div>
-          <div>
-            <h3 class="font-heading font-extrabold text-base">{{ userStore.userDisplayName }}</h3>
-            <p class="text-xs text-indigo-200 font-heading">{{ userStore.currentUser?.grade || 'TK B / Kelas 1' }}</p>
-            <span class="inline-block mt-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-heading font-bold text-[10px]">
-              Active Learner
-            </span>
-          </div>
-        </div>
+          <template #fallback>
+            <div class="flex items-center gap-4 bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 z-10 shrink-0">
+              <div class="w-14 h-14 rounded-2xl bg-indigo-500 flex items-center justify-center text-3xl shadow-md">
+                🦉
+              </div>
+              <div>
+                <h3 class="font-heading font-extrabold text-base">Penjelajah Muda</h3>
+                <p class="text-xs text-indigo-200 font-heading">TK B / Kelas 1</p>
+              </div>
+            </div>
+          </template>
+        </ClientOnly>
       </div>
 
       <!-- Quick Metrics Grid -->

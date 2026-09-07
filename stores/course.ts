@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export interface Exercise {
   id: string
-  type: 'multiple_choice' | 'true_false' | 'fill_in_blank' | 'matching' | 'drag_and_drop' | 'shadow_matching' | 'sequence_ordering' | 'pattern_matching' | 'odd_one_out' | 'memory_flip' | 'seek_find' | 'comparison' | 'category_sorting' | 'drag_to_sort' | 'true_false_image' | 'hotspot' | 'word_building' | 'sound_matching' | 'puzzle_assembly' | 'fill_missing_number' | 'time_reading' | 'shape_transform' | 'count_select' | 'number_tracing'
+  type: 'multiple_choice' | 'true_false' | 'fill_in_blank' | 'matching' | 'drag_and_drop' | 'shadow_matching' | 'sequence_ordering' | 'pattern_matching' | 'odd_one_out' | 'memory_flip' | 'seek_find' | 'comparison' | 'category_sorting' | 'drag_to_sort' | 'true_false_image' | 'hotspot' | 'word_building' | 'sound_matching' | 'puzzle_assembly' | 'fill_missing_number' | 'time_reading' | 'shape_transform' | 'count_select' | 'number_tracing' | 'reading' | 'number_maze' | 'balance_scale' | 'color_by_number' | 'syllable_clapping'
   difficulty: 'easy' | 'medium' | 'hard'
   question: string
   options: string[]

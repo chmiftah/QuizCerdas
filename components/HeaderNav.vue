@@ -46,6 +46,14 @@
             </span>
           </NuxtLink>
 
+          <NuxtLink 
+            to="/about" 
+            class="px-3.5 py-1.5 rounded-xl text-xs font-heading font-extrabold transition-all"
+            active-class="bg-white text-slate-800 shadow-2xs"
+          >
+            ℹ️ Tentang Kami
+          </NuxtLink>
+
         
 
           <!-- Aktivitas Dropdown Menu -->
@@ -165,125 +173,157 @@
                   <span class="text-[10px] font-normal text-slate-400">Laporan & statistik belajar</span>
                 </div>
               </NuxtLink>
+
+              <NuxtLink 
+                to="/about" 
+                @click="showActivitiesMenu = false"
+                class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-heading font-bold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+                active-class="bg-slate-100 text-slate-900"
+              >
+                <span class="text-base">ℹ️</span>
+                <div class="flex flex-col">
+                  <span>Tentang CountingDuo</span>
+                  <span class="text-[10px] font-normal text-slate-400">Visi, misi & sahabat belajar</span>
+                </div>
+              </NuxtLink>
             </div>
           </div>
         </nav>
       </div>
 
       <!-- Gamification Indicators & Auth Profile -->
-      <div class="flex items-center gap-2 sm:gap-3">
-        <!-- Gamification Indicators (Only when logged in) -->
-        <template v-if="userStore.isLoggedIn">
-          <!-- Streak Indicator -->
-          <div class="flex items-center gap-1 px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-orange-50 border sm:border-2 border-orange-200 text-duo-orange-dark font-heading font-bold text-[11px] sm:text-sm shadow-2xs" title="Streak Hari Ini">
-            <Flame class="w-3.5 h-3.5 sm:w-5 sm:h-5 fill-duo-orange text-duo-orange animate-pulse" />
-            <span>{{ userStore.streak }}</span>
-          </div>
-
-          <!-- XP Badge -->
-          <div class="flex items-center gap-1 px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-amber-50 border sm:border-2 border-amber-200 text-amber-800 font-heading font-bold text-[11px] sm:text-sm shadow-2xs" title="Total XP Kamu">
-            <Zap class="w-3.5 h-3.5 sm:w-5 sm:h-5 fill-duo-yellow text-duo-yellow-dark" />
-            <span class="font-extrabold">{{ userStore.xp }} <span class="hidden sm:inline">XP</span></span>
-          </div>
-
-          <!-- Hearts Indicator -->
-          <div 
-            @click="showHeartModal = true"
-            class="flex items-center gap-1 px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-rose-50 border sm:border-2 border-rose-200 text-rose-600 font-heading font-bold text-[11px] sm:text-sm shadow-2xs cursor-pointer hover:bg-rose-100 transition-colors" 
-            title="Nyawa Kamu (Klik untuk isi)"
-          >
-            <Heart class="w-3.5 h-3.5 sm:w-5 sm:h-5 fill-duo-red text-duo-red" />
-            <span>{{ userStore.hearts }}</span>
-          </div>
-        </template>
-
-        <!-- User Profile Dropdown or Auth Buttons -->
-        <div v-if="userStore.isLoggedIn" class="relative">
-          <button 
-            @click="showProfileMenu = !showProfileMenu"
-            type="button"
-            class="flex items-center gap-1.5 pl-2 pr-3 py-1 rounded-2xl bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-colors font-heading text-xs font-bold text-slate-700 cursor-pointer"
-          >
-            <span class="text-base sm:text-lg">{{ userStore.userAvatar }}</span>
-            <span class="hidden md:inline max-w-[100px] truncate">{{ userStore.userDisplayName }}</span>
-            <ChevronDown class="w-3.5 h-3.5 text-slate-500" />
-          </button>
-
-          <!-- Dropdown Menu -->
-          <div 
-            v-if="showProfileMenu" 
-            @click.outside="showProfileMenu = false"
-            class="absolute right-0 mt-2 w-48 bg-white rounded-2xl border-2 border-duo-gray-100 shadow-xl py-2 z-50 animate-pop space-y-1"
-          >
-            <div class="px-3 py-2 border-b border-slate-100">
-              <p class="font-heading font-extrabold text-xs text-slate-800">{{ userStore.userDisplayName }}</p>
-              <p class="text-[10px] text-slate-500 truncate">{{ userStore.currentUser?.email }}</p>
-              <span class="inline-block mt-1 px-2 py-0.5 bg-blue-50 text-duo-blue rounded-md font-heading font-extrabold text-[10px]">
-                {{ userStore.currentUser?.grade || 'Siswa' }}
-              </span>
+      <ClientOnly>
+        <div class="flex items-center gap-2 sm:gap-3">
+          <!-- Gamification Indicators (Only when logged in) -->
+          <template v-if="userStore.isLoggedIn">
+            <!-- Streak Indicator -->
+            <div class="flex items-center gap-1 px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-orange-50 border sm:border-2 border-orange-200 text-duo-orange-dark font-heading font-bold text-[11px] sm:text-sm shadow-2xs" title="Streak Hari Ini">
+              <Flame class="w-3.5 h-3.5 sm:w-5 sm:h-5 fill-duo-orange text-duo-orange animate-pulse" />
+              <span>{{ userStore.streak }}</span>
             </div>
 
-            <NuxtLink 
-              v-if="userStore.isAdmin"
-              to="/admin" 
-              @click="showProfileMenu = false"
-              class="w-full px-3 py-2 text-left text-xs font-heading font-extrabold text-purple-700 hover:bg-purple-50 flex items-center gap-2"
-            >
-              <span>🛡️</span> Dashboard Admin
-            </NuxtLink>
+            <!-- XP Badge -->
+            <div class="flex items-center gap-1 px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-amber-50 border sm:border-2 border-amber-200 text-amber-800 font-heading font-bold text-[11px] sm:text-sm shadow-2xs" title="Total XP Kamu">
+              <Zap class="w-3.5 h-3.5 sm:w-5 sm:h-5 fill-duo-yellow text-duo-yellow-dark" />
+              <span class="font-extrabold">{{ userStore.xp }} <span class="hidden sm:inline">XP</span></span>
+            </div>
 
-            <button 
-              @click="handleToggleAdmin"
-              class="w-full px-3 py-2 text-left text-xs font-heading font-bold text-slate-700 hover:bg-slate-100 flex items-center justify-between cursor-pointer"
+            <!-- Hearts Indicator -->
+            <div 
+              @click="showHeartModal = true"
+              class="flex items-center gap-1 px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-rose-50 border sm:border-2 border-rose-200 text-rose-600 font-heading font-bold text-[11px] sm:text-sm shadow-2xs cursor-pointer hover:bg-rose-100 transition-colors" 
+              title="Nyawa Kamu (Klik untuk isi)"
             >
-              <span class="flex items-center gap-2">
-                <span>⚙️</span> Switch Admin Mode
-              </span>
-              <span class="px-1.5 py-0.5 text-[9px] rounded font-black uppercase" :class="userStore.isAdmin ? 'bg-purple-100 text-purple-700' : 'bg-slate-200 text-slate-600'">
-                {{ userStore.isAdmin ? 'ON' : 'OFF' }}
-              </span>
+              <Heart class="w-3.5 h-3.5 sm:w-5 sm:h-5 fill-duo-red text-duo-red" />
+              <span>{{ userStore.hearts }}</span>
+            </div>
+          </template>
+
+          <!-- User Profile Dropdown or Auth Buttons -->
+          <div v-if="userStore.isLoggedIn" class="relative">
+            <button 
+              @click="showProfileMenu = !showProfileMenu"
+              type="button"
+              class="flex items-center gap-1.5 pl-2 pr-3 py-1 rounded-2xl bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-colors font-heading text-xs font-bold text-slate-700 cursor-pointer"
+            >
+              <span class="text-base sm:text-lg">{{ userStore.userAvatar }}</span>
+              <span class="hidden md:inline max-w-[100px] truncate">{{ userStore.userDisplayName }}</span>
+              <ChevronDown class="w-3.5 h-3.5 text-slate-500" />
             </button>
 
-            <NuxtLink 
-              to="/shop" 
-              @click="showProfileMenu = false"
-              class="w-full px-3 py-2 text-left text-xs font-heading font-extrabold text-amber-700 hover:bg-amber-50 flex items-center gap-2"
+            <!-- Dropdown Menu -->
+            <div 
+              v-if="showProfileMenu" 
+              @click.outside="showProfileMenu = false"
+              class="absolute right-0 mt-2 w-48 bg-white rounded-2xl border-2 border-duo-gray-100 shadow-xl py-2 z-50 animate-pop space-y-1"
             >
-              <span>🛍️</span> Toko Kostum & Hadiah XP
-            </NuxtLink>
+              <div class="px-3 py-2 border-b border-slate-100">
+                <p class="font-heading font-extrabold text-xs text-slate-800">{{ userStore.userDisplayName }}</p>
+                <p class="text-[10px] text-slate-500 truncate">{{ userStore.currentUser?.email }}</p>
+                <span class="inline-block mt-1 px-2 py-0.5 bg-blue-50 text-duo-blue rounded-md font-heading font-extrabold text-[10px]">
+                  {{ userStore.currentUser?.grade || 'Siswa' }}
+                </span>
+              </div>
 
-            <NuxtLink 
-              to="/catalog" 
-              @click="showProfileMenu = false"
-              class="w-full px-3 py-2 text-left text-xs font-heading font-bold text-slate-600 hover:bg-slate-50 flex items-center gap-2"
-            >
-              <span>📚</span> Dashboard Katalog
-            </NuxtLink>
+              <NuxtLink 
+                v-if="userStore.isAdmin"
+                to="/admin" 
+                @click="showProfileMenu = false"
+                class="w-full px-3 py-2 text-left text-xs font-heading font-extrabold text-purple-700 hover:bg-purple-50 flex items-center gap-2"
+              >
+                <span>🛡️</span> Dashboard Admin
+              </NuxtLink>
 
-            <button 
-              @click="handleLogout"
-              class="w-full px-3 py-2 text-left text-xs font-heading font-bold text-rose-600 hover:bg-rose-50 flex items-center gap-2 cursor-pointer"
+              <button 
+                @click="handleToggleAdmin"
+                class="w-full px-3 py-2 text-left text-xs font-heading font-bold text-slate-700 hover:bg-slate-100 flex items-center justify-between cursor-pointer"
+              >
+                <span class="flex items-center gap-2">
+                  <span>⚙️</span> Switch Admin Mode
+                </span>
+                <span class="px-1.5 py-0.5 text-[9px] rounded font-black uppercase" :class="userStore.isAdmin ? 'bg-purple-100 text-purple-700' : 'bg-slate-200 text-slate-600'">
+                  {{ userStore.isAdmin ? 'ON' : 'OFF' }}
+                </span>
+              </button>
+
+              <NuxtLink 
+                to="/shop" 
+                @click="showProfileMenu = false"
+                class="w-full px-3 py-2 text-left text-xs font-heading font-extrabold text-amber-700 hover:bg-amber-50 flex items-center gap-2"
+              >
+                <span>🛍️</span> Toko Kostum & Hadiah XP
+              </NuxtLink>
+
+              <NuxtLink 
+                to="/catalog" 
+                @click="showProfileMenu = false"
+                class="w-full px-3 py-2 text-left text-xs font-heading font-bold text-slate-600 hover:bg-slate-50 flex items-center gap-2"
+              >
+                <span>📚</span> Dashboard Katalog
+              </NuxtLink>
+
+              <button 
+                @click="handleLogout"
+                class="w-full px-3 py-2 text-left text-xs font-heading font-bold text-rose-600 hover:bg-rose-50 flex items-center gap-2 cursor-pointer"
+              >
+                <span>🚪</span> Keluar Akun
+              </button>
+            </div>
+          </div>
+
+          <div v-else class="flex items-center gap-1 sm:gap-2">
+            <NuxtLink 
+              to="/login"
+              class="px-3 py-1.5 rounded-xl font-heading font-bold text-xs text-slate-600 hover:bg-slate-100 transition-colors"
             >
-              <span>🚪</span> Keluar Akun
-            </button>
+              Masuk
+            </NuxtLink>
+            <NuxtLink 
+              to="/register"
+              class="px-3 py-1.5 rounded-xl duo-btn-green text-xs font-heading font-extrabold py-1.5"
+            >
+              Daftar Gratis
+            </NuxtLink>
           </div>
         </div>
 
-        <div v-else class="flex items-center gap-1 sm:gap-2">
-          <NuxtLink 
-            to="/login"
-            class="px-3 py-1.5 rounded-xl font-heading font-bold text-xs text-slate-600 hover:bg-slate-100 transition-colors"
-          >
-            Masuk
-          </NuxtLink>
-          <NuxtLink 
-            to="/register"
-            class="px-3 py-1.5 rounded-xl duo-btn-green text-xs font-heading font-extrabold py-1.5"
-          >
-            Daftar Gratis
-          </NuxtLink>
-        </div>
-      </div>
+        <template #fallback>
+          <div class="flex items-center gap-1 sm:gap-2">
+            <NuxtLink 
+              to="/login"
+              class="px-3 py-1.5 rounded-xl font-heading font-bold text-xs text-slate-600 hover:bg-slate-100 transition-colors"
+            >
+              Masuk
+            </NuxtLink>
+            <NuxtLink 
+              to="/register"
+              class="px-3 py-1.5 rounded-xl duo-btn-green text-xs font-heading font-extrabold py-1.5"
+            >
+              Daftar Gratis
+            </NuxtLink>
+          </div>
+        </template>
+      </ClientOnly>
     </div>
 
     <!-- Heart Refill Modal -->
@@ -360,8 +400,8 @@ const buyHeartRefill = () => {
   }
 }
 
-const handleLogout = () => {
-  userStore.logout()
+const handleLogout = async () => {
+  await userStore.logout()
   showProfileMenu.value = false
   navigateTo('/')
 }

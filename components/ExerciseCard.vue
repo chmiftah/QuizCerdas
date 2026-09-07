@@ -278,6 +278,51 @@
           :isCorrect="engine.isCorrect"
           @select="engine.selectOption"
         />
+
+        <ExerciseReading
+          v-else-if="engine.currentExercise.type === 'reading'"
+          :exercise="engine.currentExercise"
+          :selectedOption="engine.selectedOption"
+          :isChecked="engine.isChecked"
+          :isCorrect="engine.isCorrect"
+          @select="engine.selectOption"
+        />
+
+        <ExerciseNumberMaze
+          v-else-if="engine.currentExercise.type === 'number_maze'"
+          :exercise="engine.currentExercise"
+          :selectedOption="engine.selectedOption"
+          :isChecked="engine.isChecked"
+          :isCorrect="engine.isCorrect"
+          @select="engine.selectOption"
+        />
+
+        <ExerciseBalanceScale
+          v-else-if="engine.currentExercise.type === 'balance_scale'"
+          :exercise="engine.currentExercise"
+          :selectedOption="engine.selectedOption"
+          :isChecked="engine.isChecked"
+          :isCorrect="engine.isCorrect"
+          @select="engine.selectOption"
+        />
+
+        <ExerciseColorByNumber
+          v-else-if="engine.currentExercise.type === 'color_by_number'"
+          :exercise="engine.currentExercise"
+          :selectedOption="engine.selectedOption"
+          :isChecked="engine.isChecked"
+          :isCorrect="engine.isCorrect"
+          @select="engine.selectOption"
+        />
+
+        <ExerciseSyllableClapping
+          v-else-if="engine.currentExercise.type === 'syllable_clapping'"
+          :exercise="engine.currentExercise"
+          :selectedOption="engine.selectedOption"
+          :isChecked="engine.isChecked"
+          :isCorrect="engine.isCorrect"
+          @select="engine.selectOption"
+        />
       </div>
     </main>
 
@@ -351,9 +396,7 @@ const currentExerciseOptions = computed(() => {
 
 const canCheck = computed(() => {
   const ex = unref(props.engine.currentExercise)
-  if (!ex) return false
-
-  if (ex.type === 'multiple_choice' || ex.type === 'true_false' || ex.type === 'true_false_image' || ex.type === 'sequence_ordering' || ex.type === 'comparison' || ex.type === 'pattern_matching' || ex.type === 'odd_one_out' || ex.type === 'shadow_matching' || ex.type === 'hotspot' || ex.type === 'word_building' || ex.type === 'sound_matching' || ex.type === 'puzzle_assembly' || ex.type === 'time_reading' || ex.type === 'shape_transform' || ex.type === 'count_select' || ex.type === 'number_tracing') {
+  if (ex.type === 'multiple_choice' || ex.type === 'true_false' || ex.type === 'true_false_image' || ex.type === 'sequence_ordering' || ex.type === 'comparison' || ex.type === 'pattern_matching' || ex.type === 'odd_one_out' || ex.type === 'shadow_matching' || ex.type === 'hotspot' || ex.type === 'word_building' || ex.type === 'sound_matching' || ex.type === 'puzzle_assembly' || ex.type === 'time_reading' || ex.type === 'shape_transform' || ex.type === 'count_select' || ex.type === 'number_tracing' || ex.type === 'reading' || ex.type === 'number_maze' || ex.type === 'balance_scale' || ex.type === 'color_by_number' || ex.type === 'syllable_clapping') {
     return !!unref(props.engine.selectedOption)
   }
   if (ex.type === 'fill_in_blank' || ex.type === 'fill_missing_number') {
@@ -380,7 +423,7 @@ const handleVoiceSelection = (val) => {
   const ex = unref(props.engine.currentExercise)
   if (!ex) return
 
-  if (ex.type === 'multiple_choice' || ex.type === 'true_false' || ex.type === 'sequence_ordering' || ex.type === 'comparison' || ex.type === 'pattern_matching' || ex.type === 'number_tracing') {
+  if (ex.type === 'multiple_choice' || ex.type === 'true_false' || ex.type === 'sequence_ordering' || ex.type === 'comparison' || ex.type === 'pattern_matching' || ex.type === 'number_tracing' || ex.type === 'reading' || ex.type === 'balance_scale' || ex.type === 'syllable_clapping') {
     props.engine.selectOption(val)
   } else if (ex.type === 'fill_in_blank') {
     props.engine.fillBlankInput = val
@@ -445,7 +488,12 @@ const getExerciseTypeLabel = (type) => {
     'time_reading': 'Baca Jam',
     'shape_transform': 'Transformasi Bentuk',
     'count_select': 'Hitung & Pilih',
-    'number_tracing': 'Tebalkan Angka'
+    'number_tracing': 'Tebalkan Angka',
+    'reading': 'Membaca Nyaring',
+    'number_maze': 'Labirin Logika Angka',
+    'balance_scale': 'Timbangan Seimbang',
+    'color_by_number': 'Mewarnai Angka',
+    'syllable_clapping': 'Ketukan Suku Kata'
   }
   return typeMap[type] || 'Soal'
 }
@@ -473,9 +521,14 @@ const getExerciseTypeIcon = (type) => {
     'puzzle_assembly': '🧩',
     'fill_missing_number': '🔢',
     'time_reading': '⏰',
-    'shape_transform': '🔄',
+    'shape_transform': '🔷',
     'count_select': '🔢',
-    'number_tracing': '✏️'
+    'number_tracing': '✏️',
+    'reading': '📖',
+    'number_maze': '🌀',
+    'balance_scale': '⚖️',
+    'color_by_number': '🎨',
+    'syllable_clapping': '👏'
   }
   return iconMap[type] || '🎮'
 }

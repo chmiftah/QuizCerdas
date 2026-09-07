@@ -257,7 +257,7 @@ export const useUserStore = defineStore('user', {
       }
     },
 
-    logout() {
+    async logout() {
       this.currentUser = null
       this.isAuthenticated = false
       this.xp = 0
@@ -268,6 +268,36 @@ export const useUserStore = defineStore('user', {
       this.completedLessons = []
       this.completedCheckpoints = []
       this.saveToStorage()
+
+      if (import.meta.client) {
+        try {
+          await $fetch('/api/auth/logout', { method: 'POST' })
+        } catch (e) {}
+      }
+    },
+
+    async handleSessionExpired(notify = false) {
+      this.currentUser = null
+      this.isAuthenticated = false
+      if (import.meta.client) {
+        try {
+          const saved = localStorage.getItem('duo_user_progress')
+          if (saved) {
+            const data = JSON.parse(saved)
+            data.currentUser = null
+            data.isAuthenticated = false
+            localStorage.setItem('duo_user_progress', JSON.stringify(data))
+          }
+        } catch (e) {}
+
+        try {
+          await $fetch('/api/auth/logout', { method: 'POST' })
+        } catch (e) {}
+
+        if (notify) {
+          console.warn('[AUTH] Sesi login telah berakhir atau tidak valid. Silakan login kembali.')
+        }
+      }
     },
 
     checkAndResetDailyQuests() {
@@ -466,8 +496,12 @@ export const useUserStore = defineStore('user', {
           this.rebuildFlatCompletedArrays()
           this.saveToStorage()
         }
-      } catch (err) {
-        console.warn('[POSTGRESQL] Could not sync progress from DB:', err)
+      } catch (err: any) {
+        if (err.statusCode === 401 || err.status === 401 || err.data?.statusCode === 401) {
+          await this.handleSessionExpired(true)
+        } else {
+          console.warn('[POSTGRESQL] Could not sync progress from DB:', err)
+        }
       }
     },
 
@@ -560,8 +594,8 @@ export const useUserStore = defineStore('user', {
         }
         localStorage.setItem('duo_user_progress', JSON.stringify(payload))
 
-        // Sync directly to PostgreSQL database if logged in
-        if (this.currentUser && this.currentUser.role !== 'guest') {
+        // Sync directly to PostgreSQL database if logged in and authenticated
+        if (this.currentUser && this.currentUser.role !== 'guest' && this.isAuthenticated) {
           try {
             await $fetch('/api/progress/save', {
               method: 'POST',
@@ -576,8 +610,10 @@ export const useUserStore = defineStore('user', {
                 ...(extraData || {})
               }
             })
-          } catch (err) {
-            // Background sync silent catch
+          } catch (err: any) {
+            if (err.statusCode === 401 || err.status === 401 || err.data?.statusCode === 401) {
+              await this.handleSessionExpired(false)
+            }
           }
         }
       }

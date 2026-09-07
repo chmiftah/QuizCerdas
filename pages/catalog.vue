@@ -21,24 +21,35 @@
         </div>
 
         <!-- User Stats Pill Quick View -->
-        <div class="z-10 bg-white/10 rounded-2xl p-4 text-center shrink-0 space-y-2 max-w-xs w-full sm:w-auto">
-          <div v-if="userStore.isLoggedIn" class="text-xs font-heading font-extrabold text-amber-200 flex items-center justify-center gap-1">
-            <span>{{ userStore.userAvatar }} Halo, {{ userStore.userDisplayName }}!</span>
+        <ClientOnly>
+          <div class="z-10 bg-white/10 rounded-2xl p-4 text-center shrink-0 space-y-2 max-w-xs w-full sm:w-auto">
+            <div v-if="userStore.isLoggedIn" class="text-xs font-heading font-extrabold text-amber-200 flex items-center justify-center gap-1">
+              <span>{{ userStore.userAvatar }} Halo, {{ userStore.userDisplayName }}!</span>
+            </div>
+            <span class="text-xs font-heading font-bold uppercase tracking-wider text-indigo-200">Level Pengguna</span>
+            <div class="font-heading text-2xl font-black text-amber-300 flex items-center justify-center gap-1">
+              <span>⭐ Level {{ userStore.userLevel }}</span>
+            </div>
+            <p class="text-[11px] font-heading font-semibold text-white/80">
+              XP: {{ userStore.xp }} / Next Level: +{{ userStore.xpToNextLevel }} XP
+            </p>
+            <button 
+              @click="resetAllProgress"
+              class="w-full mt-1 px-3 py-1.5 bg-rose-500/80 hover:bg-rose-600 border border-rose-300/40 rounded-xl font-heading font-bold text-xs text-white transition-colors cursor-pointer"
+            >
+              🔄 Reset Total Progress (0 XP)
+            </button>
           </div>
-          <span class="text-xs font-heading font-bold uppercase tracking-wider text-indigo-200">Level Pengguna</span>
-          <div class="font-heading text-2xl font-black text-amber-300 flex items-center justify-center gap-1">
-            <span>⭐ Level {{ userStore.userLevel }}</span>
-          </div>
-          <p class="text-[11px] font-heading font-semibold text-white/80">
-            XP: {{ userStore.xp }} / Next Level: +{{ userStore.xpToNextLevel }} XP
-          </p>
-          <button 
-            @click="resetAllProgress"
-            class="w-full mt-1 px-3 py-1.5 bg-rose-500/80 hover:bg-rose-600 border border-rose-300/40 rounded-xl font-heading font-bold text-xs text-white transition-colors cursor-pointer"
-          >
-            🔄 Reset Total Progress (0 XP)
-          </button>
-        </div>
+          <template #fallback>
+            <div class="z-10 bg-white/10 rounded-2xl p-4 text-center shrink-0 space-y-2 max-w-xs w-full sm:w-auto">
+              <span class="text-xs font-heading font-bold uppercase tracking-wider text-indigo-200">Level Pengguna</span>
+              <div class="font-heading text-2xl font-black text-amber-300 flex items-center justify-center gap-1">
+                <span>⭐ Level 1</span>
+              </div>
+              <div class="w-24 h-4 bg-white/20 rounded mx-auto animate-pulse"></div>
+            </div>
+          </template>
+        </ClientOnly>
       </div>
 
       <!-- Catalog View Mode & Category Filter Pills -->

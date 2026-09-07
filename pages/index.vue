@@ -651,6 +651,7 @@
             <li><NuxtLink to="/" class="hover:text-white transition-colors">Beranda Utama</NuxtLink></li>
             <li><NuxtLink to="/catalog" class="hover:text-white transition-colors">Katalog Modul</NuxtLink></li>
             <li><NuxtLink to="/course" class="hover:text-white transition-colors">Peta Jalur Belajar</NuxtLink></li>
+            <li><NuxtLink to="/about" class="hover:text-white transition-colors">Tentang Kami</NuxtLink></li>
           </ul>
         </div>
 

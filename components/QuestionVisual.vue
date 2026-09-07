@@ -277,7 +277,12 @@ const hasVisual = computed(() => {
     'drag_to_sort',
     'hotspot',
     'seek_find',
-    'odd_one_out'
+    'odd_one_out',
+    'reading',
+    'number_maze',
+    'balance_scale',
+    'color_by_number',
+    'syllable_clapping'
   ]
   if (hiddenTypes.includes(props.exercise.type)) return false
   return !!(props.exercise?.image || visualData.value)

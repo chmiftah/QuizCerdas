@@ -137,7 +137,7 @@ export function useExerciseEngine(exercises: Exercise[], onLessonComplete?: (xp:
     const ex = currentExercise.value
     let correct = false
 
-    if (ex.type === 'multiple_choice' || ex.type === 'true_false' || ex.type === 'true_false_image' || ex.type === 'comparison' || ex.type === 'pattern_matching' || ex.type === 'odd_one_out' || ex.type === 'shadow_matching' || ex.type === 'hotspot' || ex.type === 'sound_matching' || ex.type === 'time_reading' || ex.type === 'shape_transform' || ex.type === 'count_select' || ex.type === 'number_tracing') {
+    if (ex.type === 'multiple_choice' || ex.type === 'true_false' || ex.type === 'true_false_image' || ex.type === 'comparison' || ex.type === 'pattern_matching' || ex.type === 'odd_one_out' || ex.type === 'shadow_matching' || ex.type === 'hotspot' || ex.type === 'sound_matching' || ex.type === 'time_reading' || ex.type === 'shape_transform' || ex.type === 'count_select' || ex.type === 'number_tracing' || ex.type === 'balance_scale' || ex.type === 'syllable_clapping') {
       correct = selectedOption.value.trim().toLowerCase() === ex.correct_answer.trim().toLowerCase()
     } else if (ex.type === 'sequence_ordering') {
       const userSeq = selectedOption.value.split(',').map(s => s.trim().toLowerCase())
@@ -191,6 +191,36 @@ export function useExerciseEngine(exercises: Exercise[], onLessonComplete?: (xp:
       correct = Object.keys(expectedPairs).every(leftKey => {
         return matchingSelections.value[leftKey] === expectedPairs[leftKey]
       })
+    } else if (ex.type === 'reading') {
+      const cleanUser = selectedOption.value.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()?"']/g, '').trim()
+      const cleanTarget = ex.correct_answer.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()?"']/g, '').trim()
+
+      if (cleanUser === cleanTarget) {
+        correct = true
+      } else {
+        const targetWords = cleanTarget.split(/\s+/).filter(Boolean)
+        const userWords = cleanUser.split(/\s+/).filter(Boolean)
+
+        if (targetWords.length > 0 && userWords.length > 0) {
+          let matchedCount = 0
+          for (const tw of targetWords) {
+            if (userWords.some(uw => uw === tw || uw.includes(tw) || tw.includes(uw))) {
+              matchedCount++
+            }
+          }
+          const accuracy = matchedCount / targetWords.length
+          correct = accuracy >= 0.7 // 70% matching threshold
+        }
+      }
+    } else if (ex.type === 'number_maze') {
+      const normalizeSeq = (str: string) => str.replace(/[\s\->]+/g, ',').split(',').map(s => s.trim()).filter(Boolean).join(',')
+      const userSeq = normalizeSeq(selectedOption.value)
+      const targetSeq = normalizeSeq(ex.correct_answer)
+      correct = userSeq === targetSeq
+    } else if (ex.type === 'color_by_number') {
+      const target = ex.correct_answer.trim().toLowerCase()
+      const userVal = selectedOption.value.trim().toLowerCase()
+      correct = userVal === 'completed' || userVal === target || (target === 'completed' && userVal.includes('completed'))
     }
 
     isCorrect.value = correct

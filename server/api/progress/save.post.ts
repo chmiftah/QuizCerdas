@@ -15,6 +15,7 @@ export default defineEventHandler(async (event) => {
 
   const session = validateSessionToken(token)
   if (!session) {
+    deleteCookie(event, 'auth_session')
     throw createError({
       statusCode: 401,
       statusMessage: 'Sesi tidak valid atau sudah kadaluarsa. Silakan login kembali.'
