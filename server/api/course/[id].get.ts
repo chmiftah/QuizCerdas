@@ -20,11 +20,16 @@ export default defineEventHandler(async (event) => {
     })
 
     if (course) {
+      const isPro = Array.isArray(course.features)
+        ? (course.features as any[]).includes('pro_access')
+        : Boolean((course.features as any)?.isPro)
+
       return {
         id: course.id,
         title: course.title,
         description: course.description,
         target_audience: course.targetAudience,
+        isPro: isPro,
         units: course.units
       }
     }

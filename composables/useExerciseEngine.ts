@@ -1,10 +1,12 @@
 import { ref, computed, reactive } from 'vue'
 import { useUserStore } from '~/stores/user'
+import { usePaywall } from '~/composables/usePaywall'
 import type { Exercise } from '~/stores/course'
 import confetti from 'canvas-confetti'
 
 export function useExerciseEngine(exercises: Exercise[], onLessonComplete?: (xp: number) => void) {
   const userStore = useUserStore()
+  const { openPaywall } = usePaywall()
 
   const currentIndex = ref(0)
   const selectedOption = ref<string>('')
@@ -239,6 +241,18 @@ export function useExerciseEngine(exercises: Exercise[], onLessonComplete?: (xp:
       userStore.loseHeart()
       playSound('incorrect')
       
+      // If user ran out of hearts and not pro, show paywall prompt
+      if (!userStore.hasUnlimitedHearts && userStore.hearts <= 0) {
+        setTimeout(() => {
+          openPaywall({
+            reason: 'out_of_hearts',
+            title: 'Yah, Nyawa Kamu Habis! 💔',
+            description: 'Jangan biarkan semangat belajar si kecil terhenti. Buka Nyawa Tanpa Batas dengan QuizCerdas Pro!',
+            featureHighlight: 'Unlimited Hearts (❤️ ∞)'
+          })
+        }, 600)
+      }
+
       // Add to retry queue to force user to answer it correctly later
       retryQueue.value.push(ex)
       

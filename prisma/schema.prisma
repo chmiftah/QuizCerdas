@@ -25,6 +25,9 @@ model User {
   maxHearts               Int      @default(5)
   streak                  Int      @default(1)
   lastActiveDate          DateTime @default(now())
+  subscriptionTier        String   @default("FREE") // "FREE", "PRO"
+  subscriptionExpiresAt   DateTime?
+  parentWhatsapp          String?
   completedLessonsByCourse Json?   // Stored as JSON object: { courseId: [lessonIds] }
   completedCheckpointsByCourse Json? // Stored as JSON object: { courseId: [checkpointIds] }
   createdAt               DateTime @default(now())
@@ -32,6 +35,7 @@ model User {
 
   progressLogs            ProgressLog[]
   sessions                Session[]
+  subscriptions           Subscription[]
 
   @@map("users")
 }
@@ -59,6 +63,23 @@ model ProgressLog {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("progress_logs")
+}
+
+model Subscription {
+  id              String    @id @default(uuid())
+  userId          String
+  tier            String    @default("PRO") // "PRO"
+  status          String    @default("active") // "active", "expired", "cancelled"
+  amount          Int       @default(99000)
+  paymentMethod   String    @default("qris") // "qris", "bca_va", "mandiri_va", "shopeepay"
+  startsAt        DateTime  @default(now())
+  expiresAt       DateTime
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("subscriptions")
 }
 
 model Course {

@@ -32,6 +32,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useCourseStore } from '~/stores/course'
 import { useUserStore } from '~/stores/user'
 import { useExerciseEngine } from '~/composables/useExerciseEngine'
+import { usePaywall } from '~/composables/usePaywall'
 
 definePageMeta({
   middleware: 'auth'
@@ -41,6 +42,7 @@ const route = useRoute()
 const router = useRouter()
 const courseStore = useCourseStore()
 const userStore = useUserStore()
+const { openPaywall } = usePaywall()
 
 const unitId = route.params.unitId
 const checkpoint = computed(() => courseStore.getCheckpointById(unitId))
@@ -65,6 +67,18 @@ const engine = shallowRef(null)
 onMounted(() => {
   userStore.loadFromStorage()
   courseStore.loadActiveCourse()
+
+  const isCoursePro = Boolean(courseStore.course?.isPro || courseStore.catalogRegistry.find(c => c.id === courseStore.activeCourseId)?.isPro)
+  if (isCoursePro && !userStore.isPro) {
+    openPaywall({
+      reason: 'unit_locked',
+      title: `Akses Terkunci: ${courseStore.course.title || 'Modul Pro'} 👑`,
+      description: 'Kursus ini khusus untuk pengguna QuizCerdas Pro. Tingkatkan akun Anda untuk mengakses materi!',
+      featureHighlight: 'Akses Penuh Kursus Pro'
+    })
+    router.push('/catalog')
+    return
+  }
 
   if (!checkpoint.value) {
     router.push('/course')

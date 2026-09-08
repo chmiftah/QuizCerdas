@@ -10,9 +10,29 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const { userId, action, role, xp, hearts } = body
+  const { userId, action, role, xp, hearts, subscriptionTier } = body
 
   try {
+    if (action === 'update_subscription') {
+      const tier = subscriptionTier === 'PRO' ? 'PRO' : 'FREE'
+      let expiresAt: Date | null = null
+      if (tier === 'PRO') {
+        expiresAt = new Date()
+        expiresAt.setFullYear(expiresAt.getFullYear() + 1)
+      }
+
+      const updated = await prisma.user.update({
+        where: { id: userId },
+        data: {
+          subscriptionTier: tier,
+          subscriptionExpiresAt: expiresAt,
+          hearts: 5
+        }
+      })
+      console.log(`[POSTGRESQL ADMIN] User ${userId} subscription updated to: ${tier}`)
+      return { success: true, user: updated }
+    }
+
     if (action === 'update_role' && role) {
       const updated = await prisma.user.update({
         where: { id: userId },

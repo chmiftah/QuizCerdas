@@ -21,6 +21,41 @@
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0"></span>
             <span class="truncate">Modul: {{ courseStore.course.title }}</span>
           </span>
+          <span v-if="isCoursePro" class="px-2 py-0.5 bg-amber-400 text-amber-950 font-heading font-black text-[10px] rounded-full shrink-0 shadow-2xs">
+            👑 PRO
+          </span>
+        </div>
+      </div>
+
+      <!-- Locked Pro Course Alert Banner -->
+      <div 
+        v-if="isCoursePro && !userStore.isPro" 
+        class="bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 rounded-3xl p-5 sm:p-6 text-slate-950 shadow-xl border-4 border-amber-300 relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-5 animate-pop"
+      >
+        <div class="flex items-center gap-4 z-10">
+          <div class="w-14 h-14 rounded-2xl bg-white text-3xl flex items-center justify-center shrink-0 shadow-md">
+            👑
+          </div>
+          <div class="space-y-1">
+            <div class="inline-flex items-center gap-1.5 px-3 py-0.5 bg-amber-950 text-amber-300 rounded-full text-[11px] font-heading font-black uppercase tracking-wider">
+              <span>🔒 KURSUS KHUSUS PRO</span>
+            </div>
+            <h4 class="font-heading text-lg sm:text-xl font-black text-slate-950 leading-snug">
+              Modul Ini Hanya Dapat Diakses Oleh Akun QuizCerdas Pro!
+            </h4>
+            <p class="text-xs sm:text-sm font-heading font-bold text-amber-950/80">
+              Tingkatkan akun sekarang (Rp 99.000/tahun) untuk membuka seluruh pelajaran dan nyawa tanpa batas.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0 z-10 w-full sm:w-auto justify-end">
+          <button 
+            @click="openProPaywall"
+            class="w-full sm:w-auto px-6 py-3 bg-slate-950 hover:bg-slate-900 text-amber-300 rounded-2xl text-xs sm:text-sm font-heading font-black shadow-lg cursor-pointer transition-transform hover:scale-105"
+          >
+            🚀 Buka dengan Pro (Rp 99.000)
+          </button>
         </div>
       </div>
 
@@ -228,11 +263,27 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUserStore } from '~/stores/user'
 import { useCourseStore } from '~/stores/course'
+import { usePaywall } from '~/composables/usePaywall'
 
 const route = useRoute()
 const userStore = useUserStore()
 const courseStore = useCourseStore()
+const { openPaywall } = usePaywall()
 const showCert = ref(false)
+
+const isCoursePro = computed(() => {
+  const c = courseStore.catalogRegistry.find(item => item.id === activeCourseId.value) || courseStore.course
+  return Boolean(c?.isPro)
+})
+
+const openProPaywall = () => {
+  openPaywall({
+    reason: 'unit_locked',
+    title: `Buka Kursus Pro: ${courseStore.course.title} 👑`,
+    description: 'Modul ini merupakan konten pembelajaran eksklusif QuizCerdas Pro. Tingkatkan akun untuk membuka seluruh materi!',
+    featureHighlight: 'Akses Penuh Kursus Pro'
+  })
+}
 
 onMounted(async () => {
   userStore.loadFromStorage()
@@ -240,11 +291,17 @@ onMounted(async () => {
   if (route.query.id) {
     courseStore.selectCourse(route.query.id)
   }
+  if (isCoursePro.value && !userStore.isPro) {
+    openProPaywall()
+  }
 })
 
 watch(() => route.query.id, (newId) => {
   if (newId) {
     courseStore.selectCourse(newId)
+    if (isCoursePro.value && !userStore.isPro) {
+      openProPaywall()
+    }
   }
 })
 

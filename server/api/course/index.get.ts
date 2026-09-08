@@ -16,8 +16,12 @@ const defaultCourses = [
     icon: '🏆',
     themeColor: 'green',
     features: ['1 Unit Praktis', '29 Jenis Soal Lengkap', 'Membaca Nyaring 📖', 'Marathon & Sesi Bertahap'],
+    isPro: true,
     isReady: true,
-    courseData: course24Types1Unit.course
+    courseData: {
+      ...course24Types1Unit.course,
+      isPro: true
+    }
   },
   {
     id: 'course_hewan_tk_sd',
@@ -76,8 +80,12 @@ const defaultCourses = [
     icon: '🍎',
     themeColor: 'emerald',
     features: ['10 Soal dari Worksheet Nyata', 'Penjumlahan Bergambar Buah', '3 Pelajaran Bertingkat', 'Ujian Akhir'],
+    isPro: true,
     isReady: true,
-    courseData: coursePenjumlahanBuah.course
+    courseData: {
+      ...coursePenjumlahanBuah.course,
+      isPro: true
+    }
   }
 ]
 
@@ -91,19 +99,20 @@ export default defineEventHandler(async (event) => {
       const validDbCourses = dbCourses.filter(c => c.id !== 'course_23_types')
       console.log(`[POSTGRESQL] Serving ${validDbCourses.length} courses directly from database`)
       
-      return validDbCourses.map(c => ({
-        id: c.id,
-        title: c.title,
-        description: c.description,
-        target_audience: c.targetAudience,
-        category: c.category || 'math',
-        icon: c.icon || '⭐',
-        themeColor: c.themeColor || 'green',
-        features: c.features || ['Kuis Interaktif'],
-        isReady: c.isReady ?? true,
-        isFromDatabase: true,
-        source: 'postgresql_database',
-        courseData: {
+      const checkIsPro = (c: any) => {
+        if (c.isPro !== undefined) return Boolean(c.isPro)
+        if (Array.isArray(c.features)) return c.features.includes('pro_access')
+        if (c.features && typeof c.features === 'object') return Boolean(c.features.isPro)
+        return false
+      }
+
+      return validDbCourses.map(c => {
+        const isPro = checkIsPro(c)
+        const cleanFeatures = Array.isArray(c.features)
+          ? c.features.filter((f: any) => f !== 'pro_access')
+          : (c.features?.list || c.features?.items || ['Kuis Interaktif'])
+
+        return {
           id: c.id,
           title: c.title,
           description: c.description,
@@ -111,9 +120,24 @@ export default defineEventHandler(async (event) => {
           category: c.category || 'math',
           icon: c.icon || '⭐',
           themeColor: c.themeColor || 'green',
-          units: c.units || []
+          features: cleanFeatures,
+          isPro: isPro,
+          isReady: c.isReady ?? true,
+          isFromDatabase: true,
+          source: 'postgresql_database',
+          courseData: {
+            id: c.id,
+            title: c.title,
+            description: c.description,
+            target_audience: c.targetAudience,
+            category: c.category || 'math',
+            icon: c.icon || '⭐',
+            themeColor: c.themeColor || 'green',
+            isPro: isPro,
+            units: c.units || []
+          }
         }
-      }))
+      })
     }
   } catch (error: any) {
     console.warn('[POSTGRESQL] Database error or offline, serving local fallback:', error.message)

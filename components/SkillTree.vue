@@ -151,20 +151,36 @@
             <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/20 rounded-full blur-xl pointer-events-none"></div>
             
             <div class="space-y-1 min-w-0 z-10">
-              <div class="inline-flex items-center gap-1.5 px-3 py-0.5 bg-white/25 rounded-full text-[11px] font-heading font-black uppercase tracking-wider border border-white/20">
-                <span>{{ getUnitBiomeIcon(unit.color) }}</span>
-                <span>BIOMA {{ unit.order }} • {{ getUnitBiomeName(unit.color) }}</span>
+              <div class="flex items-center gap-2 flex-wrap">
+                <div class="inline-flex items-center gap-1.5 px-3 py-0.5 bg-white/25 rounded-full text-[11px] font-heading font-black uppercase tracking-wider border border-white/20">
+                  <span>{{ getUnitBiomeIcon(unit.color) }}</span>
+                  <span>BIOMA {{ unit.order }} • {{ getUnitBiomeName(unit.color) }}</span>
+                  <div v-if="isUnitGated(unitIdx)" class="inline-flex items-center gap-1 px-2.5 py-0.5 bg-amber-400 text-amber-950 rounded-full text-[11px] font-heading font-black border border-white/50 shadow-xs animate-bounce-slow">
+                    <span>👑</span> <span>FITUR PRO</span>
+                  </div>
+                </div>
               </div>
-              <h3 class="font-heading text-xl sm:text-2xl font-black truncate drop-shadow-sm">
-                {{ unit.title }}
+              <h3 class="font-heading text-xl sm:text-2xl font-black truncate drop-shadow-sm flex items-center gap-2">
+                <span>{{ unit.title }}</span>
+                <span v-if="isUnitGated(unitIdx)" class="text-base text-amber-300">🔒</span>
               </h3>
               <p class="text-xs text-white/90 font-body line-clamp-1 max-w-sm">
                 {{ getUnitSummary(unit) }}
               </p>
             </div>
 
-            <!-- Unit Progress Pill -->
-            <div class="bg-black/20 backdrop-blur-xs px-3.5 py-2 rounded-2xl border border-white/25 text-center shrink-0 space-y-1">
+            <!-- Unit Action / Progress Pill -->
+            <div v-if="isUnitGated(unitIdx)" class="z-10 shrink-0">
+              <button 
+                @click="openPaywallForUnit"
+                class="px-4 py-2.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-amber-950 font-heading font-black text-xs shadow-lg border-2 border-white cursor-pointer active:scale-95 transition-all flex items-center gap-1.5"
+              >
+                <span>👑</span>
+                <span class="hidden sm:inline">Buka dengan</span> PRO
+              </button>
+            </div>
+
+            <div v-else class="bg-black/20 backdrop-blur-xs px-3.5 py-2 rounded-2xl border border-white/25 text-center shrink-0 space-y-1 z-10">
               <div class="text-[10px] font-heading font-black text-amber-300 uppercase">
                 {{ getUnitProgressPercent(unit) }}% SELESAI
               </div>
@@ -300,18 +316,26 @@
 
               <!-- 3. LIVE MASCOT KIKO COMPANION (Next to Active Node) -->
               <div 
-                v-if="isNextActiveLesson(unit.id, item.id)"
-                class="absolute left-24 sm:left-28 -top-8 z-30 flex items-center gap-2 pointer-events-auto cursor-pointer animate-float"
+                v-if="item.type === 'lesson' && isNextActiveLesson(unit.id, item.id)"
+                class="absolute -top-6 sm:-top-8 z-30 flex items-center gap-1.5 sm:gap-2 pointer-events-auto cursor-pointer animate-float"
+                :class="item.x > 200 
+                  ? 'right-16 sm:right-24 flex-row-reverse' 
+                  : 'left-16 sm:left-24'"
                 @click="onTapMascot"
                 title="Klik Kiko untuk menyemangati!"
               >
                 <!-- Mascot Speech Bubble -->
-                <div class="bg-white px-3 py-1.5 rounded-2xl shadow-lg border-2 border-amber-300 text-[11px] font-heading font-black text-amber-950 whitespace-nowrap relative animate-pop">
+                <div class="bg-white px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-2xl shadow-lg border-2 border-amber-300 text-[10px] sm:text-[11px] font-heading font-black text-amber-950 max-w-[130px] sm:max-w-[170px] leading-tight relative animate-pop text-center">
                   <span>{{ currentMascotSpeech }}</span>
-                  <div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-white border-l-2 border-b-2 border-amber-300 rotate-45"></div>
+                  <div 
+                    class="absolute top-1/2 -translate-y-1/2 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-white rotate-45"
+                    :class="item.x > 200 
+                      ? '-right-1 border-r-2 border-t-2 border-amber-300' 
+                      : '-left-1 border-l-2 border-b-2 border-amber-300'"
+                  ></div>
                 </div>
                 <!-- Kiko Avatar -->
-                <div class="w-14 h-14 rounded-2xl bg-amber-400 text-3xl flex items-center justify-center shadow-lg border-2 border-white hover:scale-110 active:scale-95 transition-transform">
+                <div class="w-11 h-11 sm:w-14 sm:h-14 rounded-2xl bg-amber-400 text-2xl sm:text-3xl flex items-center justify-center shadow-lg border-2 border-white hover:scale-110 active:scale-95 transition-transform shrink-0">
                   🦉
                 </div>
               </div>
@@ -761,10 +785,12 @@
 import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import { useCourseStore } from '~/stores/course'
 import { useUserStore } from '~/stores/user'
+import { usePaywall } from '~/composables/usePaywall'
 import { Check, Star, Lock, Trophy, Crown, ChevronUp } from 'lucide-vue-next'
 
 const courseStore = useCourseStore()
 const userStore = useUserStore()
+const { openPaywall } = usePaywall()
 
 const showAuthModal = ref(false)
 const pendingTargetUrl = ref('')
@@ -1122,8 +1148,43 @@ const getUnitSvgPath = (unit) => {
   return d
 }
 
+const isUnitGated = (unitIdx) => {
+  const isCoursePro = Boolean(courseStore.course?.isPro || courseStore.catalogRegistry.find(c => c.id === courseStore.activeCourseId)?.isPro)
+  if (isCoursePro && !userStore.isPro) return true
+  if (unitIdx > 0 && !userStore.canAccessUnit(unitIdx)) return true
+  return false
+}
+
+const openPaywallForUnit = () => {
+  const isCoursePro = Boolean(courseStore.course?.isPro || courseStore.catalogRegistry.find(c => c.id === courseStore.activeCourseId)?.isPro)
+  if (isCoursePro && !userStore.isPro) {
+    openPaywall({
+      reason: 'unit_locked',
+      title: `Kursus Pro: ${courseStore.course.title || 'Modul Pro'} 👑`,
+      description: 'Modul ini merupakan bagian dari QuizCerdas Pro. Tingkatkan akun Anda untuk membuka seluruh pelajaran dan latihan tanpa batas!',
+      featureHighlight: 'Akses Penuh Kursus Pro'
+    })
+    return
+  }
+
+  openPaywall({
+    reason: 'unit_locked',
+    title: 'Buka Unit 2 & Seluruh Bioma! 👑',
+    description: 'Tingkatkan ke QuizCerdas Pro untuk membuka seluruh bioma belajar, kurikulum lengkap, dan nyawa tanpa batas.',
+    featureHighlight: 'Akses Semua Unit & Kurikulum'
+  })
+}
+
 const onNodeTap = (unitId, itemId, type) => {
   playPopSound(460)
+  
+  // Check if this unit is gated for free users
+  const unitIdx = courseStore.units.findIndex(u => u.id === unitId)
+  if (isUnitGated(unitIdx)) {
+    openPaywallForUnit()
+    return
+  }
+
   const isUnlocked = type === 'checkpoint'
     ? isCheckpointUnlocked(unitId)
     : isLessonUnlocked(unitId, itemId)
@@ -1138,6 +1199,12 @@ const onNodeTap = (unitId, itemId, type) => {
 }
 
 const confirmStartNode = (unitId, itemId, type) => {
+  const unitIdx = courseStore.units.findIndex(u => u.id === unitId)
+  if (isUnitGated(unitIdx)) {
+    openPaywallForUnit()
+    return
+  }
+
   const targetPath = type === 'checkpoint' 
     ? `/course/${unitId}/checkpoint` 
     : `/course/${unitId}/${itemId}`
@@ -1175,7 +1242,10 @@ const isNodeCompleted = (unitId, itemId, type) => {
 }
 
 const isNextActiveLesson = (unitId, lessonId) => {
-  return isLessonUnlocked(unitId, lessonId) && !isLessonCompleted(lessonId)
+  const unit = courseStore.units.find(u => u.id === unitId)
+  if (!unit || !unit.lessons) return false
+  const activeLesson = unit.lessons.find(l => isLessonUnlocked(unitId, l.id) && !isLessonCompleted(l.id))
+  return activeLesson?.id === lessonId
 }
 
 const getUnitHeaderTheme = (color) => {

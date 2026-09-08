@@ -15,18 +15,6 @@
         <div v-if="isActiveRoute('/')" class="absolute -bottom-1 w-2 h-1 bg-white rounded-full"></div>
       </NuxtLink>
 
-      <!-- 2. Peta Belajar / Kursus -->
-      <NuxtLink 
-        to="/course" 
-        @click="playNavSound(520)"
-        class="relative flex flex-col items-center justify-center py-2 px-3 rounded-2xl min-w-[54px] min-h-[48px] transition-all cursor-pointer group active:scale-90"
-        :class="route.path.startsWith('/course') ? 'bg-gradient-to-b from-amber-400 to-amber-500 text-amber-950 shadow-md shadow-amber-500/30 font-black' : 'text-slate-600 hover:text-slate-900'"
-      >
-        <span class="text-xl leading-none transition-transform group-hover:scale-110">🗺️</span>
-        <span class="text-[10px] font-heading font-black mt-1">Peta</span>
-        <div v-if="route.path.startsWith('/course')" class="absolute -bottom-1 w-2 h-1 bg-amber-950 rounded-full"></div>
-      </NuxtLink>
-
       <!-- 3. Katalog Modul -->
       <NuxtLink 
         to="/catalog" 

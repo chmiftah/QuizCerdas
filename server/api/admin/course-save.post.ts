@@ -11,6 +11,17 @@ export default defineEventHandler(async (event) => {
   }
 
   const c = body.course
+  const isPro = Boolean(c.isPro)
+
+  let rawFeatures: any = c.features
+  if (Array.isArray(rawFeatures)) {
+    rawFeatures = rawFeatures.filter((f: any) => f !== 'pro_access')
+    if (isPro) rawFeatures.push('pro_access')
+  } else if (rawFeatures && typeof rawFeatures === 'object') {
+    rawFeatures.isPro = isPro
+  } else {
+    rawFeatures = isPro ? ['pro_access'] : ['Kuis Interaktif']
+  }
 
   try {
     const savedCourse = await prisma.course.upsert({
@@ -22,7 +33,8 @@ export default defineEventHandler(async (event) => {
         category: c.category || 'math',
         icon: c.icon || '🔢',
         themeColor: c.themeColor || 'purple',
-        features: c.features || ['7 Jenis Soal Interaktif', 'Jawab Suara 🎤'],
+        features: rawFeatures,
+        isReady: c.isReady !== undefined ? Boolean(c.isReady) : true,
         units: c.units || []
       },
       create: {
@@ -33,13 +45,13 @@ export default defineEventHandler(async (event) => {
         category: c.category || 'math',
         icon: c.icon || '🔢',
         themeColor: c.themeColor || 'purple',
-        features: c.features || ['7 Jenis Soal Interaktif', 'Jawab Suara 🎤'],
-        isReady: true,
+        features: rawFeatures,
+        isReady: c.isReady !== undefined ? Boolean(c.isReady) : true,
         units: c.units || []
       }
     })
 
-    console.log(`[POSTGRESQL ADMIN] Saved course '${savedCourse.id}' (${savedCourse.title}) to database`)
+    console.log(`[POSTGRESQL ADMIN] Saved course '${savedCourse.id}' (${savedCourse.title}) [isPro: ${isPro}] to database`)
 
     return {
       success: true,

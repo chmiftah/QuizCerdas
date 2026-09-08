@@ -5,36 +5,36 @@
 
     <main id="main-content" class="flex-1 space-y-16 sm:space-y-24 py-8 sm:py-12 safe-mobile-padding">
       
-      <!-- 1. HERO SECTION -->
+      <!-- 1. HERO SECTION (SIMPLIFIED, CLEAN & COMPACT) -->
       <section class="max-w-6xl mx-auto px-4" aria-label="Hero Section Tentang Kami">
-        <div class="relative bg-gradient-to-br from-indigo-900 via-indigo-800 to-purple-900 rounded-[36px] sm:rounded-[48px] p-8 sm:p-14 text-white shadow-2xl overflow-hidden border-4 border-indigo-400/20">
+        <div class="relative bg-gradient-to-br from-indigo-900 via-indigo-800 to-purple-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl overflow-hidden border border-indigo-400/20">
           <!-- Background Decorative Glows -->
-          <div class="absolute -right-20 -top-20 w-80 h-80 bg-duo-green/20 rounded-full blur-3xl pointer-events-none"></div>
-          <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-duo-blue/30 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="absolute -right-20 -top-20 w-64 h-64 bg-duo-green/15 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="absolute -left-20 -bottom-20 w-64 h-64 bg-duo-blue/20 rounded-full blur-3xl pointer-events-none"></div>
 
-          <div class="relative z-10 max-w-3xl space-y-6 text-center sm:text-left">
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/15 backdrop-blur-md rounded-full text-xs sm:text-sm font-heading font-extrabold text-amber-300 border border-white/20 shadow-xs">
-              <span>🦉 Cerita Di Balik CountingDuo</span>
+          <div class="relative z-10 max-w-2xl space-y-4 text-center sm:text-left">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 bg-white/15 backdrop-blur-md rounded-full text-xs font-heading font-extrabold text-amber-300 border border-white/20">
+              <span>🦉 Tentang CountingDuo</span>
             </div>
 
-            <h1 class="font-heading text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.15]">
-              Membangun Generasi Cerdas Melalui Belajar yang <span class="text-duo-green underline decoration-duo-yellow decoration-wavy">Penuh Kegembiraan</span> ✨
+            <h1 class="font-heading text-2xl sm:text-4xl font-black tracking-tight leading-tight">
+              Membangun Generasi Cerdas Lewat Belajar yang <span class="text-emerald-400">Menyenangkan</span> ✨
             </h1>
 
-            <p class="text-base sm:text-lg text-indigo-100 leading-relaxed font-normal max-w-2xl">
-              Kami percaya setiap anak terlahir dengan rasa ingin tahu yang tak terbatas. CountingDuo hadir untuk mengubah waktu layar (*screen time*) menjadi petualangan belajar mandiri yang bermakna, gratis, dan 100% aman tanpa iklan.
+            <p class="text-sm sm:text-base text-indigo-100 leading-relaxed font-medium">
+              Mengubah waktu layar anak menjadi petualangan belajar kuis interaktif yang seru, edukatif, mandiri, dan 100% aman tanpa iklan.
             </p>
 
             <!-- Quick Key Highlights Pills -->
-            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2.5 pt-2">
-              <a href="#daftar-29-soal" class="px-3.5 py-1.5 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-xs border border-white/15 text-xs font-heading font-extrabold text-emerald-300 flex items-center gap-1.5 transition-colors cursor-pointer">
-                <span>🎯</span> 29 Tipe Soal Interaktif ➔
+            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-1">
+              <a href="#daftar-29-soal" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-xs border border-white/15 text-xs font-heading font-bold text-emerald-300 flex items-center gap-1.5 transition-colors cursor-pointer">
+                <span>🎯</span> 29 Tipe Soal ➔
               </a>
-              <span class="px-3.5 py-1.5 rounded-2xl bg-white/10 backdrop-blur-xs border border-white/15 text-xs font-heading font-extrabold text-sky-300 flex items-center gap-1.5">
-                <span>🎤</span> Pengenalan Suara Bahasa Indonesia
+              <span class="px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-xs border border-white/15 text-xs font-heading font-bold text-sky-200 flex items-center gap-1.5">
+                <span>🎤</span> Suara Bahasa Indonesia
               </span>
-              <span class="px-3.5 py-1.5 rounded-2xl bg-white/10 backdrop-blur-xs border border-white/15 text-xs font-heading font-extrabold text-amber-300 flex items-center gap-1.5">
-                <span>🛡️</span> Tanpa Iklan & Ramah Anak
+              <span class="px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-xs border border-white/15 text-xs font-heading font-bold text-amber-200 flex items-center gap-1.5">
+                <span>🛡️</span> 100% Ramah Anak
               </span>
             </div>
           </div>

@@ -45,6 +45,7 @@ export interface Course {
   title: string
   description: string
   target_audience: string
+  isPro?: boolean
   units: Unit[]
 }
 
@@ -58,6 +59,7 @@ export interface CatalogCourse {
   themeColor: 'green' | 'blue' | 'yellow' | 'red' | 'sky'
   features: string[]
   isReady: boolean
+  isPro?: boolean
   isFromDatabase?: boolean
   source?: string
   courseData?: Course
@@ -142,7 +144,8 @@ export const useCourseStore = defineStore('course', {
 
       const unit = active.units[unitIndex]
       const lessonIndex = unit.lessons.findIndex(l => l.id === lessonId)
-      if (lessonIndex <= 0) return true // Lesson 1 of an unlocked unit is always unlocked
+      if (lessonIndex < 0) return false // Not a lesson in this unit
+      if (lessonIndex === 0) return true // Lesson 1 of an unlocked unit is always unlocked
 
       const prevLesson = unit.lessons[lessonIndex - 1]
       return completedLessons.includes(prevLesson.id)
@@ -213,6 +216,7 @@ export const useCourseStore = defineStore('course', {
           const newRegistry: CatalogCourse[] = []
 
           data.forEach(item => {
+            const isPro = item.isPro ?? item.courseData?.isPro ?? false
             newRegistry.push({
               id: item.id,
               title: item.title,
@@ -223,13 +227,14 @@ export const useCourseStore = defineStore('course', {
               themeColor: item.themeColor || 'green',
               features: item.features || [],
               isReady: item.isReady ?? true,
+              isPro: isPro,
               isFromDatabase: item.isFromDatabase ?? true,
               source: item.source || 'postgresql_database',
-              courseData: item.courseData
+              courseData: item.courseData ? { ...item.courseData, isPro } : undefined
             })
 
             if (item.courseData) {
-              newMap[item.id] = item.courseData
+              newMap[item.id] = { ...item.courseData, isPro }
             }
           })
 
@@ -290,7 +295,8 @@ export const useCourseStore = defineStore('course', {
           icon: courseData.icon || '🔢',
           themeColor: courseData.themeColor || 'purple',
           features: courseData.features || ['7 Jenis Soal Interaktif'],
-          isReady: true,
+          isReady: courseData.isReady !== false,
+          isPro: Boolean(courseData.isPro),
           isFromDatabase: true,
           courseData: courseData
         }
@@ -299,6 +305,57 @@ export const useCourseStore = defineStore('course', {
         } else {
           this.catalogRegistry.push(catalogItem)
         }
+      }
+    },
+
+    async toggleCourseTier(courseId: string, isPro: boolean) {
+      // Optimistically update local store
+      const regItem = this.catalogRegistry.find(c => c.id === courseId)
+      if (regItem) {
+        regItem.isPro = isPro
+        if (regItem.courseData) regItem.courseData.isPro = isPro
+      }
+      if (this.courses[courseId]) {
+        this.courses[courseId].isPro = isPro
+      }
+
+      // Persist to database via API
+      try {
+        const res = await $fetch<any>('/api/admin/course-toggle-tier', {
+          method: 'POST',
+          body: { courseId, isPro, title: regItem?.title }
+        })
+        return res
+      } catch (err: any) {
+        // Rollback on failure
+        if (regItem) regItem.isPro = !isPro
+        if (this.courses[courseId]) this.courses[courseId].isPro = !isPro
+        throw new Error(err.data?.statusMessage || err.message || 'Gagal mengubah status kursus di server')
+      }
+    },
+
+    async toggleCourseStatus(courseId: string, isReady: boolean) {
+      // Optimistically update local store
+      const regItem = this.catalogRegistry.find(c => c.id === courseId)
+      if (regItem) {
+        regItem.isReady = isReady
+      }
+      if (this.courses[courseId]) {
+        (this.courses[courseId] as any).isReady = isReady
+      }
+
+      // Persist to database via API
+      try {
+        const res = await $fetch<any>('/api/admin/course-toggle-status', {
+          method: 'POST',
+          body: { courseId, isReady, title: regItem?.title }
+        })
+        return res
+      } catch (err: any) {
+        // Rollback on failure
+        if (regItem) regItem.isReady = !isReady
+        if (this.courses[courseId]) (this.courses[courseId] as any).isReady = !isReady
+        throw new Error(err.data?.statusMessage || err.message || 'Gagal mengubah status publikasi kursus di server')
       }
     },
 

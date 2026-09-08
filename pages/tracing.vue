@@ -33,14 +33,17 @@
           <button
             v-for="num in 10"
             :key="num"
-            @click="activeNumber = num"
-            class="w-11 h-11 sm:w-13 sm:h-13 rounded-2xl font-heading font-black text-lg sm:text-xl border-3 transition-all cursor-pointer shadow-xs active:scale-95"
+            @click="selectNumber(num)"
+            class="w-11 h-11 sm:w-13 sm:h-13 rounded-2xl font-heading font-black text-lg sm:text-xl border-3 transition-all cursor-pointer shadow-xs active:scale-95 relative"
             :class="activeNumber === num 
               ? 'bg-amber-400 text-white border-amber-600 shadow-md scale-110' 
               : completedNumbers.has(num) 
                 ? 'bg-emerald-50 text-emerald-700 border-emerald-300' 
                 : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-amber-300'"
           >
+            <span v-if="num > 5 && !userStore.isPro" class="absolute -top-1.5 -right-1.5 bg-amber-500 text-slate-950 text-[9px] px-1 rounded-full font-black shadow-2xs">
+              👑
+            </span>
             {{ num }}
           </button>
         </div>
@@ -72,9 +75,27 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useUserStore } from '~/stores/user'
+import { usePaywall } from '~/composables/usePaywall'
+
+const userStore = useUserStore()
+const { openPaywall } = usePaywall()
 
 const activeNumber = ref(1)
 const completedNumbers = ref(new Set())
+
+const selectNumber = (num) => {
+  if (num > 5 && !userStore.isPro) {
+    openPaywall({
+      reason: 'creative_locked',
+      title: 'Buka Menulis Angka 6 – 100 ✏️',
+      description: 'Latih motorik dan ketangkasan menulis angka lanjutan dan huruf lengkap dengan QuizCerdas Pro!',
+      featureHighlight: 'Akses Seluruh Modul Tracing & Menulis'
+    })
+    return
+  }
+  activeNumber.value = num
+}
 
 const handleCompleted = (num) => {
   completedNumbers.value.add(num)

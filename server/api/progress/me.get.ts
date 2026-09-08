@@ -38,6 +38,8 @@ export default defineEventHandler(async (event) => {
         xp: true,
         hearts: true,
         streak: true,
+        subscriptionTier: true,
+        subscriptionExpiresAt: true,
         completedLessonsByCourse: true,
         completedCheckpointsByCourse: true,
         progressLogs: {
@@ -60,6 +62,8 @@ export default defineEventHandler(async (event) => {
         xp: user.xp,
         hearts: user.hearts,
         streak: user.streak,
+        subscriptionTier: user.subscriptionTier || 'FREE',
+        subscriptionExpiresAt: user.subscriptionExpiresAt ? user.subscriptionExpiresAt.toISOString() : null,
         completedLessonsByCourse: user.completedLessonsByCourse || {},
         completedCheckpointsByCourse: user.completedCheckpointsByCourse || {},
         logs: user.progressLogs

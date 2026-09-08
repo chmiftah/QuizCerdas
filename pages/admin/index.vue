@@ -190,6 +190,7 @@
               <tr>
                 <th class="p-3.5 rounded-l-xl">User</th>
                 <th class="p-3.5">Role</th>
+                <th class="p-3.5">Paket Langganan</th>
                 <th class="p-3.5">XP</th>
                 <th class="p-3.5">Nyawa</th>
                 <th class="p-3.5">Pelajaran Selesai</th>
@@ -214,6 +215,17 @@
                     <option value="student">🎓 Siswa</option>
                     <option value="admin">🛡️ Admin</option>
                     <option value="parent">👨‍👩‍👧 Orang Tua</option>
+                  </select>
+                </td>
+                <td class="p-3.5">
+                  <select 
+                    :value="u.subscriptionTier || 'FREE'" 
+                    @change="(e) => adminStore.updateUserSubscription(u.id, e.target.value)"
+                    class="px-2.5 py-1 rounded-lg text-xs font-black cursor-pointer border transition-all"
+                    :class="u.subscriptionTier === 'PRO' ? 'bg-amber-100 text-amber-950 border-amber-300' : 'bg-slate-100 text-slate-700 border-slate-300'"
+                  >
+                    <option value="FREE">🐣 GRATIS</option>
+                    <option value="PRO">👑 PRO (Aktif)</option>
                   </select>
                 </td>
                 <td class="p-3.5">
@@ -384,6 +396,8 @@
                   <tr class="bg-slate-100/80 text-slate-500 font-extrabold uppercase text-[11px] tracking-wider border-b border-slate-200">
                     <th class="p-4 pl-6">Kursus & Modul</th>
                     <th class="p-4">Kategori & Sasaran</th>
+                    <th class="p-4">Status Publikasi</th>
+                    <th class="p-4">Akses & Tier</th>
                     <th class="p-4">Struktur Konten</th>
                     <th class="p-4 pr-6 text-right">Aksi</th>
                   </tr>
@@ -426,6 +440,44 @@
                           🎯 {{ c.target_audience || 'Semua Siswa' }}
                         </span>
                       </div>
+                    </td>
+
+                    <!-- Column 3: Publication Status (Active / Inactive) -->
+                    <td class="p-4">
+                      <button 
+                        @click="handleToggleCourseStatus(c)"
+                        type="button"
+                        class="px-3 py-1.5 rounded-xl font-heading font-black text-xs transition-all border shadow-2xs flex items-center gap-1.5 cursor-pointer active:scale-95"
+                        :class="c.isReady !== false 
+                          ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border-emerald-300' 
+                          : 'bg-slate-100 hover:bg-slate-200 text-slate-600 border-slate-300'"
+                        :title="c.isReady !== false ? 'Klik untuk nonaktifkan (sembunyikan dari katalog)' : 'Klik untuk aktifkan (tampilkan di katalog)'"
+                      >
+                        <span class="w-2 h-2 rounded-full" :class="c.isReady !== false ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'"></span>
+                        <span>{{ c.isReady !== false ? 'AKTIF' : 'NONAKTIF' }}</span>
+                        <span class="text-[9px] px-1.5 py-0.5 rounded font-bold uppercase" :class="c.isReady !== false ? 'bg-emerald-200 text-emerald-950' : 'bg-slate-200 text-slate-700'">
+                          {{ c.isReady !== false ? 'Di Katalog' : 'Draft' }}
+                        </span>
+                      </button>
+                    </td>
+
+                    <!-- Column 4: Access Tier Toggle (Free vs Pro) -->
+                    <td class="p-4">
+                      <button 
+                        @click="handleToggleCourseTier(c)"
+                        type="button"
+                        class="px-3 py-1.5 rounded-xl font-heading font-black text-xs transition-all border shadow-2xs flex items-center gap-1.5 cursor-pointer active:scale-95"
+                        :class="c.isPro 
+                          ? 'bg-amber-100 hover:bg-amber-200 text-amber-950 border-amber-300' 
+                          : 'bg-emerald-100 hover:bg-emerald-200 text-emerald-950 border-emerald-300'"
+                        :title="c.isPro ? 'Klik untuk ubah ke Akses Gratis' : 'Klik untuk ubah ke Akses Khusus Pro'"
+                      >
+                        <span>{{ c.isPro ? '👑' : '🐣' }}</span>
+                        <span>{{ c.isPro ? 'PRO' : 'GRATIS' }}</span>
+                        <span class="text-[9px] px-1.5 py-0.5 rounded font-black uppercase" :class="c.isPro ? 'bg-amber-200 text-amber-900' : 'bg-emerald-200 text-emerald-900'">
+                          {{ c.isPro ? 'Khusus Pro' : 'Semua' }}
+                        </span>
+                      </button>
                     </td>
 
                     <!-- Column 3: Stats -->
@@ -532,6 +584,27 @@
                 <span class="px-2.5 py-0.5 bg-amber-400 text-amber-950 rounded-lg text-[10px] font-black uppercase">
                   🎯 {{ guiCourseForm.target_audience || 'Semua Siswa' }}
                 </span>
+                <button 
+                  @click="handleToggleCourseStatus(guiCourseForm)"
+                  type="button"
+                  class="px-2.5 py-0.5 rounded-lg text-[10px] font-black uppercase transition-transform active:scale-95 cursor-pointer flex items-center gap-1 shadow-xs"
+                  :class="guiCourseForm.isReady !== false ? 'bg-emerald-400 text-emerald-950 hover:bg-emerald-300' : 'bg-slate-300 text-slate-800 hover:bg-slate-200'"
+                  :title="guiCourseForm.isReady !== false ? 'Klik untuk sembunyikan dari katalog (Draft)' : 'Klik untuk tampilkan di katalog (Aktif)'"
+                >
+                  <span class="w-1.5 h-1.5 rounded-full" :class="guiCourseForm.isReady !== false ? 'bg-emerald-900' : 'bg-slate-600'"></span>
+                  <span>{{ guiCourseForm.isReady !== false ? '🟢 AKTIF (KATALOG)' : '⚪ NONAKTIF (DRAFT)' }}</span>
+                  <span class="opacity-75 text-[9px]">➔ Ubah</span>
+                </button>
+                <button 
+                  @click="handleToggleCourseTier(guiCourseForm)"
+                  type="button"
+                  class="px-2.5 py-0.5 rounded-lg text-[10px] font-black uppercase transition-transform active:scale-95 cursor-pointer flex items-center gap-1 shadow-xs"
+                  :class="guiCourseForm.isPro ? 'bg-amber-400 text-amber-950 hover:bg-amber-300' : 'bg-emerald-400 text-emerald-950 hover:bg-emerald-300'"
+                  :title="guiCourseForm.isPro ? 'Klik untuk ubah ke Akses Gratis' : 'Klik untuk ubah ke Akses Pro'"
+                >
+                  <span>{{ guiCourseForm.isPro ? '👑 KHUSUS PRO' : '🐣 GRATIS' }}</span>
+                  <span class="opacity-75 text-[9px]">➔ Ubah</span>
+                </button>
                 <code class="px-2 py-0.5 bg-black/30 text-purple-200 rounded text-[10px] font-mono">
                   ID: {{ guiCourseForm.id }}
                 </code>
@@ -1354,6 +1427,70 @@
                 </select>
               </div>
             </div>
+
+            <!-- Free vs Pro Tier Toggle in Course Metadata Modal -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1.5">Hak Akses Paket Pelanggan</label>
+              <div class="grid grid-cols-2 gap-3">
+                <button 
+                  type="button"
+                  @click="guiCourseForm.isPro = false"
+                  class="p-3 rounded-2xl border-2 font-heading font-black text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
+                  :class="!guiCourseForm.isPro ? 'bg-emerald-50 border-emerald-500 text-emerald-900 shadow-xs' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'"
+                >
+                  <span class="text-xl">🐣</span>
+                  <div class="text-left">
+                    <div>Paket Gratis</div>
+                    <div class="text-[10px] font-normal opacity-80">Bisa diakses semua siswa</div>
+                  </div>
+                </button>
+
+                <button 
+                  type="button"
+                  @click="guiCourseForm.isPro = true"
+                  class="p-3 rounded-2xl border-2 font-heading font-black text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
+                  :class="guiCourseForm.isPro ? 'bg-amber-50 border-amber-500 text-amber-950 shadow-xs' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'"
+                >
+                  <span class="text-xl">👑</span>
+                  <div class="text-left">
+                    <div>QuizCerdas Pro</div>
+                    <div class="text-[10px] font-normal opacity-80">Hanya untuk akun Pro</div>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Publication Status Toggle in Course Metadata Modal -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1.5">Status Publikasi Katalog Siswa</label>
+              <div class="grid grid-cols-2 gap-3">
+                <button 
+                  type="button"
+                  @click="guiCourseForm.isReady = true"
+                  class="p-3 rounded-2xl border-2 font-heading font-black text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
+                  :class="guiCourseForm.isReady !== false ? 'bg-emerald-50 border-emerald-500 text-emerald-900 shadow-xs' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'"
+                >
+                  <span class="text-xl">🟢</span>
+                  <div class="text-left">
+                    <div>Aktif (Tampil)</div>
+                    <div class="text-[10px] font-normal opacity-80">Muncul di katalog siswa</div>
+                  </div>
+                </button>
+
+                <button 
+                  type="button"
+                  @click="guiCourseForm.isReady = false"
+                  class="p-3 rounded-2xl border-2 font-heading font-black text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
+                  :class="guiCourseForm.isReady === false ? 'bg-rose-50 border-rose-400 text-rose-900 shadow-xs' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'"
+                >
+                  <span class="text-xl">⚪</span>
+                  <div class="text-left">
+                    <div>Nonaktif (Draft)</div>
+                    <div class="text-[10px] font-normal opacity-80">Sembunyi dari katalog</div>
+                  </div>
+                </button>
+              </div>
+            </div>
           </div>
 
           <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
@@ -1428,6 +1565,70 @@
                   <option value="yellow">Kuning (Yellow)</option>
                   <option value="red">Merah (Red)</option>
                 </select>
+              </div>
+            </div>
+
+            <!-- Free vs Pro Tier Toggle in New Course Modal -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1.5">Hak Akses Paket Pelanggan</label>
+              <div class="grid grid-cols-2 gap-3">
+                <button 
+                  type="button"
+                  @click="newCourseForm.isPro = false"
+                  class="p-3 rounded-2xl border-2 font-heading font-black text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
+                  :class="!newCourseForm.isPro ? 'bg-emerald-50 border-emerald-500 text-emerald-900 shadow-xs' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'"
+                >
+                  <span class="text-xl">🐣</span>
+                  <div class="text-left">
+                    <div>Paket Gratis</div>
+                    <div class="text-[10px] font-normal opacity-80">Bisa diakses semua siswa</div>
+                  </div>
+                </button>
+
+                <button 
+                  type="button"
+                  @click="newCourseForm.isPro = true"
+                  class="p-3 rounded-2xl border-2 font-heading font-black text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
+                  :class="newCourseForm.isPro ? 'bg-amber-50 border-amber-500 text-amber-950 shadow-xs' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'"
+                >
+                  <span class="text-xl">👑</span>
+                  <div class="text-left">
+                    <div>QuizCerdas Pro</div>
+                    <div class="text-[10px] font-normal opacity-80">Hanya untuk akun Pro</div>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Publication Status Toggle in New Course Modal -->
+            <div>
+              <label class="block font-bold text-slate-700 mb-1.5">Status Publikasi Katalog Siswa</label>
+              <div class="grid grid-cols-2 gap-3">
+                <button 
+                  type="button"
+                  @click="newCourseForm.isReady = true"
+                  class="p-3 rounded-2xl border-2 font-heading font-black text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
+                  :class="newCourseForm.isReady !== false ? 'bg-emerald-50 border-emerald-500 text-emerald-900 shadow-xs' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'"
+                >
+                  <span class="text-xl">🟢</span>
+                  <div class="text-left">
+                    <div>Aktif (Tampil)</div>
+                    <div class="text-[10px] font-normal opacity-80">Muncul di katalog siswa</div>
+                  </div>
+                </button>
+
+                <button 
+                  type="button"
+                  @click="newCourseForm.isReady = false"
+                  class="p-3 rounded-2xl border-2 font-heading font-black text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
+                  :class="newCourseForm.isReady === false ? 'bg-rose-50 border-rose-400 text-rose-900 shadow-xs' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'"
+                >
+                  <span class="text-xl">⚪</span>
+                  <div class="text-left">
+                    <div>Nonaktif (Draft)</div>
+                    <div class="text-[10px] font-normal opacity-80">Sembunyi dari katalog</div>
+                  </div>
+                </button>
               </div>
             </div>
           </div>
@@ -1608,6 +1809,7 @@ const guiCourseForm = ref({
   category: 'math',
   icon: '⭐',
   themeColor: 'purple',
+  isPro: false,
   units: [
     {
       id: 'unit_1',
@@ -1738,6 +1940,8 @@ const selectCourseToManage = (courseId) => {
       category: data.category || regItem?.category || 'math',
       icon: data.icon || regItem?.icon || '⭐',
       themeColor: data.themeColor || regItem?.themeColor || 'purple',
+      isPro: Boolean(regItem?.isPro ?? data.isPro ?? false),
+      isReady: (regItem?.isReady ?? data?.isReady) !== false,
       units: JSON.parse(JSON.stringify(data.units || []))
     }
     if (!guiCourseForm.value.units || guiCourseForm.value.units.length === 0) {
@@ -1964,6 +2168,8 @@ const saveGuiCourse = async (showNotification = true) => {
     category: guiCourseForm.value.category || 'math',
     icon: guiCourseForm.value.icon || '⭐',
     themeColor: guiCourseForm.value.themeColor || 'purple',
+    isPro: Boolean(guiCourseForm.value.isPro),
+    isReady: guiCourseForm.value.isReady !== false,
     features: ['29 Jenis Soal Interaktif', 'Jawab Suara 🎤'],
     units: formattedUnits
   }
@@ -1997,9 +2203,53 @@ const openNewCourseModal = () => {
     target_audience: 'Anak TK (4-6 Tahun)',
     category: 'math',
     icon: '⭐',
-    themeColor: 'purple'
+    themeColor: 'purple',
+    isPro: false,
+    isReady: true
   }
   showNewCourseModal.value = true
+}
+
+const handleToggleCourseStatus = async (courseItem) => {
+  const currentReady = courseItem.isReady !== false
+  const targetReady = !currentReady
+  try {
+    await courseStore.toggleCourseStatus(courseItem.id, targetReady)
+    courseItem.isReady = targetReady
+    if (guiCourseForm.value && guiCourseForm.value.id === courseItem.id) {
+      guiCourseForm.value.isReady = targetReady
+    }
+    guiStatus.value = {
+      error: false,
+      message: `Status publikasi kursus '${courseItem.title}' berhasil diubah ke ${targetReady ? '🟢 AKTIF (Tampil di Katalog)' : '⚪ NONAKTIF (Sembunyi / Draft)'}!`
+    }
+  } catch (err) {
+    guiStatus.value = {
+      error: true,
+      message: err.message || 'Gagal mengubah status publikasi kursus'
+    }
+  }
+}
+
+const handleToggleCourseTier = async (courseItem) => {
+  const currentPro = Boolean(courseItem.isPro)
+  const targetPro = !currentPro
+  try {
+    await courseStore.toggleCourseTier(courseItem.id, targetPro)
+    courseItem.isPro = targetPro
+    if (guiCourseForm.value && guiCourseForm.value.id === courseItem.id) {
+      guiCourseForm.value.isPro = targetPro
+    }
+    guiStatus.value = {
+      error: false,
+      message: `Status kursus '${courseItem.title}' berhasil diubah ke ${targetPro ? '👑 PRO' : '🐣 GRATIS'}!`
+    }
+  } catch (err) {
+    guiStatus.value = {
+      error: true,
+      message: err.message || 'Gagal mengubah status kursus'
+    }
+  }
 }
 
 const createNewCourse = async () => {
@@ -2009,6 +2259,8 @@ const createNewCourse = async () => {
   }
   const newCourseData = {
     ...newCourseForm.value,
+    isPro: Boolean(newCourseForm.value.isPro),
+    isReady: newCourseForm.value.isReady !== false,
     units: [
       {
         id: `${newCourseForm.value.id}_unit_1`,

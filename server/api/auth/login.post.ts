@@ -66,6 +66,8 @@ export default defineEventHandler(async (event) => {
         avatar: user.avatar,
         grade: user.grade,
         role: user.role || 'student',
+        subscriptionTier: user.subscriptionTier || 'FREE',
+        subscriptionExpiresAt: user.subscriptionExpiresAt ? user.subscriptionExpiresAt.toISOString() : null,
         dailyGoalMinutes: user.dailyGoalMinutes,
         xp: user.xp,
         hearts: user.hearts,

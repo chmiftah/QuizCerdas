@@ -49,6 +49,15 @@
           </NuxtLink>
 
           <NuxtLink 
+            to="/pricing" 
+            class="px-3 py-1.5 rounded-xl text-xs font-heading font-extrabold transition-all whitespace-nowrap shrink-0 flex items-center gap-1.5 text-amber-900 bg-amber-100 hover:bg-amber-200 border border-amber-300"
+            active-class="bg-amber-400 text-amber-950 font-black shadow-xs"
+          >
+            <span>👑</span>
+            <span>Langganan Pro</span>
+          </NuxtLink>
+
+          <NuxtLink 
             to="/about" 
             class="hidden xl:flex px-3 py-1.5 rounded-xl text-xs font-heading font-extrabold transition-all whitespace-nowrap shrink-0 items-center gap-1.5"
             active-class="bg-white text-slate-800 shadow-2xs"
@@ -209,8 +218,19 @@
               <span class="font-extrabold">{{ userStore.xp }} <span class="hidden sm:inline">XP</span></span>
             </div>
 
-            <!-- Hearts Indicator -->
+            <!-- Hearts Indicator (Unlimited Hearts for PRO, regular 5 for Free) -->
             <div 
+              v-if="userStore.hasUnlimitedHearts"
+              @click="showHeartModal = true"
+              class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 border sm:border-2 border-amber-300 text-slate-950 font-heading font-black text-[11px] sm:text-xs shadow-md cursor-pointer hover:scale-105 transition-transform shrink-0 whitespace-nowrap animate-pulse-glow" 
+              title="Nyawa Tanpa Batas (QuizCerdas Pro)"
+            >
+              <span class="text-xs sm:text-sm">❤️</span>
+              <span class="font-black text-amber-950">∞ PRO</span>
+            </div>
+
+            <div 
+              v-else
               @click="showHeartModal = true"
               class="flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-rose-50 border sm:border-2 border-rose-200 text-rose-600 font-heading font-bold text-[11px] sm:text-sm shadow-2xs cursor-pointer hover:bg-rose-100 transition-colors shrink-0 whitespace-nowrap" 
               title="Nyawa Kamu (Klik untuk isi)"
@@ -229,6 +249,7 @@
             >
               <span class="text-base sm:text-lg">{{ userStore.userAvatar }}</span>
               <span class="hidden lg:inline max-w-[110px] truncate">{{ userStore.userDisplayName }}</span>
+              <span v-if="userStore.isPro" class="px-1.5 py-0.2 bg-amber-400 text-amber-950 rounded-md font-heading font-black text-[9px]">PRO</span>
               <ChevronDown class="w-3.5 h-3.5 text-slate-500 shrink-0" />
             </button>
 
@@ -236,15 +257,32 @@
             <div 
               v-if="showProfileMenu" 
               @click.outside="showProfileMenu = false"
-              class="absolute right-0 mt-2 w-48 bg-white rounded-2xl border-2 border-duo-gray-100 shadow-xl py-2 z-50 animate-pop space-y-1"
+              class="absolute right-0 mt-2 w-56 bg-white rounded-2xl border-2 border-duo-gray-100 shadow-xl py-2 z-50 animate-pop space-y-1"
             >
-              <div class="px-3 py-2 border-b border-slate-100">
-                <p class="font-heading font-extrabold text-xs text-slate-800">{{ userStore.userDisplayName }}</p>
+              <div class="px-3 py-2 border-b border-slate-100 space-y-1">
+                <div class="flex items-center justify-between">
+                  <p class="font-heading font-extrabold text-xs text-slate-800">{{ userStore.userDisplayName }}</p>
+                  <span 
+                    class="px-2 py-0.5 rounded-full font-heading font-black text-[10px]"
+                    :class="userStore.isPro ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-slate-100 text-slate-600'"
+                  >
+                    {{ userStore.isPro ? '👑 PRO' : '🐣 FREE' }}
+                  </span>
+                </div>
                 <p class="text-[10px] text-slate-500 truncate">{{ userStore.currentUser?.email }}</p>
-                <span class="inline-block mt-1 px-2 py-0.5 bg-blue-50 text-duo-blue rounded-md font-heading font-extrabold text-[10px]">
-                  {{ userStore.currentUser?.grade || 'Siswa' }}
-                </span>
               </div>
+
+              <!-- Pro Upgrade / Manage Link -->
+              <NuxtLink 
+                to="/pricing" 
+                @click="showProfileMenu = false"
+                class="w-full px-3 py-2 text-left text-xs font-heading font-extrabold text-amber-800 bg-amber-50 hover:bg-amber-100 flex items-center justify-between"
+              >
+                <span class="flex items-center gap-2">
+                  <span>👑</span> {{ userStore.isPro ? 'Kelola Langganan' : 'Upgrade ke Pro' }}
+                </span>
+                <span class="text-[10px]">➔</span>
+              </NuxtLink>
 
               <!-- Menu Khusus Akun Admin (Hanya Tampil untuk Role Admin) -->
               <template v-if="userStore.isActualAdmin">

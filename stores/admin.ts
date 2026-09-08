@@ -6,6 +6,7 @@ export interface AdminUser {
   email: string
   avatar: string
   role: 'student' | 'admin' | 'parent'
+  subscriptionTier?: 'FREE' | 'PRO'
   xp: number
   hearts: number
   streak: number
@@ -213,6 +214,22 @@ export const useAdminStore = defineStore('admin', {
     },
 
     // --- User Actions ---
+    async updateUserSubscription(userId: string, newTier: 'FREE' | 'PRO') {
+      const u = this.users.find(x => x.id === userId)
+      if (u) {
+        u.subscriptionTier = newTier
+        this.saveToStorage()
+      }
+      try {
+        await $fetch('/api/admin/user-update', {
+          method: 'POST',
+          body: { userId, action: 'update_subscription', subscriptionTier: newTier }
+        })
+      } catch (e) {
+        // Silent catch for DB sync
+      }
+    },
+
     async updateUserRole(userId: string, newRole: 'student' | 'admin' | 'parent') {
       const u = this.users.find(x => x.id === userId)
       if (u) {

@@ -28,6 +28,8 @@ export interface DailyQuest {
 export interface UserState {
   currentUser: UserProfile | null
   isAuthenticated: boolean
+  subscriptionTier: 'FREE' | 'PRO' | 'FAMILY'
+  subscriptionExpiresAt: string | null
   xp: number
   weeklyXP: number
   hearts: number
@@ -92,6 +94,8 @@ export const useUserStore = defineStore('user', {
   state: (): UserState => ({
     currentUser: null,
     isAuthenticated: false,
+    subscriptionTier: 'FREE',
+    subscriptionExpiresAt: null,
     xp: 0,
     weeklyXP: 120,
     hearts: 5,
@@ -116,7 +120,43 @@ export const useUserStore = defineStore('user', {
   getters: {
     userLevel: (state) => Math.floor(state.xp / 100) + 1,
     xpToNextLevel: (state) => 100 - (state.xp % 100),
-    hasHearts: (state) => state.hearts > 0,
+    hasHearts: (state) => state.subscriptionTier !== 'FREE' || state.currentUser?.role === 'admin' || state.hearts > 0,
+    isPro: (state) => {
+      if (state.currentUser?.role === 'admin' || state.currentUser?.accountRole === 'admin') return true
+      if (state.subscriptionTier === 'PRO' || state.subscriptionTier === 'FAMILY') {
+        if (!state.subscriptionExpiresAt) return true
+        return new Date(state.subscriptionExpiresAt).getTime() > Date.now()
+      }
+      return false
+    },
+    hasUnlimitedHearts: (state) => {
+      if (state.currentUser?.role === 'admin' || state.currentUser?.accountRole === 'admin') return true
+      return state.subscriptionTier === 'PRO' || state.subscriptionTier === 'FAMILY'
+    },
+    subscriptionLabel: (state) => {
+      if (state.subscriptionTier === 'FAMILY') return 'Paket Keluarga 👨‍👩‍👧‍👦'
+      if (state.subscriptionTier === 'PRO') return 'QuizCerdas Pro 👑'
+      return 'Akun Gratis 🐣'
+    },
+    subscriptionDaysLeft: (state) => {
+      if (!state.subscriptionExpiresAt) return 365
+      const diffTime = new Date(state.subscriptionExpiresAt).getTime() - Date.now()
+      return Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)))
+    },
+    subscriptionFormattedExpiry: (state) => {
+      if (!state.subscriptionExpiresAt) return '1 Tahun ke Depan'
+      return new Date(state.subscriptionExpiresAt).toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      })
+    },
+    canAccessUnit: (state) => (unitIndex: number) => {
+      if (state.currentUser?.role === 'admin' || state.currentUser?.accountRole === 'admin') return true
+      if (state.subscriptionTier === 'PRO' || state.subscriptionTier === 'FAMILY') return true
+      // Free user can only access Unit 0 (Bioma 1)
+      return unitIndex === 0
+    },
     isLoggedIn: (state) => state.isAuthenticated && !!state.currentUser,
     isAdmin: (state) => state.currentUser?.role === 'admin',
     isActualAdmin: (state) => state.currentUser?.accountRole === 'admin' || state.currentUser?.role === 'admin',
@@ -196,6 +236,8 @@ export const useUserStore = defineStore('user', {
           if (res.user.xp !== undefined) this.xp = res.user.xp
           if (res.user.hearts !== undefined) this.hearts = res.user.hearts
           if (res.user.streak !== undefined) this.streak = res.user.streak
+          if (res.user.subscriptionTier) this.subscriptionTier = res.user.subscriptionTier
+          if (res.user.subscriptionExpiresAt !== undefined) this.subscriptionExpiresAt = res.user.subscriptionExpiresAt
           if (res.user.completedLessonsByCourse) this.completedLessonsByCourse = res.user.completedLessonsByCourse
           if (res.user.completedCheckpointsByCourse) this.completedCheckpointsByCourse = res.user.completedCheckpointsByCourse
           
@@ -365,6 +407,7 @@ export const useUserStore = defineStore('user', {
     },
 
     loseHeart() {
+      if (this.hasUnlimitedHearts) return
       if (this.hearts > 0) {
         this.hearts--
         this.saveToStorage()
@@ -504,6 +547,8 @@ export const useUserStore = defineStore('user', {
           if (res.progress.xp !== undefined) this.xp = res.progress.xp
           if (res.progress.hearts !== undefined) this.hearts = res.progress.hearts
           if (res.progress.streak !== undefined) this.streak = res.progress.streak
+          if (res.progress.subscriptionTier) this.subscriptionTier = res.progress.subscriptionTier
+          if (res.progress.subscriptionExpiresAt !== undefined) this.subscriptionExpiresAt = res.progress.subscriptionExpiresAt
           if (res.progress.completedLessonsByCourse) this.completedLessonsByCourse = res.progress.completedLessonsByCourse
           if (res.progress.completedCheckpointsByCourse) this.completedCheckpointsByCourse = res.progress.completedCheckpointsByCourse
 
@@ -527,6 +572,8 @@ export const useUserStore = defineStore('user', {
             const data = JSON.parse(saved)
             this.currentUser = data.currentUser ?? null
             this.isAuthenticated = data.isAuthenticated ?? false
+            this.subscriptionTier = data.subscriptionTier ?? 'FREE'
+            this.subscriptionExpiresAt = data.subscriptionExpiresAt ?? null
             this.xp = data.xp ?? 0
             this.hearts = data.hearts ?? 5
             this.streak = data.streak ?? 1
@@ -555,6 +602,67 @@ export const useUserStore = defineStore('user', {
         if (this.isAuthenticated && this.currentUser && this.currentUser.role !== 'guest') {
           this.fetchProgressFromDatabase()
         }
+      }
+    },
+
+    async upgradeToPro(tier: 'PRO' | 'FAMILY' = 'PRO', months: number = 12) {
+      this.subscriptionTier = tier
+      let baseDate = new Date()
+      if (this.subscriptionExpiresAt && new Date(this.subscriptionExpiresAt).getTime() > Date.now()) {
+        baseDate = new Date(this.subscriptionExpiresAt)
+      }
+      baseDate.setMonth(baseDate.getMonth() + months)
+      this.subscriptionExpiresAt = baseDate.toISOString()
+      this.refillHearts()
+      this.saveToStorage()
+
+      if (import.meta.client && this.currentUser && this.currentUser.role !== 'guest' && this.isAuthenticated) {
+        try {
+          const res = await $fetch<any>('/api/subscription/subscribe', {
+            method: 'POST',
+            body: {
+              userId: this.currentUser.id,
+              tier: 'PRO',
+              durationMonths: months,
+              amount: 99000,
+              paymentMethod: 'qris'
+            }
+          })
+          if (res?.user?.subscriptionExpiresAt) {
+            this.subscriptionExpiresAt = res.user.subscriptionExpiresAt
+            this.saveToStorage()
+          }
+        } catch (e) {
+          console.warn('[SUBSCRIPTION] Could not sync to DB:', e)
+        }
+      }
+      return true
+    },
+
+    async downgradeToFree() {
+      this.subscriptionTier = 'FREE'
+      this.subscriptionExpiresAt = null
+      this.saveToStorage()
+
+      if (import.meta.client && this.currentUser && this.currentUser.role !== 'guest' && this.isAuthenticated) {
+        try {
+          await $fetch('/api/subscription/cancel', {
+            method: 'POST',
+            body: {
+              userId: this.currentUser.id
+            }
+          })
+        } catch (e) {
+          console.warn('[SUBSCRIPTION] Cancel sync error:', e)
+        }
+      }
+    },
+
+    async toggleProTestMode() {
+      if (this.isPro && this.subscriptionTier !== 'FREE') {
+        await this.downgradeToFree()
+      } else {
+        await this.upgradeToPro('PRO', 12)
       }
     },
 
@@ -598,6 +706,8 @@ export const useUserStore = defineStore('user', {
         const payload = {
           currentUser: this.currentUser,
           isAuthenticated: this.isAuthenticated,
+          subscriptionTier: this.subscriptionTier,
+          subscriptionExpiresAt: this.subscriptionExpiresAt,
           xp: this.xp,
           weeklyXP: this.weeklyXP,
           hearts: this.hearts,

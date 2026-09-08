@@ -4,66 +4,59 @@
     <HeaderNav />
 
     <main id="main-content" class="flex-1 py-8 px-4 max-w-6xl mx-auto w-full space-y-8 safe-mobile-padding">
-      <!-- LEAGUE HERO BANNER -->
-      <section class="relative rounded-3xl p-6 sm:p-8 text-white shadow-xl overflow-hidden animate-pop" :class="[leagueBgGradient]">
+      <!-- LEAGUE HERO BANNER (SIMPLIFIED, COMPACT & MODERN) -->
+      <section class="relative rounded-3xl p-5 sm:p-6 text-white shadow-lg overflow-hidden animate-pop" :class="[leagueBgGradient]">
         <!-- Background Glow Blobs -->
-        <div class="absolute -top-12 -right-12 w-64 h-64 bg-white/20 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -bottom-12 -left-12 w-64 h-64 bg-black/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -top-12 -right-12 w-48 h-48 bg-white/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-12 -left-12 w-48 h-48 bg-black/10 rounded-full blur-3xl pointer-events-none"></div>
 
-        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-          <!-- Left Banner Text -->
-          <div class="lg:col-span-8 space-y-4 text-center lg:text-left">
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-xs font-heading font-black border border-white/30">
-              <span class="text-base">{{ userStore.leagueTier.icon }}</span>
-              <span>LIGA MINGGUAN • DIVISI {{ userStore.leagueTier.name.toUpperCase() }}</span>
+        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-5">
+          <!-- Left: Division Tag, Title & Quick Stats -->
+          <div class="space-y-3 text-center md:text-left">
+            <div class="flex flex-wrap items-center justify-center md:justify-start gap-2">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-heading font-extrabold border border-white/25">
+                <span>{{ userStore.leagueTier.icon }}</span>
+                <span>Divisi {{ userStore.leagueTier.name }}</span>
+              </span>
+              <span class="text-xs text-white/80 font-heading font-bold hidden sm:inline">•</span>
+              <span class="text-xs text-white/90 font-heading font-bold">Top 3 otomatis promosi liga 🚀</span>
             </div>
 
-            <h1 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight drop-shadow-sm">
-              Papan Peringkat & Liga Mingguan 🏆
+            <h1 class="font-heading text-2xl sm:text-3xl font-black tracking-tight leading-tight drop-shadow-xs">
+              Papan Peringkat Mingguan 🏆
             </h1>
 
-            <p class="text-sm sm:text-base text-white/90 max-w-2xl leading-relaxed">
-              Tingkatkan akumulasi XP mingguanmu dengan memecahkan soal kuis! Top 3 di akhir minggu akan naik tingkat ke Liga yang lebih tinggi!
-            </p>
-
-            <!-- User Quick Stats Pill -->
-            <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
-              <div class="bg-black/20 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/20 flex items-center gap-2">
-                <span class="text-xl">⚡</span>
-                <div class="text-left">
-                  <span class="text-[10px] uppercase font-heading font-extrabold text-white/70 block">XP Mingguan</span>
-                  <span class="font-heading font-black text-lg text-amber-300">{{ userStore.weeklyXP }} XP</span>
-                </div>
+            <!-- Sleek Compact Stats Badges -->
+            <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 pt-0.5">
+              <div class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-black/20 backdrop-blur-md rounded-xl border border-white/15 text-xs font-heading">
+                <span>⚡</span>
+                <span class="text-white/75 font-medium">XP:</span>
+                <span class="font-black text-amber-300">{{ userStore.weeklyXP }} XP</span>
               </div>
 
-              <div class="bg-black/20 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/20 flex items-center gap-2">
-                <span class="text-xl">🏅</span>
-                <div class="text-left">
-                  <span class="text-[10px] uppercase font-heading font-extrabold text-white/70 block">Posisi Kamu</span>
-                  <span class="font-heading font-black text-lg text-emerald-300">Peringkat #{{ currentUserRank }}</span>
-                </div>
+              <div class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-black/20 backdrop-blur-md rounded-xl border border-white/15 text-xs font-heading">
+                <span>🏅</span>
+                <span class="text-white/75 font-medium">Posisi:</span>
+                <span class="font-black text-emerald-300">Peringkat #{{ currentUserRank }}</span>
               </div>
 
-              <div class="bg-black/20 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/20 flex items-center gap-2">
-                <span class="text-xl">⏰</span>
-                <div class="text-left">
-                  <span class="text-[10px] uppercase font-heading font-extrabold text-white/70 block">Sisa Waktu</span>
-                  <span class="font-heading font-black text-sm text-cyan-200">3 Hari 14 Jam</span>
-                </div>
+              <div class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-black/20 backdrop-blur-md rounded-xl border border-white/15 text-xs font-heading">
+                <span>⏰</span>
+                <span class="text-white/75 font-medium">Sisa:</span>
+                <span class="font-black text-cyan-200">3 Hari 14 Jam</span>
               </div>
             </div>
           </div>
 
-          <!-- Right Mascot Spotlight -->
-          <div class="lg:col-span-4 flex flex-col items-center justify-center">
-            <div class="relative group">
-              <KikoAvatar size="xl" :showLevelBadge="true" />
-            </div>
-            <div class="mt-4 text-center">
-              <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-heading font-black text-white">
-                {{ userStore.kikoTitle.icon }} {{ userStore.kikoTitle.title }}
-              </span>
-              <p class="text-[11px] text-white/80 font-body mt-1">{{ userStore.kikoTitle.subtitle }}</p>
+          <!-- Right: Compact Avatar Profile Card -->
+          <div class="flex items-center gap-3.5 bg-white/15 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/20 shrink-0 shadow-xs">
+            <KikoAvatar size="md" :showLevelBadge="true" />
+            <div class="text-left font-heading">
+              <div class="text-xs font-black text-white flex items-center gap-1">
+                <span>{{ userStore.kikoTitle.icon }}</span>
+                <span>{{ userStore.kikoTitle.title }}</span>
+              </div>
+              <p class="text-[11px] text-white/80 font-medium">Level {{ userStore.userLevel }} • {{ userStore.userDisplayName }}</p>
             </div>
           </div>
         </div>

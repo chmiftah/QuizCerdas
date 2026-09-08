@@ -24,6 +24,53 @@
         </div>
       </div>
 
+      <!-- Template Selector (Free vs Pro) -->
+      <div class="bg-white p-4 rounded-3xl border-2 border-duo-gray-100 shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-heading font-black text-slate-400 uppercase tracking-wider">PILIH TEMPLATE GAMBAR:</span>
+          <span v-if="!userStore.isPro" class="text-[11px] font-heading font-black text-amber-700 bg-amber-100 px-2.5 py-0.5 rounded-full">
+            👑 2 Template Pro Terkunci
+          </span>
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          <button 
+            @click="activeTemplate = 'house'"
+            class="p-3 rounded-2xl border-2 text-center transition-all cursor-pointer flex flex-col items-center gap-1"
+            :class="activeTemplate === 'house' ? 'bg-rose-50 border-rose-500 shadow-xs font-black text-rose-950' : 'bg-slate-50 border-slate-200 text-slate-600'"
+          >
+            <span class="text-2xl">🏡</span>
+            <span class="text-xs font-heading font-bold">Rumah Ceria</span>
+            <span class="text-[10px] text-emerald-600 font-extrabold">GRATIS</span>
+          </button>
+
+          <button 
+            @click="selectProTemplate('rocket')"
+            class="p-3 rounded-2xl border-2 text-center transition-all cursor-pointer flex flex-col items-center gap-1 relative overflow-hidden"
+            :class="activeTemplate === 'rocket' ? 'bg-amber-50 border-amber-500 shadow-xs font-black text-amber-950' : 'bg-slate-50 border-slate-200 text-slate-600'"
+          >
+            <div v-if="!userStore.isPro" class="absolute top-1 right-1 bg-amber-400 text-amber-950 text-[9px] font-black px-1.5 py-0.2 rounded-md shadow-2xs">
+              👑 PRO
+            </div>
+            <span class="text-2xl">🚀</span>
+            <span class="text-xs font-heading font-bold">Roket Luar Angkasa</span>
+            <span class="text-[10px] text-amber-700 font-extrabold">Koleksi Pro</span>
+          </button>
+
+          <button 
+            @click="selectProTemplate('dino')"
+            class="p-3 rounded-2xl border-2 text-center transition-all cursor-pointer flex flex-col items-center gap-1 relative overflow-hidden"
+            :class="activeTemplate === 'dino' ? 'bg-purple-50 border-purple-500 shadow-xs font-black text-purple-950' : 'bg-slate-50 border-slate-200 text-slate-600'"
+          >
+            <div v-if="!userStore.isPro" class="absolute top-1 right-1 bg-amber-400 text-amber-950 text-[9px] font-black px-1.5 py-0.2 rounded-md shadow-2xs">
+              👑 PRO
+            </div>
+            <span class="text-2xl">🦕</span>
+            <span class="text-xs font-heading font-bold">Dino Hutan</span>
+            <span class="text-[10px] text-purple-700 font-extrabold">Koleksi Pro</span>
+          </button>
+        </div>
+      </div>
+
       <!-- Color Palette Picker -->
       <div class="bg-white p-4 rounded-3xl border-2 border-duo-gray-100 shadow-sm space-y-2">
         <div class="text-xs font-heading font-extrabold text-slate-400 uppercase tracking-wider text-center">
@@ -116,8 +163,28 @@
 <script setup>
 import { ref } from 'vue'
 import { useSoundEffects } from '~/composables/useSoundEffects'
+import { useUserStore } from '~/stores/user'
+import { usePaywall } from '~/composables/usePaywall'
 
 const { playPop, playCorrect } = useSoundEffects()
+const userStore = useUserStore()
+const { openPaywall } = usePaywall()
+
+const activeTemplate = ref('house')
+
+const selectProTemplate = (templateName) => {
+  if (!userStore.isPro) {
+    openPaywall({
+      reason: 'creative_locked',
+      title: 'Buka Koleksi Gambar Mewarnai Pro 🎨',
+      description: 'Dapatkan akses ke ratusan gambar mewarnai bertema hewan, dinosaurus, luar angkasa, dan palet warna spesial!',
+      featureHighlight: 'Akses Lengkap Fitur Mewarnai & Tracing'
+    })
+    return
+  }
+  activeTemplate.value = templateName
+  playPop()
+}
 
 const palette = [
   { number: 1, name: 'Kuning Kunyit', hex: '#f59e0b', bgClass: 'bg-amber-500 border-amber-600' },
