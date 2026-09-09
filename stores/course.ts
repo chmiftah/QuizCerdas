@@ -69,7 +69,10 @@ export const useCourseStore = defineStore('course', {
   state: () => ({
     activeCourseId: 'counting_101',
     courses: {} as Record<string, Course>,
-    catalogRegistry: [] as CatalogCourse[]
+    catalogRegistry: [] as CatalogCourse[],
+    isLoading: false,
+    hasLoaded: false,
+    error: null as string | null
   }),
 
   getters: {
@@ -208,7 +211,12 @@ export const useCourseStore = defineStore('course', {
   },
 
   actions: {
-    async fetchCoursesFromApi() {
+    async fetchCoursesFromApi(force = false) {
+      if (this.hasLoaded && !force && this.catalogRegistry.length > 0) {
+        return
+      }
+      this.isLoading = true
+      this.error = null
       try {
         const data = await $fetch<any[]>('/api/course')
         if (data && Array.isArray(data)) {
@@ -240,15 +248,23 @@ export const useCourseStore = defineStore('course', {
 
           this.catalogRegistry = newRegistry
           this.courses = newMap
+          this.hasLoaded = true
 
           // Update active course ID if current active is not present and registry has items
           if (newRegistry.length > 0 && !newMap[this.activeCourseId]) {
             this.activeCourseId = newRegistry[0].id
           }
         }
-      } catch (err) {
-        console.warn('Could not fetch courses from server API:', err)
+      } catch (err: any) {
+        console.error('Failed to fetch courses from server API:', err)
+        this.error = err.data?.statusMessage || err.message || 'Gagal memuat modul pembelajaran dari server'
+      } finally {
+        this.isLoading = false
       }
+    },
+
+    async retryFetchCourses() {
+      await this.fetchCoursesFromApi(true)
     },
 
     selectCourse(courseId: string) {
