@@ -72,22 +72,26 @@ export const useCourseStore = defineStore('course', {
     catalogRegistry: [] as CatalogCourse[],
     isLoading: false,
     hasLoaded: false,
-    error: null as string | null
+    error: null as string | null,
+    currentCourseStatus: 'idle' as 'idle' | 'loading' | 'success' | 'not_found' | 'error',
+    currentCourseError: null as string | null
   }),
 
   getters: {
     allCatalogCourses: (state) => state.catalogRegistry.filter(c => c.isReady),
 
+    hasCurrentCourse: (state) => Boolean(state.courses[state.activeCourseId] && state.courses[state.activeCourseId].units?.length >= 0),
+
     course: (state) => state.courses[state.activeCourseId] || {
       id: state.activeCourseId,
-      title: 'Memuat Modul...',
-      description: 'Memuat data dari database PostgreSQL',
-      target_audience: 'Siswa',
+      title: '',
+      description: '',
+      target_audience: '',
       units: []
     },
     units: (state) => {
       const active = state.courses[state.activeCourseId]
-      return active ? active.units : []
+      return active ? active.units || [] : []
     },
 
     getUnitById: (state) => (unitId: string) => {
@@ -267,13 +271,91 @@ export const useCourseStore = defineStore('course', {
       await this.fetchCoursesFromApi(true)
     },
 
-    selectCourse(courseId: string) {
-      if (this.courses[courseId]) {
+    async fetchCourseById(courseId: string, force = false): Promise<Course | null> {
+      if (!courseId) return null
+      
+      // If already in courses with units and not forced, set active and return
+      if (!force && this.courses[courseId] && Array.isArray(this.courses[courseId].units)) {
         this.activeCourseId = courseId
+        this.currentCourseStatus = 'success'
+        this.currentCourseError = null
         if (typeof window !== 'undefined') {
           localStorage.setItem('activeCourseId', courseId)
         }
+        return this.courses[courseId]
       }
+
+      this.currentCourseStatus = 'loading'
+      this.currentCourseError = null
+      this.activeCourseId = courseId
+
+      try {
+        const data = await $fetch<any>(`/api/course/${courseId}`)
+        if (data && data.id) {
+          const isPro = data.isPro ?? false
+          const courseObj: Course = {
+            id: data.id,
+            title: data.title,
+            description: data.description || '',
+            target_audience: data.target_audience || 'Siswa',
+            isPro,
+            units: data.units || []
+          }
+          this.courses[data.id] = courseObj
+          this.activeCourseId = data.id
+          this.currentCourseStatus = 'success'
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('activeCourseId', data.id)
+          }
+
+          // Also update or insert into catalogRegistry
+          const existingIdx = this.catalogRegistry.findIndex(c => c.id === data.id)
+          const catalogItem: CatalogCourse = {
+            id: data.id,
+            title: data.title,
+            description: data.description || '',
+            target_audience: data.target_audience || 'Siswa',
+            category: data.category || 'math',
+            icon: data.icon || '⭐',
+            themeColor: data.themeColor || 'green',
+            features: data.features || [],
+            isReady: data.isReady ?? true,
+            isPro,
+            isFromDatabase: true,
+            courseData: courseObj
+          }
+          if (existingIdx >= 0) {
+            this.catalogRegistry[existingIdx] = catalogItem
+          } else {
+            this.catalogRegistry.push(catalogItem)
+          }
+
+          return courseObj
+        }
+        this.currentCourseStatus = 'not_found'
+        return null
+      } catch (err: any) {
+        if (err.statusCode === 404 || err.response?.status === 404) {
+          this.currentCourseStatus = 'not_found'
+        } else {
+          this.currentCourseStatus = 'error'
+          this.currentCourseError = err.data?.statusMessage || err.message || 'Gagal memuat modul dari server'
+        }
+        return null
+      }
+    },
+
+    async selectCourse(courseId: string) {
+      if (!courseId) return
+      this.activeCourseId = courseId
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('activeCourseId', courseId)
+      }
+      if (this.courses[courseId] && Array.isArray(this.courses[courseId].units)) {
+        this.currentCourseStatus = 'success'
+        return this.courses[courseId]
+      }
+      return await this.fetchCourseById(courseId)
     },
 
     async loadActiveCourse() {

@@ -345,24 +345,51 @@
                 <div 
                   v-if="selectedNodeId === item.id"
                   @click.outside="selectedNodeId = null"
-                  class="absolute -top-44 left-1/2 -translate-x-1/2 z-40 bg-white text-slate-800 rounded-3xl p-5 w-72 shadow-2xl border-4 space-y-3 text-center animate-pop"
-                  :class="item.type === 'checkpoint' ? 'border-purple-400' : 'border-[#58cc02]'"
+                  class="absolute -top-48 left-1/2 -translate-x-1/2 z-40 bg-white text-slate-800 rounded-3xl p-5 w-72 sm:w-80 shadow-2xl border-4 space-y-3 text-center animate-pop"
+                  :class="[
+                    item.type === 'checkpoint' 
+                      ? (isCheckpointCompleted(item.id) ? 'border-amber-400' : isCheckpointUnlocked(unit.id) ? 'border-purple-400' : 'border-slate-300')
+                      : (isNodeCompleted(unit.id, item.id, item.type) ? 'border-amber-400' : isLessonUnlocked(unit.id, item.id) ? 'border-[#58cc02]' : 'border-slate-300')
+                  ]"
                 >
                   <!-- Arrow tip -->
                   <div 
                     class="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent"
-                    :class="item.type === 'checkpoint' ? 'border-t-purple-400' : 'border-t-[#58cc02]'"
+                    :class="[
+                      item.type === 'checkpoint' 
+                        ? (isCheckpointCompleted(item.id) ? 'border-t-amber-400' : isCheckpointUnlocked(unit.id) ? 'border-t-purple-400' : 'border-t-slate-300')
+                        : (isNodeCompleted(unit.id, item.id, item.type) ? 'border-t-amber-400' : isLessonUnlocked(unit.id, item.id) ? 'border-t-[#58cc02]' : 'border-t-slate-300')
+                    ]"
                   ></div>
 
-                  <div class="space-y-1">
-                    <div class="flex items-center justify-center gap-1.5">
+                  <div class="space-y-1.5">
+                    <div class="flex items-center justify-center gap-1.5 flex-wrap">
                       <span 
-                        class="px-3 py-0.5 rounded-full text-[10px] font-heading font-black uppercase tracking-wide inline-block shadow-2xs"
-                        :class="item.type === 'checkpoint' ? 'bg-purple-500 text-white' : 'bg-[#58cc02] text-white'"
+                        v-if="isNodeCompleted(unit.id, item.id, item.type)"
+                        class="px-2.5 py-0.5 rounded-full text-[10px] font-heading font-black bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1"
                       >
-                        {{ item.type === 'checkpoint' ? '👑 CHECKPOINT UNIT' : `🎯 TAHAP ${itemIdx + 1}` }}
+                        <span>✓ SUDAH SELESAI</span>
                       </span>
-                      <span class="px-2 py-0.5 rounded-full text-[10px] font-heading font-black bg-amber-100 text-amber-900 border border-amber-300">
+                      <span 
+                        v-else-if="item.type === 'checkpoint' && isCheckpointUnlocked(unit.id)"
+                        class="px-2.5 py-0.5 rounded-full text-[10px] font-heading font-black bg-purple-100 text-purple-900 border border-purple-300 flex items-center gap-1"
+                      >
+                        <span>👑 TANTANGAN CHECKPOINT</span>
+                      </span>
+                      <span 
+                        v-else-if="isLessonUnlocked(unit.id, item.id)"
+                        class="px-2.5 py-0.5 rounded-full text-[10px] font-heading font-black bg-emerald-100 text-emerald-900 border border-emerald-300 flex items-center gap-1"
+                      >
+                        <span>{{ isNextActiveLesson(unit.id, item.id) ? '▶ MULAI DI SINI' : `🎯 TAHAP ${itemIdx + 1}` }}</span>
+                      </span>
+                      <span 
+                        v-else
+                        class="px-2.5 py-0.5 rounded-full text-[10px] font-heading font-black bg-slate-100 text-slate-600 border border-slate-300 flex items-center gap-1"
+                      >
+                        <span>🔒 BELUM TERBUKA</span>
+                      </span>
+
+                      <span class="px-2 py-0.5 rounded-full text-[10px] font-heading font-black bg-amber-400 text-amber-950 shadow-2xs">
                         {{ item.type === 'checkpoint' ? '+50 XP' : '+20 XP' }}
                       </span>
                     </div>
@@ -370,15 +397,45 @@
                     <h4 class="font-heading text-base font-black text-slate-800 leading-snug">
                       {{ item.title }}
                     </h4>
+
+                    <p v-if="item.type === 'checkpoint' ? !isCheckpointUnlocked(unit.id) : !isLessonUnlocked(unit.id, item.id)" class="text-xs font-heading font-bold text-slate-500 leading-relaxed">
+                      Selesaikan materi atau checkpoint sebelumnya untuk membuka pos petualangan ini!
+                    </p>
+                    <p v-else-if="isNodeCompleted(unit.id, item.id, item.type)" class="text-xs font-heading font-bold text-emerald-700 leading-relaxed">
+                      Hebat! Kamu telah menguasai materi ini. Ingin mengulangi kuis?
+                    </p>
+                    <p v-else-if="item.type === 'checkpoint'" class="text-xs font-heading font-bold text-purple-700 leading-relaxed">
+                      Kamu sudah sampai di sini! Taklukkan tantangan untuk membuka area berikutnya!
+                    </p>
+                    <p v-else class="text-xs font-heading font-bold text-slate-600 leading-relaxed">
+                      Ayo mulai petualangan seru ini dan raih bintang belajar!
+                    </p>
                   </div>
 
-                  <button 
-                    @click="confirmStartNode(unit.id, item.id, item.type)"
-                    class="w-full duo-btn-green py-3 text-xs font-heading font-black shadow-md cursor-pointer flex items-center justify-center gap-2 active:scale-95 transition-transform"
-                    :class="item.type === 'checkpoint' ? 'bg-purple-500 border-purple-600 hover:bg-purple-400' : ''"
-                  >
-                    <span>🚀 MULAI BELAJAR</span>
-                  </button>
+                  <div class="pt-1">
+                    <button 
+                      v-if="item.type === 'checkpoint' ? isCheckpointUnlocked(unit.id) : isLessonUnlocked(unit.id, item.id)"
+                      @click="confirmStartNode(unit.id, item.id, item.type)"
+                      class="w-full py-3 text-xs font-heading font-black shadow-md cursor-pointer flex items-center justify-center gap-2 active:scale-95 transition-all rounded-2xl"
+                      :class="[
+                        isNodeCompleted(unit.id, item.id, item.type)
+                          ? 'bg-amber-400 hover:bg-amber-300 text-amber-950 border-b-4 border-amber-600'
+                          : item.type === 'checkpoint'
+                            ? 'bg-purple-600 hover:bg-purple-500 text-white border-b-4 border-purple-800'
+                            : 'bg-[#58cc02] hover:bg-[#46a302] text-white border-b-4 border-[#388502]'
+                      ]"
+                    >
+                      <span>{{ isNodeCompleted(unit.id, item.id, item.type) ? '🔄 ULANGI MATERI' : (item.type === 'checkpoint' ? '👑 MULAI TANTANGAN' : '🚀 MULAI BELAJAR') }}</span>
+                    </button>
+
+                    <button 
+                      v-else
+                      @click="selectedNodeId = null"
+                      class="w-full py-2.5 text-xs font-heading font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-2xl cursor-pointer transition-all"
+                    >
+                      Mengerti, Lanjut Belajar 👍
+                    </button>
+                  </div>
                 </div>
               </Transition>
 
@@ -575,6 +632,7 @@
                 :completedLessons="currentCompletedLessons"
                 :completedCheckpoints="currentCompletedCheckpoints"
                 @node-click="handle3DNodeClick"
+                @switch-classic="setPathViewMode('classic')"
               />
             </ClientOnly>
           </div>
@@ -1189,10 +1247,10 @@ const onNodeTap = (unitId, itemId, type) => {
     ? isCheckpointUnlocked(unitId)
     : isLessonUnlocked(unitId, itemId)
 
-  if (!isUnlocked) return
-
   if (selectedNodeId.value === itemId) {
-    confirmStartNode(unitId, itemId, type)
+    if (isUnlocked) {
+      confirmStartNode(unitId, itemId, type)
+    }
   } else {
     selectedNodeId.value = itemId
   }

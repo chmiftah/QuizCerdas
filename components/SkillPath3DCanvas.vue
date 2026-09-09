@@ -1,13 +1,37 @@
 <template>
   <div class="relative w-full h-[540px] sm:h-[620px] rounded-2xl overflow-hidden select-none group">
-    <!-- WebGL Canvas Container -->
-    <div ref="canvasContainer" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
+    <!-- WebGL Fallback Alert Card -->
+    <div v-if="webglError" class="w-full h-full flex flex-col items-center justify-center bg-slate-100 p-6 text-center space-y-4 rounded-2xl border-2 border-slate-300">
+      <div class="w-14 h-14 rounded-2xl bg-amber-100 border border-amber-300 flex items-center justify-center text-3xl">
+        🌴
+      </div>
+      <div class="space-y-1 max-w-sm">
+        <h4 class="font-heading font-black text-slate-800 text-base">Peta 3D Tidak Dapat Dimuat</h4>
+        <p class="text-xs text-slate-500 font-body">
+          Akselerasi WebGL tidak tersedia atau mengalami kendala di browser ini. Kamu tetap bisa menjelajahi modul dengan lancar melalui Jalur Petualang!
+        </p>
+      </div>
+      <div class="flex items-center gap-2 pt-2">
+        <button 
+          @click="retryInit3D" 
+          class="px-4 py-2 bg-white hover:bg-slate-50 border border-slate-300 rounded-xl font-heading font-black text-xs text-slate-700 shadow-xs cursor-pointer active:scale-95 transition-all"
+        >
+          🔄 Coba Lagi
+        </button>
+        <button 
+          @click="$emit('switch-classic')" 
+          class="px-4 py-2 bg-[#58cc02] hover:bg-[#46a302] text-white rounded-xl font-heading font-black text-xs shadow-md border-b-2 border-[#388502] cursor-pointer active:scale-95 transition-all"
+        >
+          ✨ Buka Jalur Petualang
+        </button>
+      </div>
+    </div>
 
-    <!-- Interactive Controls Helper Badge & Reset View Button -->
-    <!-- Removed helper badge and reset button per user request -->
+    <!-- WebGL Canvas Container -->
+    <div v-show="!webglError" ref="canvasContainer" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
 
     <!-- Floating Title Pill Badges Overlay Projected Over 3D Nodes -->
-    <div class="absolute inset-0 pointer-events-none z-10 overflow-hidden">
+    <div v-if="!webglError" class="absolute inset-0 pointer-events-none z-10 overflow-hidden">
       <div 
         v-for="node in projectedNodes" 
         :key="node.id"
@@ -107,12 +131,13 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['node-click'])
+const emit = defineEmits(['node-click', 'switch-classic'])
 
 const canvasContainer = ref<HTMLDivElement | null>(null)
 const hoveredNode = ref<any | null>(null)
 const selectedNode = ref<any | null>(null)
 const projectedNodes = ref<any[]>([])
+const webglError = ref<string | null>(null)
 
 const activeCardNode = computed(() => selectedNode.value || hoveredNode.value)
 
@@ -198,27 +223,45 @@ const onBadgeClick = (node: any) => {
   }
 }
 
+const retryInit3D = () => {
+  webglError.value = null
+  init3D()
+}
+
 const init3D = () => {
   if (!canvasContainer.value) return
 
-  const width = canvasContainer.value.clientWidth
-  const height = canvasContainer.value.clientHeight
+  try {
+    const testCanvas = document.createElement('canvas')
+    const hasWebGL = Boolean(window.WebGLRenderingContext && (testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl')))
+    if (!hasWebGL) {
+      webglError.value = 'Browser atau perangkat tidak mendukung WebGL.'
+      return
+    }
 
-  scene = new THREE.Scene()
-  scene.background = new THREE.Color(0xf1f5f9) // Matches bg-slate-100
-  scene.fog = new THREE.FogExp2(0xf1f5f9, 0.018)
+    const width = canvasContainer.value.clientWidth || 600
+    const height = canvasContainer.value.clientHeight || 540
 
-  camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100)
-  camera.position.set(0, 14.0, 4.5)
-  camera.lookAt(0, 0, 0)
+    scene = new THREE.Scene()
+    scene.background = new THREE.Color(0xf1f5f9) // Matches bg-slate-100
+    scene.fog = new THREE.FogExp2(0xf1f5f9, 0.018)
 
-  renderer = new THREE.WebGLRenderer({ antialias: true })
-  renderer.setSize(width, height)
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-  renderer.toneMapping = THREE.ACESFilmicToneMapping
-  renderer.shadowMap.enabled = true
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap
-  canvasContainer.value.appendChild(renderer.domElement)
+    camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100)
+    camera.position.set(0, 14.0, 4.5)
+    camera.lookAt(0, 0, 0)
+
+    renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'default' })
+    renderer.setSize(width, height)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderer.toneMapping = THREE.ACESFilmicToneMapping
+    renderer.shadowMap.enabled = true
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap
+    
+    // Clear any previous child in container
+    while (canvasContainer.value.firstChild) {
+      canvasContainer.value.removeChild(canvasContainer.value.firstChild)
+    }
+    canvasContainer.value.appendChild(renderer.domElement)
 
   // Lights
   const ambientLight = new THREE.AmbientLight(0xffffff, 2.2)
@@ -469,6 +512,10 @@ const init3D = () => {
   dom.addEventListener('click', onClickCanvas)
 
   animate()
+  } catch (err: any) {
+    console.warn('[SkillPath3DCanvas] WebGL initialization error:', err)
+    webglError.value = err.message || 'Gagal memuat kanvas WebGL'
+  }
 }
 
 const updateProjectedNodeBadges = () => {
