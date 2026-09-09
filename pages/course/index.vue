@@ -17,22 +17,22 @@
         </div>
 
         <!-- Course Hero Banner Skeleton -->
-        <div class="bg-white rounded-3xl p-6 sm:p-8 border-2 border-slate-200 space-y-6 shadow-sm">
-          <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div class="space-y-3 w-full max-w-md">
+        <div class="bg-white rounded-3xl p-5 sm:p-6 border-2 border-slate-200/90 space-y-4 shadow-sm">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="space-y-2.5 w-full max-w-md">
               <div class="h-6 w-36 bg-slate-200 rounded-full"></div>
-              <div class="h-10 w-3/4 bg-slate-200 rounded-2xl"></div>
+              <div class="h-8 w-3/4 bg-slate-200 rounded-2xl"></div>
               <div class="h-4 w-full bg-slate-200 rounded-lg"></div>
             </div>
-            <div class="w-full md:w-56 h-28 bg-slate-200 rounded-2xl"></div>
+            <div class="w-full md:w-64 h-24 bg-slate-100 rounded-2xl border border-slate-200"></div>
           </div>
 
           <!-- Quick Stats Row Skeleton -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-slate-200">
-            <div class="h-14 bg-slate-200 rounded-2xl"></div>
-            <div class="h-14 bg-slate-200 rounded-2xl"></div>
-            <div class="h-14 bg-slate-200 rounded-2xl"></div>
-            <div class="h-14 bg-slate-200 rounded-2xl"></div>
+          <div class="flex flex-wrap gap-2 pt-3 border-t border-slate-100">
+            <div class="h-8 w-20 bg-slate-100 rounded-xl"></div>
+            <div class="h-8 w-24 bg-slate-100 rounded-xl"></div>
+            <div class="h-8 w-24 bg-slate-100 rounded-xl"></div>
+            <div class="h-8 w-28 bg-slate-100 rounded-xl"></div>
           </div>
         </div>
 
@@ -213,140 +213,96 @@
           <div class="absolute -right-8 -bottom-10 w-40 h-40 bg-white/20 rounded-full blur-xl pointer-events-none"></div>
         </div>
 
-        <!-- Main Course Hero Banner (Compact so Adventure Map gets primary viewport) -->
-        <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-5 sm:p-7 text-white shadow-xl border-4 border-emerald-400 relative overflow-hidden space-y-5 animate-pop">
+        <!-- Simplified Course Hero Header (Clean, Light, and Uncluttered) -->
+        <div class="bg-white rounded-3xl p-5 sm:p-6 border-2 border-slate-200/90 shadow-sm relative overflow-hidden space-y-4 animate-pop">
           
-          <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-5 z-10 relative">
-            <!-- Course Title & Metadata -->
-            <div class="space-y-2.5 max-w-xl">
-              <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/20 rounded-full text-xs font-heading font-black uppercase tracking-wider backdrop-blur-md text-white border border-white/25 shadow-2xs">
-                <span>{{ courseStore.course.icon || '⭐' }}</span>
-                <span>{{ getCategoryLabel(courseStore.course.category) }} • {{ courseStore.course.target_audience }}</span>
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <!-- Left: Course Title & Meta -->
+            <div class="space-y-2 max-w-xl">
+              <div class="flex items-center gap-2">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200/80 rounded-full text-xs font-heading font-black">
+                  <span>{{ courseStore.course.icon || '⭐' }}</span>
+                  <span>{{ getCategoryLabel(courseStore.course.category) }} • {{ courseStore.course.target_audience }}</span>
+                </span>
+                <span v-if="isCoursePro" class="px-2.5 py-0.5 bg-amber-400 text-amber-950 font-heading font-black text-[10px] rounded-full">
+                  👑 PRO
+                </span>
               </div>
               
-              <h1 class="font-heading text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-tight drop-shadow-sm">
+              <h1 class="font-heading text-xl sm:text-2xl md:text-3xl font-black text-slate-800 tracking-tight leading-snug">
                 {{ courseStore.course.title }}
               </h1>
               
-              <p class="text-emerald-50 text-xs sm:text-sm font-body leading-relaxed max-w-lg line-clamp-2">
+              <p class="text-slate-500 text-xs sm:text-sm font-body leading-relaxed max-w-lg line-clamp-2">
                 {{ courseStore.course.description }}
               </p>
             </div>
 
-            <!-- Overall Course Progress Card -->
-            <div class="bg-black/15 backdrop-blur-md rounded-2xl p-4 sm:p-5 text-center shrink-0 space-y-2.5 w-full md:w-60 border border-white/20 shadow-inner">
-              <div class="text-[11px] font-heading font-black text-amber-300 uppercase tracking-wider">
-                Progres Total Modul
+            <!-- Right: Compact Progress Indicator -->
+            <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-3.5 sm:p-4 shrink-0 w-full md:w-64 space-y-2">
+              <div class="flex items-center justify-between text-xs font-heading font-black">
+                <span class="text-slate-500 text-[11px] uppercase tracking-wider">Progres Modul</span>
+                <span class="text-emerald-700">{{ completedLessonsCount }}/{{ totalLessonsCount }} ({{ overallProgressPercent }}%)</span>
               </div>
               
-              <!-- Real Progress Bar -->
-              <div class="space-y-1.5">
-                <div class="flex items-center justify-between text-xs font-heading font-black">
-                  <span>Pelajaran</span>
-                  <span>{{ completedLessonsCount }} / {{ totalLessonsCount }}</span>
-                </div>
-                <div class="w-full h-3.5 bg-black/30 rounded-full overflow-hidden p-0.5 border border-white/25">
-                  <div 
-                    class="h-full bg-gradient-to-r from-amber-400 to-yellow-400 rounded-full transition-all duration-500 shadow-sm"
-                    :style="{ width: `${overallProgressPercent}%` }"
-                  ></div>
-                </div>
-                <p class="text-[11px] font-heading font-black text-amber-300 text-right">
-                  {{ overallProgressPercent }}% Selesai
-                </p>
+              <!-- Progress Bar -->
+              <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+                <div 
+                  class="h-full bg-[#58cc02] rounded-full transition-all duration-500 shadow-xs"
+                  :style="{ width: `${overallProgressPercent}%` }"
+                ></div>
               </div>
 
-              <!-- Certificate Button when 100% completed -->
-              <button 
-                v-if="overallProgressPercent >= 100 && totalLessonsCount > 0"
-                @click="showCert = true"
-                type="button"
-                class="w-full py-2 px-3 bg-amber-400 hover:bg-amber-300 rounded-xl font-heading font-black text-xs text-amber-950 transition-transform hover:scale-105 cursor-pointer flex items-center justify-center gap-1.5 shadow-md border-b-2 border-amber-600"
-              >
-                <span>🎓 Lihat Sertifikat 📜</span>
-              </button>
-
-              <!-- Action Button: Reset Progress -->
-              <button 
-                v-if="completedLessonsCount > 0"
-                @click="resetCurrentCourseProgress" 
-                class="w-full py-1.5 px-3 bg-white/10 hover:bg-white/20 border border-white/25 rounded-xl font-heading font-bold text-[11px] text-white transition-colors cursor-pointer flex items-center justify-center gap-1"
-                title="Reset progress untuk modul ini"
-              >
-                <span>🔄</span> Reset Progress
-              </button>
-            </div>
-          </div>
-
-          <!-- Quick Child Stats Toolbar -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3.5 border-t border-white/20 z-10 relative">
-            <div class="bg-black/15 rounded-2xl p-2.5 flex items-center gap-2.5 border border-white/10">
-              <div class="w-9 h-9 rounded-xl bg-amber-400 text-slate-900 flex items-center justify-center font-heading text-base font-black shadow-xs shrink-0">
-                ⭐
-              </div>
-              <div class="min-w-0">
-                <div class="text-[9px] font-heading font-bold text-emerald-100 uppercase truncate">Total XP</div>
-                <div class="font-heading text-base font-black text-white truncate">+{{ userStore.xp }} XP</div>
-              </div>
-            </div>
-
-            <div class="bg-black/15 rounded-2xl p-2.5 flex items-center gap-2.5 border border-white/10">
-              <div class="w-9 h-9 rounded-xl bg-rose-500 text-white flex items-center justify-center font-heading text-base font-black shadow-xs shrink-0">
-                ❤️
-              </div>
-              <div class="min-w-0">
-                <div class="text-[9px] font-heading font-bold text-emerald-100 uppercase truncate">Sisa Nyawa</div>
-                <div class="font-heading text-base font-black text-white truncate">{{ userStore.hearts }} / {{ userStore.maxHearts }}</div>
-              </div>
-            </div>
-
-            <div class="bg-black/15 rounded-2xl p-2.5 flex items-center gap-2.5 border border-white/10">
-              <div class="w-9 h-9 rounded-xl bg-orange-500 text-white flex items-center justify-center font-heading text-base font-black shadow-xs shrink-0">
-                🔥
-              </div>
-              <div class="min-w-0">
-                <div class="text-[9px] font-heading font-bold text-emerald-100 uppercase truncate">Streak Hari</div>
-                <div class="font-heading text-base font-black text-white truncate">{{ userStore.streak }} Hari</div>
-              </div>
-            </div>
-
-            <div class="bg-black/15 rounded-2xl p-2.5 flex items-center gap-2.5 border border-white/10">
-              <div class="w-9 h-9 rounded-xl bg-sky-400 text-slate-900 flex items-center justify-center font-heading text-base font-black shadow-xs shrink-0">
-                👑
-              </div>
-              <div class="min-w-0">
-                <div class="text-[9px] font-heading font-bold text-emerald-100 uppercase truncate">Checkpoint</div>
-                <div class="font-heading text-base font-black text-white truncate">{{ completedCheckpointsCount }} Selesai</div>
+              <!-- Certificate & Reset Actions -->
+              <div class="flex items-center justify-between gap-2 pt-0.5">
+                <button 
+                  v-if="overallProgressPercent >= 100 && totalLessonsCount > 0"
+                  @click="showCert = true"
+                  type="button"
+                  class="flex-1 py-1 px-2.5 bg-amber-400 hover:bg-amber-300 rounded-xl font-heading font-black text-[11px] text-amber-950 transition-all flex items-center justify-center gap-1 cursor-pointer shadow-xs border-b-2 border-amber-600 active:scale-95"
+                >
+                  <span>🎓 Sertifikat</span>
+                </button>
+                
+                <button 
+                  v-if="completedLessonsCount > 0"
+                  @click="resetCurrentCourseProgress" 
+                  class="text-slate-400 hover:text-slate-600 hover:bg-slate-200/50 px-2 py-1 rounded-lg font-heading font-bold text-[11px] transition-colors cursor-pointer flex items-center gap-1"
+                  title="Reset progres pelajaran untuk modul ini"
+                >
+                  <span>🔄</span> Reset
+                </button>
               </div>
             </div>
           </div>
 
-        </div>
-
-        <!-- Spaced Repetition Review Card Prompt -->
-        <div 
-          v-if="userStore.spacedRepetitionQueue.length > 0" 
-          class="bg-amber-50 border-4 border-duo-yellow/60 rounded-3xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md animate-pop"
-        >
-          <div class="flex items-center gap-4">
-            <div class="w-12 h-12 rounded-2xl bg-duo-yellow text-slate-900 flex items-center justify-center font-heading text-2xl font-black shrink-0 shadow-duo-yellow animate-bounce">
-              🧠
+          <!-- Bottom: Clean, Light Gamification Stats Toolbar -->
+          <div class="flex flex-wrap items-center gap-2 pt-3 border-t border-slate-100">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 border border-amber-200/80 rounded-xl font-heading text-xs font-black text-amber-900 shadow-2xs">
+              <span>⭐</span>
+              <span class="text-slate-400 font-bold text-[10px] uppercase">XP</span>
+              <span>+{{ userStore.xp }}</span>
             </div>
-            <div class="space-y-1">
-              <h4 class="font-heading text-sm sm:text-base font-black text-amber-950 flex items-center gap-2">
-                <span>Review Ingatan Spaced Repetition</span>
-                <span class="px-2 py-0.5 bg-amber-200 text-amber-900 rounded-full text-xs font-black">
-                  {{ userStore.spacedRepetitionQueue.length }} Soal
-                </span>
-              </h4>
-              <p class="text-xs text-amber-800 font-body">
-                Mengulang kuis berkala membantu ingatan matematika si kecil melekat lebih lama!
-              </p>
+
+            <div class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-rose-50 border border-rose-200/80 rounded-xl font-heading text-xs font-black text-rose-800 shadow-2xs">
+              <span>❤️</span>
+              <span class="text-slate-400 font-bold text-[10px] uppercase">Nyawa</span>
+              <span>{{ userStore.hearts }}/{{ userStore.maxHearts }}</span>
+            </div>
+
+            <div class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-orange-50 border border-orange-200/80 rounded-xl font-heading text-xs font-black text-orange-800 shadow-2xs">
+              <span>🔥</span>
+              <span class="text-slate-400 font-bold text-[10px] uppercase">Streak</span>
+              <span>{{ userStore.streak }} Hari</span>
+            </div>
+
+            <div class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-50 border border-sky-200/80 rounded-xl font-heading text-xs font-black text-sky-800 shadow-2xs">
+              <span>👑</span>
+              <span class="text-slate-400 font-bold text-[10px] uppercase">Checkpoint</span>
+              <span>{{ completedCheckpointsCount }} Selesai</span>
             </div>
           </div>
-          <NuxtLink to="/course/unit_1/unit1_lesson1" class="duo-btn-yellow px-5 py-2.5 text-xs font-heading font-black shrink-0 w-full sm:w-auto text-center">
-            ⚡ Review Sekarang
-          </NuxtLink>
+
         </div>
 
         <!-- ===================================================================== -->
