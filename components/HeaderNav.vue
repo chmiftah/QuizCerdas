@@ -30,174 +30,127 @@
             active-class="bg-white text-slate-800 shadow-2xs"
           >
             <span>📚</span>
-            <span>Katalog</span>
-          </NuxtLink>
-
-          <NuxtLink 
-            to="/leaderboard" 
-            class="px-3 py-1.5 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center gap-1.5 relative whitespace-nowrap shrink-0"
-            active-class="bg-white text-slate-800 shadow-2xs"
-          >
-            <span>🏆</span>
-            <span>Liga & Misi</span>
-            <span 
-              v-if="userStore.unclaimedQuestsCount > 0" 
-              class="px-1.5 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-black leading-none animate-bounce shadow-xs"
-            >
-              {{ userStore.unclaimedQuestsCount }}
-            </span>
-          </NuxtLink>
-
-          <NuxtLink 
-            to="/pricing" 
-            class="px-3 py-1.5 rounded-xl text-xs font-heading font-extrabold transition-all whitespace-nowrap shrink-0 flex items-center gap-1.5 text-amber-900 bg-amber-100 hover:bg-amber-200 border border-amber-300"
-            active-class="bg-amber-400 text-amber-950 font-black shadow-xs"
-          >
-            <span>👑</span>
-            <span>Langganan Pro</span>
+            <span>Kursus</span>
           </NuxtLink>
 
           <NuxtLink 
             to="/about" 
-            class="hidden xl:flex px-3 py-1.5 rounded-xl text-xs font-heading font-extrabold transition-all whitespace-nowrap shrink-0 items-center gap-1.5"
+            class="px-3 py-1.5 rounded-xl text-xs font-heading font-extrabold transition-all whitespace-nowrap shrink-0 flex items-center gap-1.5"
             active-class="bg-white text-slate-800 shadow-2xs"
           >
             <span>ℹ️</span>
             <span>Tentang</span>
           </NuxtLink>
 
-          <!-- Aktivitas Dropdown Menu -->
-          <div class="relative shrink-0">
-            <button 
-              @click="showActivitiesMenu = !showActivitiesMenu"
-              type="button"
-              class="px-3 py-1.5 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
-              :class="isActivityActive ? 'bg-duo-blue text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200'"
+          <!-- Extra Logged In Nav Items -->
+          <template v-if="userStore.isLoggedIn">
+            <NuxtLink 
+              to="/leaderboard" 
+              class="px-3 py-1.5 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center gap-1.5 relative whitespace-nowrap shrink-0"
+              active-class="bg-white text-slate-800 shadow-2xs"
             >
-              <span>🎯</span>
-              <span>Aktivitas</span>
-              <ChevronDown class="w-3.5 h-3.5 transition-transform duration-200 shrink-0" :class="{ 'rotate-180': showActivitiesMenu }" />
-            </button>
+              <span>🏆</span>
+              <span>Liga</span>
+              <span 
+                v-if="userStore.unclaimedQuestsCount > 0" 
+                class="px-1.5 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-black leading-none animate-bounce shadow-xs"
+              >
+                {{ userStore.unclaimedQuestsCount }}
+              </span>
+            </NuxtLink>
 
-            <!-- Dropdown Menu Content -->
-            <div 
-              v-if="showActivitiesMenu" 
-              @click.outside="showActivitiesMenu = false"
-              class="absolute left-0 mt-2 w-60 bg-white rounded-2xl border-2 border-duo-gray-100 shadow-xl p-2 z-50 animate-pop space-y-1"
-            >
-              <div class="px-3 py-1.5 border-b border-slate-100">
-                <span class="font-heading font-black text-[10px] text-slate-400 uppercase tracking-wider">Aktivitas & Fitur Extra</span>
+            <!-- Aktivitas Dropdown Menu -->
+            <div class="relative shrink-0">
+              <button 
+                @click="showActivitiesMenu = !showActivitiesMenu"
+                type="button"
+                class="px-3 py-1.5 rounded-xl text-xs font-heading font-extrabold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+                :class="isActivityActive ? 'bg-duo-blue text-white shadow-xs' : 'bg-white text-slate-700 hover:bg-slate-200'"
+              >
+                <span>🎯</span>
+                <span>Aktivitas</span>
+                <ChevronDown class="w-3.5 h-3.5 transition-transform duration-200 shrink-0" :class="{ 'rotate-180': showActivitiesMenu }" />
+              </button>
+
+              <!-- Dropdown Menu Content -->
+              <div 
+                v-if="showActivitiesMenu" 
+                @click.outside="showActivitiesMenu = false"
+                class="absolute left-0 mt-2 w-60 bg-white rounded-2xl border-2 border-duo-gray-100 shadow-xl p-2 z-50 animate-pop space-y-1"
+              >
+                <div class="px-3 py-1.5 border-b border-slate-100">
+                  <span class="font-heading font-black text-[10px] text-slate-400 uppercase tracking-wider">Aktivitas & Fitur Extra</span>
+                </div>
+
+                <NuxtLink 
+                  to="/tracing" 
+                  @click="showActivitiesMenu = false"
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-heading font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
+                  active-class="bg-emerald-50 text-emerald-700"
+                >
+                  <span class="text-base">✏️</span>
+                  <div class="flex flex-col">
+                    <span>Menulis & Tracing</span>
+                    <span class="text-[10px] font-normal text-slate-400">Latihan menulis angka & huruf</span>
+                  </div>
+                </NuxtLink>
+
+                <NuxtLink 
+                  to="/games/bubble-pop" 
+                  @click="showActivitiesMenu = false"
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-heading font-bold text-slate-700 hover:bg-sky-50 hover:text-sky-700 transition-colors"
+                  active-class="bg-sky-50 text-sky-700"
+                >
+                  <span class="text-base">🎈</span>
+                  <div class="flex flex-col">
+                    <span>Game Balon Angka</span>
+                    <span class="text-[10px] font-normal text-slate-400">Permainan meletuskan balon</span>
+                  </div>
+                </NuxtLink>
+
+                <NuxtLink 
+                  to="/coloring" 
+                  @click="showActivitiesMenu = false"
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-heading font-bold text-slate-700 hover:bg-amber-50 hover:text-amber-700 transition-colors"
+                  active-class="bg-amber-50 text-amber-700"
+                >
+                  <span class="text-base">🎨</span>
+                  <div class="flex flex-col">
+                    <span>Mewarnai Ceria</span>
+                    <span class="text-[10px] font-normal text-slate-400">Kreasi gambar & warna</span>
+                  </div>
+                </NuxtLink>
+
+                <NuxtLink 
+                  to="/nursery-rhymes" 
+                  @click="showActivitiesMenu = false"
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-heading font-bold text-slate-700 hover:bg-purple-50 hover:text-purple-700 transition-colors"
+                  active-class="bg-purple-50 text-purple-700"
+                >
+                  <span class="text-base">🎵</span>
+                  <div class="flex flex-col">
+                    <span>Lagu Anak Edukatif</span>
+                    <span class="text-[10px] font-normal text-slate-400">Musik & nyanyian anak</span>
+                  </div>
+                </NuxtLink>
+
+                <div class="border-t border-slate-100 my-1"></div>
+
+                <NuxtLink 
+                  to="/parent-dashboard" 
+                  @click="showActivitiesMenu = false"
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-heading font-bold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+                  active-class="bg-slate-100 text-slate-900"
+                >
+                  <span class="text-base">📊</span>
+                  <div class="flex flex-col">
+                    <span>Area Orang Tua</span>
+                    <span class="text-[10px] font-normal text-slate-400">Laporan & statistik belajar</span>
+                  </div>
+                </NuxtLink>
               </div>
-
-              <NuxtLink 
-                to="/tracing" 
-                @click="showActivitiesMenu = false"
-                class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-heading font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
-                active-class="bg-emerald-50 text-emerald-700"
-              >
-                <span class="text-base">✏️</span>
-                <div class="flex flex-col">
-                  <span>Menulis & Tracing</span>
-                  <span class="text-[10px] font-normal text-slate-400">Latihan menulis angka & huruf</span>
-                </div>
-              </NuxtLink>
-
-              <NuxtLink 
-                to="/games/bubble-pop" 
-                @click="showActivitiesMenu = false"
-                class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-heading font-bold text-slate-700 hover:bg-sky-50 hover:text-sky-700 transition-colors"
-                active-class="bg-sky-50 text-sky-700"
-              >
-                <span class="text-base">🎈</span>
-                <div class="flex flex-col">
-                  <span>Game Balon Angka</span>
-                  <span class="text-[10px] font-normal text-slate-400">Permainan meletuskan balon</span>
-                </div>
-              </NuxtLink>
-
-              <NuxtLink 
-                to="/coloring" 
-                @click="showActivitiesMenu = false"
-                class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-heading font-bold text-slate-700 hover:bg-amber-50 hover:text-amber-700 transition-colors"
-                active-class="bg-amber-50 text-amber-700"
-              >
-                <span class="text-base">🎨</span>
-                <div class="flex flex-col">
-                  <span>Mewarnai Ceria</span>
-                  <span class="text-[10px] font-normal text-slate-400">Kreasi gambar & warna</span>
-                </div>
-              </NuxtLink>
-
-              <NuxtLink 
-                to="/nursery-rhymes" 
-                @click="showActivitiesMenu = false"
-                class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-heading font-bold text-slate-700 hover:bg-purple-50 hover:text-purple-700 transition-colors"
-                active-class="bg-purple-50 text-purple-700"
-              >
-                <span class="text-base">🎵</span>
-                <div class="flex flex-col">
-                  <span>Lagu Anak Edukatif</span>
-                  <span class="text-[10px] font-normal text-slate-400">Musik & nyanyian anak</span>
-                </div>
-              </NuxtLink>
-
-              <NuxtLink 
-                v-if="userStore.isLoggedIn"
-                to="/shop" 
-                @click="showActivitiesMenu = false"
-                class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-heading font-bold text-slate-700 hover:bg-yellow-50 hover:text-yellow-800 transition-colors"
-                active-class="bg-yellow-50 text-yellow-800"
-              >
-                <span class="text-base">🛍️</span>
-                <div class="flex flex-col">
-                  <span>Toko Kiko</span>
-                  <span class="text-[10px] font-normal text-slate-400">Tukar XP dengan kostum</span>
-                </div>
-              </NuxtLink>
-
-              <NuxtLink 
-                v-if="userStore.isLoggedIn"
-                to="/stickers" 
-                @click="showActivitiesMenu = false"
-                class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-heading font-bold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors"
-                active-class="bg-indigo-50 text-indigo-700"
-              >
-                <span class="text-base">⭐</span>
-                <div class="flex flex-col">
-                  <span>Koleksi Stikerku</span>
-                  <span class="text-[10px] font-normal text-slate-400">Album stiker prestasi</span>
-                </div>
-              </NuxtLink>
-
-              <div class="border-t border-slate-100 my-1"></div>
-
-              <NuxtLink 
-                to="/parent-dashboard" 
-                @click="showActivitiesMenu = false"
-                class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-heading font-bold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors"
-                active-class="bg-slate-100 text-slate-900"
-              >
-                <span class="text-base">📊</span>
-                <div class="flex flex-col">
-                  <span>Area Orang Tua</span>
-                  <span class="text-[10px] font-normal text-slate-400">Laporan & statistik belajar</span>
-                </div>
-              </NuxtLink>
-
-              <NuxtLink 
-                to="/about" 
-                @click="showActivitiesMenu = false"
-                class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-heading font-bold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors"
-                active-class="bg-slate-100 text-slate-900"
-              >
-                <span class="text-base">ℹ️</span>
-                <div class="flex flex-col">
-                  <span>Tentang CountingDuo</span>
-                  <span class="text-[10px] font-normal text-slate-400">Visi, misi & sahabat belajar</span>
-                </div>
-              </NuxtLink>
             </div>
-          </div>
+          </template>
         </nav>
       </div>
 
@@ -241,7 +194,7 @@
           </template>
 
           <!-- User Profile Dropdown or Auth Buttons -->
-          <div v-if="userStore.isLoggedIn" class="relative shrink-0">
+          <div v-if="userStore.isLoggedIn" class="relative shrink-0 flex items-center gap-2">
             <button 
               @click="showProfileMenu = !showProfileMenu"
               type="button"
@@ -257,7 +210,7 @@
             <div 
               v-if="showProfileMenu" 
               @click.outside="showProfileMenu = false"
-              class="absolute right-0 mt-2 w-56 bg-white rounded-2xl border-2 border-duo-gray-100 shadow-xl py-2 z-50 animate-pop space-y-1"
+              class="absolute right-0 mt-2 top-full w-56 bg-white rounded-2xl border-2 border-duo-gray-100 shadow-xl py-2 z-50 animate-pop space-y-1"
             >
               <div class="px-3 py-2 border-b border-slate-100 space-y-1">
                 <div class="flex items-center justify-between">
@@ -284,7 +237,7 @@
                 <span class="text-[10px]">➔</span>
               </NuxtLink>
 
-              <!-- Menu Khusus Akun Admin (Hanya Tampil untuk Role Admin) -->
+              <!-- Menu Khusus Akun Admin -->
               <template v-if="userStore.isActualAdmin">
                 <NuxtLink 
                   v-if="userStore.isAdmin"
@@ -307,6 +260,14 @@
                   </span>
                 </button>
               </template>
+
+              <NuxtLink 
+                to="/parent-dashboard" 
+                @click="showProfileMenu = false"
+                class="w-full px-3 py-2 text-left text-xs font-heading font-bold text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+              >
+                <span>📊</span> Area Orang Tua
+              </NuxtLink>
 
               <NuxtLink 
                 to="/shop" 
@@ -333,40 +294,151 @@
             </div>
           </div>
 
-          <div v-else class="flex items-center gap-1 sm:gap-2">
+          <!-- Logged Out Auth Buttons -->
+          <div v-else class="flex items-center gap-1.5 sm:gap-2">
             <NuxtLink 
               to="/login"
-              class="px-3 py-1.5 rounded-xl font-heading font-bold text-xs text-slate-600 hover:bg-slate-100 transition-colors"
+              class="hidden sm:inline-flex px-3 py-1.5 rounded-xl font-heading font-bold text-xs text-slate-600 hover:bg-slate-100 transition-colors"
             >
               Masuk
             </NuxtLink>
             <NuxtLink 
               to="/register"
-              class="px-3 py-1.5 rounded-xl duo-btn-green text-xs font-heading font-extrabold py-1.5"
+              class="px-3.5 py-1.5 rounded-xl duo-btn-green text-xs font-heading font-extrabold"
             >
-              Daftar Gratis
+              Mulai Belajar
             </NuxtLink>
           </div>
+
+          <!-- Mobile Hamburger Toggle Button -->
+          <button 
+            @click="showMobileMenu = !showMobileMenu"
+            type="button"
+            class="md:hidden w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-700 cursor-pointer transition-colors"
+            aria-label="Toggle menu"
+          >
+            <X v-if="showMobileMenu" class="w-4 h-4" />
+            <Menu v-else class="w-4 h-4" />
+          </button>
         </div>
 
         <template #fallback>
-          <div class="flex items-center gap-1 sm:gap-2">
+          <div class="flex items-center gap-1.5 sm:gap-2">
             <NuxtLink 
               to="/login"
-              class="px-3 py-1.5 rounded-xl font-heading font-bold text-xs text-slate-600 hover:bg-slate-100 transition-colors"
+              class="hidden sm:inline-flex px-3 py-1.5 rounded-xl font-heading font-bold text-xs text-slate-600 hover:bg-slate-100 transition-colors"
             >
               Masuk
             </NuxtLink>
             <NuxtLink 
               to="/register"
-              class="px-3 py-1.5 rounded-xl duo-btn-green text-xs font-heading font-extrabold py-1.5"
+              class="px-3.5 py-1.5 rounded-xl duo-btn-green text-xs font-heading font-extrabold"
             >
-              Daftar Gratis
+              Mulai Belajar
             </NuxtLink>
           </div>
         </template>
       </ClientOnly>
     </div>
+
+    <!-- Mobile Dropdown Navigation Drawer -->
+    <Transition name="slide-down">
+      <div 
+        v-if="showMobileMenu" 
+        class="md:hidden border-t border-slate-200/80 bg-white px-4 py-4 space-y-3 shadow-xl"
+      >
+        <nav class="grid grid-cols-2 gap-2 text-xs font-heading font-bold">
+          <NuxtLink 
+            to="/" 
+            @click="showMobileMenu = false"
+            class="flex items-center gap-2 p-2.5 rounded-xl hover:bg-slate-100 text-slate-700"
+            exact-active-class="bg-emerald-50 text-duo-green font-extrabold"
+          >
+            <span>🏠</span>
+            <span>Beranda</span>
+          </NuxtLink>
+
+          <NuxtLink 
+            to="/catalog" 
+            @click="showMobileMenu = false"
+            class="flex items-center gap-2 p-2.5 rounded-xl hover:bg-slate-100 text-slate-700"
+            active-class="bg-sky-50 text-duo-blue font-extrabold"
+          >
+            <span>📚</span>
+            <span>Katalog</span>
+          </NuxtLink>
+
+          <NuxtLink 
+            to="/course" 
+            @click="showMobileMenu = false"
+            class="flex items-center gap-2 p-2.5 rounded-xl hover:bg-slate-100 text-slate-700"
+            active-class="bg-emerald-50 text-duo-green font-extrabold"
+          >
+            <span>🗺️</span>
+            <span>Peta Belajar</span>
+          </NuxtLink>
+
+          <NuxtLink 
+            to="/about" 
+            @click="showMobileMenu = false"
+            class="flex items-center gap-2 p-2.5 rounded-xl hover:bg-slate-100 text-slate-700"
+            active-class="bg-slate-100 text-slate-900 font-extrabold"
+          >
+            <span>ℹ️</span>
+            <span>Tentang</span>
+          </NuxtLink>
+
+          <NuxtLink 
+            to="/parent-dashboard" 
+            @click="showMobileMenu = false"
+            class="col-span-2 flex items-center gap-2 p-2.5 rounded-xl bg-indigo-50/60 hover:bg-indigo-100/70 text-indigo-900 font-extrabold border border-indigo-100"
+          >
+            <span>👨‍👩‍👧</span>
+            <span>Area Orang Tua (Laporan Belajar)</span>
+          </NuxtLink>
+        </nav>
+
+        <div class="border-t border-slate-100 pt-3 space-y-2">
+          <template v-if="!userStore.isLoggedIn">
+            <NuxtLink 
+              to="/register" 
+              @click="showMobileMenu = false"
+              class="w-full py-2.5 duo-btn-green text-xs font-heading font-extrabold flex items-center justify-center gap-1.5"
+            >
+              <span>🚀 Mulai Belajar Gratis</span>
+            </NuxtLink>
+
+            <div class="flex items-center justify-between text-xs font-heading pt-1 px-1">
+              <button 
+                @click="handleGuestMobile" 
+                class="text-slate-500 hover:text-duo-blue underline font-bold cursor-pointer"
+              >
+                ⚡ Coba Mode Tamu
+              </button>
+              <NuxtLink 
+                to="/login" 
+                @click="showMobileMenu = false"
+                class="text-duo-blue font-extrabold hover:underline"
+              >
+                Sudah punya akun? Masuk
+              </NuxtLink>
+            </div>
+          </template>
+
+          <template v-else>
+            <div class="flex items-center justify-between pt-1">
+              <span class="text-xs font-heading text-slate-500">Halo, {{ userStore.userDisplayName }}</span>
+              <button 
+                @click="handleLogoutMobile" 
+                class="text-xs font-heading font-bold text-rose-600 hover:underline cursor-pointer"
+              >
+                Keluar Akun
+              </button>
+            </div>
+          </template>
+        </div>
+      </div>
+    </Transition>
 
     <!-- Heart Refill Modal -->
     <Teleport to="body">
@@ -410,16 +482,13 @@
       </div>
     </Teleport>
   </header>
-
-  <!-- Mobile Bottom Navigation Bar -->
-  <MobileBottomNav />
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUserStore } from '~/stores/user'
-import { Flame, Zap, Heart, ChevronDown } from 'lucide-vue-next'
+import { Flame, Zap, Heart, ChevronDown, Menu, X } from 'lucide-vue-next'
 
 const route = useRoute()
 const userStore = useUserStore()
@@ -427,6 +496,7 @@ const userStore = useUserStore()
 const showHeartModal = ref(false)
 const showProfileMenu = ref(false)
 const showActivitiesMenu = ref(false)
+const showMobileMenu = ref(false)
 
 const isActivityActive = computed(() => {
   const path = route.path
@@ -440,6 +510,18 @@ const buyHeartRefill = () => {
   } catch (err) {
     alert(err.message)
   }
+}
+
+const handleGuestMobile = () => {
+  showMobileMenu.value = false
+  userStore.loginAsGuest()
+  navigateTo('/catalog')
+}
+
+const handleLogoutMobile = async () => {
+  showMobileMenu.value = false
+  await userStore.logout()
+  navigateTo('/')
 }
 
 const handleLogout = async () => {
