@@ -6,64 +6,7 @@
     <!-- Catalog Dashboard Main Container -->
     <main class="max-w-6xl mx-auto w-full px-3.5 sm:px-6 py-4 sm:py-8 flex-1 space-y-6 sm:space-y-8 pb-32 sm:pb-16">
       
-      <!-- User Status & Progress Bar (Natural, Compact & Helpful) -->
-      <ClientOnly>
-        <div class="bg-white rounded-2xl sm:rounded-3xl border-2 border-slate-200 p-3.5 sm:p-4 shadow-sm flex flex-wrap items-center justify-between gap-3">
-          <!-- User Profile / Guest Info -->
-          <div class="flex items-center gap-2.5 sm:gap-3">
-            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-emerald-100 border border-emerald-300 flex items-center justify-center text-xl sm:text-2xl shadow-2xs shrink-0">
-              {{ userStore.isLoggedIn ? userStore.userAvatar : '🦉' }}
-            </div>
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="font-heading font-black text-xs sm:text-sm text-slate-800">
-                  {{ userStore.isLoggedIn ? userStore.userDisplayName : 'Belajar sebagai Tamu' }}
-                </span>
-                <span 
-                  class="px-2 py-0.5 rounded-full font-heading font-black text-[10px]"
-                  :class="userStore.isLoggedIn && userStore.isPro ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-emerald-100 text-emerald-800'"
-                >
-                  Level {{ userStore.userLevel }}
-                </span>
-              </div>
-              <p class="text-[11px] text-slate-500 font-heading">
-                {{ userStore.isLoggedIn ? `${userStore.xp} XP Terkumpul • ${userStore.streak} Hari Rutin 🔥` : 'Buat akun gratis untuk menyimpan progress & XP anak' }}
-              </p>
-            </div>
-          </div>
 
-          <!-- Right Action: Guest Register or Reset Progress -->
-          <div class="flex items-center gap-2 ml-auto">
-            <NuxtLink 
-              v-if="!userStore.isLoggedIn"
-              to="/register" 
-              class="px-3.5 py-1.5 duo-btn-green text-xs font-heading font-extrabold whitespace-nowrap"
-            >
-              Simpan Progress (Daftar Gratis)
-            </NuxtLink>
-            <button 
-              v-else
-              @click="confirmResetProgress"
-              class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-600 border border-slate-200 font-heading font-bold text-xs text-slate-600 transition-colors cursor-pointer"
-              title="Reset progress pengerjaan modul"
-            >
-              🔄 Reset Progress
-            </button>
-          </div>
-        </div>
-
-        <template #fallback>
-          <div class="bg-white rounded-2xl sm:rounded-3xl border-2 border-slate-200 p-3.5 sm:p-4 shadow-sm flex items-center justify-between gap-3">
-            <div class="flex items-center gap-2.5">
-              <span class="text-2xl">🦉</span>
-              <div>
-                <p class="font-heading font-black text-xs sm:text-sm text-slate-800">Katalog Petualangan Belajar</p>
-                <p class="text-[11px] text-slate-500 font-heading">Pilih materi sesuai usia dan jenjang anak</p>
-              </div>
-            </div>
-          </div>
-        </template>
-      </ClientOnly>
 
       <!-- Hero Learning Adventure Banner -->
       <div class="bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-600 rounded-3xl p-5 sm:p-8 text-white shadow-lg relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-5 animate-pop">
