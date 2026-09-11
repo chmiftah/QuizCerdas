@@ -93,6 +93,23 @@
 <script setup>
 import { ref, onUnmounted } from 'vue'
 
+useSeoMeta({
+  title: 'Lagu Anak & Karaoke Hitungan Edukatif | CountingDuo',
+  description: 'Kumpulan lagu edukasi anak TK dan PAUD: Satu-Satu Aku Sayang Ibu, Dua Mata Saya, Balonku Ada Lima dengan lirik karaoke interaktif.',
+  keywords: 'lagu anak edukatif, karaoke lagu anak tk, satu satu aku sayang ibu, dua mata saya, lagu berhitung anak paud, lagu anak indonesia',
+  ogTitle: 'Karaoke & Lagu Hitungan Anak — CountingDuo',
+  ogDescription: 'Bernyanyi dan mengenal angka bersama lagu anak Indonesia ceria dan ramah anak.',
+  ogImage: 'https://countingduo.id/images/og-banner.png',
+  ogUrl: 'https://countingduo.id/nursery-rhymes',
+  twitterCard: 'summary_large_image'
+})
+
+useHead({
+  link: [
+    { rel: 'canonical', href: 'https://countingduo.id/nursery-rhymes' }
+  ]
+})
+
 const songList = [
   {
     id: 'satu_satu',

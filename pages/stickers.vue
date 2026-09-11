@@ -87,6 +87,23 @@ import { computed } from 'vue'
 import { useUserStore } from '~/stores/user'
 import { useSoundEffects } from '~/composables/useSoundEffects'
 
+useSeoMeta({
+  title: 'Album Stiker & Prestasi Belajar Kiko | CountingDuo',
+  description: 'Koleksi stiker hadiah belajar interaktif untuk anak. Kumpulkan stiker lucu setiap kali menyelesaikan modul pelajaran dan kuis checkpoint.',
+  keywords: 'stiker edukasi anak, reward belajar anak, album stiker prestasi, gamifikasi pembelajaran',
+  ogTitle: 'Album Stiker Hadiah Belajar — CountingDuo',
+  ogDescription: 'Koleksi stiker lucu hasil pencapaian belajar kuis anak usia dini.',
+  ogImage: 'https://countingduo.id/images/og-banner.png',
+  ogUrl: 'https://countingduo.id/stickers',
+  twitterCard: 'summary_large_image'
+})
+
+useHead({
+  link: [
+    { rel: 'canonical', href: 'https://countingduo.id/stickers' }
+  ]
+})
+
 const userStore = useUserStore()
 const { playPop } = useSoundEffects()
 

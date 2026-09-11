@@ -573,11 +573,37 @@ import { usePaywall } from '~/composables/usePaywall'
 
 // SEO Meta Tags
 useSeoMeta({
-  title: 'Katalog Belajar Anak | CountingDuo',
-  description: 'Temukan modul belajar interaktif untuk PAUD, TK, dan SD di CountingDuo. Kuis berhitung, sains hewan, bahasa, dan logika menyenangkan.',
+  title: 'Katalog Modul Belajar Anak PAUD, TK & SD | CountingDuo',
+  description: 'Pilihan lengkap materi belajar anak usia 4–9 tahun: Matematika, Sains & Dunia Hewan, Bahasa Indonesia, dan Logika Spasial dengan 29 variasi kuis bergambar.',
+  keywords: 'katalog modul belajar anak, kurikulum paud tk sd, materi calistung anak, soal matematika kelas 1 sd, sains anak tk',
   ogTitle: 'Katalog Petualangan Belajar Anak — CountingDuo',
   ogDescription: 'Pilih modul belajar anak usia 4–9 tahun dengan quiz interaktif, visual bergambar, dan reward XP.',
-  ogImage: '/images/og-banner.png'
+  ogImage: 'https://countingduo.id/images/og-banner.png',
+  ogUrl: 'https://countingduo.id/catalog',
+  twitterCard: 'summary_large_image'
+})
+
+useHead({
+  link: [
+    { rel: 'canonical', href: 'https://countingduo.id/catalog' }
+  ],
+  script: [
+    {
+      type: 'application/ld+json',
+      children: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        'name': 'Katalog Modul Belajar CountingDuo',
+        'url': 'https://countingduo.id/catalog',
+        'description': 'Kumpulan modul pembelajaran edukatif interaktif untuk anak usia 4 hingga 9 tahun.',
+        'provider': {
+          '@type': 'Organization',
+          'name': 'CountingDuo',
+          'url': 'https://countingduo.id'
+        }
+      })
+    }
+  ]
 })
 
 const userStore = useUserStore()

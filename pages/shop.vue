@@ -247,6 +247,23 @@ definePageMeta({
   middleware: 'auth'
 })
 
+useSeoMeta({
+  title: 'Toko Hadiah & Kostum Karakter 3D Kiko | CountingDuo',
+  description: 'Tukarkan koin dan XP hasil belajar kuis untuk membeli kostum mahkota, kacamata keren, dan karakter hewan favorit di Toko Kiko Panda.',
+  keywords: 'toko hadiah edukasi, gamifikasi kuis anak, kostum kiko panda, reward belajar anak',
+  ogTitle: 'Toko Hadiah & Kostum Kiko Panda — CountingDuo',
+  ogDescription: 'Koleksi kostum dan karakter lucu hasil apresiasi belajar anak.',
+  ogImage: 'https://countingduo.id/images/og-banner.png',
+  ogUrl: 'https://countingduo.id/shop',
+  twitterCard: 'summary_large_image'
+})
+
+useHead({
+  link: [
+    { rel: 'canonical', href: 'https://countingduo.id/shop' }
+  ]
+})
+
 const userStore = useUserStore()
 const activeTab = ref('hats')
 const toastMessage = ref('')

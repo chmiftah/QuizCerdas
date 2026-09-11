@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+  <!-- Halaman Utama / Beranda -->
+  <url>
+    <loc>https://countingduo.id/</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Katalog Materi Belajar & Kursus -->
+  <url>
+    <loc>https://countingduo.id/catalog</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Belajar Menulis & Tracing Angka -->
+  <url>
+    <loc>https://countingduo.id/tracing</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Game Edukasi Bubble Pop -->
+  <url>
+    <loc>https://countingduo.id/games/bubble-pop</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Lembar Mewarnai Digital Anak -->
+  <url>
+    <loc>https://countingduo.id/coloring</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Lagu Edukasi Anak (Nursery Rhymes) -->
+  <url>
+    <loc>https://countingduo.id/nursery-rhymes</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Paket Langganan & Harga Pro -->
+  <url>
+    <loc>https://countingduo.id/pricing</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Tentang Platform CountingDuo / QuizCerdas -->
+  <url>
+    <loc>https://countingduo.id/about</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Dashboard Pantauan Orang Tua -->
+  <url>
+    <loc>https://countingduo.id/parent-dashboard</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Toko Kostum & Maskot 3D Kiko -->
+  <url>
+    <loc>https://countingduo.id/shop</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Liga Peringkat & Prestasi Belajar -->
+  <url>
+    <loc>https://countingduo.id/leaderboard</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Koleksi Stiker Hadiah -->
+  <url>
+    <loc>https://countingduo.id/stickers</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Pendaftaran Akun Belajar Siswa / Anak -->
+  <url>
+    <loc>https://countingduo.id/register</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Masuk Akun -->
+  <url>
+    <loc>https://countingduo.id/login</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+</urlset>

@@ -622,6 +622,43 @@ import { usePaywall } from '~/composables/usePaywall'
 import { Calendar, Clock, CreditCard, CheckCircle, RefreshCw, Printer } from 'lucide-vue-next'
 import confetti from 'canvas-confetti'
 
+useSeoMeta({
+  title: 'Paket & Biaya Langganan QuizCerdas Pro — Belajar Tanpa Batas',
+  description: 'Dapatkan akses tak terbatas ke seluruh materi, nyawa tanpa batas, laporan WhatsApp mingguan, dan ratusan latihan interaktif untuk anak dengan QuizCerdas Pro.',
+  keywords: 'harga quizcerdas pro, biaya langganan aplikasi belajar anak, bimbel online anak tk sd, langganan calistung anak, edukasi anak tanpa iklan',
+  ogTitle: 'Paket Belajar QuizCerdas Pro — Mulai Rp 99.000 / Tahun',
+  ogDescription: 'Beri anak akses tanpa batas ke seluruh petualangan belajar, nyawa tak terhingga, dan sertifikat prestasi resmi.',
+  ogImage: 'https://countingduo.id/images/og-banner.png',
+  ogUrl: 'https://countingduo.id/pricing',
+  twitterCard: 'summary_large_image'
+})
+
+useHead({
+  link: [
+    { rel: 'canonical', href: 'https://countingduo.id/pricing' }
+  ],
+  script: [
+    {
+      type: 'application/ld+json',
+      children: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        'name': 'QuizCerdas Pro',
+        'description': 'Akses langganan penuh untuk belajar anak usia 4–9 tahun dengan nyawa tanpa batas, laporan WhatsApp mingguan, dan sertifikat.',
+        'image': 'https://countingduo.id/images/og-banner.png',
+        'offers': {
+          '@type': 'Offer',
+          'url': 'https://countingduo.id/pricing',
+          'priceCurrency': 'IDR',
+          'price': '99000',
+          'priceValidUntil': '2026-12-31',
+          'availability': 'https://schema.org/InStock'
+        }
+      })
+    }
+  ]
+})
+
 const userStore = useUserStore()
 const { openPaywall } = usePaywall()
 

@@ -183,6 +183,18 @@ import { useUserStore } from '~/stores/user'
 const route = useRoute()
 const userStore = useUserStore()
 
+useSeoMeta({
+  title: 'Masuk Akun Belajar | CountingDuo',
+  description: 'Masuk ke akun CountingDuo untuk melanjutkan petualangan kuis, mengumpulkan bintang, dan menjaga streak harian anak.',
+  robots: 'noindex, follow'
+})
+
+useHead({
+  link: [
+    { rel: 'canonical', href: 'https://countingduo.id/login' }
+  ]
+})
+
 const form = reactive({
   email: '',
   password: '',

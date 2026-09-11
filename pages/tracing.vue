@@ -78,6 +78,23 @@ import { ref } from 'vue'
 import { useUserStore } from '~/stores/user'
 import { usePaywall } from '~/composables/usePaywall'
 
+useSeoMeta({
+  title: 'Latihan Menulis Angka 1–10 Interaktif Anak TK & SD | CountingDuo',
+  description: 'Belajar menulis angka dengan jari atau stylus di layar sentuh. Garis panduan ceria membantu motorik halus anak TK dan SD belajar calistung mandiri.',
+  keywords: 'latihan menulis angka anak, tracing angka anak tk, belajar menulis angka 1-10, motorik halus anak, lembar kerja calistung digital',
+  ogTitle: 'Kanvas Menulis Angka Ceria — CountingDuo',
+  ogDescription: 'Latihan motorik menulis angka 1 sampai 10 interaktif di browser untuk anak usia dini.',
+  ogImage: 'https://countingduo.id/images/og-banner.png',
+  ogUrl: 'https://countingduo.id/tracing',
+  twitterCard: 'summary_large_image'
+})
+
+useHead({
+  link: [
+    { rel: 'canonical', href: 'https://countingduo.id/tracing' }
+  ]
+})
+
 const userStore = useUserStore()
 const { openPaywall } = usePaywall()
 

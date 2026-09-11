@@ -967,12 +967,39 @@
 <script setup>
 import { ref, computed } from 'vue'
 
+useSeoMeta({
+  title: 'Tentang CountingDuo — Platform Belajar Ceria & Interaktif Anak Indonesia',
+  description: 'Kenali visi CountingDuo dalam menghadirkan platform edukasi gamifikasi ramah anak usia 4–9 tahun. Dilengkapi 29 jenis kuis interaktif, audio jernih, dan petualangan belajar.',
+  keywords: 'tentang countingduo, aplikasi edukasi anak indonesia, metode belajar anak tk sd, kuis matematika ceria, platform calistung interaktif',
+  ogTitle: 'Tentang CountingDuo — Belajar Seru Ramah Anak Usia Dini',
+  ogDescription: 'Kenali visi CountingDuo dalam menghadirkan pembelajaran ramah anak dengan 29 jenis kuis interaktif, peta skill, dan maskot Kiko.',
+  ogImage: 'https://countingduo.id/images/og-banner.png',
+  ogUrl: 'https://countingduo.id/about',
+  twitterCard: 'summary_large_image'
+})
+
 useHead({
-  title: 'Tentang CountingDuo | Belajar Anak dengan Petualangan Interaktif',
-  meta: [
+  link: [
+    { rel: 'canonical', href: 'https://countingduo.id/about' }
+  ],
+  script: [
     {
-      name: 'description',
-      content: 'Kenali CountingDuo, platform pembelajaran interaktif untuk anak TK dan SD dengan aktivitas bermain, peta petualangan, dan 29 jenis aktivitas belajar.'
+      type: 'application/ld+json',
+      children: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'AboutPage',
+        'name': 'Tentang CountingDuo',
+        'url': 'https://countingduo.id/about',
+        'description': 'Mengenal CountingDuo, inovasi platform edukasi interaktif berbasis gamifikasi untuk anak usia 4–9 tahun di Indonesia.',
+        'mainEntity': {
+          '@type': 'EducationalOrganization',
+          'name': 'CountingDuo',
+          'url': 'https://countingduo.id',
+          'logo': 'https://countingduo.id/images/og-banner.png',
+          'slogan': 'Petualangan Berhitung Ceria untuk Anak Indonesia',
+          'knowsAbout': ['Matematika Anak', 'Sains & Hewan', 'Bahasa Indonesia', 'Logika Interaktif']
+        }
+      })
     }
   ]
 })

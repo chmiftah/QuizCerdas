@@ -216,6 +216,18 @@ import { useUserStore } from '~/stores/user'
 
 const userStore = useUserStore()
 
+useSeoMeta({
+  title: 'Daftar Akun Gratis & Dapatkan 50 XP | CountingDuo',
+  description: 'Daftar akun gratis di CountingDuo untuk menyimpan progres belajar, mengumpulkan bintang, dan menjaga streak belajar anak setiap hari.',
+  robots: 'noindex, follow'
+})
+
+useHead({
+  link: [
+    { rel: 'canonical', href: 'https://countingduo.id/register' }
+  ]
+})
+
 const currentStep = ref(1)
 const totalSteps = 4
 const loading = ref(false)

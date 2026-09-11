@@ -461,6 +461,23 @@ import { useUserStore } from '~/stores/user'
 import { useCourseStore } from '~/stores/course'
 import { usePaywall } from '~/composables/usePaywall'
 
+useSeoMeta({
+  title: 'Dashboard Orang Tua & Laporan Belajar Anak | CountingDuo',
+  description: 'Pantau riwayat latihan kuis, waktu belajar, penguasaan materi, dan rekomendasi latihan harian untuk anak Anda di Area Orang Tua CountingDuo.',
+  keywords: 'dashboard orang tua, pantau belajar anak, laporan belajar calistung anak, riwayat kuis anak, evaluasi belajar anak tk sd',
+  ogTitle: 'Dashboard Orang Tua — CountingDuo',
+  ogDescription: 'Pantau perkembangan dan konsistensi belajar ananda secara transparan dan terukur.',
+  ogImage: 'https://countingduo.id/images/og-banner.png',
+  ogUrl: 'https://countingduo.id/parent-dashboard',
+  twitterCard: 'summary_large_image'
+})
+
+useHead({
+  link: [
+    { rel: 'canonical', href: 'https://countingduo.id/parent-dashboard' }
+  ]
+})
+
 const userStore = useUserStore()
 const courseStore = useCourseStore()
 const { openPaywall } = usePaywall()

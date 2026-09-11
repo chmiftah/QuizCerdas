@@ -449,13 +449,18 @@ const resetCurrentCourseProgress = () => {
   }
 }
 
+useSeoMeta({
+  title: () => courseStore.course?.title ? `${courseStore.course.title} — Petualangan Belajar | CountingDuo` : 'Peta Petualangan Belajar | CountingDuo',
+  description: () => courseStore.course?.description || 'Jelajahi peta petualangan belajar interaktif ramah anak di CountingDuo. Kuis bergambar, checkpoint seru, dan reward bintang.',
+  ogTitle: () => courseStore.course?.title ? `${courseStore.course.title} — CountingDuo` : 'Peta Petualangan Belajar — CountingDuo',
+  ogDescription: () => courseStore.course?.description || 'Jelajahi jalur belajar interaktif anak usia 4–9 tahun.',
+  ogImage: 'https://countingduo.id/images/og-banner.png',
+  twitterCard: 'summary_large_image'
+})
+
 useHead(() => ({
-  title: courseStore.course?.title ? `${courseStore.course.title} | CountingDuo` : 'Peta Petualangan Belajar | CountingDuo',
-  meta: [
-    {
-      name: 'description',
-      content: courseStore.course?.description || 'Jelajahi peta petualangan belajar berhitung interaktif ramah anak di CountingDuo.'
-    }
+  link: [
+    { rel: 'canonical', href: `https://countingduo.id/course${activeCourseId.value ? `?id=${activeCourseId.value}` : ''}` }
   ]
 }))
 </script>

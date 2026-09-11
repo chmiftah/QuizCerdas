@@ -103,6 +103,23 @@ import { ref, onUnmounted } from 'vue'
 import { useUserStore } from '~/stores/user'
 import { useSoundEffects } from '~/composables/useSoundEffects'
 
+useSeoMeta({
+  title: 'Game Bubble Pop Berhitung Balon Angka | CountingDuo',
+  description: 'Main game edukasi pecahkan balon angka interaktif! Latih kecepatan refleks dan pengenalan angka untuk anak TK dan SD secara menyenangkan.',
+  keywords: 'game bubble pop edukasi, game pecah balon angka, permainan berhitung anak tk, game matematika seru anak sd, game edukasi anak',
+  ogTitle: 'Pecahkan Balon Angka — Mini Game Edukasi CountingDuo',
+  ogDescription: 'Pecahkan balon sesuai angka target sebelum waktu habis! Game seru pengasah ketangkasan angka.',
+  ogImage: 'https://countingduo.id/images/og-banner.png',
+  ogUrl: 'https://countingduo.id/games/bubble-pop',
+  twitterCard: 'summary_large_image'
+})
+
+useHead({
+  link: [
+    { rel: 'canonical', href: 'https://countingduo.id/games/bubble-pop' }
+  ]
+})
+
 const userStore = useUserStore()
 const { playPop, playCorrect, playWrong } = useSoundEffects()
 

@@ -1,0 +1,32 @@
+# Robots.txt for CountingDuo / QuizCerdas
+# Allow search engines to index all public educational pages
+
+User-agent: *
+Allow: /
+Allow: /catalog
+Allow: /about
+Allow: /pricing
+Allow: /tracing
+Allow: /coloring
+Allow: /nursery-rhymes
+Allow: /games/bubble-pop
+Allow: /leaderboard
+Allow: /shop
+Allow: /parent-dashboard
+Allow: /course/
+
+# Disallow private and administrative areas
+Disallow: /admin/
+Disallow: /admin
+Disallow: /api/
+Disallow: /scratch/
+
+# Googlebot & Bingbot specific directives
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Canonical Sitemap URL
+Sitemap: https://countingduo.id/sitemap.xml

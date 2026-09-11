@@ -166,6 +166,23 @@ import { useSoundEffects } from '~/composables/useSoundEffects'
 import { useUserStore } from '~/stores/user'
 import { usePaywall } from '~/composables/usePaywall'
 
+useSeoMeta({
+  title: 'Mewarnai Gambar Sesuai Angka Online Anak TK & SD | CountingDuo',
+  description: 'Game edukasi mewarnai gambar interaktif berbasis angka (Color by Number). Mengasah kreativitas, fokus, dan pengenalan angka anak usia dini.',
+  keywords: 'game mewarnai anak online, mewarnai gambar sesuai angka, color by number anak tk, aktivitas seni anak, permainan mewarnai edukatif',
+  ogTitle: 'Mewarnai Gambar Sesuai Angka — CountingDuo',
+  ogDescription: 'Aktivitas mewarnai online ceria sesuai angka untuk anak usia 4–9 tahun.',
+  ogImage: 'https://countingduo.id/images/og-banner.png',
+  ogUrl: 'https://countingduo.id/coloring',
+  twitterCard: 'summary_large_image'
+})
+
+useHead({
+  link: [
+    { rel: 'canonical', href: 'https://countingduo.id/coloring' }
+  ]
+})
+
 const { playPop, playCorrect } = useSoundEffects()
 const userStore = useUserStore()
 const { openPaywall } = usePaywall()
