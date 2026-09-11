@@ -171,6 +171,16 @@
               <span class="font-extrabold">{{ userStore.xp }} <span class="hidden sm:inline">XP</span></span>
             </div>
 
+            <!-- Koin Kiko Badge (Shop Currency) -->
+            <NuxtLink 
+              to="/shop"
+              class="flex items-center gap-1 px-1.5 sm:px-2.5 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-amber-100 hover:bg-amber-200 border sm:border-2 border-amber-300 text-amber-900 font-heading font-black text-[11px] sm:text-xs shadow-2xs shrink-0 whitespace-nowrap transition-transform hover:scale-105"
+              title="Koin Kiko Kamu (Klik untuk ke Toko)"
+            >
+              <span class="text-xs sm:text-sm">🪙</span>
+              <span>{{ userStore.coins || 0 }}</span>
+            </NuxtLink>
+
             <!-- Hearts Indicator (Unlimited Hearts for PRO, regular 5 for Free) -->
             <div 
               v-if="userStore.hasUnlimitedHearts"
@@ -201,7 +211,17 @@
               class="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:pl-2 sm:pr-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-colors font-heading text-xs font-bold text-slate-700 cursor-pointer whitespace-nowrap shrink-0"
               title="Menu Profil"
             >
-              <span class="text-base sm:text-lg leading-none">{{ userStore.userAvatar }}</span>
+              <div class="relative flex items-center justify-center shrink-0">
+                <div v-if="userAvatarImage" class="w-6 h-6 sm:w-7 sm:h-7 rounded-xl overflow-hidden border border-amber-300 shadow-xs shrink-0 relative">
+                  <img :src="userAvatarImage" :alt="userStore.userDisplayName" class="w-full h-full object-cover" />
+                  <div class="absolute inset-0 bg-gradient-to-tr from-black/10 via-transparent to-white/20 pointer-events-none"></div>
+                </div>
+                <span v-else class="text-base sm:text-lg leading-none">{{ userAvatarDisplay }}</span>
+                <div v-if="userHatImage" class="absolute -top-2.5 -right-2 w-4 h-4 z-10 filter drop-shadow-xs pointer-events-none">
+                  <img :src="userHatImage" alt="Topi" class="w-full h-full object-contain" />
+                </div>
+                <span v-else-if="userHatDisplay" class="absolute -top-2.5 -right-1.5 text-[11px] drop-shadow-xs z-10">{{ userHatDisplay }}</span>
+              </div>
               <span class="hidden lg:inline max-w-[110px] truncate">{{ userStore.userDisplayName }}</span>
               <span v-if="userStore.isPro" class="hidden sm:inline px-1.5 py-0.2 bg-amber-400 text-amber-950 rounded-md font-heading font-black text-[9px]">PRO</span>
               <ChevronDown class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-500 shrink-0" />
@@ -450,7 +470,7 @@
               class="w-full duo-btn-red py-3 text-sm flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>❤️ Beli Isi Penuh Nyawa</span>
-              <span class="bg-black/20 px-2 py-0.5 rounded-full text-xs font-black">20 XP</span>
+              <span class="bg-black/20 px-2 py-0.5 rounded-full text-xs font-black">20 Koin</span>
             </button>
             <div v-else class="bg-emerald-50 text-emerald-800 text-xs p-2.5 rounded-xl border border-emerald-200 font-extrabold">
               ✨ Nyawa kamu sudah penuh (5/5)!
@@ -492,6 +512,66 @@ const showMobileMenu = ref(false)
 const isActivityActive = computed(() => {
   const path = route.path
   return ['/tracing', '/games/bubble-pop', '/coloring', '/nursery-rhymes', '/shop', '/stickers', '/parent-dashboard'].some(p => path.startsWith(p))
+})
+
+const avatarMap = {
+  avatar_kiko: '🐼',
+  avatar_fox: '🦊',
+  avatar_lion: '🦁',
+  avatar_bunny: '🐰',
+  avatar_owl: '🦉'
+}
+
+const avatarImageMap = {
+  avatar_kiko: '/images/characters/avatar_kiko.jpg',
+  avatar_fox: '/images/characters/avatar_fox.jpg',
+  avatar_lion: '/images/characters/avatar_lion.jpg',
+  avatar_bunny: '/images/characters/avatar_bunny.jpg',
+  avatar_owl: '/images/characters/avatar_owl.jpg'
+}
+
+const userAvatarImage = computed(() => {
+  if (userStore.equippedAvatar && avatarImageMap[userStore.equippedAvatar]) {
+    return avatarImageMap[userStore.equippedAvatar]
+  }
+  return null
+})
+
+const hatImageMap = {
+  hat_crown: '/images/costumes/hat_crown.png',
+  hat_grad: '/images/costumes/hat_grad.png',
+  hat_cowboy: '/images/costumes/hat_cowboy.png',
+  hat_cap: '/images/costumes/hat_cap.png',
+  hat_wizard: '/images/costumes/hat_wizard.png'
+}
+
+const userHatImage = computed(() => {
+  if (userStore.equippedHat && hatImageMap[userStore.equippedHat]) {
+    return hatImageMap[userStore.equippedHat]
+  }
+  return null
+})
+
+const hatEmojiMap = {
+  hat_crown: '👑',
+  hat_grad: '🎓',
+  hat_cowboy: '🤠',
+  hat_cap: '🧢',
+  hat_wizard: '🎩'
+}
+
+const userAvatarDisplay = computed(() => {
+  if (userStore.equippedAvatar && avatarMap[userStore.equippedAvatar]) {
+    return avatarMap[userStore.equippedAvatar]
+  }
+  return userStore.userAvatar || '🦉'
+})
+
+const userHatDisplay = computed(() => {
+  if (userStore.equippedHat && hatEmojiMap[userStore.equippedHat]) {
+    return hatEmojiMap[userStore.equippedHat]
+  }
+  return ''
 })
 
 const buyHeartRefill = () => {

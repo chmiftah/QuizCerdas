@@ -174,17 +174,37 @@
             Memuat data modul...
           </div>
 
+          <!-- Empty state if no modules have been attempted yet -->
+          <div v-else-if="attemptedCourses.length === 0" class="text-center py-10 px-4 space-y-3 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
+            <span class="text-4xl block">🌱</span>
+            <h3 class="font-heading font-black text-slate-700 text-base">Belum Ada Modul yang Dikerjakan</h3>
+            <p class="text-xs text-slate-500 font-heading max-w-md mx-auto">
+              Ananda belum mulai mengerjakan latihan pada modul belajar. Ajak Ananda untuk memulai petualangan pertamanya di katalog kursus!
+            </p>
+            <div class="pt-1">
+              <NuxtLink
+                to="/catalog"
+                class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#58cc02] hover:bg-[#46a302] text-white rounded-xl font-heading font-black text-xs shadow-sm hover:scale-105 transition-transform"
+              >
+                <span>📚</span>
+                <span>Buka Katalog Modul</span>
+              </NuxtLink>
+            </div>
+          </div>
+
           <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div
-              v-for="course in courseStore.catalogRegistry"
+              v-for="course in attemptedCourses"
               :key="course.id"
-              class="p-4 rounded-2xl border-2 flex flex-col gap-2.5 transition-all hover:scale-[1.02] hover:shadow-sm cursor-default"
+              @click="openModuleHistory(course.id)"
+              class="p-4 rounded-2xl border-2 flex flex-col gap-2.5 transition-all hover:scale-[1.02] hover:shadow-md cursor-pointer group relative"
               :class="getModuleCardClass(course.id)"
+              title="Klik untuk melihat histori pengerjaan dan evaluasi jawaban"
             >
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2 min-w-0">
-                  <span class="text-xl shrink-0">{{ course.icon || '📖' }}</span>
-                  <span class="font-heading font-black text-xs truncate">{{ course.title }}</span>
+                  <span class="text-xl shrink-0 group-hover:scale-110 transition-transform">{{ course.icon || '📖' }}</span>
+                  <span class="font-heading font-black text-xs truncate group-hover:text-indigo-600 transition-colors">{{ course.title }}</span>
                 </div>
                 <span
                   class="text-[10px] font-heading font-black px-2 py-0.5 rounded-full shrink-0"
@@ -202,9 +222,26 @@
                     :style="{ width: `${getModuleBarWidth(course.id)}%` }"
                   ></div>
                 </div>
-                <p class="text-[11px] font-heading font-bold text-right" :class="getModuleTextClass(course.id)">
-                  {{ getCompletedLessonsForCourse(course.id) }} pelajaran selesai
-                </p>
+                <div class="flex items-center justify-between text-[11px] font-heading font-bold">
+                  <span class="text-slate-400 text-[10px] font-semibold">
+                    {{ getCourseAttemptCount(course.id) > 0 ? `${getCourseAttemptCount(course.id)} soal tercatat` : '' }}
+                  </span>
+                  <p :class="getModuleTextClass(course.id)">
+                    {{ getCompletedLessonsForCourse(course.id) }} pelajaran selesai
+                  </p>
+                </div>
+              </div>
+
+              <!-- Button CTA to see history -->
+              <div class="pt-1 mt-auto border-t border-slate-100/80">
+                <button
+                  type="button"
+                  class="w-full py-1.5 px-2.5 rounded-xl bg-white/80 hover:bg-white text-indigo-700 hover:text-indigo-800 border border-slate-200/70 font-heading font-black text-[11px] flex items-center justify-center gap-1.5 transition-all shadow-2xs group-hover:border-indigo-300 group-hover:bg-indigo-50/50"
+                >
+                  <span>🔍</span>
+                  <span>Lihat Histori & Jawaban</span>
+                  <span class="text-[10px] opacity-60">➔</span>
+                </button>
               </div>
             </div>
           </div>
@@ -401,6 +438,14 @@
           </ul>
         </div>
 
+        <!-- Module History & Answers Modal -->
+        <ModuleHistoryModal
+          :isOpen="isHistoryModalOpen"
+          :courseId="selectedHistoryCourseId"
+          @close="isHistoryModalOpen = false"
+          @selectCourse="selectedHistoryCourseId = $event"
+        />
+
       </div>
     </main>
 
@@ -426,6 +471,17 @@ const isRefreshingActivity = ref(false)
 const recentLogs = ref([])
 const waNumber = ref('')
 const isWaSaved = ref(false)
+const isHistoryModalOpen = ref(false)
+const selectedHistoryCourseId = ref('counting_101')
+
+const openModuleHistory = (courseId) => {
+  selectedHistoryCourseId.value = courseId || 'counting_101'
+  isHistoryModalOpen.value = true
+}
+
+const getCourseAttemptCount = (courseId) => {
+  return (userStore.exerciseHistory || []).filter(h => h.courseId === courseId).length
+}
 
 // ─── Data Fetching ────────────────────────────────────────────────────────────
 const fetchDashboardData = async () => {
@@ -436,11 +492,9 @@ const fetchDashboardData = async () => {
 
   isLoading.value = true
   try {
-    // Force re-fetch courses if catalog is empty (handles SSR/hydration mismatch)
-    const needsCatalogFetch = courseStore.catalogRegistry.length === 0
     await Promise.all([
       userStore.fetchProgressFromDatabase(),
-      courseStore.fetchCoursesFromApi(needsCatalogFetch)
+      courseStore.fetchCoursesFromApi(true)
     ])
 
     // Fetch progress logs for activity feed
@@ -491,10 +545,19 @@ const totalCompletedLessons = computed(() => {
   return Object.values(all).reduce((sum, arr) => sum + (Array.isArray(arr) ? arr.length : 0), 0)
 })
 
-/** Number of distinct courses with at least 1 completed lesson */
+/** Courses that have actually been attempted or completed by the child */
+const attemptedCourses = computed(() => {
+  return (courseStore.catalogRegistry || []).filter(course => {
+    const hasCompletedLessons = (userStore.completedLessonsByCourse?.[course.id] || []).length > 0
+    const hasCompletedCheckpoints = (userStore.completedCheckpointsByCourse?.[course.id] || []).length > 0
+    const hasRecordedAttempts = (userStore.exerciseHistory || []).some(h => h.courseId === course.id)
+    return hasCompletedLessons || hasCompletedCheckpoints || hasRecordedAttempts
+  })
+})
+
+/** Number of distinct courses with at least 1 completed lesson or attempt */
 const exploredCoursesCount = computed(() => {
-  const all = userStore.completedLessonsByCourse || {}
-  return Object.values(all).filter(arr => Array.isArray(arr) && arr.length > 0).length
+  return attemptedCourses.value.length
 })
 
 // ─── Module Progress Helpers ──────────────────────────────────────────────────

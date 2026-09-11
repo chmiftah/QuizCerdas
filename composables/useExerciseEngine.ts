@@ -4,7 +4,20 @@ import { usePaywall } from '~/composables/usePaywall'
 import type { Exercise } from '~/stores/course'
 import confetti from 'canvas-confetti'
 
-export function useExerciseEngine(exercises: Exercise[], onLessonComplete?: (xp: number) => void) {
+export interface ExerciseContext {
+  courseId?: string
+  courseTitle?: string
+  unitId?: string
+  unitTitle?: string
+  lessonId?: string
+  lessonTitle?: string
+}
+
+export function useExerciseEngine(
+  exercises: Exercise[], 
+  onLessonComplete?: (xp: number) => void,
+  context?: ExerciseContext
+) {
   const userStore = useUserStore()
   const { openPaywall } = usePaywall()
 
@@ -228,6 +241,83 @@ export function useExerciseEngine(exercises: Exercise[], onLessonComplete?: (xp:
     isCorrect.value = correct
     isChecked.value = true
     feedbackExplanation.value = ex.explanation
+
+    // Record the attempt for parent dashboard and progress evaluation
+    try {
+      const getUserAnswerString = (): string => {
+        if (ex.type === 'fill_in_blank' || ex.type === 'fill_missing_number') {
+          return fillBlankInput.value.trim() || '(Belum diisi)'
+        }
+        if (ex.type === 'sequence_ordering') {
+          return selectedOption.value ? selectedOption.value.split(',').map(s => s.trim()).join(' ➔ ') : '(Belum diurutkan)'
+        }
+        if (ex.type === 'drag_and_drop' || ex.type === 'seek_find') {
+          return `${dragDropCount.value} objek`
+        }
+        if (ex.type === 'memory_flip') {
+          return `${memoryMatchCount.value} pasangan kartu dicocokkan`
+        }
+        if (ex.type === 'category_sorting') {
+          return categoryMap.value ? categoryMap.value.replace(/::/g, ' ➔ ').replace(/\|/g, ', ') : '(Belum dikelompokkan)'
+        }
+        if (ex.type === 'drag_to_sort') {
+          return dragToSortCategoryMap.value ? dragToSortCategoryMap.value.replace(/::/g, ' ➔ ').replace(/\|/g, ', ') : '(Belum dikelompokkan)'
+        }
+        if (ex.type === 'matching') {
+          const pairs = Object.entries(matchingSelections.value)
+          if (pairs.length === 0) return '(Belum dipasangkan)'
+          return pairs.map(([l, r]) => `${l} ➔ ${r}`).join(', ')
+        }
+        if (ex.type === 'reading') {
+          return selectedOption.value || '(Latihan Membaca)'
+        }
+        if (ex.type === 'true_false' || ex.type === 'true_false_image') {
+          const val = selectedOption.value.toLowerCase()
+          if (val === 'true') return 'Benar'
+          if (val === 'false') return 'Salah'
+          return selectedOption.value || '(Belum dipilih)'
+        }
+        return selectedOption.value || '(Belum dipilih)'
+      }
+
+      const getCorrectAnswerString = (): string => {
+        if (ex.type === 'category_sorting' || ex.type === 'drag_to_sort' || ex.type === 'matching') {
+          return ex.correct_answer.replace(/::/g, ' ➔ ').replace(/\|/g, ', ')
+        }
+        if (ex.type === 'sequence_ordering') {
+          return ex.correct_answer.split(',').map(s => s.trim()).join(' ➔ ')
+        }
+        if (ex.type === 'true_false' || ex.type === 'true_false_image') {
+          const lower = ex.correct_answer.trim().toLowerCase()
+          if (lower === 'true') return 'Benar'
+          if (lower === 'false') return 'Salah'
+        }
+        if (ex.type === 'drag_and_drop' || ex.type === 'seek_find') {
+          return `${ex.correct_answer} objek`
+        }
+        return ex.correct_answer || '-'
+      }
+
+      userStore.recordExerciseAttempt({
+        id: `attempt_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+        courseId: context?.courseId || 'counting_101',
+        courseTitle: context?.courseTitle || 'Petualangan Modul',
+        unitId: context?.unitId || '',
+        unitTitle: context?.unitTitle || '',
+        lessonId: context?.lessonId || '',
+        lessonTitle: context?.lessonTitle || 'Latihan',
+        exerciseId: ex.id,
+        exerciseType: ex.type,
+        question: ex.question || 'Latihan Soal',
+        userAnswer: getUserAnswerString(),
+        correctAnswer: getCorrectAnswerString(),
+        isCorrect: correct,
+        explanation: ex.explanation || '',
+        answeredAt: new Date().toISOString()
+      })
+    } catch (err) {
+      console.warn('[useExerciseEngine] Error recording attempt:', err)
+    }
 
     if (correct) {
       correctCount.value++

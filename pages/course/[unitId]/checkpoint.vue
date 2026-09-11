@@ -88,6 +88,13 @@ onMounted(() => {
   engine.value = useExerciseEngine(checkpoint.value.exercises, (xp) => {
     earnedXP.value = xp
     userStore.completeCheckpoint(checkpoint.value.id, xp, courseStore.activeCourseId)
+  }, {
+    courseId: courseStore.activeCourseId,
+    courseTitle: courseStore.course?.title || 'Modul Belajar',
+    unitId: unitId,
+    unitTitle: courseStore.getUnitById(unitId)?.title || '',
+    lessonId: checkpoint.value?.id || 'checkpoint',
+    lessonTitle: checkpoint.value?.title || 'Checkpoint Ujian'
   })
 })
 

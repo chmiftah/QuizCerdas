@@ -1,22 +1,48 @@
 <template>
   <div 
-    class="min-h-screen bg-slate-50 flex flex-col justify-between pb-32 overflow-x-hidden w-full max-w-full transition-all duration-300"
-    :class="engine.comboCount >= 3 ? 'ring-4 ring-amber-400/60' : ''"
+    class="min-h-screen bg-slate-50 relative flex flex-col justify-between pb-32 overflow-x-hidden w-full max-w-full transition-all duration-300"
+    :class="engine.comboCount >= 5 
+      ? 'ring-4 ring-orange-500 shadow-2xl shadow-orange-500/20' 
+      : engine.comboCount >= 3 
+        ? 'ring-4 ring-amber-400/80' 
+        : ''"
   >
+    <!-- Playful Educational Doodle Background Pattern Layer -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
+      <!-- Ambient Pastel Vignette Gradients for Depth -->
+      <div class="absolute -top-24 -left-24 w-96 h-96 bg-amber-200/25 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-sky-200/25 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-100/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- Seamless Educational Doodle Pattern Tile -->
+      <div 
+        class="absolute inset-0 opacity-[0.065] sm:opacity-[0.075]" 
+        style="background-image: url('/images/patterns/doodle_pattern.svg'); background-repeat: repeat; background-size: 280px 280px;"
+      ></div>
+    </div>
+
     <!-- Lesson Runner Top Header Bar -->
-    <header class="p-2.5 sm:p-4 bg-white/95 backdrop-blur-md border-b-2 border-slate-200 sticky top-0 z-30 shadow-2xs overflow-hidden">
-      <div class="max-w-3xl mx-auto flex items-center justify-between gap-2 sm:gap-4 w-full min-w-0">
+    <header class="px-2.5 py-2 sm:p-4 bg-white/95 backdrop-blur-md border-b-2 border-slate-200 sticky top-0 z-30 shadow-2xs overflow-hidden">
+      <div class="max-w-3xl mx-auto flex items-center justify-between gap-1.5 sm:gap-4 w-full min-w-0">
         <!-- Close / Quit Button -->
         <NuxtLink 
           to="/" 
-          class="w-10 h-10 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center transition-transform active:scale-90 shrink-0 border border-slate-200"
+          class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center transition-transform active:scale-90 shrink-0 border border-slate-200"
           title="Keluar ke Dashboard"
         >
-          <X class="w-6 h-6 stroke-[3]" />
+          <X class="w-4 h-4 sm:w-6 sm:h-6 stroke-[3]" />
         </NuxtLink>
 
-        <!-- Liquid Shimmer Progress Bar Track -->
-        <div class="flex-1 bg-slate-100 h-4 sm:h-5 rounded-full overflow-hidden p-0.5 border-2 border-slate-200 min-w-0 relative shadow-inner">
+        <!-- Question Index Pill (e.g. Soal 2 / 8) -->
+        <div class="flex items-center gap-1 px-2.5 py-1 sm:py-1.5 bg-slate-100 border border-slate-200 rounded-xl sm:rounded-2xl font-heading font-black text-[11px] sm:text-xs text-slate-700 whitespace-nowrap shrink-0 shadow-2xs">
+          <span class="text-slate-400 font-bold hidden xs:inline">Soal</span>
+          <span class="text-emerald-700 font-black">{{ (engine.currentIndex || 0) + 1 }}</span>
+          <span class="text-slate-300 font-bold">/</span>
+          <span class="text-slate-600 font-extrabold">{{ engine.totalExercises || 0 }}</span>
+        </div>
+
+        <!-- Liquid Shimmer Progress Bar Track (Wide & Clear) -->
+        <div class="flex-1 bg-slate-100 h-3.5 sm:h-5 rounded-full overflow-hidden p-0.5 border sm:border-2 border-slate-200 min-w-0 relative shadow-inner">
           <div 
             class="bg-gradient-to-r from-emerald-400 via-emerald-500 to-[#58cc02] h-full rounded-full transition-all duration-500 shadow-md relative overflow-hidden flex items-center justify-end pr-1"
             :style="{ width: `${Math.max(engine.progressPercentage, 4)}%` }"
@@ -26,48 +52,48 @@
           </div>
         </div>
 
-        <!-- Toggle Progress Path Button -->
+        <!-- Active Combo Multiplier Badge with Fiery Glow -->
+        <div 
+          v-if="engine.comboCount >= 2" 
+          class="flex items-center gap-1 px-2 sm:px-3 py-0.5 sm:py-1 bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 text-white rounded-xl sm:rounded-2xl border sm:border-2 border-white font-heading font-black text-[10px] sm:text-xs animate-bounce shadow-md shrink-0" 
+          title="Combo Beruntun!"
+        >
+          <span>🔥 {{ engine.comboCount }}x</span>
+        </div>
+
+        <!-- Toggle Progress Path Button (Desktop only to prevent mobile crowding) -->
         <button 
           @click="isPathOpen = !isPathOpen"
-          class="flex items-center gap-1 px-2.5 sm:px-3.5 py-1.5 bg-amber-50 hover:bg-amber-100 border-2 border-amber-300 text-amber-900 font-heading font-black text-[11px] sm:text-xs rounded-2xl transition-all cursor-pointer shrink-0 shadow-2xs active:scale-95"
+          class="hidden sm:flex items-center gap-1 px-2.5 sm:px-3.5 py-1.5 bg-amber-50 hover:bg-amber-100 border-2 border-amber-300 text-amber-900 font-heading font-black text-[11px] sm:text-xs rounded-2xl transition-all cursor-pointer shrink-0 shadow-2xs active:scale-95"
           title="Tampilkan / Sembunyikan Peta Jalur Belajar"
         >
           <span>🗺️</span>
-          <span class="hidden sm:inline">Peta</span>
+          <span>Peta</span>
           <ChevronDown v-if="!isPathOpen" class="w-3.5 h-3.5 text-amber-700" />
           <ChevronUp v-else class="w-3.5 h-3.5 text-amber-700" />
         </button>
 
-        <!-- Active Combo Multiplier Badge with Fiery Glow -->
-        <div 
-          v-if="engine.comboCount >= 2" 
-          class="flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 text-white rounded-2xl border-2 border-white font-heading font-black text-[11px] sm:text-xs animate-bounce shadow-lg shrink-0" 
-          title="Combo Beruntun!"
-        >
-          <span>🔥 x{{ engine.comboCount }}!</span>
-        </div>
-
-        <!-- Petunjuk Kiko Button -->
+        <!-- Petunjuk Kiko Button (Compact on Mobile) -->
         <button
           @click="toggleHint"
           type="button"
-          class="px-2.5 sm:px-3.5 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-900 border-2 border-amber-300 rounded-2xl font-heading font-black text-xs sm:text-sm flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs shrink-0 active:scale-95"
+          class="w-8 h-8 sm:w-auto px-0 sm:px-3.5 py-0 sm:py-1.5 justify-center bg-amber-100 hover:bg-amber-200 text-amber-900 border sm:border-2 border-amber-300 rounded-xl sm:rounded-2xl font-heading font-black text-xs sm:text-sm flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs shrink-0 active:scale-95"
           title="Petunjuk Kiko"
         >
-          <span>💡</span>
+          <span class="text-sm sm:text-base">💡</span>
           <span class="hidden sm:inline">Petunjuk</span>
         </button>
 
         <!-- Remaining Hearts with Tactile Badge -->
-        <div class="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 bg-rose-50 rounded-2xl border-2 border-rose-200 text-rose-600 font-heading font-black text-xs sm:text-sm shrink-0 shadow-2xs">
-          <Heart class="w-4 h-4 sm:w-5 sm:h-5 fill-rose-500 text-rose-500 animate-pulse" />
+        <div class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3.5 py-1 sm:py-1.5 bg-rose-50 rounded-xl sm:rounded-2xl border sm:border-2 border-rose-200 text-rose-600 font-heading font-black text-xs sm:text-sm shrink-0 shadow-2xs">
+          <Heart class="w-3.5 h-3.5 sm:w-5 sm:h-5 fill-rose-500 text-rose-500 animate-pulse" />
           <span>{{ userStore.hearts }}</span>
         </div>
       </div>
     </header>
 
     <!-- Main Question Container -->
-    <main class="max-w-2xl mx-auto w-full px-3 sm:px-4 py-4 sm:py-8 flex-1 overflow-x-hidden">
+    <main class="max-w-2xl mx-auto w-full px-3 sm:px-4 py-4 sm:py-8 flex-1 overflow-x-hidden relative z-10">
       <div v-if="engine.currentExercise" class="space-y-4 sm:space-y-8 animate-pop w-full min-w-0">
         <!-- Hint Text Drawer (Opens when Hint button is clicked) -->
         <div v-if="engine.showHint" class="p-3.5 sm:p-4 bg-amber-50 border-2 border-amber-300 rounded-2xl text-xs sm:text-sm font-heading font-bold text-amber-900 animate-pop flex items-center gap-3 shadow-sm">
@@ -340,12 +366,15 @@
         <button 
           @click="handleManualCheckAnswer"
           type="button"
-          class="flex-1 px-4 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-heading font-black rounded-2xl transition-all cursor-pointer text-center justify-center min-w-0 select-none active:translate-y-1"
+          class="flex-1 px-4 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-heading font-black rounded-2xl transition-all cursor-pointer text-center justify-center min-w-0 select-none active:translate-y-1 flex items-center gap-2"
           :class="canCheck 
             ? 'duo-btn-green border-b-6 border-emerald-700 shadow-lg shadow-emerald-500/30 hover:scale-[1.01] active:border-b-2' 
             : 'bg-slate-200 border-2 border-b-4 border-slate-300 text-slate-400 cursor-not-allowed'"
         >
           <span class="truncate">PERIKSA JAWABAN 🚀</span>
+          <span v-if="canCheck" class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-lg bg-black/20 text-white/90 text-xs font-heading font-black">
+            ↵ Enter
+          </span>
         </button>
       </div>
     </footer>
@@ -374,7 +403,7 @@
 </template>
 
 <script setup>
-import { ref, computed, unref, watch, onUnmounted } from 'vue'
+import { ref, computed, unref, watch, onMounted, onUnmounted } from 'vue'
 import { useUserStore } from '~/stores/user'
 import { useVoiceNarrator } from '~/composables/useVoiceNarrator'
 import { X, Heart, ChevronDown, ChevronUp } from 'lucide-vue-next'
@@ -479,7 +508,52 @@ watch(() => props.engine.isChecked, (checked) => {
   }
 })
 
+// Keyboard shortcuts handler (1, 2, 3, 4, Enter, Space)
+const handleKeyDown = (e) => {
+  // Ignore if typing in text inputs
+  const tag = document.activeElement?.tagName?.toLowerCase()
+  if (tag === 'input' || tag === 'textarea') {
+    return
+  }
+
+  // 1. If drawer is open (answer checked), Enter or Space advances to next exercise!
+  if (props.engine.isChecked) {
+    if (e.key === 'Enter' || e.key === ' ' || e.code === 'Space') {
+      e.preventDefault()
+      props.engine.nextExercise()
+      return
+    }
+  }
+
+  // 2. If not checked yet, Enter checks answer
+  if (e.key === 'Enter') {
+    e.preventDefault()
+    handleManualCheckAnswer()
+    return
+  }
+
+  // 3. Number keys 1-9 to select options for choice questions
+  const num = parseInt(e.key)
+  if (!isNaN(num) && num >= 1 && num <= 9 && !props.engine.isChecked) {
+    const opts = currentExerciseOptions.value
+    if (opts && opts.length >= num) {
+      e.preventDefault()
+      const selected = opts[num - 1]
+      props.engine.selectOption(selected)
+    }
+  }
+}
+
+onMounted(() => {
+  if (typeof window !== 'undefined') {
+    window.addEventListener('keydown', handleKeyDown)
+  }
+})
+
 onUnmounted(() => {
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('keydown', handleKeyDown)
+  }
   narrator.stop()
 })
 

@@ -25,6 +25,24 @@ export interface DailyQuest {
   type: 'complete_lessons' | 'earn_xp' | 'perfect_score'
 }
 
+export interface ExerciseAttempt {
+  id: string
+  courseId: string
+  courseTitle?: string
+  unitId?: string
+  unitTitle?: string
+  lessonId: string
+  lessonTitle?: string
+  exerciseId: string
+  exerciseType?: string
+  question: string
+  userAnswer: string
+  correctAnswer: string
+  isCorrect: boolean
+  explanation?: string
+  answeredAt: string
+}
+
 export interface UserState {
   currentUser: UserProfile | null
   isAuthenticated: boolean
@@ -32,6 +50,7 @@ export interface UserState {
   subscriptionExpiresAt: string | null
   xp: number
   weeklyXP: number
+  coins: number
   hearts: number
   maxHearts: number
   streak: number
@@ -49,6 +68,7 @@ export interface UserState {
   lastQuestResetDate: string | null
   dailyQuests: DailyQuest[]
   claimedChests: string[]
+  exerciseHistory: ExerciseAttempt[]
 }
 
 const createDefaultDailyQuests = (): DailyQuest[] => [
@@ -98,6 +118,7 @@ export const useUserStore = defineStore('user', {
     subscriptionExpiresAt: null,
     xp: 0,
     weeklyXP: 120,
+    coins: 100,
     hearts: 5,
     maxHearts: 5,
     streak: 1,
@@ -114,7 +135,8 @@ export const useUserStore = defineStore('user', {
     streakFreezeCount: 0,
     lastQuestResetDate: new Date().toDateString(),
     dailyQuests: createDefaultDailyQuests(),
-    claimedChests: []
+    claimedChests: [],
+    exerciseHistory: []
   }),
 
   getters: {
@@ -211,6 +233,21 @@ export const useUserStore = defineStore('user', {
 
     unclaimedQuestsCount: (state) => {
       return (state.dailyQuests || []).filter(q => q.current >= q.target && !q.claimed).length
+    },
+
+    getExerciseHistoryForCourse: (state) => (courseId: string) => {
+      return (state.exerciseHistory || []).filter(h => h.courseId === courseId)
+    },
+
+    getExerciseHistoryStats: (state) => (courseId?: string) => {
+      const list = courseId
+        ? (state.exerciseHistory || []).filter(h => h.courseId === courseId)
+        : (state.exerciseHistory || [])
+      const total = list.length
+      const correct = list.filter(h => h.isCorrect).length
+      const wrong = total - correct
+      const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0
+      return { total, correct, wrong, accuracy }
     }
   },
 
@@ -390,6 +427,7 @@ export const useUserStore = defineStore('user', {
       if (quest && quest.current >= quest.target && !quest.claimed) {
         quest.claimed = true
         this.addXP(quest.rewardXP)
+        this.addCoins(15)
         if (quest.rewardHearts > 0 && this.hearts < this.maxHearts) {
           this.hearts = Math.min(this.maxHearts, this.hearts + quest.rewardHearts)
         }
@@ -406,6 +444,11 @@ export const useUserStore = defineStore('user', {
       this.saveToStorage()
     },
 
+    addCoins(amount: number) {
+      this.coins = (this.coins || 0) + amount
+      this.saveToStorage()
+    },
+
     loseHeart() {
       if (this.hasUnlimitedHearts) return
       if (this.hearts > 0) {
@@ -419,11 +462,22 @@ export const useUserStore = defineStore('user', {
       this.saveToStorage()
     },
 
-    buyHeartRefill(cost: number = 20) {
-      if (this.xp < cost) {
-        throw new Error(`XP kamu belum cukup! Kamu butuh ${cost} XP untuk isi nyawa.`)
+    recordExerciseAttempt(attempt: ExerciseAttempt) {
+      if (!this.exerciseHistory) {
+        this.exerciseHistory = []
       }
-      this.xp -= cost
+      this.exerciseHistory.unshift(attempt)
+      if (this.exerciseHistory.length > 300) {
+        this.exerciseHistory = this.exerciseHistory.slice(0, 300)
+      }
+      this.saveToStorage()
+    },
+
+    buyHeartRefill(cost: number = 20) {
+      if ((this.coins || 0) < cost) {
+        throw new Error(`Koin kamu belum cukup! Kamu butuh ${cost} Koin untuk isi nyawa.`)
+      }
+      this.coins -= cost
       this.refillHearts()
     },
 
@@ -441,6 +495,7 @@ export const useUserStore = defineStore('user', {
       }
 
       this.addXP(xpEarned)
+      this.addCoins(10)
       this.updateStreak()
       this.updateQuestProgress('complete_lessons', 1)
       this.updateQuestProgress('perfect_score', 1)
@@ -461,6 +516,7 @@ export const useUserStore = defineStore('user', {
       }
 
       this.addXP(xpEarned)
+      this.addCoins(25)
       this.updateStreak()
       this.saveToStorage({ lastCompletedCheckpointId: checkpointId, xpEarned, courseId: activeCourse })
     },
@@ -506,6 +562,7 @@ export const useUserStore = defineStore('user', {
 
     resetProgress() {
       this.xp = 0
+      this.coins = 100
       this.hearts = 5
       this.maxHearts = 5
       this.streak = 1
@@ -514,6 +571,7 @@ export const useUserStore = defineStore('user', {
       this.completedLessonsByCourse = {}
       this.completedCheckpointsByCourse = {}
       this.spacedRepetitionQueue = []
+      this.exerciseHistory = []
       if (import.meta.client) {
         try {
           localStorage.clear()
@@ -588,9 +646,11 @@ export const useUserStore = defineStore('user', {
             this.equippedAvatar = data.equippedAvatar ?? 'avatar_kiko'
             this.streakFreezeCount = data.streakFreezeCount ?? 0
             this.weeklyXP = data.weeklyXP ?? 120
+            this.coins = data.coins ?? Math.max(100, Math.floor((data.xp ?? 100) / 2))
             this.lastQuestResetDate = data.lastQuestResetDate ?? new Date().toDateString()
             this.dailyQuests = data.dailyQuests ?? createDefaultDailyQuests()
             this.claimedChests = data.claimedChests ?? []
+            this.exerciseHistory = data.exerciseHistory ?? []
 
             this.rebuildFlatCompletedArrays()
             this.checkAndResetDailyQuests()
@@ -671,14 +731,15 @@ export const useUserStore = defineStore('user', {
         this.claimedChests.push(chestId)
       }
       this.addXP(xpBonus)
+      this.addCoins(30)
       this.saveToStorage({ xpEarned: xpBonus })
     },
 
     buyItem(itemId: string, price: number) {
-      if (this.xp < price) {
-        throw new Error(`XP kamu belum cukup! Kamu butuh ${price} XP.`)
+      if ((this.coins || 0) < price) {
+        throw new Error(`Koin kamu belum cukup! Kamu butuh ${price} Koin.`)
       }
-      this.xp -= price
+      this.coins -= price
       if (!this.unlockedItems.includes(itemId)) {
         this.unlockedItems.push(itemId)
       }
@@ -693,10 +754,10 @@ export const useUserStore = defineStore('user', {
     },
 
     buyStreakFreeze(price: number = 50) {
-      if (this.xp < price) {
-        throw new Error(`XP kamu belum cukup! Kamu butuh ${price} XP.`)
+      if ((this.coins || 0) < price) {
+        throw new Error(`Koin kamu belum cukup! Kamu butuh ${price} Koin.`)
       }
-      this.xp -= price
+      this.coins -= price
       this.streakFreezeCount += 1
       this.saveToStorage()
     },
@@ -710,6 +771,7 @@ export const useUserStore = defineStore('user', {
           subscriptionExpiresAt: this.subscriptionExpiresAt,
           xp: this.xp,
           weeklyXP: this.weeklyXP,
+          coins: this.coins,
           hearts: this.hearts,
           streak: this.streak,
           completedLessonsByCourse: this.completedLessonsByCourse,
@@ -724,7 +786,8 @@ export const useUserStore = defineStore('user', {
           streakFreezeCount: this.streakFreezeCount,
           lastQuestResetDate: this.lastQuestResetDate,
           dailyQuests: this.dailyQuests,
-          claimedChests: this.claimedChests
+          claimedChests: this.claimedChests,
+          exerciseHistory: this.exerciseHistory
         }
         localStorage.setItem('duo_user_progress', JSON.stringify(payload))
 

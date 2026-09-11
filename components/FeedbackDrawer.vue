@@ -47,13 +47,13 @@
             </p>
           </div>
 
-          <!-- Cheering Kiko Mascot on Desktop -->
-          <div class="hidden md:flex items-center justify-center text-4xl shrink-0" :class="isCorrect ? 'animate-bounce' : 'animate-pulse'">
-            {{ isCorrect ? '🦉' : '🐣' }}
+          <!-- Cheering Kiko 3D Mascot on Desktop & Tablet -->
+          <div class="hidden md:flex items-center justify-center shrink-0 transition-transform" :class="isCorrect ? 'animate-bounce' : 'animate-pulse'">
+            <KikoAvatar size="md" />
           </div>
         </div>
 
-        <!-- Action Button -->
+        <!-- Action Button with Enter Keyboard Hint -->
         <button 
           @click="handleNext"
           :disabled="isClicked"
@@ -62,7 +62,12 @@
             ? 'duo-btn-green border-b-6 border-emerald-700 shadow-emerald-500/30' 
             : 'duo-btn-red border-b-6 border-rose-700 shadow-rose-500/30'"
         >
-          <span>{{ isCorrect ? 'LANJUTKAN ➔' : 'MENGERTI 👍' }}</span>
+          <div class="flex items-center justify-center gap-2">
+            <span>{{ isCorrect ? 'LANJUTKAN ➔' : 'MENGERTI 👍' }}</span>
+            <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-lg bg-black/20 text-white/90 text-xs font-heading font-black">
+              ↵ Enter
+            </span>
+          </div>
         </button>
 
       </div>
