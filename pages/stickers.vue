@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-slate-50 flex flex-col justify-between">
-    <!-- Main Top Navigation -->
-    <HeaderNav />
+    <!-- Game App Top Bar -->
+    <AppTopBar />
 
     <!-- Sticker Book Container -->
     <main class="max-w-4xl mx-auto w-full px-4 py-8 flex-1 space-y-8 animate-pop">

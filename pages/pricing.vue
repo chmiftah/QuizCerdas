@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-slate-50 flex flex-col font-body antialiased selection:bg-duo-green selection:text-white">
-    <!-- Main Top Navigation -->
-    <HeaderNav />
+    <!-- Main Top Navigation (Landing Header) -->
+    <LandingHeader />
 
     <main class="flex-1 max-w-5xl mx-auto w-full px-4 py-8 sm:py-12 space-y-10 safe-mobile-padding">
       

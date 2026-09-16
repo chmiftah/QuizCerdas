@@ -1,112 +1,31 @@
 <template>
   <div class="space-y-6 py-2 select-none">
     
-    <!-- Top View Switcher & Quick Navigation Toolbar -->
-    <div class="bg-white/90 backdrop-blur-md px-4 py-3 rounded-3xl border-2 border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-500 text-white flex items-center justify-center font-heading text-lg font-black shadow-md border-b-2 border-amber-600 animate-bounce-slow">
-          🗺️
-        </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <h3 class="font-heading text-base font-black text-slate-800">Peta Petualangan Belajar</h3>
-            <span class="px-2.5 py-0.5 bg-emerald-100 border border-emerald-300 text-emerald-800 rounded-full font-heading font-black text-[11px]">
-              {{ courseStore.units.length }} Bioma
-            </span>
-          </div>
-          <p class="text-[11px] font-heading font-bold text-slate-500 hidden sm:block">
-            Jelajahi setiap pos, buka peti harta karun, dan taklukkan checkpoint!
-          </p>
-        </div>
-      </div>
-
+    <!-- Simplified Top Navigation Bar -->
+    <div class="flex items-center justify-between gap-3 px-1 py-0.5">
       <div class="flex items-center gap-2">
-        <!-- Center/Focus on Active Node Button -->
-        <button 
-          @click="scrollToActiveNode"
-          class="px-3.5 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 rounded-xl font-heading font-black text-xs transition-all active:scale-95 flex items-center gap-1.5 shadow-2xs cursor-pointer"
-          title="Fokus ke Posisi Terakhir"
-        >
-          <span>🎯</span>
-          <span class="hidden sm:inline">Posisi Saya</span>
-        </button>
-
-        <!-- View Mode Switcher Pills -->
-        <div class="p-1 bg-slate-100 rounded-2xl flex items-center gap-1 border border-slate-200">
-          <button 
-            @click="setPathViewMode('classic')"
-            class="px-3 py-1.5 rounded-xl font-heading font-black text-xs transition-all cursor-pointer flex items-center gap-1"
-            :class="pathViewMode === 'classic' ? 'bg-[#58cc02] text-white shadow-md scale-105 border-b-2 border-[#459e03]' : 'text-slate-600 hover:text-slate-900'"
-          >
-            <span>✨ Jalur Petualang</span>
-          </button>
-          <button 
-            @click="setPathViewMode('2d')"
-            class="px-3 py-1.5 rounded-xl font-heading font-black text-xs transition-all cursor-pointer flex items-center gap-1"
-            :class="pathViewMode === '2d' ? 'bg-duo-blue text-white shadow-md scale-105 border-b-2 border-blue-600' : 'text-slate-600 hover:text-slate-900'"
-          >
-            <span>🏝️ Peta Pulau</span>
-          </button>
-          <button 
-            @click="setPathViewMode('3d')"
-            class="px-3 py-1.5 rounded-xl font-heading font-black text-xs transition-all cursor-pointer flex items-center gap-1"
-            :class="pathViewMode === '3d' ? 'bg-purple-500 text-white shadow-md scale-105 border-b-2 border-purple-700' : 'text-slate-600 hover:text-slate-900'"
-          >
-            <span>🌴 3D WebGL</span>
-          </button>
-        </div>
+        <span class="text-xs font-heading font-black text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+          <span>🗺️</span>
+          <span>Peta Petualangan</span>
+        </span>
+        <span class="px-2 py-0.5 bg-emerald-100 border border-emerald-300 text-emerald-800 rounded-full font-heading font-black text-[10px]">
+          {{ courseStore.units.length }} Bioma
+        </span>
       </div>
+
+      <!-- Center/Focus on Active Node Button -->
+      <button 
+        @click="scrollToActiveNode"
+        type="button"
+        class="px-3 py-1.5 bg-white hover:bg-amber-50 text-amber-900 border-2 border-amber-300 rounded-xl font-heading font-black text-xs transition-all active:scale-95 flex items-center gap-1.5 shadow-2xs cursor-pointer"
+        title="Fokus ke Posisi Terakhir Belajar"
+      >
+        <span>🎯</span>
+        <span>Posisi Saya</span>
+      </button>
     </div>
 
-    <!-- Duolingo/Mario Sticky Top Active Unit Header Bar -->
-    <Transition name="slide-down">
-      <div 
-        v-if="showStickyHeader && courseStore.units.length > 0"
-        class="fixed top-16 sm:top-20 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-2rem)] max-w-[calc(56rem-2rem)] rounded-3xl p-3 sm:p-4 text-white shadow-2xl border-4 border-black/15 backdrop-blur-md flex items-center justify-between gap-3 transition-all duration-300 select-none"
-        :class="getUnitHeaderTheme(currentVisibleUnit?.color || 'emerald')"
-      >
-        <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
-          <button 
-            @click="scrollToActiveNode" 
-            class="w-10 h-10 rounded-2xl bg-white/20 hover:bg-white/35 active:scale-95 text-white flex items-center justify-center font-heading font-black text-base shrink-0 border border-white/30 shadow-md cursor-pointer transition-all"
-            title="Lompat ke Posisi Aktif"
-          >
-            🎯
-          </button>
-          <div class="min-w-0 space-y-0.5">
-            <div class="text-[10px] sm:text-xs font-heading font-black uppercase tracking-wider text-white/95 truncate flex items-center gap-1">
-              <span>{{ getUnitBiomeIcon(currentVisibleUnit?.color) }}</span>
-              <span>BIOMA {{ currentVisibleUnit?.order || 1 }} • {{ getUnitBiomeName(currentVisibleUnit?.color) }}</span>
-            </div>
-            <h4 class="font-heading font-black text-sm sm:text-base text-white truncate drop-shadow-xs">
-              {{ currentVisibleUnit?.title || 'Petualangan Belajar' }}
-            </h4>
-          </div>
-        </div>
 
-        <div class="flex items-center gap-3 sm:gap-4 shrink-0">
-          <!-- Mini Progress Bar -->
-          <div v-if="currentVisibleUnit" class="hidden sm:flex flex-col items-end gap-1">
-            <div class="text-[9px] font-heading font-black text-white uppercase tracking-widest drop-shadow-xs">
-              {{ getUnitProgressPercent(currentVisibleUnit) }}% Dikuasai
-            </div>
-            <div class="w-28 h-2.5 bg-black/30 rounded-full overflow-hidden border border-white/20 p-0.5">
-              <div 
-                class="h-full bg-amber-400 rounded-full transition-all shadow-sm"
-                :style="{ width: `${getUnitProgressPercent(currentVisibleUnit)}%` }"
-              ></div>
-            </div>
-          </div>
-
-          <button 
-            @click="showGuidebook(currentVisibleUnit)" 
-            class="px-3.5 py-2 bg-white/25 hover:bg-white/40 active:scale-95 text-white rounded-2xl font-heading font-black text-xs flex items-center gap-1.5 border border-white/30 shadow-md cursor-pointer transition-all uppercase tracking-wider"
-          >
-            <span>📖 PANDUAN</span>
-          </button>
-        </div>
-      </div>
-    </Transition>
 
     <!-- Loading State -->
     <div v-if="courseStore.units.length === 0" class="bg-white rounded-3xl p-10 text-center border-4 border-dashed border-slate-300 space-y-4 shadow-sm animate-pop">
@@ -126,72 +45,25 @@
     <!-- ========================================================================= -->
     <div 
       v-else-if="pathViewMode === 'classic'"
-      class="relative bg-gradient-to-b from-sky-100 via-emerald-50 to-amber-50 rounded-[40px] p-4 sm:p-8 text-slate-800 space-y-16 shadow-2xl border-4 border-emerald-200/80 overflow-hidden min-h-[700px]"
+      class="relative text-slate-800 w-full overflow-visible min-h-[500px] pt-1 pb-8"
     >
-      <!-- Parallax Drifting Clouds in Background -->
-      <div class="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        <div class="clouds-layer clouds-layer-1"></div>
-        <div class="clouds-layer clouds-layer-2"></div>
-      </div>
-
-      <!-- Unit Biomes Loop -->
+      <!-- Unit Biomes Loop (Lazy Loaded / Progressive Infinite Scroll) -->
       <div 
-        v-for="(unit, unitIdx) in courseStore.units" 
+        v-for="(unit, unitIdx) in visibleUnits" 
         :key="unit.id" 
         :id="'unit-container-' + unit.id" 
-        class="relative space-y-8 max-w-lg mx-auto z-10"
+        class="relative space-y-4 max-w-lg mx-auto z-10"
       >
-        <!-- Unit Header Island Banner -->
-        <div class="relative py-4 select-none">
-          <div 
-            class="p-4 sm:p-5 rounded-3xl text-white shadow-xl border-b-4 relative overflow-hidden flex items-center justify-between gap-4"
-            :class="getUnitHeaderTheme(unit.color)"
-          >
-            <!-- Background Soft Ornaments -->
-            <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/20 rounded-full blur-xl pointer-events-none"></div>
-            
-            <div class="space-y-1 min-w-0 z-10">
-              <div class="flex items-center gap-2 flex-wrap">
-                <div class="inline-flex items-center gap-1.5 px-3 py-0.5 bg-white/25 rounded-full text-[11px] font-heading font-black uppercase tracking-wider border border-white/20">
-                  <span>{{ getUnitBiomeIcon(unit.color) }}</span>
-                  <span>BIOMA {{ unit.order }} • {{ getUnitBiomeName(unit.color) }}</span>
-                  <div v-if="isUnitGated(unitIdx)" class="inline-flex items-center gap-1 px-2.5 py-0.5 bg-amber-400 text-amber-950 rounded-full text-[11px] font-heading font-black border border-white/50 shadow-xs animate-bounce-slow">
-                    <span>👑</span> <span>FITUR PRO</span>
-                  </div>
-                </div>
-              </div>
-              <h3 class="font-heading text-xl sm:text-2xl font-black truncate drop-shadow-sm flex items-center gap-2">
-                <span>{{ unit.title }}</span>
-                <span v-if="isUnitGated(unitIdx)" class="text-base text-amber-300">🔒</span>
-              </h3>
-              <p class="text-xs text-white/90 font-body line-clamp-1 max-w-sm">
-                {{ getUnitSummary(unit) }}
-              </p>
-            </div>
-
-            <!-- Unit Action / Progress Pill -->
-            <div v-if="isUnitGated(unitIdx)" class="z-10 shrink-0">
-              <button 
-                @click="openPaywallForUnit"
-                class="px-4 py-2.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-amber-950 font-heading font-black text-xs shadow-lg border-2 border-white cursor-pointer active:scale-95 transition-all flex items-center gap-1.5"
-              >
-                <span>👑</span>
-                <span class="hidden sm:inline">Buka dengan</span> PRO
-              </button>
-            </div>
-
-            <div v-else class="bg-black/20 backdrop-blur-xs px-3.5 py-2 rounded-2xl border border-white/25 text-center shrink-0 space-y-1 z-10">
-              <div class="text-[10px] font-heading font-black text-amber-300 uppercase">
-                {{ getUnitProgressPercent(unit) }}% SELESAI
-              </div>
-              <div class="w-16 sm:w-20 bg-black/30 h-2 rounded-full overflow-hidden p-0.5 border border-white/20">
-                <div 
-                  class="h-full bg-amber-400 rounded-full transition-all"
-                  :style="{ width: `${getUnitProgressPercent(unit)}%` }"
-                ></div>
-              </div>
-            </div>
+        <!-- Sleek Bioma Title Badge (Tampil untuk semua unit termasuk Unit 1) -->
+        <div class="flex items-center justify-center gap-3 py-2 mb-6 sm:mb-8 select-none">
+          <div class="h-0.5 bg-slate-200/80 flex-1 max-w-[80px]"></div>
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/95 backdrop-blur-md border-2 border-slate-200/90 rounded-full shadow-xs font-heading font-black text-xs text-slate-800">
+            <span class="text-sm leading-none">{{ getUnitBiomeIcon(unit.color) }}</span>
+            <span class="text-emerald-700 uppercase tracking-wider font-extrabold text-[11px]">Bioma {{ unit.order }}:</span>
+            <span class="text-slate-800">{{ unit.title }}</span>
+            <span v-if="isUnitGated(unitIdx)" class="px-2 py-0.5 bg-amber-400 text-amber-950 rounded-full text-[10px] font-black">👑 PRO</span>
           </div>
+          <div class="h-0.5 bg-slate-200/80 flex-1 max-w-[80px]"></div>
         </div>
 
         <!-- Overworld Path Container with SVG Lines (Glowing Golden & Cobblestone Path) -->
@@ -269,20 +141,6 @@
             />
           </svg>
 
-          <!-- Floating Thematic Scenery Around Path -->
-          <div class="absolute top-8 left-4 text-3xl animate-float pointer-events-none z-0">
-            {{ getSceneryItem(unit.color, 0) }}
-          </div>
-          <div class="absolute top-[35%] right-4 text-4xl animate-bounce-slow pointer-events-none z-0">
-            {{ getSceneryItem(unit.color, 1) }}
-          </div>
-          <div class="absolute top-[65%] left-3 text-3xl animate-float pointer-events-none z-0">
-            {{ getSceneryItem(unit.color, 2) }}
-          </div>
-          <div class="absolute bottom-12 right-6 text-3xl pointer-events-none z-0">
-            {{ getSceneryItem(unit.color, 3) }}
-          </div>
-
           <!-- Nodes Loop (Lessons, Chests, Checkpoints) -->
           <template v-for="(item, itemIdx) in getClassicUnitNodeItems(unit)" :key="item.id">
             
@@ -295,18 +153,18 @@
               <!-- 1. "MULAI" Live Badge on Active Node -->
               <div 
                 v-if="item.type === 'lesson' && isNextActiveLesson(unit.id, item.id)"
-                class="absolute -top-12 z-30 flex flex-col items-center pointer-events-none animate-bounce"
+                class="absolute -top-8 z-30 flex flex-col items-center pointer-events-none animate-bounce"
               >
-                <div class="relative bg-gradient-to-r from-emerald-500 to-[#58cc02] text-white px-3.5 py-1 rounded-2xl shadow-xl font-heading font-black text-xs uppercase tracking-wider flex items-center gap-1.5 border-2 border-white">
+                <div class="relative bg-gradient-to-r from-emerald-500 to-[#58cc02] text-white px-3 py-1 rounded-full shadow-lg font-heading font-black text-[11px] uppercase tracking-wider flex items-center gap-1 border-2 border-white">
                   <span>MULAI DISINI</span>
-                  <div class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#58cc02] border-r-2 border-b-2 border-white rotate-45"></div>
+                  <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-[#58cc02] border-r-2 border-b-2 border-white rotate-45"></div>
                 </div>
               </div>
 
               <!-- 2. "LOMPAT KE SINI?" Badge on Unlocked Checkpoint -->
               <div 
                 v-else-if="item.type === 'checkpoint' && isCheckpointUnlocked(unit.id) && !isCheckpointCompleted(item.id)"
-                class="absolute -top-12 z-30 flex flex-col items-center pointer-events-none animate-bounce"
+                class="absolute -top-10 z-30 flex flex-col items-center pointer-events-none animate-bounce"
               >
                 <div class="relative bg-gradient-to-r from-purple-500 to-indigo-600 text-white px-3.5 py-1 rounded-2xl shadow-xl font-heading font-black text-xs uppercase tracking-wider flex items-center gap-1.5 border-2 border-white">
                   <span>👑 UJIAN CHECKPOINT</span>
@@ -314,28 +172,28 @@
                 </div>
               </div>
 
-              <!-- 3. LIVE MASCOT KIKO COMPANION (Next to Active Node) -->
+              <!-- 3. LIVE MASCOT KIKO COMPANION (Next to Active Node dengan Jarak Lega) -->
               <div 
                 v-if="item.type === 'lesson' && isNextActiveLesson(unit.id, item.id)"
-                class="absolute -top-6 sm:-top-8 z-30 flex items-center gap-1.5 sm:gap-2 pointer-events-auto cursor-pointer animate-float"
+                class="absolute -top-3 sm:-top-6 z-30 flex items-center gap-2 pointer-events-auto cursor-pointer animate-float"
                 :class="item.x > 200 
-                  ? 'right-16 sm:right-24 flex-row-reverse' 
-                  : 'left-16 sm:left-24'"
+                  ? 'right-20 sm:right-28 flex-row-reverse' 
+                  : 'left-20 sm:left-28'"
                 @click="onTapMascot"
                 title="Klik Kiko untuk menyemangati!"
               >
-                <!-- Mascot Speech Bubble -->
-                <div class="bg-white px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-2xl shadow-lg border-2 border-amber-300 text-[10px] sm:text-[11px] font-heading font-black text-amber-950 max-w-[130px] sm:max-w-[170px] leading-tight relative animate-pop text-center">
+                <!-- Mascot Speech Bubble (Tampil di tablet/desktop agar mobile tetap lega) -->
+                <div class="hidden sm:block bg-white px-3 py-1.5 rounded-2xl shadow-lg border-2 border-amber-300 text-[11px] font-heading font-black text-amber-950 max-w-[150px] leading-tight relative animate-pop text-center">
                   <span>{{ currentMascotSpeech }}</span>
                   <div 
-                    class="absolute top-1/2 -translate-y-1/2 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-white rotate-45"
+                    class="absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-white rotate-45"
                     :class="item.x > 200 
-                      ? '-right-1 border-r-2 border-t-2 border-amber-300' 
-                      : '-left-1 border-l-2 border-b-2 border-amber-300'"
+                      ? '-right-1.5 border-r-2 border-t-2 border-amber-300' 
+                      : '-left-1.5 border-l-2 border-b-2 border-amber-300'"
                   ></div>
                 </div>
                 <!-- Kiko Avatar -->
-                <div class="w-11 h-11 sm:w-14 sm:h-14 rounded-2xl bg-amber-400 text-2xl sm:text-3xl flex items-center justify-center shadow-lg border-2 border-white hover:scale-110 active:scale-95 transition-transform shrink-0">
+                <div class="w-10 h-10 sm:w-13 sm:h-13 rounded-2xl bg-amber-400 text-xl sm:text-2xl flex items-center justify-center shadow-lg border-2 border-white hover:scale-110 active:scale-95 transition-transform shrink-0">
                   🦉
                 </div>
               </div>
@@ -524,14 +382,6 @@
                     <span>⭐</span>
                   </div>
 
-                  <!-- Lesson Number Badge for In-Progress Lessons -->
-                  <div 
-                    v-else-if="isLessonUnlocked(unit.id, item.id)"
-                    class="absolute -top-4 left-1/2 -translate-x-1/2 z-20 px-2.5 py-0.5 bg-white border-2 border-slate-300 rounded-full shadow-md text-slate-800 font-heading font-black text-[10px] flex items-center gap-1 whitespace-nowrap"
-                  >
-                    <span>Pos {{ itemIdx + 1 }}</span>
-                  </div>
-
                   <!-- Main Chunky Tactile Node Button -->
                   <button 
                     @click="onNodeTap(unit.id, item.id, item.type)"
@@ -553,13 +403,13 @@
                     ></div>
                   </button>
 
-                  <!-- Stage Name Badge Below -->
+                  <!-- Stage Name Badge Below (Nomor + Judul Materi Rapi) -->
                   <div 
                     @click="onNodeTap(unit.id, item.id, item.type)"
-                    class="mt-2 text-center bg-white px-3.5 py-1 rounded-2xl border-2 border-slate-200 shadow-xs max-w-[160px] cursor-pointer hover:border-[#58cc02] transition-colors relative z-10"
+                    class="mt-2 text-center bg-white px-3.5 py-1 rounded-2xl border-2 border-slate-200 shadow-xs max-w-[170px] cursor-pointer hover:border-[#58cc02] transition-colors relative z-10"
                   >
                     <span class="font-heading font-extrabold text-xs text-slate-700 block truncate">
-                      {{ item.title }}
+                      {{ itemIdx + 1 }}. {{ item.title }}
                     </span>
                   </div>
                 </div>
@@ -567,6 +417,26 @@
 
             </div>
           </template>
+        </div>
+      </div>
+
+      <!-- Infinite Scroll Trigger / Sentinel (Muat Bertahap Saat Scroll) -->
+      <div v-if="hasMoreUnits" ref="infiniteSentinelRef" class="py-8 flex flex-col items-center justify-center space-y-2 select-none">
+        <button 
+          @click="loadMoreUnits"
+          type="button"
+          class="px-6 py-2.5 bg-white hover:bg-slate-50 border-2 border-slate-200 hover:border-emerald-400 text-slate-700 font-heading font-black text-xs rounded-2xl shadow-xs transition-all active:scale-95 cursor-pointer flex items-center gap-2"
+        >
+          <span>🐾</span>
+          <span>Buka Bioma Selanjutnya ({{ visibleUnits.length }}/{{ courseStore.units.length }}) ➔</span>
+        </button>
+      </div>
+
+      <!-- Finish Milestone Card Saat Semua Bioma Terbuka -->
+      <div v-else-if="courseStore.units && courseStore.units.length > 0" class="py-8 flex flex-col items-center justify-center select-none animate-fade-in">
+        <div class="inline-flex items-center gap-2 px-5 py-2.5 bg-white/95 backdrop-blur-md rounded-2xl border-2 border-amber-300 shadow-xs">
+          <span class="text-xl">🏆</span>
+          <span class="font-heading font-black text-xs text-amber-950">Semua Bioma Petualangan Telah Terbuka ({{ visibleUnits.length }}/{{ courseStore.units.length }})!</span>
         </div>
       </div>
     </div>
@@ -850,6 +720,46 @@ const courseStore = useCourseStore()
 const userStore = useUserStore()
 const { openPaywall } = usePaywall()
 
+// Core Progress & State Getters (Hoisted so always initialized)
+const activeCourseId = computed(() => courseStore.activeCourseId)
+
+const currentCompletedLessons = computed(() => {
+  return userStore.getCompletedLessonsForCourse(activeCourseId.value)
+})
+
+const currentCompletedCheckpoints = computed(() => {
+  return userStore.getCompletedCheckpointsForCourse(activeCourseId.value)
+})
+
+const isLessonUnlocked = (unitId, lessonId) => {
+  return courseStore.isLessonUnlocked(unitId, lessonId, currentCompletedLessons.value, currentCompletedCheckpoints.value)
+}
+
+const isLessonCompleted = (lessonId) => {
+  return userStore.isLessonCompleted(lessonId, activeCourseId.value)
+}
+
+const isCheckpointUnlocked = (unitId) => {
+  return courseStore.isCheckpointUnlocked(unitId, currentCompletedLessons.value)
+}
+
+const isCheckpointCompleted = (checkpointId) => {
+  return userStore.isCheckpointCompleted(checkpointId, activeCourseId.value)
+}
+
+const isNodeCompleted = (unitId, itemId, type) => {
+  return type === 'checkpoint' 
+    ? isCheckpointCompleted(itemId)
+    : isLessonCompleted(itemId)
+}
+
+const isNextActiveLesson = (unitId, lessonId) => {
+  const unit = courseStore.units.find(u => u.id === unitId)
+  if (!unit || !unit.lessons) return false
+  const activeLesson = unit.lessons.find(l => isLessonUnlocked(unitId, l.id) && !isLessonCompleted(l.id))
+  return activeLesson?.id === lessonId
+}
+
 const showAuthModal = ref(false)
 const pendingTargetUrl = ref('')
 const selectedNodeId = ref(null)
@@ -857,6 +767,52 @@ const pathViewMode = ref('classic')
 const collapsedUnits = ref({})
 const currentVisibleUnit = ref(null)
 const showStickyHeader = ref(false)
+
+// Lazy Loading / Infinite Scroll Bioma
+const renderedUnitsCount = ref(1) // Render bioma awal
+const infiniteSentinelRef = ref(null)
+let infiniteObserver = null
+
+const initRenderedUnitsCount = () => {
+  if (!courseStore.units || courseStore.units.length === 0) {
+    renderedUnitsCount.value = 1
+    return
+  }
+  // Buka sampai bioma tempat user sedang aktif belajar
+  const activeUnitIdx = courseStore.units.findIndex(u => {
+    return u.lessons?.some(l => isLessonUnlocked(u.id, l.id) && !isLessonCompleted(l.id))
+  })
+  renderedUnitsCount.value = activeUnitIdx >= 0 ? Math.max(1, activeUnitIdx + 1) : 1
+}
+
+const visibleUnits = computed(() => {
+  if (!courseStore.units || courseStore.units.length === 0) return []
+  return courseStore.units.slice(0, renderedUnitsCount.value)
+})
+
+const hasMoreUnits = computed(() => {
+  return renderedUnitsCount.value < (courseStore.units?.length || 0)
+})
+
+const loadMoreUnits = () => {
+  if (hasMoreUnits.value) {
+    renderedUnitsCount.value++
+  }
+}
+
+const handleScrollInfinite = () => {
+  if (!hasMoreUnits.value) return
+  if (!infiniteSentinelRef.value) return
+  const rect = infiniteSentinelRef.value.getBoundingClientRect()
+  if (rect.top <= (window.innerHeight || 800) + 250) {
+    loadMoreUnits()
+  }
+}
+
+// Reset rendered count saat kursus berganti
+watch(() => courseStore.activeCourseId, () => {
+  initRenderedUnitsCount()
+})
 
 // Chest & Unboxing State
 const activeChestModal = ref(null)
@@ -963,7 +919,7 @@ const claimCurrentChest = () => {
 const getClassicUnitNodeItems = (unit) => {
   const items = []
   const baseWidth = 400
-  const startY = 85
+  const startY = 70
   const ySpacing = 180
   const waveOffsets = [0, 52, -52, 0]
   
@@ -1117,9 +1073,29 @@ const showGuidebook = (unit) => {
 }
 
 onMounted(() => {
+  initRenderedUnitsCount()
   updateActiveUnitOnScroll()
   window.addEventListener('scroll', updateActiveUnitOnScroll, { passive: true })
+  window.addEventListener('scroll', handleScrollInfinite, { passive: true })
   
+  // Setup Infinite Scroll Intersection Observer
+  if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
+    infiniteObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && hasMoreUnits.value) {
+          loadMoreUnits()
+        }
+      })
+    }, { rootMargin: '250px' })
+
+    watch(infiniteSentinelRef, (el) => {
+      if (el) {
+        infiniteObserver?.disconnect()
+        infiniteObserver?.observe(el)
+      }
+    }, { immediate: true })
+  }
+
   nextTick(() => {
     scrollToActiveNode()
     setTimeout(scrollToActiveNode, 300)
@@ -1127,6 +1103,7 @@ onMounted(() => {
 })
 
 watch(() => courseStore.units, () => {
+  initRenderedUnitsCount()
   nextTick(() => {
     updateActiveUnitOnScroll()
     setTimeout(scrollToActiveNode, 300)
@@ -1136,22 +1113,16 @@ watch(() => courseStore.units, () => {
 onUnmounted(() => {
   if (typeof window !== 'undefined') {
     window.removeEventListener('scroll', updateActiveUnitOnScroll)
+    window.removeEventListener('scroll', handleScrollInfinite)
+  }
+  if (infiniteObserver) {
+    infiniteObserver.disconnect()
   }
 })
 
 const handle3DNodeClick = ({ unitId, itemId, type }) => {
   confirmStartNode(unitId, itemId, type)
 }
-
-const activeCourseId = computed(() => courseStore.activeCourseId)
-
-const currentCompletedLessons = computed(() => {
-  return userStore.getCompletedLessonsForCourse(activeCourseId.value)
-})
-
-const currentCompletedCheckpoints = computed(() => {
-  return userStore.getCompletedCheckpointsForCourse(activeCourseId.value)
-})
 
 // Calculate list of items for 2D Map view
 const getUnitNodeItems = (unit) => {
@@ -1275,35 +1246,6 @@ const confirmStartNode = (unitId, itemId, type) => {
 
   selectedNodeId.value = null
   navigateTo(targetPath)
-}
-
-const isLessonUnlocked = (unitId, lessonId) => {
-  return courseStore.isLessonUnlocked(unitId, lessonId, currentCompletedLessons.value, currentCompletedCheckpoints.value)
-}
-
-const isLessonCompleted = (lessonId) => {
-  return userStore.isLessonCompleted(lessonId, activeCourseId.value)
-}
-
-const isCheckpointUnlocked = (unitId) => {
-  return courseStore.isCheckpointUnlocked(unitId, currentCompletedLessons.value)
-}
-
-const isCheckpointCompleted = (checkpointId) => {
-  return userStore.isCheckpointCompleted(checkpointId, activeCourseId.value)
-}
-
-const isNodeCompleted = (unitId, itemId, type) => {
-  return type === 'checkpoint' 
-    ? isCheckpointCompleted(itemId)
-    : isLessonCompleted(itemId)
-}
-
-const isNextActiveLesson = (unitId, lessonId) => {
-  const unit = courseStore.units.find(u => u.id === unitId)
-  if (!unit || !unit.lessons) return false
-  const activeLesson = unit.lessons.find(l => isLessonUnlocked(unitId, l.id) && !isLessonCompleted(l.id))
-  return activeLesson?.id === lessonId
 }
 
 const getUnitHeaderTheme = (color) => {

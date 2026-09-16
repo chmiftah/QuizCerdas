@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-slate-50 flex flex-col font-body antialiased selection:bg-duo-green selection:text-white pb-28 sm:pb-16">
-    <!-- Header Navigation -->
-    <HeaderNav />
+    <!-- Game App Top Bar -->
+    <AppTopBar />
 
     <main id="main-content" class="flex-1 max-w-5xl mx-auto w-full px-3.5 sm:px-6 pt-3 sm:pt-6 space-y-5 safe-mobile-padding">
       <!-- 1. LEAGUE OVERVIEW CONTEXT (COMPACT, WARM & MOBILE-FIRST) -->

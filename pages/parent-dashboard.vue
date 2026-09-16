@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-slate-50 flex flex-col justify-between">
-    <!-- Top Navigation -->
-    <HeaderNav />
+    <!-- Top Navigation (Khusus Orang Tua) -->
+    <LandingHeader />
 
     <main class="max-w-5xl mx-auto w-full px-4 py-8 flex-1 space-y-8">
 

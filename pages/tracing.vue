@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-slate-50 flex flex-col justify-between">
-    <!-- Header -->
-    <HeaderNav />
+    <!-- App Top Bar -->
+    <AppTopBar />
 
     <!-- Main Tracing Room -->
     <main class="max-w-4xl mx-auto w-full px-4 py-8 flex-1 space-y-8 animate-pop">

@@ -1,7 +1,8 @@
 <template>
   <div class="min-h-screen bg-slate-50 flex flex-col font-body antialiased selection:bg-duo-green selection:text-white">
-    <!-- Main Top Navigation Bar -->
-    <HeaderNav />
+    <!-- Main Top Navigation Bar (Disesuaikan berdasarkan Domain & Status Pengguna) -->
+    <AppTopBar v-if="userStore.isAuthenticated || isAppSubdomain" />
+    <LandingHeader v-else />
 
     <!-- Catalog Dashboard Main Container -->
     <main class="max-w-6xl mx-auto w-full px-3.5 sm:px-6 py-4 sm:py-8 flex-1 space-y-6 sm:space-y-8 pb-32 sm:pb-16">
@@ -160,10 +161,9 @@
             <input 
               v-model="searchQuery"
               type="text" 
-              placeholder="🔍 Cari materi..." 
-              class="w-full pl-9 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-heading font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:border-duo-blue focus:bg-white transition-all"
+              placeholder="Cari materi..." 
+              class="w-full px-3.5 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-heading font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:border-duo-blue focus:bg-white transition-all"
             />
-            <span class="absolute left-3 top-2.5 text-xs text-slate-400">🔍</span>
             <button 
               v-if="searchQuery" 
               @click="searchQuery = ''"
@@ -174,7 +174,7 @@
           </div>
         </div>
 
-        <!-- Sub Row: Tier Filter (Semua/Gratis/Pro) & View Switcher (Kartu/Daftar/SkillPath) -->
+        <!-- Sub Row: Tier Filter (Semua/Gratis/Pro) & View Switcher (Kartu/Daftar) -->
         <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs font-heading">
           <!-- Free / Pro Tier Switcher -->
           <div class="flex items-center gap-1 p-1 bg-slate-100 rounded-xl border border-slate-200 font-bold">
@@ -204,7 +204,7 @@
             </button>
           </div>
 
-          <!-- View Mode Toggle: Kartu, Daftar, Skill Path -->
+          <!-- View Mode Toggle: Kartu & Daftar -->
           <div class="flex items-center gap-1 p-1 bg-slate-100 rounded-xl border border-slate-200 font-bold">
             <button 
               @click="viewMode = 'grid'"
@@ -225,16 +225,6 @@
             >
               <span>☰</span>
               <span>Daftar</span>
-            </button>
-            <button 
-              @click="viewMode = 'path'"
-              type="button"
-              class="px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 text-[11px] sm:text-xs"
-              :class="viewMode === 'path' ? 'bg-duo-green text-white shadow-xs font-black' : 'text-slate-500 hover:text-slate-800'"
-              title="Tampilan Alur Jalur Belajar"
-            >
-              <span>🗺️</span>
-              <span>Skill Path</span>
             </button>
           </div>
         </div>
@@ -609,6 +599,7 @@ useHead({
 const userStore = useUserStore()
 const courseStore = useCourseStore()
 const { openPaywall } = usePaywall()
+const { isAppSubdomain } = useAppDomain()
 
 // Reactive filter states
 const selectedGrade = ref('all')

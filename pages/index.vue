@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-slate-50 flex flex-col font-body antialiased selection:bg-duo-green selection:text-white">
-    <!-- Header Navigation -->
-    <HeaderNav />
+    <!-- Header Navigation (Khusus Landing Page Ortu) -->
+    <LandingHeader />
 
     <!-- Access Control Error Banner -->
     <div v-if="accessErrorMsg" class="bg-rose-600 text-white font-heading font-extrabold text-xs sm:text-sm px-4 py-3 text-center relative flex items-center justify-center gap-2 shadow-md">
@@ -1284,7 +1284,7 @@ useHead({
 
 const handleGuestLogin = () => {
   userStore.loginAsGuest()
-  navigateTo('/catalog')
+  navigateTo('/course')
 }
 
 const faqs = [
