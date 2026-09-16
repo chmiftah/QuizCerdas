@@ -74,7 +74,7 @@ export const useAdminStore = defineStore('admin', {
       {
         id: 'usr_3',
         name: 'Admin Utama',
-        email: 'admin@countingduo.id',
+        email: 'admin@pintara.id',
         avatar: '🛡️',
         role: 'admin',
         xp: 1500,

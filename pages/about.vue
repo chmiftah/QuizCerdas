@@ -18,7 +18,7 @@
             <!-- Left Text Column -->
             <div class="lg:col-span-7 space-y-5 text-center lg:text-left">
               <div class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/10 backdrop-blur-md rounded-full text-xs font-heading font-black text-amber-300 border border-white/15 shadow-2xs">
-                <span>🦉 Dunia Belajar CountingDuo</span>
+                <span>🦉 Dunia Belajar Pintara</span>
               </div>
 
               <h1 class="font-heading text-3xl sm:text-5xl lg:text-5xl font-black tracking-tight leading-tight text-white drop-shadow-sm">
@@ -27,7 +27,7 @@
               </h1>
 
               <p class="text-sm sm:text-base text-slate-300 leading-relaxed font-normal max-w-xl mx-auto lg:mx-0">
-                CountingDuo mengubah belajar anak menjadi petualangan interaktif yang membuat si kecil aktif mencoba, bermain, dan memahami konsep secara mandiri.
+                Pintara mengubah belajar anak menjadi petualangan interaktif yang membuat si kecil aktif mencoba, bermain, dan memahami konsep secara mandiri.
               </p>
 
               <!-- CTA Buttons -->
@@ -152,9 +152,9 @@
       </section>
 
       <!-- ===================================================================== -->
-      <!-- 3. SECTION "APA ITU COUNTINGDUO?" (5-SECOND UNDERSTANDING)           -->
+      <!-- 3. SECTION "APA ITU PINTARA?" (5-SECOND UNDERSTANDING)           -->
       <!-- ===================================================================== -->
-      <section class="max-w-6xl mx-auto px-4" aria-label="Apa Itu CountingDuo">
+      <section class="max-w-6xl mx-auto px-4" aria-label="Apa Itu Pintara">
         <div class="bg-white rounded-[36px] p-6 sm:p-12 border-2 border-slate-200 shadow-sm">
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             <!-- Left Copywriting -->
@@ -166,7 +166,7 @@
                 Satu Dunia Belajar untuk Anak
               </h2>
               <p class="text-slate-600 text-sm sm:text-base leading-relaxed font-body">
-                CountingDuo adalah platform pembelajaran interaktif untuk anak yang menggabungkan materi kurikulum, permainan kinestetik, latihan terarah, dan perjalanan belajar dalam satu pengalaman yang utuh.
+                Pintara adalah platform pembelajaran interaktif untuk anak yang menggabungkan materi kurikulum, permainan kinestetik, latihan terarah, dan perjalanan belajar dalam satu pengalaman yang utuh.
               </p>
               <p class="text-slate-600 text-sm sm:text-base leading-relaxed font-body">
                 Di sini, anak tidak dituntut menghafal rumus secara kaku. Mereka diajak bereksplorasi langkah demi langkah di sepanjang peta petualangan, memecahkan teka-teki logika, mengamati sains alam, dan melatih pelafalan bahasa dengan rasa percaya diri.
@@ -176,7 +176,7 @@
             <!-- Right Visual: 5-Step Product Pipeline -->
             <div class="lg:col-span-6 bg-slate-50 rounded-3xl p-6 border-2 border-slate-200/80 space-y-3">
               <div class="text-xs font-heading font-black text-slate-500 uppercase tracking-wider mb-2">
-                Alur Pengalaman Belajar di CountingDuo
+                Alur Pengalaman Belajar di Pintara
               </div>
 
               <div class="space-y-2">
@@ -403,7 +403,7 @@
             Belajar dengan 29 Cara Berbeda
           </h2>
           <p class="text-slate-600 text-xs sm:text-sm font-body max-w-xl mx-auto">
-            Tidak semua anak belajar dengan cara yang sama. Karena itu CountingDuo menghadirkan berbagai bentuk aktivitas kinestetik, visual, logika, dan bahasa.
+            Tidak semua anak belajar dengan cara yang sama. Karena itu Pintara menghadirkan berbagai bentuk aktivitas kinestetik, visual, logika, dan bahasa.
           </p>
         </div>
 
@@ -657,7 +657,7 @@
             Kami Percaya...
           </h2>
           <p class="text-slate-600 text-xs sm:text-sm font-body">
-            Empat keyamanan mendasar yang menjadi fondasi setiap fitur di CountingDuo.
+            Empat keyamanan mendasar yang menjadi fondasi setiap fitur di Pintara.
           </p>
         </div>
 
@@ -668,7 +668,7 @@
             </div>
             <h3 class="font-heading text-lg font-black text-slate-800">Anak tidak harus takut salah</h3>
             <p class="text-xs sm:text-sm text-slate-600 font-body leading-relaxed">
-              Kesalahan bukanlah kegagalan, melainkan petunjuk alami untuk memahami konsep. Di CountingDuo, anak selalu didukung untuk mencoba lagi tanpa kata-kata yang menghakimi.
+              Kesalahan bukanlah kegagalan, melainkan petunjuk alami untuk memahami konsep. Di Pintara, anak selalu didukung untuk mencoba lagi tanpa kata-kata yang menghakimi.
             </p>
           </div>
 
@@ -924,7 +924,7 @@
       <div class="max-w-6xl mx-auto px-4 grid grid-cols-2 sm:grid-cols-4 gap-8">
         <div class="col-span-2 sm:col-span-1 space-y-2">
           <div class="flex items-center gap-2 font-black text-slate-800 text-sm">
-            <span>🦉</span> CountingDuo
+            <span>🦉</span> Pintara
           </div>
           <p class="text-slate-400 font-normal font-body">
             Platform pembelajaran anak usia dini dan SD awal berbasis petualangan interaktif ramah anak.
@@ -952,13 +952,13 @@
         <div class="space-y-2">
           <div class="font-black text-slate-800 uppercase tracking-wider">Tentang</div>
           <ul class="space-y-1.5 font-bold">
-            <li><NuxtLink to="/about" class="text-duo-green">Tentang CountingDuo</NuxtLink></li>
+            <li><NuxtLink to="/about" class="text-duo-green">Tentang Pintara</NuxtLink></li>
             <li><NuxtLink to="/catalog" class="hover:text-duo-green">Mulai Belajar</NuxtLink></li>
           </ul>
         </div>
       </div>
       <div class="max-w-6xl mx-auto px-4 mt-8 pt-6 border-t border-slate-100 text-center text-slate-400">
-        © 2026 CountingDuo • Dibuat dengan cinta untuk anak-anak Indonesia.
+        © 2026 Pintara • Dibuat dengan cinta untuk anak-anak Indonesia.
       </div>
     </footer>
   </div>
@@ -968,19 +968,19 @@
 import { ref, computed } from 'vue'
 
 useSeoMeta({
-  title: 'Tentang CountingDuo — Platform Belajar Ceria & Interaktif Anak Indonesia',
-  description: 'Kenali visi CountingDuo dalam menghadirkan platform edukasi gamifikasi ramah anak usia 4–9 tahun. Dilengkapi 29 jenis kuis interaktif, audio jernih, dan petualangan belajar.',
-  keywords: 'tentang countingduo, aplikasi edukasi anak indonesia, metode belajar anak tk sd, kuis matematika ceria, platform calistung interaktif',
-  ogTitle: 'Tentang CountingDuo — Belajar Seru Ramah Anak Usia Dini',
-  ogDescription: 'Kenali visi CountingDuo dalam menghadirkan pembelajaran ramah anak dengan 29 jenis kuis interaktif, peta skill, dan maskot Kiko.',
-  ogImage: 'https://countingduo.id/images/og-banner.png',
-  ogUrl: 'https://countingduo.id/about',
+  title: 'Tentang Pintara — Platform Belajar Ceria & Interaktif Anak Indonesia',
+  description: 'Kenali visi Pintara dalam menghadirkan platform edukasi gamifikasi ramah anak usia 4–9 tahun. Dilengkapi 29 jenis kuis interaktif, audio jernih, dan petualangan belajar.',
+  keywords: 'tentang pintara, aplikasi edukasi anak indonesia, metode belajar anak tk sd, kuis matematika ceria, platform calistung interaktif',
+  ogTitle: 'Tentang Pintara — Belajar Seru Ramah Anak Usia Dini',
+  ogDescription: 'Kenali visi Pintara dalam menghadirkan pembelajaran ramah anak dengan 29 jenis kuis interaktif, peta skill, dan maskot Kiko.',
+  ogImage: 'https://pintara.id/images/og-banner.png',
+  ogUrl: 'https://pintara.id/about',
   twitterCard: 'summary_large_image'
 })
 
 useHead({
   link: [
-    { rel: 'canonical', href: 'https://countingduo.id/about' }
+    { rel: 'canonical', href: 'https://pintara.id/about' }
   ],
   script: [
     {
@@ -988,14 +988,14 @@ useHead({
       children: JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'AboutPage',
-        'name': 'Tentang CountingDuo',
-        'url': 'https://countingduo.id/about',
-        'description': 'Mengenal CountingDuo, inovasi platform edukasi interaktif berbasis gamifikasi untuk anak usia 4–9 tahun di Indonesia.',
+        'name': 'Tentang Pintara',
+        'url': 'https://pintara.id/about',
+        'description': 'Mengenal Pintara, inovasi platform edukasi interaktif berbasis gamifikasi untuk anak usia 4–9 tahun di Indonesia.',
         'mainEntity': {
           '@type': 'EducationalOrganization',
-          'name': 'CountingDuo',
-          'url': 'https://countingduo.id',
-          'logo': 'https://countingduo.id/images/og-banner.png',
+          'name': 'Pintara',
+          'url': 'https://pintara.id',
+          'logo': 'https://pintara.id/images/og-banner.png',
           'slogan': 'Petualangan Berhitung Ceria untuk Anak Indonesia',
           'knowsAbout': ['Matematika Anak', 'Sains & Hewan', 'Bahasa Indonesia', 'Logika Interaktif']
         }
@@ -1432,13 +1432,13 @@ const filteredModalActivities = computed(() => {
 // FAQ Items
 const faqs = ref([
   {
-    question: 'Untuk rentang usia berapa CountingDuo dirancang?',
-    answer: 'CountingDuo dirancang khusus untuk anak usia dini (PAUD, TK A, TK B) hingga sekolah dasar awal (Kelas 1–3), yakni rentang usia 4 hingga 9 tahun.',
+    question: 'Untuk rentang usia berapa Pintara dirancang?',
+    answer: 'Pintara dirancang khusus untuk anak usia dini (PAUD, TK A, TK B) hingga sekolah dasar awal (Kelas 1–3), yakni rentang usia 4 hingga 9 tahun.',
     open: true
   },
   {
-    question: 'Apakah CountingDuo aman dan bebas dari iklan komersial?',
-    answer: 'Ya, 100% aman. CountingDuo tidak memuat iklan luar atau pop-up komersial yang mengganggu konsentrasi belajar dan keselamatan anak.',
+    question: 'Apakah Pintara aman dan bebas dari iklan komersial?',
+    answer: 'Ya, 100% aman. Pintara tidak memuat iklan luar atau pop-up komersial yang mengganggu konsentrasi belajar dan keselamatan anak.',
     open: false
   },
   {

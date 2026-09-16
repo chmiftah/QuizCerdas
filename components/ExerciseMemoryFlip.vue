@@ -57,7 +57,7 @@
         <!-- Card Back (Covered Pattern) -->
         <div v-else class="w-full h-full flex flex-col items-center justify-center text-white space-y-1">
           <span class="text-3xl sm:text-4xl opacity-90 drop-shadow-xs">❓</span>
-          <span class="font-heading font-black text-[10px] uppercase tracking-wider text-teal-100 opacity-80">CountingDuo</span>
+          <span class="font-heading font-black text-[10px] uppercase tracking-wider text-teal-100 opacity-80">Pintara</span>
         </div>
       </button>
     </div>

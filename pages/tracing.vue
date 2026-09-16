@@ -68,7 +68,7 @@
     </main>
 
     <footer class="p-6 text-center text-xs font-heading font-bold text-slate-400 border-t border-duo-gray-100">
-      CountingDuo — Petualangan Berhitung Ceria untuk Anak Indonesia 🇮🇩
+      Pintara — Petualangan Berhitung Ceria untuk Anak Indonesia 🇮🇩
     </footer>
   </div>
 </template>
@@ -79,19 +79,19 @@ import { useUserStore } from '~/stores/user'
 import { usePaywall } from '~/composables/usePaywall'
 
 useSeoMeta({
-  title: 'Latihan Menulis Angka 1–10 Interaktif Anak TK & SD | CountingDuo',
+  title: 'Latihan Menulis Angka 1–10 Interaktif Anak TK & SD | Pintara',
   description: 'Belajar menulis angka dengan jari atau stylus di layar sentuh. Garis panduan ceria membantu motorik halus anak TK dan SD belajar calistung mandiri.',
   keywords: 'latihan menulis angka anak, tracing angka anak tk, belajar menulis angka 1-10, motorik halus anak, lembar kerja calistung digital',
-  ogTitle: 'Kanvas Menulis Angka Ceria — CountingDuo',
+  ogTitle: 'Kanvas Menulis Angka Ceria — Pintara',
   ogDescription: 'Latihan motorik menulis angka 1 sampai 10 interaktif di browser untuk anak usia dini.',
-  ogImage: 'https://countingduo.id/images/og-banner.png',
-  ogUrl: 'https://countingduo.id/tracing',
+  ogImage: 'https://pintara.id/images/og-banner.png',
+  ogUrl: 'https://pintara.id/tracing',
   twitterCard: 'summary_large_image'
 })
 
 useHead({
   link: [
-    { rel: 'canonical', href: 'https://countingduo.id/tracing' }
+    { rel: 'canonical', href: 'https://pintara.id/tracing' }
   ]
 })
 
@@ -106,7 +106,7 @@ const selectNumber = (num) => {
     openPaywall({
       reason: 'creative_locked',
       title: 'Buka Menulis Angka 6 – 100 ✏️',
-      description: 'Latih motorik dan ketangkasan menulis angka lanjutan dan huruf lengkap dengan QuizCerdas Pro!',
+      description: 'Latih motorik dan ketangkasan menulis angka lanjutan dan huruf lengkap dengan Pintara Pro!',
       featureHighlight: 'Akses Seluruh Modul Tracing & Menulis'
     })
     return

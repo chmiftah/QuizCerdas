@@ -19,7 +19,7 @@
             SERTIFIKAT KELULUSAN RESMI
           </p>
           <h2 class="text-3xl sm:text-4xl font-heading font-black text-slate-900 tracking-tight">
-            CountingDuo Junior 👑
+            Pintara Junior 👑
           </h2>
         </div>
 

@@ -82,8 +82,8 @@ export default defineEventHandler(async (event) => {
         expiresAt: latestSub.expiresAt.toISOString()
       } : null,
       invoice: {
-        number: `INV-QC-${currentYear}-${invoiceId}`,
-        planName: 'QuizCerdas Pro (Akses Penuh 1 Tahun)',
+        number: `INV-PINTARA-${currentYear}-${invoiceId}`,
+        planName: 'Pintara Pro (Akses Penuh 1 Tahun)',
         amount: latestSub?.amount || 99000,
         paymentMethod: latestSub?.paymentMethod === 'qris' ? 'QRIS / GoPay / OVO / DANA' : (latestSub?.paymentMethod || 'QRIS Digital Pay'),
         status: isPro ? 'LUNAS / AKTIF' : 'BATAL / TIDAK AKTIF',

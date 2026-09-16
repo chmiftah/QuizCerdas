@@ -450,7 +450,7 @@
     </main>
 
     <footer class="p-6 text-center text-xs font-heading font-bold text-slate-400 border-t border-slate-100">
-      CountingDuo — Petualangan Berhitung Ceria untuk Anak Indonesia 🇮🇩
+      Pintara — Petualangan Berhitung Ceria untuk Anak Indonesia 🇮🇩
     </footer>
   </div>
 </template>
@@ -462,19 +462,19 @@ import { useCourseStore } from '~/stores/course'
 import { usePaywall } from '~/composables/usePaywall'
 
 useSeoMeta({
-  title: 'Dashboard Orang Tua & Laporan Belajar Anak | CountingDuo',
-  description: 'Pantau riwayat latihan kuis, waktu belajar, penguasaan materi, dan rekomendasi latihan harian untuk anak Anda di Area Orang Tua CountingDuo.',
+  title: 'Dashboard Orang Tua & Laporan Belajar Anak | Pintara',
+  description: 'Pantau riwayat latihan kuis, waktu belajar, penguasaan materi, dan rekomendasi latihan harian untuk anak Anda di Area Orang Tua Pintara.',
   keywords: 'dashboard orang tua, pantau belajar anak, laporan belajar calistung anak, riwayat kuis anak, evaluasi belajar anak tk sd',
-  ogTitle: 'Dashboard Orang Tua — CountingDuo',
+  ogTitle: 'Dashboard Orang Tua — Pintara',
   ogDescription: 'Pantau perkembangan dan konsistensi belajar ananda secara transparan dan terukur.',
-  ogImage: 'https://countingduo.id/images/og-banner.png',
-  ogUrl: 'https://countingduo.id/parent-dashboard',
+  ogImage: 'https://pintara.id/images/og-banner.png',
+  ogUrl: 'https://pintara.id/parent-dashboard',
   twitterCard: 'summary_large_image'
 })
 
 useHead({
   link: [
-    { rel: 'canonical', href: 'https://countingduo.id/parent-dashboard' }
+    { rel: 'canonical', href: 'https://pintara.id/parent-dashboard' }
   ]
 })
 
@@ -719,7 +719,7 @@ const openPaywallForAnalytics = () => {
 
 // ─── SEO ─────────────────────────────────────────────────────────────────────
 useHead({
-  title: 'Dashboard Orang Tua | CountingDuo',
+  title: 'Dashboard Orang Tua | Pintara',
   meta: [
     { name: 'description', content: 'Pantau perkembangan belajar anak Anda secara real-time — XP, streak, modul yang dikuasai, dan rekomendasi belajar.' }
   ]

@@ -13,7 +13,7 @@
         <section class="text-center space-y-3 max-w-2xl mx-auto">
           <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-100 border border-emerald-300 rounded-full text-emerald-900 text-xs sm:text-sm font-heading font-black shadow-xs animate-pop">
             <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
-            <span>👑 LANGGANAN QUIZCERDAS PRO SEDANG AKTIF</span>
+            <span>👑 LANGGANAN PINTARA PRO SEDANG AKTIF</span>
           </div>
 
           <h1 class="font-heading text-3xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">
@@ -38,7 +38,7 @@
                 <div>
                   <div class="flex items-center gap-2">
                     <h2 class="font-heading text-xl sm:text-2xl font-black text-slate-900">
-                      QuizCerdas Pro
+                      Pintara Pro
                     </h2>
                     <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs font-heading font-black">
                       🟢 AKTIF
@@ -224,7 +224,7 @@
           </div>
 
           <h1 class="font-heading text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-            Buka Potensi Penuh Belajar Anak Bersama <span class="text-duo-green underline decoration-duo-yellow decoration-wavy">QuizCerdas Pro</span> 👑
+            Buka Potensi Penuh Belajar Anak Bersama <span class="text-duo-green underline decoration-duo-yellow decoration-wavy">Pintara Pro</span> 👑
           </h1>
 
           <p class="text-sm sm:text-base text-slate-600 font-body leading-relaxed max-w-2xl mx-auto">
@@ -288,7 +288,7 @@
             <div class="bg-white rounded-[22px] p-6 sm:p-8 flex-1 flex flex-col justify-between space-y-6">
               <div class="space-y-4">
                 <div class="space-y-1 pt-1">
-                  <div class="text-xs font-heading font-black uppercase tracking-wider text-amber-600">QUIZCERDAS PRO</div>
+                  <div class="text-xs font-heading font-black uppercase tracking-wider text-amber-600">PINTARA PRO</div>
                   <h3 class="font-heading text-2xl sm:text-3xl font-black text-slate-900">Akses Penuh Pro</h3>
                   <p class="text-xs text-slate-500 font-body">Pengalaman belajar terlengkap, seru, dan tanpa batas untuk anak.</p>
                 </div>
@@ -333,7 +333,7 @@
                 @click="openCheckoutModal('pro')"
                 class="w-full py-4 duo-btn-yellow text-sm font-heading font-black shadow-xl hover:scale-105 active:scale-95 transition-transform cursor-pointer"
               >
-                🚀 Aktifkan QuizCerdas Pro (Rp 99.000)
+                🚀 Aktifkan Pintara Pro (Rp 99.000)
               </button>
             </div>
           </div>
@@ -359,7 +359,7 @@
         <section class="max-w-3xl mx-auto space-y-6">
           <div class="text-center space-y-1">
             <h3 class="font-heading text-2xl font-black text-slate-800">Pertanyaan yang Sering Diajukan (FAQ)</h3>
-            <p class="text-xs text-slate-500">Semua yang perlu Ayah & Bunda ketahui tentang QuizCerdas Pro</p>
+            <p class="text-xs text-slate-500">Semua yang perlu Ayah & Bunda ketahui tentang Pintara Pro</p>
           </div>
 
           <div class="space-y-3">
@@ -400,14 +400,14 @@
             </div>
             <h3 class="font-heading text-2xl font-black text-slate-900">Perpanjang Langganan</h3>
             <p class="text-xs text-slate-600 font-body">
-              Tambahkan 1 Tahun (12 Bulan) masa aktif ke akun QuizCerdas Pro anak Anda.
+              Tambahkan 1 Tahun (12 Bulan) masa aktif ke akun Pintara Pro anak Anda.
             </p>
           </div>
 
           <div class="bg-amber-50/70 rounded-2xl p-4 border border-amber-200 space-y-2.5 text-xs font-heading">
             <div class="flex justify-between items-center text-slate-600">
               <span>Paket:</span>
-              <span class="font-black text-slate-900">QuizCerdas Pro (1 Tahun)</span>
+              <span class="font-black text-slate-900">Pintara Pro (1 Tahun)</span>
             </div>
             <div class="flex justify-between items-center text-slate-600">
               <span>Masa Aktif Saat Ini:</span>
@@ -472,7 +472,7 @@
                   🦉
                 </div>
                 <div>
-                  <h4 class="font-heading text-lg font-black text-slate-900 leading-tight">QuizCerdas</h4>
+                  <h4 class="font-heading text-lg font-black text-slate-900 leading-tight">Pintara</h4>
                   <p class="text-[10px] text-slate-400 font-body">Platform Belajar Cerdas & Menyenangkan</p>
                 </div>
               </div>
@@ -506,7 +506,7 @@
               </div>
               <div class="p-3 bg-white space-y-1">
                 <div class="flex justify-between font-heading font-bold text-slate-800">
-                  <span>QuizCerdas Pro (Akses Penuh 1 Tahun)</span>
+                  <span>Pintara Pro (Akses Penuh 1 Tahun)</span>
                   <span>Rp 99.000</span>
                 </div>
                 <p class="text-[10px] text-slate-500 font-body">
@@ -523,7 +523,7 @@
             <div class="text-[10px] text-slate-500 space-y-1 border-t border-slate-100 pt-3">
               <p>Metode Pembayaran: <strong class="text-slate-700">{{ invoiceInfo.paymentMethod }}</strong></p>
               <p>Masa Aktif Layanan: <strong class="text-slate-700">{{ userStore.subscriptionFormattedExpiry }}</strong></p>
-              <p class="text-slate-400 italic">Bukti pembayaran digital ini sah dan diterbitkan secara otomatis oleh sistem QuizCerdas.</p>
+              <p class="text-slate-400 italic">Bukti pembayaran digital ini sah dan diterbitkan secara otomatis oleh sistem Pintara.</p>
             </div>
           </div>
 
@@ -623,19 +623,19 @@ import { Calendar, Clock, CreditCard, CheckCircle, RefreshCw, Printer } from 'lu
 import confetti from 'canvas-confetti'
 
 useSeoMeta({
-  title: 'Paket & Biaya Langganan QuizCerdas Pro — Belajar Tanpa Batas',
-  description: 'Dapatkan akses tak terbatas ke seluruh materi, nyawa tanpa batas, laporan WhatsApp mingguan, dan ratusan latihan interaktif untuk anak dengan QuizCerdas Pro.',
-  keywords: 'harga quizcerdas pro, biaya langganan aplikasi belajar anak, bimbel online anak tk sd, langganan calistung anak, edukasi anak tanpa iklan',
-  ogTitle: 'Paket Belajar QuizCerdas Pro — Mulai Rp 99.000 / Tahun',
+  title: 'Paket & Biaya Langganan Pintara Pro — Belajar Tanpa Batas',
+  description: 'Dapatkan akses tak terbatas ke seluruh materi, nyawa tanpa batas, laporan WhatsApp mingguan, dan ratusan latihan interaktif untuk anak dengan Pintara Pro.',
+  keywords: 'harga pintara pro, biaya langganan aplikasi belajar anak, bimbel online anak tk sd, langganan calistung anak, edukasi anak tanpa iklan',
+  ogTitle: 'Paket Belajar Pintara Pro — Mulai Rp 99.000 / Tahun',
   ogDescription: 'Beri anak akses tanpa batas ke seluruh petualangan belajar, nyawa tak terhingga, dan sertifikat prestasi resmi.',
-  ogImage: 'https://countingduo.id/images/og-banner.png',
-  ogUrl: 'https://countingduo.id/pricing',
+  ogImage: 'https://pintara.id/images/og-banner.png',
+  ogUrl: 'https://pintara.id/pricing',
   twitterCard: 'summary_large_image'
 })
 
 useHead({
   link: [
-    { rel: 'canonical', href: 'https://countingduo.id/pricing' }
+    { rel: 'canonical', href: 'https://pintara.id/pricing' }
   ],
   script: [
     {
@@ -643,12 +643,12 @@ useHead({
       children: JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'Product',
-        'name': 'QuizCerdas Pro',
+        'name': 'Pintara Pro',
         'description': 'Akses langganan penuh untuk belajar anak usia 4–9 tahun dengan nyawa tanpa batas, laporan WhatsApp mingguan, dan sertifikat.',
-        'image': 'https://countingduo.id/images/og-banner.png',
+        'image': 'https://pintara.id/images/og-banner.png',
         'offers': {
           '@type': 'Offer',
-          'url': 'https://countingduo.id/pricing',
+          'url': 'https://pintara.id/pricing',
           'priceCurrency': 'IDR',
           'price': '99000',
           'priceValidUntil': '2026-12-31',
@@ -685,8 +685,8 @@ const showToast = (msg: string, type: 'success' | 'info' = 'success') => {
 
 // Invoice state
 const invoiceInfo = ref({
-  number: `INV-QC-${new Date().getFullYear()}-001`,
-  planName: 'QuizCerdas Pro (Akses Penuh 1 Tahun)',
+  number: `INV-PINTARA-${new Date().getFullYear()}-001`,
+  planName: 'Pintara Pro (Akses Penuh 1 Tahun)',
   amount: 99000,
   paymentMethod: 'QRIS / GoPay / DANA',
   date: new Date().toISOString()
@@ -786,7 +786,7 @@ const printReceipt = () => {
 const openCheckoutModal = (planType: string) => {
   openPaywall({
     reason: 'general',
-    title: 'Tingkatkan ke QuizCerdas Pro 👑',
+    title: 'Tingkatkan ke Pintara Pro 👑',
     description: 'Beri si kecil pengalaman belajar paling lengkap, menyenangkan, dan efektif.'
   })
 }
@@ -794,7 +794,7 @@ const openCheckoutModal = (planType: string) => {
 const faqs = [
   {
     q: 'Apakah bisa digunakan di HP / Tablet / Laptop?',
-    a: 'Bisa! QuizCerdas berjalan lancar di browser Chrome, Safari, HP Android, iPhone, iPad, maupun laptop tanpa perlu install aplikasi berat.'
+    a: 'Bisa! Pintara berjalan lancar di browser Chrome, Safari, HP Android, iPhone, iPad, maupun laptop tanpa perlu install aplikasi berat.'
   },
   {
     q: 'Mengapa sistem Nyawa Tanpa Batas penting untuk anak?',
@@ -802,7 +802,7 @@ const faqs = [
   },
   {
     q: 'Bagaimana cara kerja laporan mingguan ke WhatsApp?',
-    a: 'Ayah/Bunda cukup memasukkan nomor WhatsApp di Parent Dashboard. Setiap hari Minggu pukul 16:00 WIB, bot QuizCerdas akan mengirim ringkasan waktu belajar, materi yang dikuasai, dan saran latihan untuk minggu depan.'
+    a: 'Ayah/Bunda cukup memasukkan nomor WhatsApp di Parent Dashboard. Setiap hari Minggu pukul 16:00 WIB, bot Pintara akan mengirim ringkasan waktu belajar, materi yang dikuasai, dan saran latihan untuk minggu depan.'
   },
   {
     q: 'Metode pembayaran apa saja yang didukung?',

@@ -1271,7 +1271,7 @@
 
             <div>
               <label class="font-bold text-slate-600">Email</label>
-              <input v-model="newUser.email" type="email" placeholder="siswa@countingduo.id" class="w-full p-2.5 rounded-xl border border-slate-300 font-bold" />
+              <input v-model="newUser.email" type="email" placeholder="siswa@pintara.id" class="w-full p-2.5 rounded-xl border border-slate-300 font-bold" />
             </div>
 
             <div>
@@ -1453,7 +1453,7 @@
                 >
                   <span class="text-xl">👑</span>
                   <div class="text-left">
-                    <div>QuizCerdas Pro</div>
+                    <div>Pintara Pro</div>
                     <div class="text-[10px] font-normal opacity-80">Hanya untuk akun Pro</div>
                   </div>
                 </button>
@@ -1593,7 +1593,7 @@
                 >
                   <span class="text-xl">👑</span>
                   <div class="text-left">
-                    <div>QuizCerdas Pro</div>
+                    <div>Pintara Pro</div>
                     <div class="text-[10px] font-normal opacity-80">Hanya untuk akun Pro</div>
                   </div>
                 </button>

@@ -24,7 +24,7 @@
         <!-- Dynamic Header based on Trigger Reason -->
         <div class="text-center space-y-2 pt-1 relative z-10">
           <div class="inline-flex items-center gap-1.5 px-3.5 py-1 bg-gradient-to-r from-amber-400 to-amber-500 text-amber-950 rounded-full font-heading font-black text-xs uppercase tracking-wider shadow-sm border border-amber-300 animate-bounce-slow">
-            <span>👑 QUIZCERDAS PRO</span>
+            <span>👑 PINTARA PRO</span>
           </div>
 
           <h2 class="font-heading text-2xl sm:text-3xl font-black text-slate-900 leading-tight">
@@ -45,7 +45,7 @@
                   🔥 PENAWARAN SPESIAL
                 </div>
                 <h3 class="font-heading text-xl font-black text-slate-900 mt-1">
-                  Akses Penuh QuizCerdas Pro
+                  Akses Penuh Pintara Pro
                 </h3>
               </div>
               <div class="text-left sm:text-right">
@@ -118,7 +118,7 @@
           >
             <span v-if="isProcessing" class="animate-spin text-lg">⏳</span>
             <span v-else>🚀</span>
-            <span>{{ isProcessing ? 'Memproses Langganan...' : 'Aktifkan QuizCerdas Pro (Rp 99.000)' }}</span>
+            <span>{{ isProcessing ? 'Memproses Langganan...' : 'Aktifkan Pintara Pro (Rp 99.000)' }}</span>
           </button>
 
           <!-- Free refill XP alternative if out of hearts -->

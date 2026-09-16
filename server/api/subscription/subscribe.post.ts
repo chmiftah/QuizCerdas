@@ -67,7 +67,7 @@ export default defineEventHandler(async (event) => {
 
     return {
       success: true,
-      message: `Selamat! Akun QuizCerdas ${tier} aktif hingga 1 tahun ke depan! 🎉`,
+      message: `Selamat! Akun Pintara ${tier} aktif hingga 1 tahun ke depan! 🎉`,
       subscription: subscriptionRecord,
       user: {
         id: updatedUser.id,

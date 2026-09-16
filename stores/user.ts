@@ -157,7 +157,7 @@ export const useUserStore = defineStore('user', {
     },
     subscriptionLabel: (state) => {
       if (state.subscriptionTier === 'FAMILY') return 'Paket Keluarga 👨‍👩‍👧‍👦'
-      if (state.subscriptionTier === 'PRO') return 'QuizCerdas Pro 👑'
+      if (state.subscriptionTier === 'PRO') return 'Pintara Pro 👑'
       return 'Akun Gratis 🐣'
     },
     subscriptionDaysLeft: (state) => {
@@ -325,7 +325,7 @@ export const useUserStore = defineStore('user', {
         id: `guest_${Date.now()}`,
         name: 'Tamu Petualang',
         username: 'guest',
-        email: 'guest@countingduo.id',
+        email: 'guest@pintara.id',
         avatar: '🦊',
         grade: 'TK B / Kelas 1',
         dailyGoalMinutes: 5,

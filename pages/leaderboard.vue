@@ -303,19 +303,19 @@ import { useUserStore } from '~/stores/user'
 const userStore = useUserStore()
 
 useSeoMeta({
-  title: 'Papan Peringkat & Liga Mingguan Belajar Anak | CountingDuo',
-  description: 'Bersaing seru dengan teman-teman di Liga Mingguan CountingDuo. Selesaikan kuis, kumpulkan XP, dan raih posisi teratas di Divisi Diamond!',
+  title: 'Papan Peringkat & Liga Mingguan Belajar Anak | Pintara',
+  description: 'Bersaing seru dengan teman-teman di Liga Mingguan Pintara. Selesaikan kuis, kumpulkan XP, dan raih posisi teratas di Divisi Diamond!',
   keywords: 'papan peringkat anak, leaderboard kuis edukasi, liga mingguan belajar, gamifikasi anak sd tk',
-  ogTitle: 'Papan Peringkat Liga Mingguan — CountingDuo',
+  ogTitle: 'Papan Peringkat Liga Mingguan — Pintara',
   ogDescription: 'Kumpulkan XP dari kuis dan naik ke liga belajar berikutnya!',
-  ogImage: 'https://countingduo.id/images/og-banner.png',
-  ogUrl: 'https://countingduo.id/leaderboard',
+  ogImage: 'https://pintara.id/images/og-banner.png',
+  ogUrl: 'https://pintara.id/leaderboard',
   twitterCard: 'summary_large_image'
 })
 
 useHead({
   link: [
-    { rel: 'canonical', href: 'https://countingduo.id/leaderboard' }
+    { rel: 'canonical', href: 'https://pintara.id/leaderboard' }
   ]
 })
 

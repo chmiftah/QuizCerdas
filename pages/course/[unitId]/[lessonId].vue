@@ -118,7 +118,7 @@ onMounted(() => {
     openPaywall({
       reason: 'unit_locked',
       title: `Akses Terkunci: ${courseStore.course.title || 'Modul Pro'} 👑`,
-      description: 'Kursus ini khusus untuk pengguna QuizCerdas Pro. Tingkatkan akun Anda untuk mengakses materi!',
+      description: 'Kursus ini khusus untuk pengguna Pintara Pro. Tingkatkan akun Anda untuk mengakses materi!',
       featureHighlight: 'Akses Penuh Kursus Pro'
     })
     router.push('/catalog')

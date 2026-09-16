@@ -45,7 +45,7 @@ export default defineEventHandler(async (event) => {
 
     return {
       success: true,
-      message: 'Langganan QuizCerdas Pro berhasil dibatalkan.',
+      message: 'Langganan Pintara Pro berhasil dibatalkan.',
       user: {
         id: updatedUser.id,
         subscriptionTier: updatedUser.subscriptionTier,

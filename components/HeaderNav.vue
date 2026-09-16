@@ -3,13 +3,13 @@
     <div class="max-w-6xl mx-auto flex items-center justify-between gap-1.5 sm:gap-2">
       <!-- App Brand Logo & Desktop Navigation Links -->
       <div class="flex items-center gap-3 lg:gap-6 shrink-0">
-        <NuxtLink to="/" class="flex items-center gap-1.5 sm:gap-2 group active:scale-95 transition-transform shrink-0" title="CountingDuo">
+        <NuxtLink to="/" class="flex items-center gap-1.5 sm:gap-2 group active:scale-95 transition-transform shrink-0" title="Pintara">
           <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-2xl bg-duo-green flex items-center justify-center text-white font-heading text-base sm:text-xl shadow-duo-green group-hover:scale-105 transition-transform shrink-0">
             🦉
           </div>
           <div class="flex items-center leading-none">
-            <span class="font-heading text-[15px] sm:text-xl font-black text-duo-green tracking-tight">Counting</span>
-            <span class="font-heading text-[15px] sm:text-xl font-black text-duo-blue tracking-tight">Duo</span>
+            <span class="font-heading text-[15px] sm:text-xl font-black text-duo-green tracking-tight">Pint</span>
+            <span class="font-heading text-[15px] sm:text-xl font-black text-duo-blue tracking-tight">ara</span>
           </div>
         </NuxtLink>
 
@@ -186,7 +186,7 @@
               v-if="userStore.hasUnlimitedHearts"
               @click="showHeartModal = true"
               class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 border sm:border-2 border-amber-300 text-slate-950 font-heading font-black text-[11px] sm:text-xs shadow-md cursor-pointer hover:scale-105 transition-transform shrink-0 whitespace-nowrap animate-pulse-glow" 
-              title="Nyawa Tanpa Batas (QuizCerdas Pro)"
+              title="Nyawa Tanpa Batas (Pintara Pro)"
             >
               <span class="text-xs sm:text-sm">❤️</span>
               <span class="font-black text-amber-950">∞<span class="hidden sm:inline ml-1 font-black">PRO</span></span>

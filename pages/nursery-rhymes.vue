@@ -85,7 +85,7 @@
     </main>
 
     <footer class="p-6 text-center text-xs font-heading font-bold text-slate-400 border-t border-duo-gray-100">
-      CountingDuo — Petualangan Berhitung Ceria untuk Anak Indonesia 🇮🇩
+      Pintara — Petualangan Berhitung Ceria untuk Anak Indonesia 🇮🇩
     </footer>
   </div>
 </template>
@@ -94,19 +94,19 @@
 import { ref, onUnmounted } from 'vue'
 
 useSeoMeta({
-  title: 'Lagu Anak & Karaoke Hitungan Edukatif | CountingDuo',
+  title: 'Lagu Anak & Karaoke Hitungan Edukatif | Pintara',
   description: 'Kumpulan lagu edukasi anak TK dan PAUD: Satu-Satu Aku Sayang Ibu, Dua Mata Saya, Balonku Ada Lima dengan lirik karaoke interaktif.',
   keywords: 'lagu anak edukatif, karaoke lagu anak tk, satu satu aku sayang ibu, dua mata saya, lagu berhitung anak paud, lagu anak indonesia',
-  ogTitle: 'Karaoke & Lagu Hitungan Anak — CountingDuo',
+  ogTitle: 'Karaoke & Lagu Hitungan Anak — Pintara',
   ogDescription: 'Bernyanyi dan mengenal angka bersama lagu anak Indonesia ceria dan ramah anak.',
-  ogImage: 'https://countingduo.id/images/og-banner.png',
-  ogUrl: 'https://countingduo.id/nursery-rhymes',
+  ogImage: 'https://pintara.id/images/og-banner.png',
+  ogUrl: 'https://pintara.id/nursery-rhymes',
   twitterCard: 'summary_large_image'
 })
 
 useHead({
   link: [
-    { rel: 'canonical', href: 'https://countingduo.id/nursery-rhymes' }
+    { rel: 'canonical', href: 'https://pintara.id/nursery-rhymes' }
   ]
 })
 

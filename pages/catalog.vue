@@ -558,7 +558,7 @@
     <!-- App Footer -->
     <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs font-heading text-slate-400">
       <div class="max-w-5xl mx-auto px-4 space-y-1">
-        <p>CountingDuo • Petualangan Belajar Edukatif untuk Anak Usia 4–9 Tahun</p>
+        <p>Pintara • Petualangan Belajar Edukatif untuk Anak Usia 4–9 Tahun</p>
         <p class="text-[11px] text-slate-400">Matematika, Sains & Dunia Hewan, Bahasa Indonesia, dan Logika Interaktif</p>
       </div>
     </footer>
@@ -573,19 +573,19 @@ import { usePaywall } from '~/composables/usePaywall'
 
 // SEO Meta Tags
 useSeoMeta({
-  title: 'Katalog Modul Belajar Anak PAUD, TK & SD | CountingDuo',
+  title: 'Katalog Modul Belajar Anak PAUD, TK & SD | Pintara',
   description: 'Pilihan lengkap materi belajar anak usia 4–9 tahun: Matematika, Sains & Dunia Hewan, Bahasa Indonesia, dan Logika Spasial dengan 29 variasi kuis bergambar.',
   keywords: 'katalog modul belajar anak, kurikulum paud tk sd, materi calistung anak, soal matematika kelas 1 sd, sains anak tk',
-  ogTitle: 'Katalog Petualangan Belajar Anak — CountingDuo',
+  ogTitle: 'Katalog Petualangan Belajar Anak — Pintara',
   ogDescription: 'Pilih modul belajar anak usia 4–9 tahun dengan quiz interaktif, visual bergambar, dan reward XP.',
-  ogImage: 'https://countingduo.id/images/og-banner.png',
-  ogUrl: 'https://countingduo.id/catalog',
+  ogImage: 'https://pintara.id/images/og-banner.png',
+  ogUrl: 'https://pintara.id/catalog',
   twitterCard: 'summary_large_image'
 })
 
 useHead({
   link: [
-    { rel: 'canonical', href: 'https://countingduo.id/catalog' }
+    { rel: 'canonical', href: 'https://pintara.id/catalog' }
   ],
   script: [
     {
@@ -593,13 +593,13 @@ useHead({
       children: JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'CollectionPage',
-        'name': 'Katalog Modul Belajar CountingDuo',
-        'url': 'https://countingduo.id/catalog',
+        'name': 'Katalog Modul Belajar Pintara',
+        'url': 'https://pintara.id/catalog',
         'description': 'Kumpulan modul pembelajaran edukatif interaktif untuk anak usia 4 hingga 9 tahun.',
         'provider': {
           '@type': 'Organization',
-          'name': 'CountingDuo',
-          'url': 'https://countingduo.id'
+          'name': 'Pintara',
+          'url': 'https://pintara.id'
         }
       })
     }
@@ -764,7 +764,7 @@ const selectAndOpenCourse = (courseId) => {
     openPaywall({
       reason: 'unit_locked',
       title: `Buka Akses Premium: ${targetCourse.title} 👑`,
-      description: `Modul "${targetCourse.title}" merupakan materi pembelajaran premium CountingDuo. Buka akses penuh untuk mendukung kemandirian belajar anak!`,
+      description: `Modul "${targetCourse.title}" merupakan materi pembelajaran premium Pintara. Buka akses penuh untuk mendukung kemandirian belajar anak!`,
       featureHighlight: 'Akses Penuh Kursus Premium'
     })
     return

@@ -154,7 +154,7 @@
                 <span>🔒 MODUL KHUSUS PRO</span>
               </div>
               <h4 class="font-heading text-lg sm:text-xl font-black text-slate-950 leading-snug">
-                Modul Ini Hanya Dapat Diakses Oleh Akun QuizCerdas Pro!
+                Modul Ini Hanya Dapat Diakses Oleh Akun Pintara Pro!
               </h4>
               <p class="text-xs sm:text-sm font-heading font-bold text-amber-950/80">
                 Tingkatkan akun sekarang (Rp 99.000/tahun) untuk membuka seluruh pelajaran dan nyawa tanpa batas.
@@ -317,7 +317,7 @@
     <!-- App Footer -->
     <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs font-heading text-slate-500 mt-12">
       <div class="max-w-4xl mx-auto px-4 space-y-1">
-        <p class="font-bold">CountingDuo EdTech Platform • Nuxt 3 & PostgreSQL</p>
+        <p class="font-bold">Pintara EdTech Platform • Nuxt 3 & PostgreSQL</p>
         <p class="text-slate-400">Pembelajaran Berhitung & Kuis Interaktif Anak SD & TK</p>
       </div>
     </footer>
@@ -407,7 +407,7 @@ const openProPaywall = () => {
   openPaywall({
     reason: 'unit_locked',
     title: `Buka Kursus Pro: ${courseStore.course?.title || 'Modul Pro'} 👑`,
-    description: 'Modul ini merupakan konten pembelajaran eksklusif QuizCerdas Pro. Tingkatkan akun untuk membuka seluruh materi!',
+    description: 'Modul ini merupakan konten pembelajaran eksklusif Pintara Pro. Tingkatkan akun untuk membuka seluruh materi!',
     featureHighlight: 'Akses Penuh Kursus Pro'
   })
 }
@@ -450,17 +450,17 @@ const resetCurrentCourseProgress = () => {
 }
 
 useSeoMeta({
-  title: () => courseStore.course?.title ? `${courseStore.course.title} — Petualangan Belajar | CountingDuo` : 'Peta Petualangan Belajar | CountingDuo',
-  description: () => courseStore.course?.description || 'Jelajahi peta petualangan belajar interaktif ramah anak di CountingDuo. Kuis bergambar, checkpoint seru, dan reward bintang.',
-  ogTitle: () => courseStore.course?.title ? `${courseStore.course.title} — CountingDuo` : 'Peta Petualangan Belajar — CountingDuo',
+  title: () => courseStore.course?.title ? `${courseStore.course.title} — Petualangan Belajar | Pintara` : 'Peta Petualangan Belajar | Pintara',
+  description: () => courseStore.course?.description || 'Jelajahi peta petualangan belajar interaktif ramah anak di Pintara. Kuis bergambar, checkpoint seru, dan reward bintang.',
+  ogTitle: () => courseStore.course?.title ? `${courseStore.course.title} — Pintara` : 'Peta Petualangan Belajar — Pintara',
   ogDescription: () => courseStore.course?.description || 'Jelajahi jalur belajar interaktif anak usia 4–9 tahun.',
-  ogImage: 'https://countingduo.id/images/og-banner.png',
+  ogImage: 'https://pintara.id/images/og-banner.png',
   twitterCard: 'summary_large_image'
 })
 
 useHead(() => ({
   link: [
-    { rel: 'canonical', href: `https://countingduo.id/course${activeCourseId.value ? `?id=${activeCourseId.value}` : ''}` }
+    { rel: 'canonical', href: `https://pintara.id/course${activeCourseId.value ? `?id=${activeCourseId.value}` : ''}` }
   ]
 }))
 </script>

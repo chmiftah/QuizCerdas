@@ -32,7 +32,7 @@
 
             <!-- Subheadline -->
             <p class="text-sm sm:text-base lg:text-lg text-slate-600 font-body leading-relaxed max-w-xl mx-auto lg:mx-0">
-              CountingDuo membantu anak belajar Matematika, Sains, Bahasa, dan Logika melalui quiz interaktif, peta jalur belajar, XP, dan reward. Belajar terasa menyenangkan layaknya bermain.
+              Pintara membantu anak belajar Matematika, Sains, Bahasa, dan Logika melalui quiz interaktif, peta jalur belajar, XP, dan reward. Belajar terasa menyenangkan layaknya bermain.
             </p>
 
             <!-- CTA Group -->
@@ -192,7 +192,7 @@
               Belajar yang Terasa Seperti Bermain
             </h2>
             <p class="text-slate-500 text-xs sm:text-sm font-body">
-              CountingDuo memadukan kurikulum konsep dasar dengan pengalaman interaktif yang menyenangkan bagi anak usia dini.
+              Pintara memadukan kurikulum konsep dasar dengan pengalaman interaktif yang menyenangkan bagi anak usia dini.
             </p>
           </div>
 
@@ -532,7 +532,7 @@
               Coba Sebelum Mendaftar
             </h2>
             <p class="text-slate-500 text-xs sm:text-sm font-body">
-              Lihat sendiri bagaimana quiz di CountingDuo bekerja. Pilih jawaban yang benar dan rasakan feedback instannya!
+              Lihat sendiri bagaimana quiz di Pintara bekerja. Pilih jawaban yang benar dan rasakan feedback instannya!
             </p>
           </div>
 
@@ -923,7 +923,7 @@
               Materi Sesuai Tahap Tumbuh Kembang
             </h2>
             <p class="text-slate-500 text-xs sm:text-sm font-body">
-              CountingDuo dirancang dengan tingkat kesulitan yang tumbuh bersama perkembangan kognitif anak.
+              Pintara dirancang dengan tingkat kesulitan yang tumbuh bersama perkembangan kognitif anak.
             </p>
           </div>
 
@@ -989,7 +989,7 @@
               Dirancang untuk Membantu Anak Belajar dengan Lebih Menyenangkan
             </h2>
             <p class="text-slate-500 text-xs sm:text-sm font-body">
-              CountingDuo dibangun dengan prinsip aman, bebas iklan, dan ramah waktu layar anak.
+              Pintara dibangun dengan prinsip aman, bebas iklan, dan ramah waktu layar anak.
             </p>
           </div>
 
@@ -1030,7 +1030,7 @@
               </div>
               <h3 class="font-heading text-lg font-black text-slate-800">Mudah Diakses di Mana Saja</h3>
               <p class="text-xs sm:text-sm text-slate-600 font-body leading-relaxed">
-                Cukup buka web CountingDuo dari smartphone orang tua, tablet keluarga, atau komputer tanpa repot instalasi aplikasi besar.
+                Cukup buka web Pintara dari smartphone orang tua, tablet keluarga, atau komputer tanpa repot instalasi aplikasi besar.
               </p>
             </div>
           </div>
@@ -1048,7 +1048,7 @@
               Pertanyaan yang Sering Ditanyakan Orang Tua
             </h2>
             <p class="text-xs sm:text-sm text-slate-500 font-body">
-              Temukan jawaban seputar penggunaan CountingDuo untuk ananda.
+              Temukan jawaban seputar penggunaan Pintara untuk ananda.
             </p>
           </div>
 
@@ -1084,7 +1084,7 @@
               Yuk, Mulai Perjalanan Belajar Anak
             </h2>
             <p class="text-xs sm:text-base text-slate-600 font-body max-w-xl mx-auto leading-relaxed">
-              Coba CountingDuo sekarang dan biarkan anak belajar melalui permainan, quiz, dan perjalanan skill yang menyenangkan.
+              Coba Pintara sekarang dan biarkan anak belajar melalui permainan, quiz, dan perjalanan skill yang menyenangkan.
             </p>
           </div>
 
@@ -1122,7 +1122,7 @@
             <div class="w-8 h-8 rounded-xl bg-duo-green flex items-center justify-center text-white text-base">
               🦉
             </div>
-            <span class="text-white font-extrabold text-lg">CountingDuo</span>
+            <span class="text-white font-extrabold text-lg">Pintara</span>
           </div>
           <p class="text-slate-400 text-xs font-body leading-relaxed">
             Platform pembelajaran anak usia 4–9 tahun. Meliputi Matematika, Sains, Bahasa Indonesia, dan Logika Interaktif.
@@ -1153,9 +1153,9 @@
         </div>
 
         <div class="space-y-2">
-          <p class="text-white font-bold text-sm">CountingDuo</p>
+          <p class="text-white font-bold text-sm">Pintara</p>
           <p class="text-slate-400 font-body">Platform belajar anak usia dini dengan quiz, skill path, dan reward.</p>
-          <p class="text-slate-500 text-[11px] pt-2">© 2026 CountingDuo. Hak Cipta Dilindungi.</p>
+          <p class="text-slate-500 text-[11px] pt-2">© 2026 Pintara. Hak Cipta Dilindungi.</p>
         </div>
       </div>
     </footer>
@@ -1181,23 +1181,23 @@ onMounted(() => {
 
 // SEO Meta Tags - Parent-oriented, natural, and honest
 useSeoMeta({
-  title: 'CountingDuo — Belajar Seru untuk Anak Usia 4–9 Tahun',
+  title: 'Pintara — Belajar Seru untuk Anak Usia 4–9 Tahun',
   description: 'Platform belajar anak usia 4–9 tahun dengan quiz interaktif, skill path, XP, dan materi Matematika, Sains, Bahasa, dan Logika.',
   keywords: 'aplikasi belajar anak TK, kuis matematika anak SD, game edukasi anak, belajar berhitung anak, belajar sains anak, platform belajar gamifikasi anak usia dini',
-  ogTitle: 'CountingDuo — Belajar Seru untuk Anak Usia 4–9 Tahun',
+  ogTitle: 'Pintara — Belajar Seru untuk Anak Usia 4–9 Tahun',
   ogDescription: 'Platform belajar anak usia 4–9 tahun dengan quiz interaktif, skill path, XP, dan materi Matematika, Sains, Bahasa, dan Logika.',
   ogImage: '/images/og-banner.png',
   ogType: 'website',
-  ogSiteName: 'CountingDuo',
+  ogSiteName: 'Pintara',
   twitterCard: 'summary_large_image',
-  twitterTitle: 'CountingDuo — Belajar Seru untuk Anak Usia 4–9 Tahun',
+  twitterTitle: 'Pintara — Belajar Seru untuk Anak Usia 4–9 Tahun',
   twitterDescription: 'Platform belajar anak usia 4–9 tahun dengan quiz interaktif, skill path, XP, dan materi Matematika, Sains, Bahasa, dan Logika.'
 })
 
 // JSON-LD Structured Data — Organization + WebApplication + FAQPage (Cleaned from fake ratings)
 useHead({
   link: [
-    { rel: 'canonical', href: 'https://countingduo.id/' }
+    { rel: 'canonical', href: 'https://pintara.id/' }
   ],
   script: [
     {
@@ -1205,8 +1205,8 @@ useHead({
       children: JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'Organization',
-        'name': 'CountingDuo',
-        'url': 'https://countingduo.id',
+        'name': 'Pintara',
+        'url': 'https://pintara.id',
         'description': 'Platform pembelajaran anak usia 4–9 tahun meliputi Matematika, Sains, Bahasa Indonesia, dan Logika Interaktif.',
         'sameAs': []
       })
@@ -1216,8 +1216,8 @@ useHead({
       children: JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'WebApplication',
-        'name': 'CountingDuo',
-        'url': 'https://countingduo.id',
+        'name': 'Pintara',
+        'url': 'https://pintara.id',
         'applicationCategory': 'EducationalApplication',
         'operatingSystem': 'Web Browser, Android, iOS',
         'inLanguage': 'id-ID',
@@ -1243,18 +1243,18 @@ useHead({
         'mainEntity': [
           {
             '@type': 'Question',
-            'name': 'CountingDuo untuk anak usia berapa?',
-            'acceptedAnswer': { '@type': 'Answer', 'text': 'CountingDuo dirancang khusus untuk anak usia 4 hingga 9 tahun, mencakup jenjang PAUD, TK A, TK B, serta Sekolah Dasar Kelas 1 hingga Kelas 3.' }
+            'name': 'Pintara untuk anak usia berapa?',
+            'acceptedAnswer': { '@type': 'Answer', 'text': 'Pintara dirancang khusus untuk anak usia 4 hingga 9 tahun, mencakup jenjang PAUD, TK A, TK B, serta Sekolah Dasar Kelas 1 hingga Kelas 3.' }
           },
           {
             '@type': 'Question',
-            'name': 'Apakah CountingDuo benar-benar gratis?',
-            'acceptedAnswer': { '@type': 'Answer', 'text': 'Ya, CountingDuo dapat digunakan gratis tanpa biaya tersembunyi dan tanpa iklan yang mengganggu.' }
+            'name': 'Apakah Pintara benar-benar gratis?',
+            'acceptedAnswer': { '@type': 'Answer', 'text': 'Ya, Pintara dapat digunakan gratis tanpa biaya tersembunyi dan tanpa iklan yang mengganggu.' }
           },
           {
             '@type': 'Question',
-            'name': 'Mata pelajaran apa saja yang tersedia di CountingDuo?',
-            'acceptedAnswer': { '@type': 'Answer', 'text': 'CountingDuo mencakup 4 mata pelajaran utama: Matematika, Sains & Dunia Hewan, Bahasa Indonesia, serta Seni & Logika.' }
+            'name': 'Mata pelajaran apa saja yang tersedia di Pintara?',
+            'acceptedAnswer': { '@type': 'Answer', 'text': 'Pintara mencakup 4 mata pelajaran utama: Matematika, Sains & Dunia Hewan, Bahasa Indonesia, serta Seni & Logika.' }
           },
           {
             '@type': 'Question',
@@ -1264,17 +1264,17 @@ useHead({
           {
             '@type': 'Question',
             'name': 'Apakah bisa digunakan di HP atau tablet?',
-            'acceptedAnswer': { '@type': 'Answer', 'text': 'Bisa, CountingDuo dirancang responsif dan nyaman digunakan di smartphone (HP), tablet, maupun laptop/komputer.' }
+            'acceptedAnswer': { '@type': 'Answer', 'text': 'Bisa, Pintara dirancang responsif dan nyaman digunakan di smartphone (HP), tablet, maupun laptop/komputer.' }
           },
           {
             '@type': 'Question',
             'name': 'Bagaimana cara orang tua melihat perkembangan belajar anak?',
-            'acceptedAnswer': { '@type': 'Answer', 'text': 'CountingDuo menyediakan halaman Area Orang Tua untuk melihat rangkuman modul yang sudah selesai, total XP, streak harian, serta topik yang masih perlu dilatih kembali.' }
+            'acceptedAnswer': { '@type': 'Answer', 'text': 'Pintara menyediakan halaman Area Orang Tua untuk melihat rangkuman modul yang sudah selesai, total XP, streak harian, serta topik yang masih perlu dilatih kembali.' }
           },
           {
             '@type': 'Question',
             'name': 'Apakah ada iklan yang mengganggu?',
-            'acceptedAnswer': { '@type': 'Answer', 'text': 'Tidak ada iklan. CountingDuo menjaga lingkungan belajar anak tetap aman, bersih, dan bebas distraksi komersial.' }
+            'acceptedAnswer': { '@type': 'Answer', 'text': 'Tidak ada iklan. Pintara menjaga lingkungan belajar anak tetap aman, bersih, dan bebas distraksi komersial.' }
           }
         ]
       })
@@ -1289,12 +1289,12 @@ const handleGuestLogin = () => {
 
 const faqs = [
   {
-    q: 'CountingDuo untuk anak usia berapa?',
-    a: 'CountingDuo dirancang untuk anak usia 4 hingga 9 tahun, mencakup jenjang PAUD, TK A, TK B, serta SD Kelas 1 hingga Kelas 3.'
+    q: 'Pintara untuk anak usia berapa?',
+    a: 'Pintara dirancang untuk anak usia 4 hingga 9 tahun, mencakup jenjang PAUD, TK A, TK B, serta SD Kelas 1 hingga Kelas 3.'
   },
   {
-    q: 'Apakah CountingDuo benar-benar gratis?',
-    a: 'Ya, modul dasar dan kuis interaktif CountingDuo dapat diakses gratis tanpa iklan komersial yang mengganggu fokus anak.'
+    q: 'Apakah Pintara benar-benar gratis?',
+    a: 'Ya, modul dasar dan kuis interaktif Pintara dapat diakses gratis tanpa iklan komersial yang mengganggu fokus anak.'
   },
   {
     q: 'Mata pelajaran apa saja yang tersedia?',
@@ -1306,7 +1306,7 @@ const faqs = [
   },
   {
     q: 'Apakah bisa digunakan di HP atau tablet?',
-    a: 'Bisa! CountingDuo dioptimalkan untuk layar sentuh HP dan tablet, dengan ukuran tombol yang nyaman disentuh jari anak-anak.'
+    a: 'Bisa! Pintara dioptimalkan untuk layar sentuh HP dan tablet, dengan ukuran tombol yang nyaman disentuh jari anak-anak.'
   },
   {
     q: 'Bagaimana cara orang tua melihat perkembangan belajar anak?',

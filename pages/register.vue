@@ -7,7 +7,7 @@
           <div class="w-9 h-9 rounded-xl bg-duo-green flex items-center justify-center text-white font-heading text-lg shadow-duo-green">
             🦉
           </div>
-          <span class="font-heading text-lg font-bold text-slate-800">CountingDuo</span>
+          <span class="font-heading text-lg font-bold text-slate-800">Pintara</span>
         </NuxtLink>
 
         <NuxtLink to="/login" class="text-xs font-heading font-bold text-duo-blue hover:underline">
@@ -205,7 +205,7 @@
 
     <!-- Footer Minimal -->
     <footer class="py-4 text-center text-xs font-heading text-slate-400 border-t border-slate-200 bg-white">
-      CountingDuo EdTech App • Belajar Interaktif SD & TK
+      Pintara EdTech App • Belajar Interaktif SD & TK
     </footer>
   </div>
 </template>
@@ -217,14 +217,14 @@ import { useUserStore } from '~/stores/user'
 const userStore = useUserStore()
 
 useSeoMeta({
-  title: 'Daftar Akun Gratis & Dapatkan 50 XP | CountingDuo',
-  description: 'Daftar akun gratis di CountingDuo untuk menyimpan progres belajar, mengumpulkan bintang, dan menjaga streak belajar anak setiap hari.',
+  title: 'Daftar Akun Gratis & Dapatkan 50 XP | Pintara',
+  description: 'Daftar akun gratis di Pintara untuk menyimpan progres belajar, mengumpulkan bintang, dan menjaga streak belajar anak setiap hari.',
   robots: 'noindex, follow'
 })
 
 useHead({
   link: [
-    { rel: 'canonical', href: 'https://countingduo.id/register' }
+    { rel: 'canonical', href: 'https://pintara.id/register' }
   ]
 })
 

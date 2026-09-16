@@ -77,7 +77,7 @@
     </main>
 
     <footer class="p-6 text-center text-xs font-heading font-bold text-slate-400 border-t border-duo-gray-100">
-      CountingDuo — Petualangan Berhitung Ceria untuk Anak Indonesia 🇮🇩
+      Pintara — Petualangan Berhitung Ceria untuk Anak Indonesia 🇮🇩
     </footer>
   </div>
 </template>
@@ -88,19 +88,19 @@ import { useUserStore } from '~/stores/user'
 import { useSoundEffects } from '~/composables/useSoundEffects'
 
 useSeoMeta({
-  title: 'Album Stiker & Prestasi Belajar Kiko | CountingDuo',
+  title: 'Album Stiker & Prestasi Belajar Kiko | Pintara',
   description: 'Koleksi stiker hadiah belajar interaktif untuk anak. Kumpulkan stiker lucu setiap kali menyelesaikan modul pelajaran dan kuis checkpoint.',
   keywords: 'stiker edukasi anak, reward belajar anak, album stiker prestasi, gamifikasi pembelajaran',
-  ogTitle: 'Album Stiker Hadiah Belajar — CountingDuo',
+  ogTitle: 'Album Stiker Hadiah Belajar — Pintara',
   ogDescription: 'Koleksi stiker lucu hasil pencapaian belajar kuis anak usia dini.',
-  ogImage: 'https://countingduo.id/images/og-banner.png',
-  ogUrl: 'https://countingduo.id/stickers',
+  ogImage: 'https://pintara.id/images/og-banner.png',
+  ogUrl: 'https://pintara.id/stickers',
   twitterCard: 'summary_large_image'
 })
 
 useHead({
   link: [
-    { rel: 'canonical', href: 'https://countingduo.id/stickers' }
+    { rel: 'canonical', href: 'https://pintara.id/stickers' }
   ]
 })
 

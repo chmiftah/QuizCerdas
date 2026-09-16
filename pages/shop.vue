@@ -248,19 +248,19 @@ definePageMeta({
 })
 
 useSeoMeta({
-  title: 'Toko Hadiah & Kostum Karakter 3D Kiko | CountingDuo',
+  title: 'Toko Hadiah & Kostum Karakter 3D Kiko | Pintara',
   description: 'Tukarkan koin dan XP hasil belajar kuis untuk membeli kostum mahkota, kacamata keren, dan karakter hewan favorit di Toko Kiko Panda.',
   keywords: 'toko hadiah edukasi, gamifikasi kuis anak, kostum kiko panda, reward belajar anak',
-  ogTitle: 'Toko Hadiah & Kostum Kiko Panda — CountingDuo',
+  ogTitle: 'Toko Hadiah & Kostum Kiko Panda — Pintara',
   ogDescription: 'Koleksi kostum dan karakter lucu hasil apresiasi belajar anak.',
-  ogImage: 'https://countingduo.id/images/og-banner.png',
-  ogUrl: 'https://countingduo.id/shop',
+  ogImage: 'https://pintara.id/images/og-banner.png',
+  ogUrl: 'https://pintara.id/shop',
   twitterCard: 'summary_large_image'
 })
 
 useHead({
   link: [
-    { rel: 'canonical', href: 'https://countingduo.id/shop' }
+    { rel: 'canonical', href: 'https://pintara.id/shop' }
   ]
 })
 
@@ -301,7 +301,7 @@ const hatItems = [
 ]
 
 const avatarItems = [
-  { id: 'avatar_kiko', category: 'avatar', title: 'Kiko Si Panda 3D', description: 'Maskot utama CountingDuo yang ramah & ceria.', icon: '🐼', image: '/images/characters/avatar_kiko.jpg', price: 0 },
+  { id: 'avatar_kiko', category: 'avatar', title: 'Kiko Si Panda 3D', description: 'Maskot utama Pintara yang ramah & ceria.', icon: '🐼', image: '/images/characters/avatar_kiko.jpg', price: 0 },
   { id: 'avatar_fox', category: 'avatar', title: 'Rubah Pintar 3D', description: 'Rubah cerdik yang lincah dan cepat berhitung.', icon: '🦊', image: '/images/characters/avatar_fox.jpg', price: 150 },
   { id: 'avatar_lion', category: 'avatar', title: 'Singa Berani 3D', description: 'Raja hutan gagah berani pantang menyerah.', icon: '🦁', image: '/images/characters/avatar_lion.jpg', price: 200 },
   { id: 'avatar_bunny', category: 'avatar', title: 'Kelinci Ceria 3D', description: 'Kelinci lincah bertelinga panjang yang suka melompat.', icon: '🐰', image: '/images/characters/avatar_bunny.jpg', price: 100 },

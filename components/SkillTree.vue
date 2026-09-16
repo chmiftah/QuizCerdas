@@ -1219,7 +1219,7 @@ const openPaywallForUnit = () => {
     openPaywall({
       reason: 'unit_locked',
       title: `Kursus Pro: ${courseStore.course.title || 'Modul Pro'} 👑`,
-      description: 'Modul ini merupakan bagian dari QuizCerdas Pro. Tingkatkan akun Anda untuk membuka seluruh pelajaran dan latihan tanpa batas!',
+      description: 'Modul ini merupakan bagian dari Pintara Pro. Tingkatkan akun Anda untuk membuka seluruh pelajaran dan latihan tanpa batas!',
       featureHighlight: 'Akses Penuh Kursus Pro'
     })
     return
@@ -1228,7 +1228,7 @@ const openPaywallForUnit = () => {
   openPaywall({
     reason: 'unit_locked',
     title: 'Buka Unit 2 & Seluruh Bioma! 👑',
-    description: 'Tingkatkan ke QuizCerdas Pro untuk membuka seluruh bioma belajar, kurikulum lengkap, dan nyawa tanpa batas.',
+    description: 'Tingkatkan ke Pintara Pro untuk membuka seluruh bioma belajar, kurikulum lengkap, dan nyawa tanpa batas.',
     featureHighlight: 'Akses Semua Unit & Kurikulum'
   })
 }

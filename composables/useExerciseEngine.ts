@@ -337,7 +337,7 @@ export function useExerciseEngine(
           openPaywall({
             reason: 'out_of_hearts',
             title: 'Yah, Nyawa Kamu Habis! 💔',
-            description: 'Jangan biarkan semangat belajar si kecil terhenti. Buka Nyawa Tanpa Batas dengan QuizCerdas Pro!',
+            description: 'Jangan biarkan semangat belajar si kecil terhenti. Buka Nyawa Tanpa Batas dengan Pintara Pro!',
             featureHighlight: 'Unlimited Hearts (❤️ ∞)'
           })
         }, 600)

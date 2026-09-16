@@ -93,7 +93,7 @@
     </main>
 
     <footer class="p-6 text-center text-xs font-heading font-bold text-slate-400 border-t border-duo-gray-100">
-      CountingDuo — Petualangan Berhitung Ceria untuk Anak Indonesia 🇮🇩
+      Pintara — Petualangan Berhitung Ceria untuk Anak Indonesia 🇮🇩
     </footer>
   </div>
 </template>
@@ -104,19 +104,19 @@ import { useUserStore } from '~/stores/user'
 import { useSoundEffects } from '~/composables/useSoundEffects'
 
 useSeoMeta({
-  title: 'Game Bubble Pop Berhitung Balon Angka | CountingDuo',
+  title: 'Game Bubble Pop Berhitung Balon Angka | Pintara',
   description: 'Main game edukasi pecahkan balon angka interaktif! Latih kecepatan refleks dan pengenalan angka untuk anak TK dan SD secara menyenangkan.',
   keywords: 'game bubble pop edukasi, game pecah balon angka, permainan berhitung anak tk, game matematika seru anak sd, game edukasi anak',
-  ogTitle: 'Pecahkan Balon Angka — Mini Game Edukasi CountingDuo',
+  ogTitle: 'Pecahkan Balon Angka — Mini Game Edukasi Pintara',
   ogDescription: 'Pecahkan balon sesuai angka target sebelum waktu habis! Game seru pengasah ketangkasan angka.',
-  ogImage: 'https://countingduo.id/images/og-banner.png',
-  ogUrl: 'https://countingduo.id/games/bubble-pop',
+  ogImage: 'https://pintara.id/images/og-banner.png',
+  ogUrl: 'https://pintara.id/games/bubble-pop',
   twitterCard: 'summary_large_image'
 })
 
 useHead({
   link: [
-    { rel: 'canonical', href: 'https://countingduo.id/games/bubble-pop' }
+    { rel: 'canonical', href: 'https://pintara.id/games/bubble-pop' }
   ]
 })
 

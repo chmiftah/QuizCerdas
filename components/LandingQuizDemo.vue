@@ -145,7 +145,7 @@
           <span>{{ isCorrect ? '🎉 Luar Biasa! Jawaban Ananda Benar!' : '💪 Hampir Tepat! Terus Berlatih ya!' }}</span>
         </div>
         <p class="text-xs sm:text-sm font-body text-slate-600">
-          {{ isCorrect ? 'Anak mendapatkan +20 XP Pertama! Semua soal CountingDuo dilengkapi respon visual ramah anak seperti ini.' : 'Di CountingDuo, anak belajar tanpa rasa takut salah. Materi dapat diulang kapan saja.' }}
+          {{ isCorrect ? 'Anak mendapatkan +20 XP Pertama! Semua soal Pintara dilengkapi respon visual ramah anak seperti ini.' : 'Di Pintara, anak belajar tanpa rasa takut salah. Materi dapat diulang kapan saja.' }}
         </p>
 
         <div class="flex flex-col sm:flex-row gap-2 pt-1">
