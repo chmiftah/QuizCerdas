@@ -143,7 +143,7 @@ const closeModal = () => {
 
 const handleSubmit = () => {
   const correctAnswer = numA.value * numB.value
-  const parsed = parseInt(userAnswer.value.trim(), 10)
+  const parsed = parseInt(String(userAnswer.value ?? '').trim(), 10)
 
   if (isNaN(parsed)) {
     errorMessage.value = 'Silakan masukkan angka jawaban.'

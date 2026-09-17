@@ -367,6 +367,13 @@ const handleRetry = async () => {
 
 onMounted(() => {
   userStore.loadFromStorage()
+  if (!userStore.hasOnboarded) {
+    navigateTo({
+      path: '/onboarding',
+      query: route.query
+    })
+    return
+  }
   if (isCoursePro.value && !userStore.isPro) {
     openProPaywall()
   }

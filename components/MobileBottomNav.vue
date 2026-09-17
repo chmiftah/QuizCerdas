@@ -72,9 +72,15 @@ import { useUserStore } from '~/stores/user'
 const route = useRoute()
 const userStore = useUserStore()
 
-// Sembunyikan bottom nav di halaman marketing, auth, admin, atau saat kuis aktif
+// Sembunyikan bottom nav di halaman marketing, onboarding, auth, admin, atau saat kuis aktif
 const shouldShowDock = computed(() => {
   const p = route.path
+  
+  // Onboarding page must have a dedicated distraction-free flow
+  if (p === '/onboarding') return false
+
+  // Un-onboarded visitors should not see app bottom nav
+  if (!userStore.hasOnboarded) return false
   
   // Marketing & info pages for parents
   if (p === '/' || p === '/about' || p === '/pricing') return false

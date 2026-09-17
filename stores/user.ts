@@ -10,6 +10,16 @@ export interface UserProfile {
   dailyGoalMinutes: number
   role: 'student' | 'parent' | 'guest' | 'admin'
   accountRole?: 'student' | 'parent' | 'guest' | 'admin'
+  interests?: string[]
+  learningStyle?: string
+  hasCompletedOnboarding?: boolean
+}
+
+export interface GuestOnboardingData {
+  name: string
+  grade: string
+  interests: string[]
+  learningStyle: 'santai' | 'semangat' | 'tantangan' | string
 }
 
 export interface DailyQuest {
@@ -69,6 +79,9 @@ export interface UserState {
   dailyQuests: DailyQuest[]
   claimedChests: string[]
   exerciseHistory: ExerciseAttempt[]
+  hasCompletedOnboarding: boolean
+  interests: string[]
+  learningStyle: string
 }
 
 const createDefaultDailyQuests = (): DailyQuest[] => [
@@ -136,12 +149,25 @@ export const useUserStore = defineStore('user', {
     lastQuestResetDate: new Date().toDateString(),
     dailyQuests: createDefaultDailyQuests(),
     claimedChests: [],
-    exerciseHistory: []
+    exerciseHistory: [],
+    hasCompletedOnboarding: false,
+    interests: [],
+    learningStyle: 'santai'
   }),
 
   getters: {
     userLevel: (state) => Math.floor(state.xp / 100) + 1,
     xpToNextLevel: (state) => 100 - (state.xp % 100),
+    hasOnboarded: (state) => {
+      if (!state.isAuthenticated || !state.currentUser) return false
+      if (state.currentUser.role !== 'guest') return true
+      return Boolean(
+        state.hasCompletedOnboarding && 
+        state.currentUser.hasCompletedOnboarding && 
+        state.currentUser.interests && 
+        state.currentUser.interests.length > 0
+      )
+    },
     hasHearts: (state) => state.subscriptionTier !== 'FREE' || state.currentUser?.role === 'admin' || state.hearts > 0,
     isPro: (state) => {
       if (state.currentUser?.role === 'admin' || state.currentUser?.accountRole === 'admin') return true
@@ -281,6 +307,14 @@ export const useUserStore = defineStore('user', {
           this.rebuildFlatCompletedArrays()
           this.isAuthenticated = true
           this.saveToStorage()
+
+          if (import.meta.client) {
+            try {
+              const cookie = useCookie('pintara_onboarded', { maxAge: 60 * 60 * 24 * 365, path: '/' })
+              cookie.value = '1'
+            } catch (e) {}
+          }
+
           return true
         }
         throw new Error('Respon login dari database tidak valid')
@@ -311,6 +345,13 @@ export const useUserStore = defineStore('user', {
           if (res.user.xp !== undefined) this.xp = res.user.xp
           this.isAuthenticated = true
           this.saveToStorage()
+
+          if (import.meta.client) {
+            try {
+              const cookie = useCookie('pintara_onboarded', { maxAge: 60 * 60 * 24 * 365, path: '/' })
+              cookie.value = '1'
+            } catch (e) {}
+          }
           return true
         }
         throw new Error('Respon registrasi dari database tidak valid')
@@ -329,10 +370,49 @@ export const useUserStore = defineStore('user', {
         avatar: '🦊',
         grade: 'TK B / Kelas 1',
         dailyGoalMinutes: 5,
-        role: 'guest'
+        role: 'guest',
+        hasCompletedOnboarding: true
       }
+      this.hasCompletedOnboarding = true
       this.isAuthenticated = true
       this.saveToStorage()
+      return true
+    },
+
+    completeGuestOnboarding(data: GuestOnboardingData) {
+      const dailyMinutes = data.learningStyle === 'tantangan' ? 15 : (data.learningStyle === 'semangat' ? 10 : 5)
+      const cleanName = data.name.trim()
+      const usernameSlug = cleanName.toLowerCase().replace(/[^a-z0-9]/g, '') || 'teman'
+
+      this.currentUser = {
+        id: `guest_${Date.now()}`,
+        name: cleanName,
+        username: `kiko_${usernameSlug}`,
+        email: 'tamu@pintara.id',
+        avatar: '🦉',
+        grade: data.grade,
+        dailyGoalMinutes: dailyMinutes,
+        role: 'guest',
+        interests: data.interests,
+        learningStyle: data.learningStyle,
+        hasCompletedOnboarding: true
+      }
+      this.hasCompletedOnboarding = true
+      this.interests = data.interests
+      this.learningStyle = data.learningStyle
+      this.isAuthenticated = true
+      this.hearts = 5
+      this.maxHearts = 5
+      this.streak = 1
+      this.saveToStorage()
+
+      if (import.meta.client) {
+        try {
+          const cookie = useCookie('pintara_onboarded', { maxAge: 60 * 60 * 24 * 365, path: '/' })
+          cookie.value = '1'
+        } catch (e) {}
+      }
+
       return true
     },
 
@@ -353,6 +433,9 @@ export const useUserStore = defineStore('user', {
     async logout() {
       this.currentUser = null
       this.isAuthenticated = false
+      this.hasCompletedOnboarding = false
+      this.interests = []
+      this.learningStyle = 'santai'
       this.xp = 0
       this.hearts = 5
       this.streak = 1
@@ -364,6 +447,11 @@ export const useUserStore = defineStore('user', {
 
       if (import.meta.client) {
         try {
+          const cookie = useCookie('pintara_onboarded', { path: '/' })
+          cookie.value = null
+        } catch (e) {}
+
+        try {
           await $fetch('/api/auth/logout', { method: 'POST' })
         } catch (e) {}
       }
@@ -372,13 +460,23 @@ export const useUserStore = defineStore('user', {
     async handleSessionExpired(notify = false) {
       this.currentUser = null
       this.isAuthenticated = false
+      this.hasCompletedOnboarding = false
+      this.interests = []
+      this.learningStyle = 'santai'
       if (import.meta.client) {
+        try {
+          const cookie = useCookie('pintara_onboarded', { path: '/' })
+          cookie.value = null
+        } catch (e) {}
+
         try {
           const saved = localStorage.getItem('duo_user_progress')
           if (saved) {
             const data = JSON.parse(saved)
             data.currentUser = null
             data.isAuthenticated = false
+            data.hasCompletedOnboarding = false
+            data.interests = []
             localStorage.setItem('duo_user_progress', JSON.stringify(data))
           }
         } catch (e) {}
@@ -651,11 +749,33 @@ export const useUserStore = defineStore('user', {
             this.dailyQuests = data.dailyQuests ?? createDefaultDailyQuests()
             this.claimedChests = data.claimedChests ?? []
             this.exerciseHistory = data.exerciseHistory ?? []
+            this.hasCompletedOnboarding = data.hasCompletedOnboarding ?? (Boolean(this.currentUser?.hasCompletedOnboarding) || (this.isAuthenticated && this.currentUser?.role !== 'guest'))
+            this.interests = data.interests ?? (this.currentUser?.interests || [])
+            this.learningStyle = data.learningStyle ?? (this.currentUser?.learningStyle || 'santai')
 
             this.rebuildFlatCompletedArrays()
             this.checkAndResetDailyQuests()
+
+            if (import.meta.client) {
+              try {
+                const cookie = useCookie('pintara_onboarded', { maxAge: 60 * 60 * 24 * 365, path: '/' })
+                if (this.hasOnboarded) {
+                  cookie.value = '1'
+                } else {
+                  cookie.value = null
+                }
+              } catch (e) {}
+            }
           } catch (e) {
             console.error('Failed to parse user storage:', e)
+          }
+        } else {
+          // If no saved progress in localStorage, ensure cookie is cleared
+          if (import.meta.client) {
+            try {
+              const cookie = useCookie('pintara_onboarded', { path: '/' })
+              cookie.value = null
+            } catch (e) {}
           }
         }
 
@@ -787,7 +907,10 @@ export const useUserStore = defineStore('user', {
           lastQuestResetDate: this.lastQuestResetDate,
           dailyQuests: this.dailyQuests,
           claimedChests: this.claimedChests,
-          exerciseHistory: this.exerciseHistory
+          exerciseHistory: this.exerciseHistory,
+          hasCompletedOnboarding: this.hasCompletedOnboarding,
+          interests: this.interests,
+          learningStyle: this.learningStyle
         }
         localStorage.setItem('duo_user_progress', JSON.stringify(payload))
 

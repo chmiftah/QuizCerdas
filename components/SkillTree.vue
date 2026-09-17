@@ -54,16 +54,16 @@
         :id="'unit-container-' + unit.id" 
         class="relative space-y-4 max-w-lg mx-auto z-10"
       >
-        <!-- Sleek Bioma Title Badge (Tampil untuk semua unit termasuk Unit 1) -->
-        <div class="flex items-center justify-center gap-3 py-2 mb-6 sm:mb-8 select-none">
-          <div class="h-0.5 bg-slate-200/80 flex-1 max-w-[80px]"></div>
-          <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/95 backdrop-blur-md border-2 border-slate-200/90 rounded-full shadow-xs font-heading font-black text-xs text-slate-800">
+        <!-- Sleek Bioma Title Badge (Melayang / Sticky di atas saat scroll) -->
+        <div class="sticky top-[60px] sm:top-[70px] z-30 py-2.5 mb-6 sm:mb-8 flex items-center justify-center gap-3 select-none pointer-events-none">
+          <div class="h-0.5 bg-slate-200/80 flex-1 max-w-[80px] hidden sm:block"></div>
+          <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/95 backdrop-blur-md border-2 border-slate-200/90 rounded-full shadow-md font-heading font-black text-xs text-slate-800 pointer-events-auto transition-all">
             <span class="text-sm leading-none">{{ getUnitBiomeIcon(unit.color) }}</span>
             <span class="text-emerald-700 uppercase tracking-wider font-extrabold text-[11px]">Bioma {{ unit.order }}:</span>
             <span class="text-slate-800">{{ unit.title }}</span>
             <span v-if="isUnitGated(unitIdx)" class="px-2 py-0.5 bg-amber-400 text-amber-950 rounded-full text-[10px] font-black">👑 PRO</span>
           </div>
-          <div class="h-0.5 bg-slate-200/80 flex-1 max-w-[80px]"></div>
+          <div class="h-0.5 bg-slate-200/80 flex-1 max-w-[80px] hidden sm:block"></div>
         </div>
 
         <!-- Overworld Path Container with SVG Lines (Glowing Golden & Cobblestone Path) -->

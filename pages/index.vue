@@ -38,15 +38,17 @@
             <!-- CTA Group -->
             <div class="space-y-3 pt-1">
               <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3">
-                <NuxtLink 
-                  to="/register" 
-                  class="px-7 py-3.5 sm:py-4 duo-btn-green text-sm sm:text-base font-extrabold whitespace-nowrap shadow-lg hover:scale-102 transition-transform flex items-center justify-center gap-2"
-                  id="btn-hero-register"
+                <button 
+                  @click="handleStartLearning" 
+                  type="button"
+                  class="px-7 py-3.5 sm:py-4 duo-btn-green text-sm sm:text-base font-extrabold whitespace-nowrap shadow-lg hover:scale-102 transition-transform flex items-center justify-center gap-2 cursor-pointer"
+                  id="btn-hero-start"
                 >
                   <span>🚀 Mulai Belajar Gratis</span>
-                </NuxtLink>
+                </button>
                 <button 
-                  @click="handleGuestLogin" 
+                  @click="handleStartLearning" 
+                  type="button"
                   class="px-6 py-3.5 sm:py-4 duo-btn-blue text-sm sm:text-base font-extrabold whitespace-nowrap shadow-md hover:scale-102 transition-transform flex items-center justify-center gap-2 cursor-pointer"
                   id="btn-hero-guest"
                 >
@@ -1089,15 +1091,17 @@
           </div>
 
           <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-            <NuxtLink 
-              to="/register" 
-              class="w-full sm:w-auto px-8 py-4 duo-btn-green text-base font-extrabold shadow-xl hover:scale-102 transition-transform flex items-center justify-center gap-2"
-              id="btn-footer-register"
+            <button 
+              @click="handleStartLearning" 
+              type="button"
+              class="w-full sm:w-auto px-8 py-4 duo-btn-green text-base font-extrabold shadow-xl hover:scale-102 transition-transform flex items-center justify-center gap-2 cursor-pointer"
+              id="btn-footer-start"
             >
               <span>🚀 Mulai Belajar Gratis</span>
-            </NuxtLink>
+            </button>
             <button 
-              @click="handleGuestLogin" 
+              @click="handleStartLearning" 
+              type="button"
               class="w-full sm:w-auto px-7 py-4 duo-btn-blue text-sm sm:text-base font-extrabold shadow-md hover:scale-102 transition-transform flex items-center justify-center gap-2 cursor-pointer"
               id="btn-footer-guest"
             >
@@ -1282,9 +1286,12 @@ useHead({
   ]
 })
 
-const handleGuestLogin = () => {
-  userStore.loginAsGuest()
-  navigateTo('/course')
+const handleStartLearning = () => {
+  if (userStore.hasOnboarded) {
+    navigateTo('/course')
+  } else {
+    navigateTo('/onboarding')
+  }
 }
 
 const faqs = [

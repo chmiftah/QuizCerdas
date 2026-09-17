@@ -74,8 +74,9 @@
       <!-- Sisi Kanan: Area Orang Tua (Protected) & Akun -->
       <div class="flex items-center gap-1.5 sm:gap-3">
         
-        <!-- Tombol Khusus Area Orang Tua (Dengan Parent Gate) -->
+        <!-- Tombol Khusus Area Orang Tua (Hanya tampil jika sudah login & bukan akun tamu) -->
         <button 
+          v-if="userStore.isAuthenticated && userStore.currentUser?.role !== 'guest'"
           @click="openParentArea" 
           type="button" 
           class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-2xl bg-amber-50 hover:bg-amber-100 border-2 border-amber-300 text-amber-900 font-heading font-extrabold text-xs flex items-center gap-1.5 cursor-pointer shadow-2xs active:scale-95 transition-all"
@@ -91,7 +92,7 @@
           v-if="!userStore.isPro"
           @click="openProModal" 
           type="button"
-          class="hidden lg:flex items-center gap-1 px-3 py-1.5 rounded-2xl bg-gradient-to-r from-amber-400 to-yellow-500 text-amber-950 font-heading font-extrabold text-xs shadow-sm active:scale-95 transition-all cursor-pointer"
+          class="hidden lg:flex items-center gap-1 px-3 py-1.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-amber-950 font-heading font-extrabold text-xs border-b-2 border-amber-600 shadow-xs active:scale-95 transition-all cursor-pointer"
         >
           <span>👑</span>
           <span>Dapatkan Pro</span>
@@ -142,6 +143,7 @@
             </NuxtLink>
 
             <button 
+              v-if="userStore.isAuthenticated && userStore.currentUser?.role !== 'guest'"
               @click="handleParentAreaFromMenu" 
               type="button"
               class="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-heading font-bold text-amber-800 hover:bg-amber-50 text-left cursor-pointer"

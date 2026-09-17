@@ -5,40 +5,38 @@
     <LandingHeader v-else />
 
     <!-- Catalog Dashboard Main Container -->
-    <main class="max-w-6xl mx-auto w-full px-3.5 sm:px-6 py-4 sm:py-8 flex-1 space-y-6 sm:space-y-8 pb-32 sm:pb-16">
+    <main class="max-w-6xl mx-auto w-full px-3.5 sm:px-6 py-4 sm:py-8 flex-1 space-y-6 sm:space-y-8 pb-40 sm:pb-24">
       
 
 
-      <!-- Hero Learning Adventure Banner -->
-      <div class="bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-600 rounded-3xl p-5 sm:p-8 text-white shadow-lg relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-5 animate-pop">
-        <div class="space-y-2 z-10 max-w-xl">
-          <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-heading font-extrabold text-amber-200 border border-white/30">
-            <span>🚀 Petualangan Belajar Edukatif</span>
+      <!-- Clean Catalog Header (No Gradient, No AI Slop) -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-2">
+        <div class="space-y-1">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-full text-xs font-heading font-black">
+            <span>📚</span>
+            <span>Katalog Pembelajaran</span>
           </div>
-          <h1 class="font-heading text-2xl sm:text-4xl font-black tracking-tight leading-tight">
-            Pilih Petualangan Belajarmu
+          <h1 class="font-heading text-2xl sm:text-3xl font-black text-slate-800 tracking-tight">
+            Pilih Materi Belajar
           </h1>
-          <p class="text-white/90 text-xs sm:text-sm font-body leading-relaxed max-w-lg">
-            Temukan materi yang sesuai dengan usia dan kemampuanmu. Belajar bertahap dengan kuis bergambar, audio jelas, dan reward bintang.
+          <p class="text-xs sm:text-sm text-slate-500 font-body max-w-xl">
+            Pilih modul yang sesuai dengan jenjang usia anak. Setiap materi dilengkapi petualangan interaktif dan panduan audio.
           </p>
         </div>
 
-        <!-- Level XP Progress Indicator inside Hero -->
+        <!-- Level XP Mini Pill (Clean & Functional) -->
         <ClientOnly>
-          <div class="z-10 bg-white/15 backdrop-blur-md rounded-2xl p-4 border border-white/25 w-full md:w-72 shrink-0 space-y-2">
-            <div class="flex items-center justify-between text-xs font-heading font-bold">
+          <div class="bg-white rounded-2xl p-3 border-2 border-slate-200 shadow-2xs w-full sm:w-64 shrink-0 space-y-1.5">
+            <div class="flex items-center justify-between text-xs font-heading font-black text-slate-700">
               <span>🦉 Level {{ userStore.userLevel }}</span>
-              <span class="text-amber-300 font-black">{{ userStore.xp % 100 }} / 100 XP</span>
+              <span class="text-amber-600">{{ userStore.xp % 100 }}/100 XP</span>
             </div>
-            <div class="w-full bg-black/20 h-2.5 rounded-full overflow-hidden p-0.5">
+            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
               <div 
-                class="bg-amber-300 h-full rounded-full transition-all duration-500" 
+                class="bg-[#58cc02] h-full rounded-full transition-all duration-500" 
                 :style="{ width: `${Math.min(100, Math.max(10, userStore.xp % 100))}%` }"
               ></div>
             </div>
-            <p class="text-[11px] text-white/80 font-heading font-medium text-center">
-              Mari lanjutkan petualangan belajarmu! ✨
-            </p>
           </div>
         </ClientOnly>
       </div>
@@ -135,7 +133,7 @@
       </div>
 
       <!-- SECTION: FILTER CONTROLS (Subject, Tier, Search, View Mode) -->
-      <div class="bg-white p-4 sm:p-5 rounded-3xl border-2 border-slate-200 shadow-sm space-y-4">
+      <div ref="catalogSectionRef" class="bg-white p-4 sm:p-5 rounded-3xl border-2 border-slate-200 shadow-sm space-y-4 scroll-mt-24">
         <!-- Top Controls: Subject Filters & Search -->
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           
@@ -306,17 +304,37 @@
       <!-- ============================================================ -->
       <div v-else class="space-y-6">
         
-        <!-- Results Summary Bar -->
-        <div class="flex items-center justify-between text-xs font-heading font-bold text-slate-600">
-          <span class="flex items-center gap-1.5">
+        <!-- Results Summary Bar & Page Size Selector -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-heading font-bold text-slate-600">
+          <span class="flex items-center gap-1.5 flex-wrap">
             <span>✨ Menampilkan</span>
-            <strong class="text-slate-900 font-black">{{ filteredCourses.length }} Modul Belajar</strong>
+            <strong class="text-slate-900 font-black">
+              {{ (currentPage - 1) * itemsPerPage + 1 }}–{{ Math.min(currentPage * itemsPerPage, filteredCourses.length) }}
+              dari {{ filteredCourses.length }} Modul Belajar
+            </strong>
             <span v-if="selectedGrade !== 'all'" class="text-duo-blue">• Jenjang {{ getGradeLabel(selectedGrade) }}</span>
           </span>
 
-          <span v-if="searchQuery" class="text-slate-400">
-            Kata kunci: "{{ searchQuery }}"
-          </span>
+          <div class="flex items-center gap-3">
+            <span v-if="searchQuery" class="text-slate-400 truncate max-w-[140px]">
+              "{{ searchQuery }}"
+            </span>
+
+            <!-- Items per page selector -->
+            <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-[11px]">
+              <span class="px-1.5 text-slate-500 font-bold">Per hal:</span>
+              <button 
+                v-for="size in [6, 12]" 
+                :key="size"
+                @click="itemsPerPage = size; currentPage = 1"
+                type="button"
+                class="px-2.5 py-0.5 rounded-lg font-bold transition-all cursor-pointer"
+                :class="itemsPerPage === size ? 'bg-white text-slate-900 shadow-2xs font-black' : 'text-slate-500 hover:text-slate-900'"
+              >
+                {{ size }}
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- ---------------------------------------------------------- -->
@@ -324,7 +342,7 @@
         <!-- ---------------------------------------------------------- -->
         <div v-if="viewMode === 'grid'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
           <div 
-            v-for="item in filteredCourses" 
+            v-for="item in paginatedCourses" 
             :key="`grid-${item.id}`"
             class="bg-white rounded-3xl border-3 p-5 sm:p-6 shadow-sm hover:shadow-xl transition-all duration-200 flex flex-col justify-between group"
             :class="getCardBorderClass(item.themeColor)"
@@ -342,7 +360,7 @@
                 <div class="flex flex-col items-end gap-1.5">
                   <span 
                     v-if="item.isPro"
-                    class="px-2.5 py-0.5 bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 text-amber-950 rounded-full font-heading font-black text-[10px] shadow-xs border border-amber-300 flex items-center gap-1"
+                    class="px-2.5 py-0.5 bg-amber-400 text-amber-950 rounded-full font-heading font-black text-[10px] shadow-2xs border border-amber-300 flex items-center gap-1"
                   >
                     <span>👑</span>
                     <span>PREMIUM</span>
@@ -414,7 +432,7 @@
         <!-- ---------------------------------------------------------- -->
         <div v-else-if="viewMode === 'list'" class="space-y-3">
           <div 
-            v-for="item in filteredCourses" 
+            v-for="item in paginatedCourses" 
             :key="`list-${item.id}`"
             class="bg-white rounded-2xl border-2 border-slate-200 p-4 shadow-sm hover:border-duo-green transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4"
           >
@@ -463,73 +481,73 @@
           </div>
         </div>
 
-        <!-- ---------------------------------------------------------- -->
-        <!-- VIEW MODE C: SKILL PATH (JOURNEY MILESTONE FLOW)           -->
-        <!-- ---------------------------------------------------------- -->
-        <div v-else-if="viewMode === 'path'" class="bg-white rounded-3xl border-3 border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
-          <div class="text-center space-y-1 max-w-md mx-auto">
-            <span class="text-xs font-heading font-extrabold text-duo-green uppercase tracking-wider">🗺️ Alur Perjalanan Belajar</span>
-            <h3 class="font-heading text-xl font-black text-slate-800">Tahapan Petualangan Terpadu</h3>
-            <p class="text-xs text-slate-500 font-body">Anak maju dari materi pengenalan konsep dasar hingga evaluasi tantangan mandiri.</p>
-          </div>
+        <!-- ============================================================ -->
+        <!-- PAGINATION CONTROLS                                          -->
+        <!-- ============================================================ -->
+        <div v-if="totalPages > 1" class="pt-6 pb-12 sm:pb-8 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-200">
+          <!-- Page Info Summary -->
+          <p class="text-xs font-heading font-bold text-slate-500">
+            Halaman <span class="text-slate-900 font-black">{{ currentPage }}</span> dari <span class="text-slate-900 font-black">{{ totalPages }}</span>
+          </p>
 
-          <div class="max-w-xl mx-auto space-y-4 py-2">
-            <div 
-              v-for="(item, idx) in filteredCourses" 
-              :key="`path-${item.id}`"
-              class="relative"
+          <!-- Navigation Buttons -->
+          <div class="flex items-center gap-1.5 font-heading">
+            <!-- Prev Button -->
+            <button
+              @click="goToPage(currentPage - 1)"
+              :disabled="currentPage === 1"
+              type="button"
+              class="px-3.5 py-2 rounded-xl border-2 font-bold text-xs flex items-center gap-1.5 transition-all select-none"
+              :class="currentPage === 1 
+                ? 'bg-slate-100 text-slate-300 border-slate-200 cursor-not-allowed' 
+                : 'bg-white text-slate-700 border-slate-200 hover:border-duo-green hover:text-duo-green active:scale-95 shadow-2xs cursor-pointer'"
             >
-              <!-- Card Node -->
-              <div 
-                class="flex items-center gap-4 p-4 rounded-2xl border-2 transition-all shadow-xs"
-                :class="getCourseStats(item).progress === 100 
-                  ? 'bg-emerald-50 border-emerald-300' 
-                  : getCourseStats(item).progress > 0 
-                  ? 'bg-amber-50 border-amber-300' 
-                  : 'bg-white border-slate-200'"
-              >
-                <div 
-                  class="w-11 h-11 rounded-2xl flex items-center justify-center font-heading font-black text-sm shrink-0 shadow-xs"
-                  :class="getCourseStats(item).progress === 100 ? 'bg-duo-green text-white' : getCourseStats(item).progress > 0 ? 'bg-amber-500 text-white' : 'bg-slate-200 text-slate-700'"
-                >
-                  {{ getCourseStats(item).progress === 100 ? '✓' : `0${idx + 1}` }}
-                </div>
+              <span>❮</span>
+              <span class="hidden sm:inline">Sebelumnya</span>
+            </button>
 
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between">
-                    <p class="font-heading font-black text-sm sm:text-base text-slate-800 truncate">{{ item.title }}</p>
-                    <span 
-                      class="text-[10px] font-heading font-black px-2 py-0.5 rounded-full"
-                      :class="getCourseStats(item).progress === 100 ? 'bg-emerald-100 text-emerald-800' : getCourseStats(item).progress > 0 ? 'bg-amber-100 text-amber-900' : 'bg-slate-100 text-slate-600'"
-                    >
-                      {{ getCourseStats(item).progress === 100 ? 'Selesai ⭐⭐⭐' : getCourseStats(item).progress > 0 ? 'Sedang Berjalan 🎯' : 'Tersedia' }}
-                    </span>
-                  </div>
-                  <p class="text-xs text-slate-500 font-body truncate">{{ item.target_audience }} • {{ getCourseStats(item).lessons }} Pelajaran</p>
-                </div>
-
-                <button 
-                  @click="selectAndOpenCourse(item.id)" 
-                  class="px-4 py-2 duo-btn-green text-xs font-heading font-extrabold whitespace-nowrap shrink-0"
+            <!-- Page Number Buttons -->
+            <div class="flex items-center gap-1">
+              <template v-for="(p, idx) in visiblePages" :key="idx">
+                <span v-if="p === '...'" class="px-2 text-slate-400 text-xs font-bold select-none">…</span>
+                <button
+                  v-else
+                  @click="goToPage(p)"
+                  type="button"
+                  class="w-9 h-9 rounded-xl border-2 font-black text-xs transition-all flex items-center justify-center active:scale-95 select-none"
+                  :class="currentPage === p 
+                    ? 'bg-duo-green text-white border-emerald-600 shadow-sm' 
+                    : 'bg-white text-slate-700 border-slate-200 hover:border-duo-green/60 hover:bg-slate-50 shadow-2xs cursor-pointer'"
                 >
-                  Buka
+                  {{ p }}
                 </button>
-              </div>
-
-              <!-- Connector Arrow -->
-              <div v-if="idx < filteredCourses.length - 1" class="flex justify-center -my-1 text-slate-300 font-black text-base">
-                ↓
-              </div>
+              </template>
             </div>
+
+            <!-- Next Button -->
+            <button
+              @click="goToPage(currentPage + 1)"
+              :disabled="currentPage === totalPages"
+              type="button"
+              class="px-3.5 py-2 rounded-xl border-2 font-bold text-xs flex items-center gap-1.5 transition-all select-none"
+              :class="currentPage === totalPages 
+                ? 'bg-slate-100 text-slate-300 border-slate-200 cursor-not-allowed' 
+                : 'bg-white text-slate-700 border-slate-200 hover:border-duo-green hover:text-duo-green active:scale-95 shadow-2xs cursor-pointer'"
+            >
+              <span class="hidden sm:inline">Berikutnya</span>
+              <span>❯</span>
+            </button>
           </div>
         </div>
 
       </div>
 
-      <!-- GUEST CALLOUT BANNER AT BOTTOM (Non-intrusive) -->
-      <div v-if="!userStore.isLoggedIn" class="bg-gradient-to-r from-emerald-50 via-teal-50 to-sky-50 border-2 border-emerald-200 rounded-3xl p-5 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+      <!-- GUEST CALLOUT BANNER AT BOTTOM (Clean Solid Card, No Gradient) -->
+      <div v-if="!userStore.isLoggedIn" class="bg-white border-2 border-slate-200 rounded-3xl p-5 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
         <div class="flex items-center gap-3">
-          <span class="text-3xl">💡</span>
+          <div class="w-11 h-11 rounded-2xl bg-amber-100 border border-amber-300 flex items-center justify-center text-2xl shrink-0">
+            💾
+          </div>
           <div>
             <h3 class="font-heading font-black text-slate-800 text-sm sm:text-base">Simpan Progress Belajar Ananda</h3>
             <p class="text-xs text-slate-600 font-body">Daftar akun gratis sekarang agar XP, bintang prestasi, dan riwayat belajar anak tersimpan secara permanen.</p>
@@ -537,7 +555,7 @@
         </div>
         <NuxtLink 
           to="/register" 
-          class="px-6 py-3 duo-btn-green text-xs sm:text-sm font-heading font-extrabold whitespace-nowrap shrink-0"
+          class="px-6 py-3 bg-[#58cc02] hover:bg-[#46a302] text-white rounded-2xl font-heading font-black text-xs sm:text-sm border-b-4 border-[#3b8a02] shadow-xs whitespace-nowrap shrink-0 active:scale-95 transition-all"
         >
           🚀 Buat Akun Gratis
         </NuxtLink>
@@ -556,7 +574,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useUserStore } from '~/stores/user'
 import { useCourseStore } from '~/stores/course'
 import { usePaywall } from '~/composables/usePaywall'
@@ -602,11 +620,16 @@ const { openPaywall } = usePaywall()
 const { isAppSubdomain } = useAppDomain()
 
 // Reactive filter states
+const catalogSectionRef = ref(null)
 const selectedGrade = ref('all')
 const activeCategory = ref('all')
 const activeTier = ref('all') // 'all' | 'free' | 'pro'
 const viewMode = ref('grid') // 'grid' | 'list' | 'path'
 const searchQuery = ref('')
+
+// Pagination states
+const currentPage = ref(1)
+const itemsPerPage = ref(6)
 
 // Grade options (Untuk Siapa?)
 const gradeOptions = [
@@ -702,6 +725,54 @@ const filteredCourses = computed(() => {
   return list
 })
 
+// Total Pages computed
+const totalPages = computed(() => {
+  return Math.max(1, Math.ceil(filteredCourses.value.length / itemsPerPage.value))
+})
+
+// Paginated Courses computed
+const paginatedCourses = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  return filteredCourses.value.slice(start, start + itemsPerPage.value)
+})
+
+// Visible Pages calculation with ellipsis support
+const visiblePages = computed(() => {
+  const total = totalPages.value
+  const current = currentPage.value
+  if (total <= 5) {
+    return Array.from({ length: total }, (_, i) => i + 1)
+  }
+  const pages = []
+  pages.push(1)
+  if (current > 3) {
+    pages.push('...')
+  }
+  const start = Math.max(2, current - 1)
+  const end = Math.min(total - 1, current + 1)
+  for (let i = start; i <= end; i++) {
+    pages.push(i)
+  }
+  if (current < total - 2) {
+    pages.push('...')
+  }
+  pages.push(total)
+  return pages
+})
+
+const goToPage = (page) => {
+  if (page < 1 || page > totalPages.value) return
+  currentPage.value = page
+  if (import.meta.client) {
+    catalogSectionRef.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
+
+// Reset page when any filter changes
+watch([selectedGrade, activeCategory, activeTier, searchQuery, itemsPerPage], () => {
+  currentPage.value = 1
+})
+
 // Continue Learning Featured Item (Course with progress > 0 and < 100)
 const continueCourseItem = computed(() => {
   const all = courseStore.allCatalogCourses
@@ -747,6 +818,7 @@ const resetAllFilters = () => {
   activeCategory.value = 'all'
   activeTier.value = 'all'
   searchQuery.value = ''
+  currentPage.value = 1
 }
 
 const selectAndOpenCourse = (courseId) => {
