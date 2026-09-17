@@ -84,10 +84,18 @@
 
           <button 
             @click="selectAndOpenCourse(continueCourseItem.id)"
+            :disabled="openingCourseId === continueCourseItem.id"
             class="px-6 py-3 duo-btn-green text-xs sm:text-sm font-heading font-extrabold whitespace-nowrap flex items-center justify-center gap-2 shrink-0"
+            :class="{ 'opacity-80 pointer-events-none cursor-wait': openingCourseId === continueCourseItem.id }"
           >
-            <span>Lanjutkan Petualangan</span>
-            <span>➔</span>
+            <span v-if="openingCourseId === continueCourseItem.id" class="inline-flex items-center gap-2">
+              <span class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+              <span>Menyiapkan...</span>
+            </span>
+            <template v-else>
+              <span>Lanjutkan Petualangan</span>
+              <span>➔</span>
+            </template>
           </button>
         </div>
       </div>
@@ -417,11 +425,18 @@
             <div class="pt-4 border-t border-slate-100 mt-4">
               <button 
                 @click="selectAndOpenCourse(item.id)" 
+                :disabled="openingCourseId === item.id"
                 class="w-full py-3 text-center text-xs sm:text-sm font-heading font-extrabold flex items-center justify-center gap-2 shadow-sm hover:shadow-md transition-all cursor-pointer rounded-2xl active:scale-98"
-                :class="getActionButtonClass(item)"
+                :class="[getActionButtonClass(item), { 'opacity-80 pointer-events-none cursor-wait': openingCourseId === item.id }]"
               >
-                <span>{{ getActionButtonLabel(item) }}</span>
-                <span>➔</span>
+                <span v-if="openingCourseId === item.id" class="inline-flex items-center gap-2">
+                  <span class="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></span>
+                  <span>Menyiapkan Modul...</span>
+                </span>
+                <template v-else>
+                  <span>{{ getActionButtonLabel(item) }}</span>
+                  <span>➔</span>
+                </template>
               </button>
             </div>
           </div>
@@ -472,10 +487,15 @@
 
               <button 
                 @click="selectAndOpenCourse(item.id)" 
-                class="px-5 py-2.5 rounded-xl font-heading font-extrabold text-xs whitespace-nowrap cursor-pointer shadow-xs"
-                :class="getActionButtonClass(item)"
+                :disabled="openingCourseId === item.id"
+                class="px-5 py-2.5 rounded-xl font-heading font-extrabold text-xs whitespace-nowrap cursor-pointer shadow-xs active:scale-95 transition-all"
+                :class="[getActionButtonClass(item), { 'opacity-80 pointer-events-none cursor-wait': openingCourseId === item.id }]"
               >
-                {{ getActionButtonLabel(item) }}
+                <span v-if="openingCourseId === item.id" class="inline-flex items-center gap-1.5">
+                  <span class="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin"></span>
+                  <span>Menyiapkan...</span>
+                </span>
+                <span v-else>{{ getActionButtonLabel(item) }}</span>
               </button>
             </div>
           </div>
@@ -821,7 +841,10 @@ const resetAllFilters = () => {
   currentPage.value = 1
 }
 
-const selectAndOpenCourse = (courseId) => {
+const openingCourseId = ref(null)
+
+const selectAndOpenCourse = async (courseId) => {
+  if (openingCourseId.value) return
   const targetCourse = courseStore.catalogRegistry.find(c => c.id === courseId)
   if (targetCourse?.isPro && !userStore.isPro) {
     openPaywall({
@@ -832,8 +855,9 @@ const selectAndOpenCourse = (courseId) => {
     })
     return
   }
+  openingCourseId.value = courseId
   courseStore.selectCourse(courseId)
-  navigateTo(`/course?id=${courseId}`)
+  await navigateTo(`/course?id=${courseId}`)
 }
 
 const confirmResetProgress = () => {

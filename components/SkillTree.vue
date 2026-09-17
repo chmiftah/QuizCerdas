@@ -274,8 +274,10 @@
                     <button 
                       v-if="item.type === 'checkpoint' ? isCheckpointUnlocked(unit.id) : isLessonUnlocked(unit.id, item.id)"
                       @click="confirmStartNode(unit.id, item.id, item.type)"
+                      :disabled="isStartingNode"
                       class="w-full py-3 text-xs font-heading font-black shadow-md cursor-pointer flex items-center justify-center gap-2 active:scale-95 transition-all rounded-2xl"
                       :class="[
+                        isStartingNode ? 'opacity-80 pointer-events-none cursor-wait' : '',
                         isNodeCompleted(unit.id, item.id, item.type)
                           ? 'bg-amber-400 hover:bg-amber-300 text-amber-950 border-b-4 border-amber-600'
                           : item.type === 'checkpoint'
@@ -283,7 +285,11 @@
                             : 'bg-[#58cc02] hover:bg-[#46a302] text-white border-b-4 border-[#388502]'
                       ]"
                     >
-                      <span>{{ isNodeCompleted(unit.id, item.id, item.type) ? '🔄 ULANGI MATERI' : (item.type === 'checkpoint' ? '👑 MULAI TANTANGAN' : '🚀 MULAI BELAJAR') }}</span>
+                      <span v-if="isStartingNode" class="inline-flex items-center gap-2">
+                        <span class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                        <span>Menyiapkan Kuis...</span>
+                      </span>
+                      <span v-else>{{ isNodeCompleted(unit.id, item.id, item.type) ? '🔄 ULANGI MATERI' : (item.type === 'checkpoint' ? '👑 MULAI TANTANGAN' : '🚀 MULAI BELAJAR') }}</span>
                     </button>
 
                     <button 
@@ -1227,7 +1233,10 @@ const onNodeTap = (unitId, itemId, type) => {
   }
 }
 
-const confirmStartNode = (unitId, itemId, type) => {
+const isStartingNode = ref(false)
+
+const confirmStartNode = async (unitId, itemId, type) => {
+  if (isStartingNode.value) return
   const unitIdx = courseStore.units.findIndex(u => u.id === unitId)
   if (isUnitGated(unitIdx)) {
     openPaywallForUnit()
@@ -1244,8 +1253,12 @@ const confirmStartNode = (unitId, itemId, type) => {
     return
   }
 
+  isStartingNode.value = true
   selectedNodeId.value = null
-  navigateTo(targetPath)
+  await navigateTo(targetPath)
+  setTimeout(() => {
+    isStartingNode.value = false
+  }, 1200)
 }
 
 const getUnitHeaderTheme = (color) => {
