@@ -7,7 +7,7 @@
       :class="{ 'pointer-events-none opacity-80 cursor-wait': isNavigating }"
     >
       
-      <!-- 1. 🗺️ Petualangan (Peta Belajar & Bioma) -->
+      <!-- 1. 📚 Belajar (Peta Belajar & Bioma) -->
       <NuxtLink 
         to="/course" 
         @click="handleNavClick('course', 480)"
@@ -18,11 +18,11 @@
           <span v-if="clickedTab === 'course' && isNavigating" class="inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
           <span v-else>🗺️</span>
         </span>
-        <span class="text-[10px] font-heading font-black mt-1">Petualangan</span>
+        <span class="text-[10px] font-heading font-black mt-1">Belajar</span>
         <div v-if="route.path.startsWith('/course')" class="absolute -bottom-1 w-2 h-1 bg-white rounded-full"></div>
       </NuxtLink>
 
-      <!-- 2. 🎨 Arena Kreasi & Game (Tracing, Mewarnai, Balon, Lagu) -->
+      <!-- 2. 🎮 Games & Kreasi (Tracing, Mewarnai, Balon, Lagu) -->
       <NuxtLink 
         to="/activities" 
         @click="handleNavClick('activities', 540)"
@@ -31,9 +31,9 @@
       >
         <span class="text-xl leading-none transition-transform group-hover:scale-110 flex items-center justify-center">
           <span v-if="clickedTab === 'activities' && isNavigating" class="inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-          <span v-else>🎨</span>
+          <span v-else>🎮</span>
         </span>
-        <span class="text-[10px] font-heading font-black mt-1">Kreasi</span>
+        <span class="text-[10px] font-heading font-black mt-1">Games</span>
         <div v-if="isActivitiesTabActive" class="absolute -bottom-1 w-2 h-1 bg-white rounded-full"></div>
       </NuxtLink>
 

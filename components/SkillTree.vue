@@ -52,10 +52,11 @@
         v-for="(unit, unitIdx) in visibleUnits" 
         :key="unit.id" 
         :id="'unit-container-' + unit.id" 
-        class="relative space-y-4 max-w-lg mx-auto z-10"
+        class="relative space-y-4 max-w-lg mx-auto transition-all"
+        :class="unitHasSelectedNode(unit) ? 'z-40' : 'z-10'"
       >
         <!-- Sleek Bioma Title Badge (Melayang / Sticky di atas saat scroll) -->
-        <div class="sticky top-[60px] sm:top-[70px] z-30 py-2.5 mb-6 sm:mb-8 flex items-center justify-center gap-3 select-none pointer-events-none">
+        <div class="sticky top-[60px] sm:top-[70px] z-20 py-2.5 mb-6 sm:mb-8 flex items-center justify-center gap-3 select-none pointer-events-none">
           <div class="h-0.5 bg-slate-200/80 flex-1 max-w-[80px] hidden sm:block"></div>
           <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/95 backdrop-blur-md border-2 border-slate-200/90 rounded-full shadow-md font-heading font-black text-xs text-slate-800 pointer-events-auto transition-all">
             <span class="text-sm leading-none">{{ getUnitBiomeIcon(unit.color) }}</span>
@@ -146,7 +147,8 @@
             
             <div 
               :id="isNextActiveLesson(unit.id, item.id) ? 'active-lesson-node' : undefined"
-              class="absolute z-10 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group"
+              class="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group transition-all"
+              :class="selectedNodeId === item.id ? 'z-50' : 'z-10'"
               :style="{ left: `${(item.x / 400) * 100}%`, top: `${item.y}px` }"
             >
               
@@ -203,8 +205,9 @@
                 <div 
                   v-if="selectedNodeId === item.id"
                   @click.outside="selectedNodeId = null"
-                  class="absolute -top-48 left-1/2 -translate-x-1/2 z-40 bg-white text-slate-800 rounded-3xl p-5 w-72 sm:w-80 shadow-2xl border-4 space-y-3 text-center animate-pop"
+                  class="absolute left-1/2 -translate-x-1/2 z-50 bg-white text-slate-800 rounded-3xl p-5 w-72 sm:w-80 shadow-2xl border-4 space-y-3 text-center animate-pop"
                   :class="[
+                    item.y < 160 ? 'top-20' : '-top-48',
                     item.type === 'checkpoint' 
                       ? (isCheckpointCompleted(item.id) ? 'border-amber-400' : isCheckpointUnlocked(unit.id) ? 'border-purple-400' : 'border-slate-300')
                       : (isNodeCompleted(unit.id, item.id, item.type) ? 'border-amber-400' : isLessonUnlocked(unit.id, item.id) ? 'border-[#58cc02]' : 'border-slate-300')
@@ -212,6 +215,16 @@
                 >
                   <!-- Arrow tip -->
                   <div 
+                    v-if="item.y < 160"
+                    class="absolute -top-3 left-1/2 -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-b-8 border-l-transparent border-r-transparent"
+                    :class="[
+                      item.type === 'checkpoint' 
+                        ? (isCheckpointCompleted(item.id) ? 'border-b-amber-400' : isCheckpointUnlocked(unit.id) ? 'border-b-purple-400' : 'border-b-slate-300')
+                        : (isNodeCompleted(unit.id, item.id, item.type) ? 'border-b-amber-400' : isLessonUnlocked(unit.id, item.id) ? 'border-b-[#58cc02]' : 'border-b-slate-300')
+                    ]"
+                  ></div>
+                  <div 
+                    v-else
                     class="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent"
                     :class="[
                       item.type === 'checkpoint' 
@@ -1185,8 +1198,9 @@ const getUnitSvgPath = (unit) => {
 
 const isUnitGated = (unitIdx) => {
   const isCoursePro = Boolean(courseStore.course?.isPro || courseStore.catalogRegistry.find(c => c.id === courseStore.activeCourseId)?.isPro)
+  // Hanya kunci unit jika modul pembelajaran bertipe PRO dan siswa belum berlangganan PRO
   if (isCoursePro && !userStore.isPro) return true
-  if (unitIdx > 0 && !userStore.canAccessUnit(unitIdx)) return true
+  // Jika kuis tidak pro atau gratis, keseluruhan quiz atau unit dapat dikerjakan oleh siswa
   return false
 }
 
@@ -1195,19 +1209,12 @@ const openPaywallForUnit = () => {
   if (isCoursePro && !userStore.isPro) {
     openPaywall({
       reason: 'unit_locked',
-      title: `Kursus Pro: ${courseStore.course.title || 'Modul Pro'} 👑`,
+      title: `Kursus Pro: ${courseStore.course?.title || 'Modul Pro'} 👑`,
       description: 'Modul ini merupakan bagian dari Pintara Pro. Tingkatkan akun Anda untuk membuka seluruh pelajaran dan latihan tanpa batas!',
       featureHighlight: 'Akses Penuh Kursus Pro'
     })
     return
   }
-
-  openPaywall({
-    reason: 'unit_locked',
-    title: 'Buka Unit 2 & Seluruh Bioma! 👑',
-    description: 'Tingkatkan ke Pintara Pro untuk membuka seluruh bioma belajar, kurikulum lengkap, dan nyawa tanpa batas.',
-    featureHighlight: 'Akses Semua Unit & Kurikulum'
-  })
 }
 
 const onNodeTap = (unitId, itemId, type) => {
@@ -1231,6 +1238,12 @@ const onNodeTap = (unitId, itemId, type) => {
   } else {
     selectedNodeId.value = itemId
   }
+}
+
+const unitHasSelectedNode = (unit) => {
+  if (!selectedNodeId.value) return false
+  const items = getClassicUnitNodeItems(unit)
+  return items.some(item => item.id === selectedNodeId.value)
 }
 
 const isStartingNode = ref(false)

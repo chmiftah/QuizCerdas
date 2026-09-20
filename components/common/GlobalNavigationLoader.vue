@@ -12,36 +12,42 @@
     <Transition name="hud-fade">
       <div 
         v-if="isNavigating" 
-        class="fixed inset-0 z-[9999] pointer-events-auto flex flex-col items-center justify-start pt-6 select-none"
+        class="fixed inset-0 z-[9999] pointer-events-auto flex items-center justify-center p-4 select-none"
         aria-live="polite"
         role="status"
       >
-        <!-- Click Shield Backdrop (Lightweight, Prevents Multiple Clicks) -->
-        <div class="fixed inset-0 bg-slate-900/10 backdrop-blur-[1px] cursor-wait transition-opacity duration-200"></div>
+        <!-- Click Shield Backdrop with Rich Frost Blur -->
+        <div class="fixed inset-0 bg-slate-950/40 backdrop-blur-md cursor-wait transition-all duration-300"></div>
 
-        <!-- Floating Island Toast / Mascot Navigation HUD -->
-        <div class="relative z-10 mx-auto px-4 py-2.5 sm:py-3 bg-white/95 backdrop-blur-xl border-2 border-emerald-400/80 rounded-full shadow-[0_12px_32px_rgba(0,0,0,0.14)] flex items-center gap-3 animate-hud-pop">
+        <!-- Centered Glassmorphic Mascot Loading Card -->
+        <div class="relative z-10 mx-auto px-7 py-6 bg-white/95 backdrop-blur-2xl border-3 border-emerald-400/90 rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.25)] flex flex-col items-center text-center gap-3.5 animate-center-pop max-w-xs sm:max-w-sm">
           
-          <!-- Animated Mascot Emblem with Glow -->
-          <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-2xl bg-gradient-to-br from-emerald-400 to-[#58cc02] border border-emerald-600 flex items-center justify-center text-lg sm:text-xl shadow-xs animate-bounce-gentle shrink-0">
-            🦉
+          <!-- Animated Mascot Emblem with Glowing Spinner Ring -->
+          <div class="relative">
+            <div class="w-16 h-16 rounded-3xl bg-gradient-to-br from-emerald-400 to-[#58cc02] border-2 border-emerald-500 flex items-center justify-center text-3xl shadow-lg animate-bounce-gentle shrink-0">
+              🦉
+            </div>
+            <!-- Spinning Dotted Ring Accent around Mascot -->
+            <div class="absolute -inset-1.5 rounded-[26px] border-2 border-dashed border-emerald-400/70 animate-spin-slow pointer-events-none"></div>
           </div>
 
           <!-- Label & Microcopy -->
-          <div class="flex flex-col pr-1 min-w-[140px] sm:min-w-[180px]">
-            <span class="font-heading font-black text-xs sm:text-sm text-slate-800 leading-tight">
+          <div class="space-y-1">
+            <h3 class="font-heading font-black text-base sm:text-lg text-slate-800 leading-snug">
               {{ navigatingLabel }}
-            </span>
-            <span class="text-[10px] font-heading font-bold text-emerald-600 flex items-center gap-1">
+            </h3>
+            <p class="text-xs font-heading font-bold text-emerald-600 flex items-center justify-center gap-1">
               <span>Sebentar ya, sedang disiapkan</span>
-              <span class="inline-flex gap-0.5">
-                <span class="animate-ping text-[8px]">✨</span>
-              </span>
-            </span>
+              <span class="animate-pulse">✨</span>
+            </p>
           </div>
 
-          <!-- High-Performance Spinning Wheel Ring -->
-          <div class="w-5 h-5 shrink-0 border-2 border-slate-200 border-t-emerald-500 border-r-emerald-500 rounded-full animate-spin"></div>
+          <!-- High-Performance Animated Bouncing Energy Dots -->
+          <div class="flex items-center gap-1.5 pt-1">
+            <div class="w-2.5 h-2.5 rounded-full bg-[#58cc02] animate-bounce" style="animation-delay: 0ms"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-bounce" style="animation-delay: 150ms"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-bounce" style="animation-delay: 300ms"></div>
+          </div>
         </div>
 
       </div>
@@ -84,18 +90,18 @@ nuxtApp.hook('page:finish', () => {
 </script>
 
 <style scoped>
-@keyframes hudPop {
+@keyframes centerPop {
   0% {
     opacity: 0;
-    transform: translateY(-20px) scale(0.92);
+    transform: scale(0.88);
   }
   60% {
     opacity: 1;
-    transform: translateY(4px) scale(1.02);
+    transform: scale(1.02);
   }
   100% {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: scale(1);
   }
 }
 
@@ -104,26 +110,39 @@ nuxtApp.hook('page:finish', () => {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-3px);
+    transform: translateY(-4px);
   }
 }
 
-.animate-hud-pop {
-  animation: hudPop 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-center-pop {
+  animation: centerPop 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .animate-bounce-gentle {
   animation: bounceGentle 1.2s ease-in-out infinite;
 }
 
+.animate-spin-slow {
+  animation: spinSlow 8s linear infinite;
+}
+
 .hud-fade-enter-active,
 .hud-fade-leave-active {
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
 .hud-fade-enter-from,
 .hud-fade-leave-to {
   opacity: 0;
-  transform: translateY(-8px);
+  transform: scale(0.95);
 }
 </style>

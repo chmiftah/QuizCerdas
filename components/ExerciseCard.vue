@@ -25,13 +25,14 @@
     <header class="px-2.5 py-2 sm:p-4 bg-white/95 backdrop-blur-md border-b-2 border-slate-200 sticky top-0 z-30 shadow-2xs overflow-hidden">
       <div class="max-w-3xl mx-auto flex items-center justify-between gap-1.5 sm:gap-4 w-full min-w-0">
         <!-- Close / Quit Button -->
-        <NuxtLink 
-          to="/" 
-          class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center transition-transform active:scale-90 shrink-0 border border-slate-200"
-          title="Keluar ke Dashboard"
+        <button 
+          @click="handleQuitClick"
+          type="button"
+          class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center transition-transform active:scale-90 shrink-0 border border-slate-200 cursor-pointer"
+          title="Keluar dari Kuis"
         >
           <X class="w-4 h-4 sm:w-6 sm:h-6 stroke-[3]" />
-        </NuxtLink>
+        </button>
 
         <!-- Question Index Pill (e.g. Soal 2 / 8) -->
         <div class="flex items-center gap-1 px-2.5 py-1 sm:py-1.5 bg-slate-100 border border-slate-200 rounded-xl sm:rounded-2xl font-heading font-black text-[11px] sm:text-xs text-slate-700 whitespace-nowrap shrink-0 shadow-2xs">
@@ -399,23 +400,104 @@
       :isOpen="isPathOpen"
       @close="isPathOpen = false"
     />
+
+    <!-- Quiz Exit Warning Modal -->
+    <QuizExitModal 
+      :isOpen="showExitModal"
+      :currentQuestion="(engine.currentIndex || 0) + 1"
+      :totalQuestions="engine.totalExercises || 0"
+      @stay="cancelExit"
+      @leave="confirmExit"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, unref, watch, onMounted, onUnmounted } from 'vue'
+import { useRouter, onBeforeRouteLeave } from 'vue-router'
 import { useUserStore } from '~/stores/user'
+import { useCourseStore } from '~/stores/course'
 import { useVoiceNarrator } from '~/composables/useVoiceNarrator'
 import { X, Heart, ChevronDown, ChevronUp } from 'lucide-vue-next'
+import QuizExitModal from '~/components/QuizExitModal.vue'
 
 const props = defineProps({
   engine: { type: Object, required: true },
   lessonSummary: { type: String, default: '' }
 })
 
+const router = useRouter()
 const userStore = useUserStore()
+const courseStore = useCourseStore()
 const narrator = useVoiceNarrator()
 const isPathOpen = ref(false)
+
+// Exit confirmation state
+const showExitModal = ref(false)
+let isLeavingConfirmed = false
+let pendingRoute = null
+
+const handleQuitClick = () => {
+  if (props.engine?.isLessonFinished) {
+    router.push(`/course?id=${courseStore.activeCourseId}`)
+    return
+  }
+  showExitModal.value = true
+}
+
+const cancelExit = () => {
+  showExitModal.value = false
+  pendingRoute = null
+}
+
+const confirmExit = () => {
+  isLeavingConfirmed = true
+  showExitModal.value = false
+  if (pendingRoute) {
+    router.push(pendingRoute)
+  } else {
+    router.push(`/course?id=${courseStore.activeCourseId}`)
+  }
+}
+
+// Intercept in-app navigation
+onBeforeRouteLeave((to, from) => {
+  if (isLeavingConfirmed || props.engine?.isLessonFinished) {
+    return true
+  }
+  pendingRoute = to
+  showExitModal.value = true
+  return false
+})
+
+onMounted(() => {
+  if (typeof window !== 'undefined') {
+    // Push dummy history entry so mobile hardware back / swipe gesture triggers popstate instead of immediately leaving
+    history.pushState({ quizActive: true }, '', window.location.href)
+
+    const handlePopState = () => {
+      if (!isLeavingConfirmed && !props.engine?.isLessonFinished) {
+        history.pushState({ quizActive: true }, '', window.location.href)
+        showExitModal.value = true
+      }
+    }
+
+    const handleBeforeUnload = (e) => {
+      if (!isLeavingConfirmed && !props.engine?.isLessonFinished) {
+        e.preventDefault()
+        e.returnValue = ''
+      }
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
+    onUnmounted(() => {
+      window.removeEventListener('popstate', handlePopState)
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    })
+  }
+})
 
 const currentExerciseOptions = computed(() => {
   const ex = unref(props.engine.currentExercise)

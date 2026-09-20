@@ -46,12 +46,33 @@
           </div>
         </div>
 
+        <!-- Guest Mode Save Reminder Card -->
+        <div 
+          v-if="isGuestUser"
+          class="z-10 relative p-3 bg-gradient-to-r from-amber-400 via-amber-400 to-yellow-300 rounded-2xl text-amber-950 border-2 border-amber-500 shadow-sm flex items-center justify-between gap-2.5 text-left"
+        >
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="text-2xl shrink-0">💾</span>
+            <div class="leading-tight min-w-0">
+              <span class="font-heading font-black text-xs block text-slate-900">Simpan Bintang & Pialamu!</span>
+              <span class="text-[10px] font-heading font-bold text-amber-950/80 truncate block">Mode tamu belum tersimpan permanen</span>
+            </div>
+          </div>
+          <button 
+            @click="pendingAction = null; showSaveProgressModal = true"
+            type="button"
+            class="px-3 py-1.5 bg-slate-950 hover:bg-slate-900 text-amber-300 rounded-xl text-xs font-heading font-black shadow-xs shrink-0 active:scale-95 transition-all cursor-pointer"
+          >
+            Simpan ➔
+          </button>
+        </div>
+
         <!-- Action Navigation Buttons -->
         <div class="space-y-3 z-10 relative pt-2">
           <!-- Primary Action: Lanjut ke Quiz Selanjutnya -->
           <button 
             v-if="nextItem && nextItem.path"
-            @click="emit('next')"
+            @click="handleNextClick"
             type="button"
             class="w-full py-4 duo-btn-green font-heading font-extrabold text-lg rounded-2xl shadow-xl flex items-center justify-center gap-2 cursor-pointer animate-pulse hover:animate-none"
           >
@@ -60,7 +81,7 @@
 
           <!-- Return to Map if finished or no next item -->
           <button 
-            @click="emit('finish')"
+            @click="handleFinishClick"
             type="button"
             class="w-full py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border-2 border-slate-300 font-heading font-extrabold text-sm rounded-2xl shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
           >
@@ -94,6 +115,16 @@
       </div>
     </div>
 
+    <!-- Center Save Progress Reminder Modal for Guests -->
+    <CommonSaveProgressModal 
+      :isOpen="showSaveProgressModal"
+      :xpEarned="xpEarned"
+      :stars="stars"
+      @close="showSaveProgressModal = false"
+      @skip="handleSaveModalSkip"
+      @registered="handleSaveModalSuccess"
+    />
+
     <!-- Printable Certificate Modal Component -->
     <CertificateModal 
       :isOpen="showCert" 
@@ -104,7 +135,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useUserStore } from '~/stores/user'
 
 const props = defineProps({
   isOpen: { type: Boolean, default: false },
@@ -120,5 +152,54 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['finish', 'next'])
+
+const userStore = useUserStore()
 const showCert = ref(false)
+const showSaveProgressModal = ref(false)
+const hasPromptedSave = ref(false)
+const pendingAction = ref(null)
+
+const isGuestUser = computed(() => {
+  return !userStore.isAuthenticated || userStore.currentUser?.role === 'guest'
+})
+
+const handleNextClick = () => {
+  if (isGuestUser.value && !hasPromptedSave.value) {
+    pendingAction.value = 'next'
+    showSaveProgressModal.value = true
+    return
+  }
+  emit('next')
+}
+
+const handleFinishClick = () => {
+  if (isGuestUser.value && !hasPromptedSave.value) {
+    pendingAction.value = 'finish'
+    showSaveProgressModal.value = true
+    return
+  }
+  emit('finish')
+}
+
+const handleSaveModalSkip = () => {
+  hasPromptedSave.value = true
+  showSaveProgressModal.value = false
+  if (pendingAction.value === 'next') {
+    emit('next')
+  } else if (pendingAction.value === 'finish') {
+    emit('finish')
+  }
+  pendingAction.value = null
+}
+
+const handleSaveModalSuccess = () => {
+  hasPromptedSave.value = true
+  showSaveProgressModal.value = false
+  if (pendingAction.value === 'next') {
+    emit('next')
+  } else if (pendingAction.value === 'finish') {
+    emit('finish')
+  }
+  pendingAction.value = null
+}
 </script>

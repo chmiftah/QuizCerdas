@@ -88,23 +88,23 @@
               <div class="absolute -inset-4 bg-emerald-200/30 rounded-3xl blur-2xl pointer-events-none"></div>
 
               <!-- Main Kid Dashboard Card Preview -->
-              <div class="relative bg-white rounded-3xl border-3 border-slate-200 shadow-2xl p-5 sm:p-6 space-y-4">
+              <div class="relative bg-white rounded-3xl border-3 border-slate-200 shadow-2xl p-4 sm:p-6 space-y-4">
                 <!-- Top Status Header (Simulating Real Child Game Profile) -->
-                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                  <div class="flex items-center gap-3">
-                    <div class="w-11 h-11 rounded-2xl bg-duo-green text-white flex items-center justify-center font-heading text-2xl shadow-duo-green">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                  <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-11 h-11 rounded-2xl bg-duo-green text-white flex items-center justify-center font-heading text-2xl shadow-duo-green shrink-0">
                       🦉
                     </div>
-                    <div>
-                      <div class="flex items-center gap-1.5">
+                    <div class="min-w-0">
+                      <div class="flex items-center gap-1.5 flex-wrap">
                         <span class="font-heading font-black text-slate-800 text-sm sm:text-base">Kiko Sahabat Belajar</span>
-                        <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-heading font-black text-[10px]">Level 2</span>
+                        <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-heading font-black text-[10px] shrink-0">Level 2</span>
                       </div>
-                      <p class="text-xs text-slate-400 font-heading">Petualangan Matematika & Berhitung</p>
+                      <p class="text-xs text-slate-400 font-heading truncate">Petualangan Matematika & Berhitung</p>
                     </div>
                   </div>
 
-                  <div class="flex items-center gap-1.5">
+                  <div class="flex items-center gap-1.5 shrink-0 self-start sm:self-auto pl-14 sm:pl-0">
                     <span class="flex items-center gap-1 px-2.5 py-1 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 font-heading font-black text-xs">
                       <span>⚡</span> 180 XP
                     </span>

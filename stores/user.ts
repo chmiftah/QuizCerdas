@@ -199,10 +199,12 @@ export const useUserStore = defineStore('user', {
         year: 'numeric'
       })
     },
-    canAccessUnit: (state) => (unitIndex: number) => {
+    canAccessUnit: (state) => (unitIndex: number, isCoursePro: boolean = false) => {
       if (state.currentUser?.role === 'admin' || state.currentUser?.accountRole === 'admin') return true
       if (state.subscriptionTier === 'PRO' || state.subscriptionTier === 'FAMILY') return true
-      // Free user can only access Unit 0 (Bioma 1)
+      // Jika kuis tidak pro atau gratis, keseluruhan quiz atau unit dapat dikerjakan oleh siswa
+      if (!isCoursePro) return true
+      // Jika kursus PRO dan user free, hanya unit 0 (preview) yang dapat diakses
       return unitIndex === 0
     },
     isLoggedIn: (state) => state.isAuthenticated && !!state.currentUser,
